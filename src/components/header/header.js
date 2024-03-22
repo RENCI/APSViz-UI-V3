@@ -1,6 +1,8 @@
 import classes from './header.module.css'
 import { Menu } from './menu'
 import { Brand } from '../brand'
+import apsLogo from '../../images/aps-logo.png'
+import { Link } from '../link'
 
 //
 
@@ -24,11 +26,14 @@ const ReactLogo = () => (
 export const Header = ({ menuLinks }) => {
   return (
     <header className={ classes.appHeader }>
-      <div className={ classes.overlay }>
+      {/* <div className={ classes.overlay }>
         <ReactLogo />
         <Brand size="medium" />
       </div>
-      <Menu options={ menuLinks } />
+      <Menu options={ menuLinks } /> */}
+      <Link to="/">
+        <img className={ classes.apsLogo } src={apsLogo}/>
+      </Link>
     </header>
   )
 }

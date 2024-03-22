@@ -9,6 +9,7 @@ import {
 
 import { Header } from './components/header'
 import { Footer } from './components/footer'
+import { Map } from './components/map'
 
 const menuOptions = [
   {
@@ -29,9 +30,9 @@ export const App = () => {
   return (
     <Fragment>
       <Header menuLinks={ menuOptions } />
-      
-      <main>
-        <Routes>
+      <Map/>
+      {/* <main>
+       <Routes>
           {
             // we'll build the routes from the main menu items.
             // note this implementation only supports a flat,
@@ -46,7 +47,7 @@ export const App = () => {
           }
           <Route path="*" element={ <NotFoundView /> } />
         </Routes>
-      </main>
+      </main> */}
 
       <Footer />
     </Fragment>
