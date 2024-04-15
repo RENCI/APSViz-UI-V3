@@ -2,6 +2,7 @@ TerriaMap catalog -> STAC catalog
 
 Motivation: Move the data model to a standardized format that will be implemented in the UI and supporting components.
 
+
 --------------------------
 The TerriaMap "workbench" is a data model that defined the features displayed on the UI.
 
@@ -88,8 +89,8 @@ The original TerriaMap format for the "workbench" was a file whose contents were
   ]
 }
 
---------------------------
 
+--------------------------
 Data descriptions:
 Please reference the data above for example data in these data descriptions. Fields with an asterick indicate potential
 
@@ -123,7 +124,8 @@ Please reference the data above for example data in these data descriptions. Fie
      	    - type:
      	    - maximumFractionDigits:
         - template:
-     
+
+
 --------------------------
 The TerriaMap file-based model was used to derive the DB model as shown below. the relationships in the original data were kept intact for this model.
 
@@ -136,7 +138,6 @@ table catalog
     name            varchar(250)
 )
 
-
 table catalog_base
 (
     id          integer     		sequence, primary key,
@@ -146,7 +147,6 @@ table catalog_base
     base_maps   varchar(3000)
     viewer_mode varchar(5) 			default '2D'
 )
-
 
 table catalog_member
 (
@@ -165,13 +165,13 @@ table catalog_member
     product_type    varchar(50)
 )
 
-
 table catalog_type_lu
 (
     id          integer 			sequence, primary key
     name        varchar(50)
     description varchar(100)
 )
+
 
 ---------------------------
 STAC high level overview: https://stacspec.org/en/about/stac-spec/,
@@ -189,6 +189,7 @@ The STAC data model for a collection is defined at: https://github.com/radiantea
 The STAC data model for an item is defined at: https://github.com/radiantearth/stac-spec/item-spec/json-schema/item.json
 "an Item object represents a unit of data and metadata, typically representing a single scene of data at one place and time"
 
+
 ---------------------------
 Expectations implementing STAC:
  - PgSTAC: PGDatabase Schema and Functions for Storing and Accessing STAC collections and items in PostgreSQL
@@ -197,13 +198,13 @@ Expectations implementing STAC:
  - Creation of stored functions to get filtered data to the UI.
  - Concern: there will be a disconnect between the apsviz DB and PgSTAC if they are not merged.
 
+
 ---------------------------
 Transforming from the TerriaMap data model into the STAC data model.
 
 TerriaMap catalog -> STAC catalog analogs:
----------------
-catalog, catalog_base -> Catalog or Collection
-catalog_member -> Item
+ - catalog, catalog_base -> Catalog or Collection
+ - catalog_member -> Item
 
 Example STAC data:
 ---------------
@@ -241,6 +242,7 @@ Collection:
     "summaries": {}
 }
 
+
 ------------------------------------
 Questions/observations converting from TerriaMap entry to STAC
  - How can STAC.Item.bbox and STAC.Item.geometry be leveraged on the UI
@@ -262,6 +264,7 @@ Expected usage:
  - UI will be configured to use a new web service URL.
  - Optional potential: UI may be able to take a STAC object dragged onto the map surface and render it.
 
+
 ------------------------------------
 Expected task list:
  - Install and configure PgSTAC.
@@ -272,4 +275,3 @@ Expected task list:
  - Modification of UI to support the new data model.
  - Deploy applicable components to k8s
  - Unit and integration testing at each line item milestone of this list.
-
