@@ -261,3 +261,13 @@ Expected usage:
  - UI will be adjusted to accept the STAC data model.
  - UI will be configured to use a new web service URL.
  - Optional potential: UI may be able to take a STAC object dragged onto the map surface and render it.
+
+------------------------------------
+Expected task list:
+ - Install and configure PgSTAC.
+ - Install and configure STAC FASTAPI.
+ - Modification of that component that inserts catalog data.
+ - Addition of stored function to insert STAC data into the DB.
+ - Conversion of existing TERRIAMap data -> STAC data.
+ - Modification of UI to support the new data model.
+
