@@ -153,7 +153,7 @@ table catalog_member
 (
     id              bigint      	sequence, primary key
     catalog_id      date			references the catalog table
-    member_def      json			This column represents a single member entry of the members object defined above
+    member_def      json			This column represents a single entry of a "members" object defined above
     grid_type       varchar(50)
     event_type      varchar(50)
     run_date        varchar(50)
@@ -175,7 +175,73 @@ table catalog_type_lu
 )
 
 ---------------------------
-STAC data model; implementation.
+STAC high level overview: https://stacspec.org/en/about/stac-spec/,
+STAC specification index: https://github.com/radiantearth/stac-spec/
+STAC detailed overview: https://github.com/radiantearth/stac-spec/blob/master/overview.md
+STAC best practices (mentions leaflet): https://github.com/radiantearth/stac-spec/blob/master/best-practices.md
 
-Certain fields in the data description are not used and will be omitted from the STAC implementation.
+The STAC data model for a catalog is defined at: https://github.com/radiantearth/stac-spec/catalog-spec/json-schema/catalog.json
+"A Catalog provides links to Items or to other Catalogs"
+
+The STAC data model for a collection is defined at: https://github.com/radiantearth/collection-spec/json-schema/collection.json
+"Collection entities can be used just like Catalog entities to provide structure, as they provide all the same options for linking and organizing"
+"A Collection will generally consist of a set of assets that are defined with the same properties and share higher level metadata"
+
+The STAC data model for an item is defined at: https://github.com/radiantearth/stac-spec/item-spec/json-schema/item.json
+"an Item object represents a unit of data and metadata, typically representing a single scene of data at one place and time"
+
+---------------------------
+Expectations implementing STAC:
+ - PgSTAC: PGDatabase Schema and Functions for Storing and Accessing STAC collections and items in PostgreSQL
+ - STAC FASTAPI: https://github.com/stac-utils/stac-fastapi
+ - Modifications to the UI for the new data model
+ - Creation of stored functions to get filtered data to the UI.
+ - Concern: there will be a disconnect between the apsviz DB and PgSTAC if they are not merged.
+
+---------------------------
+Transforming from the TerriaMap data model into the STAC data model.
+
+TerriaMap catalog -> STAC catalog analogs:
+-----------------------------------------------
+catalog, catalog_base -> Catalog or Collection
+catalog_member -> Item
+
+Example STAC data:
+-----------------------------------------------
+Item:
+{
+    "stac_version": "1.0.0",
+    "type": "Feature",
+    "id": "20201211_223832_CS2",
+    "bbox": [],
+    "geometry": {},
+    "properties": {},
+    "collection": "simple-collection",
+    "links": [],
+    "assets": {}
+}
+
+Catalog:
+{
+    "stac_version": "1.0.0",
+    "type": "Catalog",
+    "id": "20201211_223832_CS2",
+    "description": "A simple catalog example",
+    "links": []
+}
+
+Collection:
+{
+    "stac_version": "1.0.0",
+    "type": "Collection",
+    "license": "ISC",
+    "id": "20201211_223832_CS2",
+    "description": "A simple collection example",
+    "links": [],
+    "extent": {},
+    "summaries": {}
+}
+
+Converting a TerriaMap entry to STAC
+------------------------------------
 
