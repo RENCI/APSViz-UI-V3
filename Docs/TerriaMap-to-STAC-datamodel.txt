@@ -270,4 +270,6 @@ Expected task list:
  - Addition of stored function to insert STAC data into the DB.
  - Conversion of existing TERRIAMap data -> STAC data.
  - Modification of UI to support the new data model.
+ - Deploy applicable components to k8s
+ - Unit and integration testing at each line item milestone of this list.
 
