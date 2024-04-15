@@ -125,7 +125,6 @@ Please reference the data above for example data in these data descriptions. Fie
         - template:
      
 --------------------------
-
 The TerriaMap file-based model was used to derive the DB model as shown below. the relationships in the original data were kept intact for this model.
 
 table catalog
@@ -202,12 +201,12 @@ Expectations implementing STAC:
 Transforming from the TerriaMap data model into the STAC data model.
 
 TerriaMap catalog -> STAC catalog analogs:
------------------------------------------------
+---------------
 catalog, catalog_base -> Catalog or Collection
 catalog_member -> Item
 
 Example STAC data:
------------------------------------------------
+---------------
 Item:
 {
     "stac_version": "1.0.0",
@@ -242,6 +241,23 @@ Collection:
     "summaries": {}
 }
 
-Converting a TerriaMap entry to STAC
 ------------------------------------
+Questions/observations converting from TerriaMap entry to STAC
+ - How can STAC.Item.bbox and STAC.Item.geometry be leveraged on the UI
+ - STAC.Item.properties will house all TerriaMap.catalog_member.member_def data
+ - STAC.Catalog/Collection will house TerriaMap.Catalog_base data. not yet sure how though
+ - How will the TerriaMap.catalog_base data be housed in STAC?
+   - Which STAC table will have a property indicating it has been chosen as "default" for a "workbench"?
+   - will cors_domain, home_camera, viewer_mode and base_maps still be needed?
+ - It is presumed that user profile/preferences will not be housed in a STAC DB.
 
+
+------------------------------------
+Detailed field mapping (TerriaMap -> STAC)
+
+
+------------------------------------
+Expected usage:
+ - UI will be adjusted to accept the STAC data model.
+ - UI will be configured to use a new web service URL.
+ - Optional potential: UI may be able to take a STAC object dragged onto the map surface and render it.
