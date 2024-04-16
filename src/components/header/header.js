@@ -1,7 +1,7 @@
 import classes from './header.module.css'
 import { Menu } from './menu'
 import { Brand } from '../brand'
-import apsLogo from '../../images/aps-logo.png'
+import apsLogo from '../../images/aps-logo2.png'
 import { Link } from '../link'
 
 //
