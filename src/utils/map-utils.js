@@ -2,8 +2,10 @@ import useLayers from '../context/map-context'
 import { StacApiProvider } from "stac-react";
 
 const {
-    currentModelRunSet,
-    setCurrentModelRunSet,
+  defaultModelLayers,
+  setDefaultModelLayers,
+  filteredModelLayers,
+  setFilteredModelLayers
   } = useLayers();
 
 
