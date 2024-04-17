@@ -1,9 +1,10 @@
 const path = require('path')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
+const DotenvPlugin = require('dotenv-webpack')
+const { HotModuleReplacementPlugin } = require('webpack')
 
 let mode = 'development'
 let target = 'web'
@@ -17,13 +18,12 @@ const plugins = [
   new ESLintPlugin({
     extensions: ['./src', 'js'],
   }),
+  new DotenvPlugin(),
+  new HotModuleReplacementPlugin(),
 ]
 
 if (process.env.NODE_ENV === 'production') {
   mode = 'production'
-}
-if (process.env.SERVE) {
-  plugins.push(new ReactRefreshWebpackPlugin())
 }
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: 'images/[hash][ext][query]',
+    assetModuleFilename: 'assets/[hash][ext][query]',
   },
 
   module: {
@@ -78,20 +78,30 @@ module.exports = {
             },
           },
         ],
-      },      
-    ]
+      },
+      {
+        test: /\.geojson$/,
+        type: 'json',
+      },
+    ],
   },
 
   plugins: plugins,
 
   resolve: {
     extensions: ['.js', '.jsx'],
+    alias: {
+      '@components': path.resolve(__dirname, 'src/components/'),
+      '@content': path.resolve(__dirname, 'src/content/'),
+      '@context': path.resolve(__dirname, 'src/context/'),
+      '@hooks': path.resolve(__dirname, 'src/hooks/'),
+      '@images': path.resolve(__dirname, 'src/images/'),
+    }
   },
 
   devtool: 'source-map',
 
   devServer: {
-    hot: true,
     client: {
       overlay: false,
     },
@@ -112,4 +122,7 @@ module.exports = {
     },
   },
 
+  performance: {
+    hints: false
+  }
 }
