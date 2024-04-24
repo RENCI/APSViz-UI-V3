@@ -193,7 +193,7 @@ The STAC data model for an item is defined at: https://github.com/radiantearth/s
 ---------------------------
 Expectations implementing STAC:
  - PgSTAC: PGDatabase Schema and Functions for Storing and Accessing STAC collections and items in PostgreSQL
- - STAC FASTAPI: https://github.com/stac-utils/stac-fastapi
+ - STAC FastAPI: https://github.com/stac-utils/stac-fastapi
  - Modifications to the UI for the new data model
  - Creation of stored functions to get filtered data to the UI.
  - Concern: there will be a disconnect between the apsviz DB and PgSTAC if they are not merged.
@@ -253,6 +253,11 @@ Questions/observations converting from TerriaMap entry to STAC
    - will cors_domain, home_camera, viewer_mode and base_maps still be needed?
  - It is presumed that user profile/preferences will not be housed in a STAC DB.
 
+Review of database
+ - the json specifications in the docs do not match the DB model
+   - the "content" column in the items table is used to store an additional json object that may contain property data (among other things)
+ - the pgstac docs mention a table named "catalog". it does not exist in the DB anywhere.
+ - there is only one foreign key specified in the DB (collection table -> item table by id).
 
 ------------------------------------
 Detailed field mapping (TerriaMap -> STAC)
@@ -267,8 +272,9 @@ Expected usage:
 
 ------------------------------------
 Expected task list:
- - Install and configure PgSTAC.
- - Install and configure STAC FASTAPI.
+ - (done) Install and configure PgSTAC DB.
+ - (configuration issues) Install and configure STAC FastAPI.
+ - (configuration issues) Deploy the PgSTAC DB and STAC FastAPI to k8s.
  - Modification of that component that inserts catalog data.
  - Addition of stored function to insert STAC data into the DB.
  - Conversion of existing TERRIAMap data -> STAC data.
