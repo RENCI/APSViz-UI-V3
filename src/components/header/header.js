@@ -1,7 +1,7 @@
 import classes from './header.module.css'
 import { Menu } from './menu'
 import { Brand } from '../brand'
-import apsLogo from '../../images/aps-logo2.png'
+import apsLogo from '../../images/aps-logo3.png'
 import { Link } from '../link'
 
 //
@@ -31,7 +31,7 @@ export const Header = ({ menuLinks }) => {
         <Brand size="medium" />
       </div>
       <Menu options={ menuLinks } /> */}
-      <Link to="/">
+      <Link to="https://www.adcircprediction.org">
         <img className={ classes.apsLogo } src={apsLogo}/>
       </Link>
     </header>

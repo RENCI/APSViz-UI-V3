@@ -5,12 +5,16 @@ export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
 export const LayersProvider = ({ children }) => {
-    const [defaultModelLayers, setDefaultModelLayers] = useState(["4545-2024041412-gfsforecast_maxele63",]);
-    const [filteredModelLayers, setFilteredModelLayers] = useState([]);
 
-return (
+    const [defaultModelLayers, setDefaultModelLayers] = useState([]);
+    const [filteredModelLayers, setFilteredModelLayers] = useState([]);
+    const [map, setMap] = useState(null);
+
+  return (
     <LayersContext.Provider
       value={{
+        map,
+        setMap,
         defaultModelLayers,
         setDefaultModelLayers,
         filteredModelLayers,
