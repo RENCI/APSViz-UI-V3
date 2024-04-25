@@ -7,7 +7,6 @@ import {
 import { DefaultLayers } from './default-layers';
 import { LayerMenu } from '../layer-menu/layer-menu';
 import { useLayers } from '../../context/map-context';
-import { Legend } from './test.js';
 
 export const Map = () => {
     const {
