@@ -1,12 +1,10 @@
 import React from 'react';
-import classes from './map.module.css'
 import 'leaflet/dist/leaflet.css'
-import {
-    MapContainer, TileLayer
-} from 'react-leaflet'
+import { MapContainer, TileLayer} from 'react-leaflet'
 import { DefaultLayers } from './default-layers';
-import { LayerMenu } from '../layer-menu/layer-menu';
-import { useLayers } from '../../context/map-context';
+import { useLayers } from '@context';
+// import classes from './map.module.css'
+// import { LayerMenu } from '../layer-menu/layer-menu';
 
 export const Map = () => {
     const {
