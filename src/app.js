@@ -1,11 +1,11 @@
 import { Fragment } from 'react'
-import { Routes, Route } from 'react-router-dom'
 import { LayersProvider } from '@context'
+//import { Routes, Route } from 'react-router-dom'
 
 import {
   AboutView,
   HomeView,
-  NotFoundView,
+//  NotFoundView,
 } from './views'
 
 import { Header } from '@components/header'
@@ -33,26 +33,25 @@ export const App = () => {
       <LayersProvider>
         <Map/>
       </LayersProvider>
-      {
-        <main>
-          <Routes>
-            {
-              // we'll build the routes from the main menu items.
-              // note this implementation only supports a flat,
-              // one-level navigation structure.
-              menuOptions.map(({ path, view, label }) => (
-                <Route
-                  key={ `route-${ label }` }
-                  path={ path }
-                  element={ view }
-                />
-              ))
-            }
-            <Route path="*" element={ <NotFoundView /> } />
-          </Routes>
-        </main>
-      }
-
+      {/*{*/}
+      {/*  <main>*/}
+      {/*    <Routes>*/}
+      {/*      {*/}
+      {/*        // we'll build the routes from the main menu items.*/}
+      {/*        // note this implementation only supports a flat,*/}
+      {/*        // one-level navigation structure.*/}
+      {/*        menuOptions.map(({ path, view, label }) => (*/}
+      {/*          <Route*/}
+      {/*            key={ `route-${ label }` }*/}
+      {/*            path={ path }*/}
+      {/*            element={ view }*/}
+      {/*          />*/}
+      {/*        ))*/}
+      {/*      }*/}
+      {/*      <Route path="*" element={ <NotFoundView /> } />*/}
+      {/*    </Routes>*/}
+      {/*  </main>*/}
+      {/*}*/}
       <Footer />
     </Fragment>
   )
