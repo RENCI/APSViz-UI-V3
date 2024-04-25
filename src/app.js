@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { LayersProvider } from './context/map-context'
+import { LayersProvider } from '@context'
 
 import {
   AboutView,
@@ -8,9 +8,9 @@ import {
   NotFoundView,
 } from './views'
 
-import { Header } from './components/header'
-import { Footer } from './components/footer'
-import { Map } from './components/map'
+import { Header } from '@components/header'
+import { Footer } from '@components/footer'
+import { Map } from '@components/map'
 
 const menuOptions = [
   {

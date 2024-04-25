@@ -1,10 +1,9 @@
 import classes from './header.module.css'
 import { Menu } from './menu'
-// import { Brand } from '../brand'
 import apsLogo from '../../images/aps-logo3.png'
 import { Link } from '../link'
 
-
+// import { Brand } from '../brand'
 // const ReactLogo = () => (
 //   <svg
 //     xmlns="http://www.w3.org/2000/svg"
