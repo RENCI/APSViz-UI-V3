@@ -1,16 +1,15 @@
 {
-  "name": "APSViz-UI-V3",
+  "name": "APSViz-UI:V3",
   "private": "true",
   "scripts": {
-    "start": "SERVE=true webpack serve",
-    "start-win": "webpack serve",
+    "start": "webpack serve --env SERVE=true",
+    "build": "webpack --env NODE_ENV=production",
     "watch": "webpack --watch",
-    "build": "NODE_ENV=production webpack",
     "build-dev": "webpack",
     "lint": "eslint ./src/index.js ./src/components/**/*.js",
     "lint:fix": "eslint --fix ./src/index.js ./src/components/**/*.js",
     "clean": "rm -rf dist",
-    "deploy": "NODE_ENV=production webpack && gh-pages -d dist",
+    "deploy": "webpack && gh-pages -d dist -env NODE_ENV=production",
     "test": "jest"
   },
   "devDependencies": {
