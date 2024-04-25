@@ -1,8 +1,9 @@
 {
-  "name": "pfas-dashboard",
+  "name": "APSViz-UI-V3",
   "private": "true",
   "scripts": {
     "start": "SERVE=true webpack serve",
+    "start-win": "webpack serve",
     "watch": "webpack --watch",
     "build": "NODE_ENV=production webpack",
     "build-dev": "webpack",
