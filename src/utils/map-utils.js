@@ -9,6 +9,6 @@ const {
   } = useLayers();
 
 
-// Utilities to access the stac cataolog items to load on map 
+// Utilities to access the stac catalog items to load on map 
 const stacCatalog = ({stacUrl}) => {
 };

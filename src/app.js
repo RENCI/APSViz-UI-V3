@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { LayersProvider } from './context/map-context'
 
 import {
   AboutView,
@@ -10,6 +11,7 @@ import {
 import { Header } from './components/header'
 import { Footer } from './components/footer'
 import { Map } from './components/map'
+import { Init } from './components/map'
 
 const menuOptions = [
   {
@@ -24,13 +26,14 @@ const menuOptions = [
   },
 ]
 
-//
-
 export const App = () => {
+
   return (
     <Fragment>
       <Header menuLinks={ menuOptions } />
-      <Map/>
+      <LayersProvider>
+        <Map/>
+      </LayersProvider>
       {/* <main>
        <Routes>
           {
