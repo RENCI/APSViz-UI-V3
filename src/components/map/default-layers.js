@@ -17,8 +17,9 @@ export const DefaultLayers = () => {
         }
     };
 
-    // create the URL to the data endpoint
-    const data_url = `${process.env.REACT_APP_BASE_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=false&use_v3_sp=true`;
+    // create the URLs to the data endpoints
+    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_v3_sp=true`;
+    const gs_url = `${process.env.REACT_APP_GS_DATA_URL}ADCIRC_2024/wms`;
 
     useEffect(() => {
         // React advises to declare the async function directly inside useEffect
@@ -66,7 +67,7 @@ export const DefaultLayers = () => {
         return(
             <WMSTileLayer
                 key = {index}
-                url="https://apsviz-geoserver-dev.apps.renci.org/geoserver/ADCIRC_2024/wms"
+                url ={gs_url}
                 layers={layer.layers}
                 params={{
                     format:"image/png",
