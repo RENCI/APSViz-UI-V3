@@ -20,22 +20,26 @@ COPY package*.json /src/
 # install package components
 RUN npm install
 
-# Copy in source files
-COPY . /src
-#COPY ./.env ./.env
-
 # get the build arguments
 ARG APP_VERSION=$(APP_VERSION)
 ARG APP_BASE_DATA_URL=$(APP_BASE_DATA_URL)
-ARG APP_SETTINGS_DATA_TOKEN=$(APP_SETTINGS_DATA_TOKEN)
+ARG APP_UI_DATA_TOKEN=$(APP_UI_DATA_TOKEN)
 
 # now add the values into ENV params
 ENV REACT_APP_VERSION=$APP_VERSION
 ENV REACT_APP_BASE_DATA_URL=$APP_BASE_DATA_URL
-ENV REACT_APP_SETTINGS_DATA_TOKEN=$APP_SETTINGS_DATA_TOKEN
+ENV REACT_APP_UI_DATA_TOKEN=$APP_UI_DATA_TOKEN
+
+# create the env file
+RUN printf "NODE_ENV=production\nREACT_APP_VERSION=$APP_VERSION\nREACT_APP_BASE_DATA_URL=$APP_BASE_DATA_URL\nREACT_APP_UI_DATA_TOKEN=$APP_UI_DATA_TOKEN\n" >> .env
+
+# Copy in source files
+COPY . /src
 
 # Build the app
 RUN npm run build
+
+#CMD ["sleep", "infinity"]
 
 ###################
 # startup the nginx server
