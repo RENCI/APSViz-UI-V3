@@ -18,7 +18,7 @@ ENV PATH /src/node_modules/.bin:$PATH
 COPY package*.json /src/
 
 # install package components
-RUN npm ci
+RUN npm install
 
 # Copy in source files
 COPY . /src

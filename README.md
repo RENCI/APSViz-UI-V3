@@ -1,4 +1,4 @@
-# RENCI React Starter
+# RENCI APSViz UI/V3
 
 This React application boilerplate contains an initial configuration common to the many of the web applications built at/by/for RENCI.
 
