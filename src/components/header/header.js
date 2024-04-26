@@ -1,6 +1,7 @@
+import React from 'react';
 import classes from './header.module.css'
+import apsLogo from '@images/aps-logo3.png'
 import { Menu } from './menu'
-import apsLogo from '../../images/aps-logo3.png'
 import { Link } from '../link'
 
 // import { Brand } from '../brand'
@@ -23,22 +24,24 @@ import { Link } from '../link'
 
 export const Header = (/*{ *menuLinks}*/ ) => {
   return (
-    <header className={ classes.appHeader }>
+      <header className={classes.appHeader}>
 
-      {/*  <div className={ classes.overlay }>*/}
-      {/*    <ReactLogo />*/}
-      {/*    <Brand size="medium" />*/}
-      {/*  </div>*/}
+          {/*  <div className={ classes.overlay }>*/}
+          {/*    <ReactLogo />*/}
+          {/*    <Brand size="medium" />*/}
+          {/*  </div>*/}
 
-      {/*<Menu options={ menuLinks } />*/}
+          {/*<Menu options={ menuLinks } />*/}
 
-      <Link to="https://www.adcircprediction.org">
-        <img className={ classes.apsLogo } src={apsLogo}/>
-      </Link>
-    </header>
+          <Link to="https://www.adcircprediction.org">
+              <img className={classes.apsLogo} src={apsLogo} alt=""/>
+          </Link>
+
+          <div style={{color: "white"}}> Version: {process.env.REACT_APP_VERSION}</div>
+      </header>
   )
 }
 
 Header.propTypes = {
-  menuLinks: Menu.propTypes.options,
+    menuLinks: Menu.propTypes.options,
 }
