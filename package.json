@@ -1,5 +1,5 @@
 {
-  "name": "APSViz-UI:V3",
+  "name": "APSViz-UI-V3",
   "private": "true",
   "scripts": {
     "start": "webpack serve --env SERVE=true",
