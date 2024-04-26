@@ -1,11 +1,11 @@
 {
-  "name": "APSViz-UI:V3",
+  "name": "APSViz-UI-V3",
   "private": "true",
   "scripts": {
     "start": "webpack serve --env SERVE=true",
-    "build": "webpack --env NODE_ENV=production",
+    "build": "webpack --env NODE_ENV=production --mode=production",
     "watch": "webpack --watch",
-    "build-dev": "webpack",
+    "build-dev": "webpack --env NODE_ENV=development --mode=development",
     "lint": "eslint ./src/index.js ./src/components/**/*.js",
     "lint:fix": "eslint --fix ./src/index.js ./src/components/**/*.js",
     "clean": "rm -rf dist",
