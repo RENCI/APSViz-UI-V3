@@ -1,48 +1,16 @@
-import { Fragment, useState } from 'react'
-import PropTypes from 'prop-types'
+import { Fragment, useCallback, useState } from 'react'
 import {
   DialogContent,
-  IconButton,
   List,
-  ListItem,
-  Tooltip,
   Sheet,
 } from '@mui/joy'
-import DrawerModules from './menu-items'
-
-const MenuItem = ({ Icon, title, onClick, active }) => {
-  return (
-    <ListItem>
-      <Tooltip
-        title={ title }
-        placement="right"
-        arrow
-      >
-        <IconButton
-          size="lg"
-          color="primary"
-          variant={ active ? 'solid' : 'soft' }
-          onClick={ onClick }
-        >
-          <Icon />
-        </IconButton>
-      </Tooltip>
-    </ListItem>
-  )
-}
-
-MenuItem.propTypes = {
-  active: PropTypes.bool.isRequired,
-  Icon: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-}
-
+import { MenuItem } from './menu-item'
+import SidebarModules from './trays'
 
 export const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(-1)
 
-  const handleClickMenuItem = newIndex => {
+  const handleClickMenuItem = useCallback(newIndex => {
     // if the incoming new index equals the old index,
     // then the user wants to close the currently open tray.
     if (newIndex === activeIndex) {
@@ -51,7 +19,7 @@ export const Sidebar = () => {
     }
     // otherwise, open desired tray.
     setActiveIndex(newIndex)
-  }
+  }, [activeIndex])
 
   return (
     <Fragment>
@@ -71,13 +39,13 @@ export const Sidebar = () => {
       >
         <List>
             {
-              Object.keys(DrawerModules).map((key, index) => {
+              Object.keys(SidebarModules).map((key, index) => {
                 return (
                   <MenuItem
                     key={ `menu-item-${ key }` }
                     active={ index === activeIndex }
-                    title={ DrawerModules[key].title }
-                    Icon={ DrawerModules[key].icon }
+                    title={ SidebarModules[key].title }
+                    Icon={ SidebarModules[key].icon }
                     onClick={ () => handleClickMenuItem(index) }
                   />
                 )
@@ -86,7 +54,7 @@ export const Sidebar = () => {
         </List>
       </Sheet>
       {
-        Object.keys(DrawerModules).map((key, index) => {
+        Object.keys(SidebarModules).map((key, index) => {
           return (
             <Sheet
               key={ `tray-${ key }` }
@@ -103,7 +71,7 @@ export const Sidebar = () => {
               }}
             >
               <DialogContent>
-                { DrawerModules[key].tray }
+                { SidebarModules[key].tray }
               </DialogContent>
             </Sheet>
           )
