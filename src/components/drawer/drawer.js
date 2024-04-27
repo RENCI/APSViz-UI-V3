@@ -1,36 +1,17 @@
 import {
-  Card,
+  Sheet,
   DialogContent,
   DialogTitle,
-  IconButton,
   Stack,
 } from '@mui/joy'
-import {
-  Menu as HamburgerIcon,
-  Close as CloseMenuIcon,
-} from '@mui/icons-material'
 import { useLayout } from '@context'
-
-const DrawerToggler = () => {
-  const { drawer } = useLayout()
-
-  return (
-    <IconButton
-      sx={{ m: 2 }}
-      color="primary"
-      variant="soft"
-      onClick={ drawer.toggle }
-    >
-      { drawer.isOpen ? <CloseMenuIcon /> : <HamburgerIcon /> }
-  </IconButton>
-  )
-}
+import { DrawerToggler } from './toggler'
 
 export const Drawer = () => {
   const { drawer } = useLayout()
 
   return (
-    <Card
+    <Sheet
       variant="soft"
       sx={{
         position: 'absolute',
@@ -39,7 +20,6 @@ export const Drawer = () => {
         height: '100vh',
         zIndex: 999,
         maxWidth: drawer.isOpen ? '300px' : '70px',
-        borderRadius: 0,
         overflow: 'hidden',
         transition: 'max-width 250ms',
         p: 0,
@@ -56,6 +36,6 @@ export const Drawer = () => {
       </Stack>
       <DialogContent>
       </DialogContent>
-    </Card>
+    </Sheet>
   )
 }
