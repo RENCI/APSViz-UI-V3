@@ -1,72 +1,61 @@
-import { Fragment, useState } from 'react'
 import {
+  Card,
   DialogContent,
   DialogTitle,
-  Drawer as MuiDrawer,
   IconButton,
-  ModalClose,
-  Sheet,
+  Stack,
 } from '@mui/joy'
-import { Menu as MenuIcon } from '@mui/icons-material'
+import {
+  Menu as HamburgerIcon,
+  Close as CloseMenuIcon,
+} from '@mui/icons-material'
+import { useLayout } from '@context'
 
-export const Drawer = () => {
-  const [open, setOpen] = useState(true)
-
-  const handleClickToggleDrawer = () => {
-    setOpen(!open)
-  }
-
-  const DrawerToggler = () => (
-    <IconButton
-      sx={{
-        position: 'absolute',
-        left: '1.5rem',
-        top: '1.5rem',
-        zIndex: 999,
-      }}
-      color="primary"
-      variant="soft"
-      onClick={ () => setOpen(!open) }
-    ><MenuIcon /></IconButton>
-  )
+const DrawerToggler = () => {
+  const { drawer } = useLayout()
 
   return (
-    <Fragment>
-      <DrawerToggler />
-      <MuiDrawer
-        open={ open }
-        onClose={ () => setOpen(false) }
-        variant="plain"
-        hideBackdrop
-        slotProps={{
-          content: {
-            sx: {
-              bgcolor: 'transparent',
-              p: { md: 3, sm: 0 },
-              boxShadow: 'none',
-            },
-          },
-        }}
-        sx={{
-          '.MuiSheet-root': {
-            borderRadius: 'md',
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-            height: '100%',
-            overflow: 'auto',
-          }
-        }}
+    <IconButton
+      sx={{ m: 2 }}
+      color="primary"
+      variant="soft"
+      onClick={ drawer.toggle }
+    >
+      { drawer.isOpen ? <CloseMenuIcon /> : <HamburgerIcon /> }
+  </IconButton>
+  )
+}
+
+export const Drawer = () => {
+  const { drawer } = useLayout()
+
+  return (
+    <Card
+      variant="soft"
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100vh',
+        zIndex: 999,
+        maxWidth: drawer.isOpen ? '300px' : '70px',
+        borderRadius: 0,
+        overflow: 'hidden',
+        transition: 'max-width 250ms',
+        p: 0,
+        filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
+      }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        sx={{ width: 'calc(300px)', border: '1px dashed crimson' }}
       >
-        <Sheet>
-          <DialogTitle>Drawer</DialogTitle>
-          <ModalClose />
-          <DialogContent>
-            Excepteur esse ad anim id consectetur voluptate proident elit sed eu nulla laboris adipisicing minim.
-          </DialogContent>
-        </Sheet>
-      </MuiDrawer>
-    </Fragment>
+        <DrawerToggler />
+        <DialogTitle sx={{ flex: 1 }}>It&apos;s a Drawer</DialogTitle>
+      </Stack>
+      <DialogContent>
+      </DialogContent>
+    </Card>
   )
 }

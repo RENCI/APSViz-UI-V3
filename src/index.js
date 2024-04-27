@@ -1,13 +1,17 @@
 import { App } from './app'
 import { createRoot } from 'react-dom/client'
-import { LayersProvider } from '@context'
+import { LayersProvider, LayoutProvider } from '@context'
 import './index.css'
 
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-root.render(
-  <LayersProvider>
-    <App />
-  </LayersProvider>
+const ProvisionedApp = () => (
+  <LayoutProvider>
+    <LayersProvider>
+      <App />
+    </LayersProvider>
+  </LayoutProvider>
 )
+
+root.render(<ProvisionedApp />)
