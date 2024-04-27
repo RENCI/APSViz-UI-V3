@@ -2,10 +2,14 @@ import {
   Sheet,
   DialogContent,
   DialogTitle,
+  List,
+  ListItem,
+  ListItemDecorator,
   Stack,
 } from '@mui/joy'
 import { useLayout } from '@context'
 import { DrawerToggler } from './toggler'
+import { DrawerHeader } from './modules'
 
 export const Drawer = () => {
   const { drawer } = useLayout()
@@ -19,23 +23,19 @@ export const Drawer = () => {
         left: 0,
         height: '100vh',
         zIndex: 999,
-        maxWidth: drawer.isOpen ? '300px' : '70px',
+        width: '300px',
+        maxWidth: drawer.isOpen ? '300px' : '68px',
         overflow: 'hidden',
         transition: 'max-width 250ms',
         p: 0,
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
+        '.MuiList-root': { p: 0, },
+        '.MuiListItem-root': { p: 0, },
       }}
     >
-      <Stack
-        direction="row"
-        alignItems="center"
-        sx={{ width: 'calc(300px)', border: '1px dashed crimson' }}
-      >
-        <DrawerToggler />
-        <DialogTitle sx={{ flex: 1 }}>It&apos;s a Drawer</DialogTitle>
-      </Stack>
-      <DialogContent>
-      </DialogContent>
+      <List>
+        <DrawerHeader />
+      </List>
     </Sheet>
   )
 }
