@@ -1,9 +1,9 @@
 import { Fragment, useCallback, useState } from 'react'
 import {
-  DialogContent,
   List,
   Sheet,
 } from '@mui/joy'
+import { Tray } from './tray'
 import { MenuItem } from './menu-item'
 import SidebarModules from './trays'
 
@@ -32,9 +32,9 @@ export const Sidebar = () => {
           zIndex: 999,
           maxWidth: '68px',
           overflow: 'hidden',
-          transition: 'max-width 250ms',
           p: 0,
-          filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
+          filter: activeIndex === -1 ? 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))' : 'drop-shadow(0 0 1px rgba(0, 0, 0, 0.2))',
+          transition: 'max-width 250ms, filter 250ms',
         }}
       >
         <List>
@@ -56,24 +56,12 @@ export const Sidebar = () => {
       {
         Object.keys(SidebarModules).map((key, index) => {
           return (
-            <Sheet
+            <Tray
               key={ `tray-${ key }` }
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                transform: activeIndex === index ? 'translateX(0)' : 'translateX(-100%)',
-                transition: 'transform 250ms',
-                height: '100vh',
-                width: '300px',
-                zIndex: 998,
-                pl: '68px',
-              }}
-            >
-              <DialogContent>
-                { SidebarModules[key].tray }
-              </DialogContent>
-            </Sheet>
+              active={ activeIndex === index }
+              title={ SidebarModules[key].title }
+              contents={ SidebarModules[key].tray }
+            />
           )
         })
       }
