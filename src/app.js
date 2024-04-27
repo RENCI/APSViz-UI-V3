@@ -1,12 +1,12 @@
 import { Fragment } from 'react'
 import { Map } from '@components/map'
-import { Drawer } from '@components/drawer'
+import { Sidebar } from '@components/sidebar'
 
 export const App = () => {
   return (
     <Fragment>
       <Map/>
-      <Drawer />
+      <Sidebar />
     </Fragment>
   )
 }
