@@ -1,25 +1,24 @@
 import React from 'react';
-import 'leaflet/dist/leaflet.css'
-import { MapContainer, TileLayer} from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet'
 import { DefaultLayers } from './default-layers';
 import { useLayers } from '@context';
+import 'leaflet/dist/leaflet.css'
 
-// import classes from './map.module.css'
-// import { LayerMenu } from '../layer-menu/layer-menu';
+const DEFAULT_CENTER = [30.0, -73.0]
 
 export const Map = () => {
     const {
-        setMap
+      setMap
     } = useLayers();
 
     return (
       <MapContainer 
-        center={[30.0, -73.0]}
+        center={ DEFAULT_CENTER }
         zoom={5}
         zoomControl={false}
         scrollWheelZoom={true}
         whenCreated={setMap}
-        style={{ height: '88vh', width:'100wh' }}>
+        style={{ height: '100vh', width:'100wh' }}>
           <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
