@@ -122,7 +122,11 @@ export const trayContents = () => {
                     </Typography>
                   </ListItemContent>
 
-                  <Switch size="sm" onChange={ handleToggleVisibilitySwitch(layer.id) } />
+                  <Switch
+                    size="sm"
+                    onChange={ handleToggleVisibilitySwitch(layer.id) }
+                    checked={ isVisible }
+                  />
 
                   <IconButton onClick={ handleToggleExpansion(layer.id) }>
                     <ExpandIcon sx={{
