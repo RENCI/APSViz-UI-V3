@@ -22,6 +22,7 @@ export const CloseTrayButton = () => {
 export const Tray = ({ active, contents, title, closeHandler }) => {
   return (
     <Sheet
+      variant="plain"
       sx={{
         position: 'absolute',
         top: 0,
