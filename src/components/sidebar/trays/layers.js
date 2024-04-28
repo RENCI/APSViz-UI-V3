@@ -1,11 +1,8 @@
-import PropTypes from 'prop-types'
 import { useState } from 'react'
 import {
   Accordion,
   AccordionGroup,
   AccordionDetails,
-  AccordionSummary,
-  Avatar,
   Box,
   Button,
   IconButton,
@@ -45,7 +42,7 @@ export const trayContents = () => {
   // real state will be maintained in some higher-up context.
   const [visibleIds, setVisibleIds] = useState(new Set())
 
-  const handleToggleExpansion = id => (event) => {
+  const handleToggleExpansion = id => () => {
     const _expandedIds = new Set([...expandedIds])
     if (_expandedIds.has(id)) {
       _expandedIds.delete(id)
@@ -56,7 +53,7 @@ export const trayContents = () => {
     setExpandedIds(_expandedIds)
   }
 
-  const handleToggleVisibilitySwitch = id => event => {
+  const handleToggleVisibilitySwitch = id => () => {
     const _visibleIds = new Set([...visibleIds])
     if (_visibleIds.has(id)) {
       _visibleIds.delete(id)
@@ -68,14 +65,11 @@ export const trayContents = () => {
   }
 
   return (
-    <Stack
-      gap={ 2 }
-      sx={{
-        height: '100%',
-        '.MuiList-root': { p: 0 },
-        '.MuiListItem-root': { my: 1 },
-      }}
-    >
+    <Stack sx={{
+      height: '100%',
+      '.MuiList-root': { p: 0 },
+      '.MuiListItem-root': { my: 1 },
+    }}>
       <AccordionGroup variant="soft">
         {
           dummyLayers.map(layer => {
@@ -147,9 +141,11 @@ export const trayContents = () => {
           })
         }
       </AccordionGroup>
-      <Button startDecorator={ <AddLayerIcon /> } size="lg">
-        Add a Layer
-      </Button>
+      <Stack p={ 2 }>
+        <Button startDecorator={ <AddLayerIcon /> } size="lg">
+          Add a Layer
+        </Button>
+      </Stack>
     </Stack>
   )
 }
