@@ -19,7 +19,7 @@ export const MenuItem = ({ Icon, title, onClick, active }) => {
           variant={ active ? 'solid' : 'soft' }
           onClick={ onClick }
         >
-          <Icon />
+          { Icon }
         </IconButton>
       </Tooltip>
     </ListItem>

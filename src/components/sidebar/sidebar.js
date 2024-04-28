@@ -61,6 +61,7 @@ export const Sidebar = () => {
               active={ activeIndex === index }
               title={ SidebarModules[key].title }
               contents={ SidebarModules[key].tray }
+              closeHandler={ () => setActiveIndex(-1) }
             />
           )
         })

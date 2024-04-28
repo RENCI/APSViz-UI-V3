@@ -1,7 +1,7 @@
 import { Card, Stack } from '@mui/joy'
 import { Tune as SettingsIcon } from '@mui/icons-material'
 
-export const icon = SettingsIcon
+export const icon = <SettingsIcon />
 
 export const title = 'Settings'
 
