@@ -5,7 +5,7 @@ export const icon = <SettingsIcon />
 
 export const title = 'Settings'
 
-export const tray = (
+export const trayContents = () => (
   <Stack gap={ 2 }>
     {
       [...Array(3).keys()].map(i => (

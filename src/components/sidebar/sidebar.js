@@ -72,7 +72,7 @@ export const Sidebar = () => {
               key={ `tray-${ key }` }
               active={ activeIndex === index }
               title={ SidebarModules[key].title }
-              contents={ SidebarModules[key].tray }
+              Contents={ SidebarModules[key].trayContents }
               closeHandler={ () => setActiveIndex(-1) }
             />
           )

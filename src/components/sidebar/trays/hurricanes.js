@@ -2,4 +2,4 @@ import { Storm as HurricaneIcon } from '@mui/icons-material'
 
 export const icon = <HurricaneIcon />
 export const title = 'Hurricanes'
-export const tray = <div>hurricanes tray</div>
+export const trayContents = () => <div>hurricanes tray</div>

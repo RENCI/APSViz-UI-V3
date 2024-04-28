@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import PropTypes from 'prop-types'
 import {
   DialogContent,
@@ -11,15 +12,7 @@ import {
   KeyboardDoubleArrowLeft as CloseTrayIcon,
 } from '@mui/icons-material'
 
-export const CloseTrayButton = () => {
-  return (
-    <IconButton>
-      <CloseTrayIcon />
-    </IconButton>
-  )
-}
-
-export const Tray = ({ active, contents, title, closeHandler }) => {
+export const Tray = ({ active, Contents, title, closeHandler }) => {
   return (
     <Sheet
       variant="plain"
@@ -30,17 +23,21 @@ export const Tray = ({ active, contents, title, closeHandler }) => {
         transform: active ? 'translateX(0)' : 'translateX(-100%)',
         transition: 'transform 250ms',
         height: '100vh',
-        width: '400px',
+        width: '450px',
         zIndex: 998,
         pl: '68px',
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
         overflowX: 'hidden',
         overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         ".tray-header": {
           p: 2,
           '.MuiDialogTitle-root': { flex: 1 },
         },
-        ".tray-contents": { p: 2 },
+        ".tray-contents": {
+          p: 0,
+        },
       }}
     >
       <Stack
@@ -59,7 +56,7 @@ export const Tray = ({ active, contents, title, closeHandler }) => {
       <Divider />
 
       <DialogContent className="tray-contents">
-        { contents }
+        <Contents />
       </DialogContent>
     </Sheet>
   )
@@ -67,7 +64,10 @@ export const Tray = ({ active, contents, title, closeHandler }) => {
 
 Tray.propTypes = {
   active: PropTypes.bool.isRequired,
-  contents: PropTypes.node.isRequired,
+  Contents: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.node,
+  ]).isRequired,
   title: PropTypes.string.isRequired,
   closeHandler: PropTypes.func.isRequired,
 }
