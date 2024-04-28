@@ -95,6 +95,10 @@ export const trayContents = () => {
                     p: 1,
                     borderLeft: '6px solid',
                     borderLeftColor: isVisible ? 'primary.400' : 'primary.100',
+                    '.MuiIconButton-root': { filter: 'opacity(0.25)', transition: 'filter 250ms' },
+                    '.MuiSwitch-root': { filter: 'opacity(0.25)', transition: 'filter 250ms' },
+                    '&:hover .MuiIconButton-root': { filter: 'opacity(1.0)' },
+                    '&:hover .MuiSwitch-root': { filter: 'opacity(1.0)' },
                   }}
                 >
                   <IconButton
