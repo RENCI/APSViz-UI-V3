@@ -1,0 +1,24 @@
+# Copyright (c) 2024, The University of North Carolina at Chapel Hill All rights reserved.
+# SPDX-FileCopyrightText: 2022 Renaissance Computing Institute. All rights reserved.
+#
+# SPDX-License-Identifier: BSD 3-Clause
+
+name: ES Lint the repo
+
+# trigger event is on a pull request
+on:
+  workflow_dispatch:
+  #push
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mrdivyansh/eslint-action@v1.0.7
+
+        with:
+          #repo-token: ${{secrets.GITHUB_TOKEN}}
+          eslint-rc: .eslintrc.js
+          execute-on-files:
+            - ./packages
