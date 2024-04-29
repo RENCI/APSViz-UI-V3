@@ -6,7 +6,7 @@ export const icon = <SettingsIcon />
 export const title = 'Settings'
 
 export const trayContents = () => (
-  <Stack gap={ 2 }>
+  <Stack gap={ 2 } p={ 2 }>
     {
       [...Array(3).keys()].map(i => (
         <Card
