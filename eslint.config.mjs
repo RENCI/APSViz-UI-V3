@@ -27,7 +27,8 @@ export default [
       "semi": "warn",
       "prefer-const": "warn",
       "no-dupe-args": "warn",
-      "no-dupe-keys": "warn"
+      "no-dupe-keys": "warn",
+      "react/display-name": "off"
     },
     linterOptions: { reportUnusedDisableDirectives: "error" }
   }
