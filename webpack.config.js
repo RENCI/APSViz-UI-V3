@@ -15,9 +15,11 @@ const plugins = [
     template: './src/index.html',
     favicon: './src/images/favicon.png',
   }),
+
   new ESLintPlugin({
-    extensions: ['./src', 'js'],
+    extensions: ['./src', 'js'], eslintPath: "eslint/use-at-your-own-risk", configType: "flat"
   }),
+
   new DotenvPlugin(),
   new HotModuleReplacementPlugin(),
 ]
@@ -39,7 +41,7 @@ module.exports = {
   },
 
   module: {
-    rules: [
+      rules: [
       {
         test: /\.(png|jpe?g|gif|svg|webp)$/i,
         // type:

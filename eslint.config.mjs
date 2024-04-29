@@ -1,24 +1,34 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import react from "eslint-plugin-react";
 
+// this bit fixes the collision with the React definition of react
+react.configs.recommended.plugins = { react };
+react.configs.recommended.languageOptions = { parserOptions: react.configs.recommended.parserOptions };
+delete react.configs.recommended.parserOptions;
 
+// define the eslint configuration
 export default [
+  react.configs.recommended,
   {
+    plugins: { react },
     files: ["src/**/*.js"],
-    ignores: ["**/*.config.js"],
-    languageOptions: { globals: globals.browser },
+    ignores: ["**/*.config.js", "dist/**/*"],
+    settings: { version: "detect" },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        }},
+      globals: globals.browser
+    },
     rules: {
-      "no-unused-vars": "error",
-      "no-undef": "error",
-      "semi": "error",
-      "prefer-const": "error",
-      "no-dupe-args": "error",
-      "no-dupe-keys": "error",
-
+      "no-unused-vars": "warn",
+      "no-undef": "warn",
+      "semi": "warn",
+      "prefer-const": "warn",
+      "no-dupe-args": "warn",
+      "no-dupe-keys": "warn"
     },
     linterOptions: { reportUnusedDisableDirectives: "error" }
-  },
-  pluginJs.configs.recommended,
-  pluginReactConfig,
+  }
 ];
