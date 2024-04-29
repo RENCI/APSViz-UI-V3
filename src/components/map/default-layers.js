@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
-import { WMSTileLayer } from 'react-leaflet'
-import { useLayers } from '@context'
+import { WMSTileLayer } from 'react-leaflet';
+import { useLayers } from '@context';
 
 export const DefaultLayers = () => {
   const {
@@ -25,7 +25,7 @@ export const DefaultLayers = () => {
     // TODO: Need to store this url in some website config file and
     //     it should change to reflect the namspace we are running in
     async function getDefaultLayers() {
-      let layer_list = [];
+      const layer_list = [];
       const response = await fetch(data_url, requestOptions);
       const data = await response.json();
       
@@ -33,7 +33,7 @@ export const DefaultLayers = () => {
         // get layer id in workbench and find catalog entries for each
         //for (let layer_id in data.workbench) {
         data.workbench.forEach(function (layer_id) {
-        let layer = getCatalogEntry(data.catalog, layer_id)
+        const layer = getCatalogEntry(data.catalog, layer_id);
         if (layer)
           layer_list.push(layer);
         });
@@ -43,9 +43,9 @@ export const DefaultLayers = () => {
 
     // retrieve the catalog member with the provided id
     const getCatalogEntry = (catalog, id)  => {
-      let entry = ""
+      let entry = "";
       
-      for (let idx in catalog) {
+      for (const idx in catalog) {
         catalog[idx].members.forEach (function (e) {
         if (e.id === id) {
           entry = e;
@@ -53,8 +53,8 @@ export const DefaultLayers = () => {
         });
       }
       return entry;
-    }
-    getDefaultLayers()
+    };
+    getDefaultLayers();
   }, []);
 
   return (
@@ -74,5 +74,5 @@ export const DefaultLayers = () => {
     );
     })};
     </>
-  )
+  );
 };

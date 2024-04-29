@@ -1,4 +1,4 @@
-import useLayers from '../context/map-context'
+import useLayers from '../context/map-context';
 import { StacApiProvider } from "stac-react";
 
 const {
