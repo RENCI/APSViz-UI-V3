@@ -13,7 +13,7 @@ export default [
     plugins: { react },
     files: ["src/**/*.js"],
     ignores: ["**/*.config.js", "dist/**/*"],
-    settings: { version: "detect" },
+    settings: { react: {version: "18.2.0"} },
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
