@@ -8,7 +8,7 @@ const SIZES = {
   large: 200,
 }
 
-export const Brand = ({ size, dark }) => {
+export const Brand = ({ size }) => {
   return (
     <a
       href="https://www.adcircprediction.org"
@@ -27,5 +27,4 @@ export const Brand = ({ size, dark }) => {
 
 Brand.propTypes = {
   size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
-  dark: PropTypes.bool,
 }
