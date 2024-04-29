@@ -16,7 +16,7 @@ import {
   KeyboardArrowDown as ExpandIcon,
   Layers as LayersIcon,
 } from '@mui/icons-material'
-import { DragHandle as DragHandleIcon } from '@mui/icons-material'
+import { DragIndicator as DragHandleIcon } from '@mui/icons-material'
 export const icon = <LayersIcon />
 
 export const title = 'Layers'
@@ -113,7 +113,7 @@ export const trayContents = () => {
                       m: 0,
                     }}
                   >
-                    <DragHandleIcon size="sm" />
+                    <DragHandleIcon fontSize="sm" />
                   </IconButton>
 
                   <ListItemContent>
