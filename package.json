@@ -8,6 +8,7 @@
     "build-dev": "webpack --mode=development",
     "lint": "eslint ./src/*/*.js",
     "lint:fix": "eslint --fix ./src/*/*.js",
+    "npx:lint": "npx eslint .",
     "clean": "rm -rf dist",
     "deploy": "webpack && gh-pages -d dist",
     "test": "jest"
