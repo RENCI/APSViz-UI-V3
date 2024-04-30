@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionGroup,
   AccordionDetails,
-  Box,
+  Divider,
   IconButton,
   ListItemContent,
   Stack,
@@ -122,21 +122,26 @@ export const LayersList = () => {
                 />
 
                 <IconButton onClick={ handleToggleExpansion(layer.id) }>
-                  <ExpandIcon sx={{
-                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
-                    transition: 'transform 100ms',
-                  }}/>
+                  <ExpandIcon
+                    fontSize="sm"
+                    sx={{
+                      transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
+                      transition: 'transform 100ms',
+                    }}
+                  />
                 </IconButton>
               </Stack>
-              <AccordionDetails variant="solid">
-                <Box sx={{ p: 1 }}>
-                  Lorem ipsum ad deserunt adipisicing deserunt sint deserunt qui occaecat consequat aliquip.
-                </Box>
+              <AccordionDetails variant="soft" sx={{
+                // remove default margin that doesn't work well in our situation.
+                marginInline: 0,
+              }}>
+                Lorem ipsum ad deserunt adipisicing deserunt sint deserunt qui occaecat consequat aliquip.
               </AccordionDetails>
             </Accordion>
           )
         })
       }
+      <Divider />
     </AccordionGroup>
   )
 }

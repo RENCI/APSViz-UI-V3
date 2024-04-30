@@ -18,13 +18,12 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
       sx={{
         position: 'absolute',
         top: 0,
-        left: 0,
-        transform: active ? 'translateX(0)' : 'translateX(-100%)',
+        left: '68px',
+        transform: active ? 'translateX(0)' : 'translateX(-120%)',
         transition: 'transform 250ms',
         height: '100vh',
         width: '450px',
         zIndex: 998,
-        pl: '68px',
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
         overflowX: 'hidden',
         overflowY: 'auto',
@@ -36,6 +35,7 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         },
         ".tray-contents": {
           p: 0,
+          // overflow: 'hidden',
         },
       }}
     >
@@ -47,8 +47,8 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         <DialogTitle>
           { title }
         </DialogTitle>
-        <IconButton onClick={ closeHandler }>
-          <CloseTrayIcon size="sm" />
+        <IconButton onClick={ closeHandler } size="sm">
+          <CloseTrayIcon fontSize="sm" />
         </IconButton>
       </Stack>
 
