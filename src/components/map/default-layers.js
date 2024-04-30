@@ -99,26 +99,26 @@ export const DefaultLayers = () => {
                     />
                 );
             }
-            // else {
-            //     return (
-            //         <WMSTileLayer
-            //             key = {index}
-            //             /* eventHandlers={{
-            //                 click: () => {
-            //                 console.log('marker clicked')
-            //                 },
-            //             }} */
-            //             url={gs_wms_url}
-            //             layers={layer.layers}
-            //             params={{
-            //                 format:"image/png",
-            //                 transparent: true,
-            //             }}
+            else {
+                return (
+                    <WMSTileLayer
+                        key = {index}
+                        /* eventHandlers={{
+                            click: () => {
+                            console.log('marker clicked')
+                            },
+                        }} */
+                        url={gs_wms_url}
+                        layers={layer.layers}
+                        params={{
+                            format:"image/png",
+                            transparent: true,
+                        }}
         
-            //         >
-            //         </WMSTileLayer>
-            //     )
-            // }
+                    >
+                    </WMSTileLayer>
+                );
+            }
         })};
         </>
     );
