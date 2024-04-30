@@ -59,7 +59,7 @@ export const DefaultLayers = () => {
             if (obs_url) {
                 const obs_response = await fetch(obs_url);
                 const obs_data = await obs_response.json();
-                console.log(obs_data)
+                //console.log("obs_data 1: " + JSON.stringify(obs_data, null, 2))
 
                 setObsData(obs_data)
             }
@@ -82,16 +82,16 @@ export const DefaultLayers = () => {
         getDefaultLayers().then()
       }, []);
 
-    console.log(defaultModelLayers)
-    console.log(obsData)
+    //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
 
     return (
         <>
         {defaultModelLayers.map((layer, index) => {
             let pieces = layer.id.split('-')
             let type = pieces[pieces.length-1]
-            console.log(type)
-            if( type === "obs") {
+            //console.log("type: " + JSON.stringify(type, null, 2))
+            if( type === "obs" && obsData !== "") {
+                console.log("obsData: " + JSON.stringify(obsData, null, 2))
                 return (
                     <GeoJSON
                         key = {index}
