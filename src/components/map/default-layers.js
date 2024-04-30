@@ -61,7 +61,7 @@ export const DefaultLayers = () => {
                 const obs_data = await obs_response.json();
                 //console.log("obs_data 1: " + JSON.stringify(obs_data, null, 2))
 
-                setObsData(obs_data)
+                setObsData(obs_data);
             }
 
         }
@@ -87,18 +87,17 @@ export const DefaultLayers = () => {
     return (
         <>
         {defaultModelLayers.map((layer, index) => {
-            const pieces = layer.id.split('-')
-            const type = pieces[pieces.length-1]
+            const pieces = layer.id.split('-');
+            const type = pieces[pieces.length-1];
             //console.log("type: " + JSON.stringify(type, null, 2))
             if( type === "obs" && obsData !== "") {
-                console.log("obsData: " + JSON.stringify(obsData, null, 2))
+                console.log("obsData: " + JSON.stringify(obsData, null, 2));
                 return (
                     <GeoJSON
                         key = {index}
                         data = {obsData}
-                    >
-                    </GeoJSON>
-                )
+                    />
+                );
             }
             // else {
             //     return (
