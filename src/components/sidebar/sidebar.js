@@ -5,7 +5,7 @@ import {
 } from '@mui/joy'
 import { Tray } from './tray'
 import { MenuItem } from './menu-item'
-import SidebarModules from './trays'
+import SidebarTrays from '../trays'
 
 export const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -51,13 +51,13 @@ export const Sidebar = () => {
       >
         <List>
             {
-              Object.keys(SidebarModules).map((key, index) => {
+              Object.keys(SidebarTrays).map((key, index) => {
                 return (
                   <MenuItem
                     key={ `menu-item-${ key }` }
                     active={ index === activeIndex }
-                    title={ SidebarModules[key].title }
-                    Icon={ SidebarModules[key].icon }
+                    title={ SidebarTrays[key].title }
+                    Icon={ SidebarTrays[key].icon }
                     onClick={ () => handleClickMenuItem(index) }
                   />
                 )
@@ -66,13 +66,13 @@ export const Sidebar = () => {
         </List>
       </Sheet>
       {
-        Object.keys(SidebarModules).map((key, index) => {
+        Object.keys(SidebarTrays).map((key, index) => {
           return (
             <Tray
               key={ `tray-${ key }` }
               active={ activeIndex === index }
-              title={ SidebarModules[key].title }
-              Contents={ SidebarModules[key].trayContents }
+              title={ SidebarTrays[key].title }
+              Contents={ SidebarTrays[key].trayContents }
               closeHandler={ () => setActiveIndex(-1) }
             />
           )
