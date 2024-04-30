@@ -7,8 +7,7 @@ name: ES Lint the repo
 
 # trigger event is on a pull request
 on:
-  workflow_dispatch:
-  #push
+  pull_request:
 
 jobs:
   eslint:
