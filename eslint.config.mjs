@@ -11,8 +11,8 @@ export default [
   react.configs.recommended,
   {
     plugins: { react },
-    files: ["src/**/*.js"],
-    ignores: ["**/*.config.js", "dist/**/*"],
+    files: ["src/**/*.js*"],
+    ignores: ["**/*.config.js", "dist/**/*", "build/**/*"],
     settings: { react: {version: "18.2.0"} },
     languageOptions: {
       parserOptions: {
