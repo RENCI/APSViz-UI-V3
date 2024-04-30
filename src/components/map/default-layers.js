@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { WMSTileLayer, GeoJSON } from 'react-leaflet'
-import { useLayers } from '@context'
+import { WMSTileLayer, GeoJSON } from 'react-leaflet';
+import { useLayers } from '@context';
 
 export const DefaultLayers = () => {
 
@@ -29,28 +29,28 @@ export const DefaultLayers = () => {
         // TODO: Need to store this url in some website config file and
         //       it should change to reflect the namspace we are running in
         async function getDefaultLayers() {
-            let layer_list = [];
+            const layer_list = [];
             const response = await fetch(data_url, requestOptions);
             const data = await response.json();
-            let obs_url = null
+            let obs_url = null;
           
             if (data) {
               // get layer id in workbench and find catalog entries for each
               data.workbench.forEach(function (layer_id) {
-                let layer = getCatalogEntry(data.catalog, layer_id)
+                const layer = getCatalogEntry(data.catalog, layer_id);
                 if (layer)
                     layer_list.push(layer);
 
                     // TODO: do we really need to do this here??!
                     // if this is an obs layer, need to retrieve
                     // the json data for it from GeoServer
-                    let pieces = layer.id.split('-')
-                    let type = pieces[pieces.length-1]
+                    const pieces = layer.id.split('-');
+                    const type = pieces[pieces.length-1];
                     if( type === "obs") {
                         obs_url = gs_wfs_url +
                             "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
                             "&typeName=" +
-                        layer.layers
+                        layer.layers;
                     }
               });
               setDefaultModelLayers(layer_list);
@@ -59,18 +59,18 @@ export const DefaultLayers = () => {
             if (obs_url) {
                 const obs_response = await fetch(obs_url);
                 const obs_data = await obs_response.json();
-                console.log(obs_data)
+                console.log(obs_data);
 
-                setObsData(obs_data)
+                setObsData(obs_data);
             }
 
         }
 
         // retrieve the catalog member with the provided id
         const getCatalogEntry = (catalog, id)  => {
-            let entry = ""
+            const entry = "";
             
-            for (let idx in catalog) {
+            for (const idx in catalog) {
                 catalog[idx].members.forEach (function (e) {
                 if (e.id === id) {
                     entry = e;
@@ -78,19 +78,19 @@ export const DefaultLayers = () => {
                 });
             }
             return entry;
-        }
-        getDefaultLayers().then()
+        };
+        getDefaultLayers().then();
       }, []);
 
-    console.log(defaultModelLayers)
-    console.log(obsData)
+    console.log(defaultModelLayers);
+    console.log(obsData);
 
     return (
         <>
         {defaultModelLayers.map((layer, index) => {
-            let pieces = layer.id.split('-')
-            let type = pieces[pieces.length-1]
-            console.log(type)
+            const pieces = layer.id.split('-');
+            const type = pieces[pieces.length-1];
+            console.log(type);
             if( type === "obs") {
                 return (
                     <GeoJSON
@@ -98,7 +98,7 @@ export const DefaultLayers = () => {
                         data = {obsData}
                     >
                     </GeoJSON>
-                )
+                );
             }
             // else {
             //     return (
@@ -122,5 +122,5 @@ export const DefaultLayers = () => {
             // }
         })};
         </>
-    )
+    );
 };
