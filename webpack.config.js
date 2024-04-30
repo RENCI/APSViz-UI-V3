@@ -15,9 +15,11 @@ const plugins = [
     template: './src/index.html',
     favicon: './src/images/favicon.png',
   }),
+
   new ESLintPlugin({
-    extensions: ['./src', 'js'],
+    extensions: ['src', 'js', 'js*'], eslintPath: "eslint/use-at-your-own-risk", configType: "flat"
   }),
+
   new DotenvPlugin(),
   new HotModuleReplacementPlugin(),
 ]
@@ -39,7 +41,7 @@ module.exports = {
   },
 
   module: {
-    rules: [
+      rules: [
       {
         test: /\.(png|jpe?g|gif|svg|webp)$/i,
         // type:
@@ -52,7 +54,7 @@ module.exports = {
       },
       {
         test: /\.(s[ac]|c)ss$/i,
-        use: [ // these load rtl
+        use: [ // these load the rtl
           {
             loader: MiniCssExtractPlugin.loader,
           },
@@ -73,7 +75,7 @@ module.exports = {
           {
             loader: "raw-loader",
             options: {
-              // Pass options to marked
+              // Pass options to be marked
               // See https://marked.js.org/using_advanced#options
             },
           },
@@ -96,6 +98,7 @@ module.exports = {
       '@context': path.resolve(__dirname, 'src/context/'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
+      '@utils': path.resolve(__dirname, 'src/utils/'),
     }
   },
 
@@ -118,6 +121,7 @@ module.exports = {
       console.log(` _|    _|  _|        _|    _|_|  _|          _|   `)
       console.log(` _|    _|  _|_|_|_|  _|      _|    _|_|_|  _|_|_| `)
       console.log(`\n`)
+
       return middlewares
     },
   },
