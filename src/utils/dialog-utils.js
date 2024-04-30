@@ -42,8 +42,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function FloatingDialog({ title, dialogText, openDialog}) { //, dialogObject
-  const [open, setOpen] = React.useState(openDialog);
+export default function BaseFloatingDialog({ title, dialogText, openDialogImmediately} ) { //, dialogObject
+  const [open, setOpen] = React.useState(openDialogImmediately);
 
   // closes the dialog
   const handleClose = () => {
@@ -79,9 +79,9 @@ export default function FloatingDialog({ title, dialogText, openDialog}) { //, d
 };
 
 // define the properties of this component
-FloatingDialog.propTypes = {
+BaseFloatingDialog.propTypes = {
   title: PropTypes.string,
   dialogText: PropTypes.string,
-  openDialog: PropTypes.bool
+  openDialogImmediately: PropTypes.bool
   // dialogObject: PropTypes.any
 };
