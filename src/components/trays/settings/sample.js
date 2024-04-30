@@ -3,10 +3,10 @@ import {
   CheckCircle as OnIcon,
   Cancel as OffIcon,
 } from '@mui/icons-material'
-import { usePreferences } from '@context'
+import { useSettings } from '@context'
 
 export const SampleToggle = () => {
-  const { booleanValue } = usePreferences()
+  const { booleanValue } = useSettings()
   
   return (
     <Stack
@@ -32,7 +32,7 @@ export const SampleToggle = () => {
 }
 
 export const Toggler = () => {
-  const { booleanValue } = usePreferences()
+  const { booleanValue } = useSettings()
 
   const handleClick = () => {
     booleanValue.toggle()

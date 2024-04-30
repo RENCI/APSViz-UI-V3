@@ -1,2 +1,2 @@
 export * from './map-context'
-export * from './preferences'
+export * from './settings'
