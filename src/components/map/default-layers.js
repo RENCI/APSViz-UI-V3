@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { WMSTileLayer, GeoJSON } from 'react-leaflet';
+import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 
 export const DefaultLayers = () => {
@@ -16,6 +17,53 @@ export const DefaultLayers = () => {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${process.env.REACT_APP_UI_DATA_TOKEN}`
+        }
+    };
+
+    const obsPointToLayer = ((feature, latlng) => {
+        let obs_color = "#FFFFFF";
+        
+        switch (feature.properties.gauge_owner) {
+            case 'NOAA/NDBC':
+                obs_color = "#FFFF00";
+                break;
+            case 'NCEM':
+                obs_color = "#3D4849";
+                break;
+            case 'NOAA/NOS':
+                obs_color = "#BEAEFA";
+                break;
+        }
+        
+        return new CircleMarker(latlng, {
+          radius: 6,
+          weight: 0.7,
+          color: '#000000',
+          fillColor: obs_color,
+          fillOpacity: 1
+        });
+    });
+
+    const onEachObsFeature = (feature, layer) => {
+        if (feature.properties && feature.properties.location_name) {
+          const popupContent = feature.properties.location_name;
+    
+          layer.on("mouseover", function (e) {
+            this.bindPopup(popupContent).openPopup(e.latlng);
+          });
+    
+          layer.on("mousemove", function (e) {
+            this.getPopup().setLatLng(e.latlng);
+          });
+    
+          layer.on("mouseout", function () {
+            this.closePopup();
+          });
+          layer.on("click", function () {
+            // Do stuff here for retrieving time series data, in csv fomat,
+            // from the feature.properties.csv_url and create a fancy plot
+            console.log("Observation Station '" + feature.properties.location_name + "' clicked");
+          });
         }
     };
 
@@ -91,11 +139,13 @@ export const DefaultLayers = () => {
             const type = pieces[pieces.length-1];
             //console.log("type: " + JSON.stringify(type, null, 2))
             if( type === "obs" && obsData !== "") {
-                console.log("obsData: " + JSON.stringify(obsData, null, 2));
+                //console.log("obsData: " + JSON.stringify(obsData, null, 2));
                 return (
                     <GeoJSON
                         key = {index}
                         data = {obsData}
+                        pointToLayer = {obsPointToLayer}
+                        onEachFeature = {onEachObsFeature}
                     />
                 );
             }
@@ -115,8 +165,7 @@ export const DefaultLayers = () => {
                             transparent: true,
                         }}
         
-                    >
-                    </WMSTileLayer>
+                    />
                 );
             }
         })};
