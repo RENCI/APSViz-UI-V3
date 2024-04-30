@@ -19,8 +19,8 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
-      - run: npm ci --no-audit --prefer-offline
+          node-version: 20
+      - run: npm ci
           
       - uses: tinovyatkin/action-eslint@v1
         with:
