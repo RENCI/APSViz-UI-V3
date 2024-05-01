@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
+import Draggable from 'react-draggable';
+import PropTypes from 'prop-types';
+
 import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
+import DialogContent from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
-import Draggable from 'react-draggable';
-import PropTypes from 'prop-types';
 import Slide from '@mui/material/Slide';
 
 /**
@@ -34,54 +36,51 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 /**
- * This is the floating component that displays a floating dialog
+ * This is a component that displays a floating dialog with the content passed
  *
- * @param title
- * @param dialogText
- * @param openDialog
+ * @param title: string
+ * @param description: string
+ * @param openDialogImmediately: boolean
+ * @param dialogObject: {JSX.Element}
  * @returns {JSX.Element}
  * @constructor
  */
 export default function BaseFloatingDialog({ title, description, openDialogImmediately, dialogObject} ) {
+
+  // define the dialog open/close session state
   const [open, setOpen] = React.useState(openDialogImmediately);
 
-  // closes the dialog
+  /**
+   * the close dialog handler
+   */
   const handleClose = () => {
     setOpen(false);
   };
 
-  // return the component that is rendered
+  /**
+   * configure and render the floating dialog
+   */
   return (
     <Fragment>
+      <CssBaseline />
       <Dialog
+        aria-labelledby="draggable-dialog-title"
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}
         TransitionComponent={Transition}
-        aria-labelledby="draggable-dialog-title"
         disableEnforceFocus
-        style={{ pointerEvents: 'none', opacity: '100%' }}
+        style={{ pointerEvents: 'none'}}
         PaperProps={{ style: { pointerEvents: 'auto'} }}
-        sx={{
-          '.MuiBackdrop-root': {
-            backgroundColor: 'transparent',
-          }
-        }}
+        sx={{ '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
       >
-        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          { title }
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            { description }
-          </DialogContentText>
-          { dialogObject }
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Close
-          </Button>
-        </DialogActions>
+        <DialogTitle sx={{cursor: 'move', backgroundColor: 'lightgray', textAlign: 'center'}} id="draggable-dialog-title"> { title } </DialogTitle>
+
+        <DialogContent sx={{backgroundColor: 'lightblue'}}><DialogContentText> { description } </DialogContentText></DialogContent>
+
+        <DialogContent sx={{backgroundColor: 'lightgreen'}}>{ dialogObject }</DialogContent>
+
+        <DialogActions sx={{backgroundColor: 'lightgray'}}><Button autoFocus onClick={handleClose}> Close </Button></DialogActions>
       </Dialog>
     </Fragment>
   );
