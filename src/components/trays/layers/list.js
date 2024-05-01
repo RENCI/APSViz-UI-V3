@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Accordion,
   AccordionGroup,
   AccordionDetails,
+  Box,
   Divider,
   IconButton,
   ListItemContent,
@@ -11,26 +12,17 @@ import {
   Typography,
 } from '@mui/joy'
 import {
+  DragIndicator as DragHandleIcon,
   KeyboardArrowDown as ExpandIcon,
 } from '@mui/icons-material'
-import { DragIndicator as DragHandleIcon } from '@mui/icons-material'
-
-const dummyLayers = [
-  {
-    id: '234567',
-    name: 'Ullamco anim ad',
-  },
-  {
-    id: '0987654',
-    name: 'In ad tempor',
-  },
-  {
-    id: '9846351',
-    name: 'Eu in laborum',
-  },
-]
+import { useLayers } from '@context'
 
 export const LayersList = () => {
+  const { defaultModelLayers } = useLayers()
+  const layers = [...defaultModelLayers]
+
+  console.log(layers)
+
   const [expandedIds, setExpandedIds] = useState(new Set())
   // of course, this is dummy state.
   // real state will be maintained in some higher-up context.
@@ -61,7 +53,7 @@ export const LayersList = () => {
   return (
     <AccordionGroup variant="soft">
       {
-        dummyLayers.map(layer => {
+        layers.map(layer => {
           const isExpanded = expandedIds.has(layer.id)
           const isVisible = visibleIds.has(layer.id)
 
@@ -69,7 +61,7 @@ export const LayersList = () => {
             <Accordion
               key={ `layer-${ layer.id }-${ isVisible ? 'visible' : 'hidden' }` }
               expanded={ isExpanded }
-              onChange={ handleToggleVisibilitySwitch }
+              onChange={ handleToggleExpansion }
               sx={{ p: 0 }}
             >
               {/*
@@ -107,11 +99,18 @@ export const LayersList = () => {
 
                 <ListItemContent>
                   <Typography level="title-md">
-                    { layer.name }
+                    { layer.id }
                   </Typography>
-                  <Typography level="body-sm">
-                    some details.
-                    some details.
+                  <Typography
+                    component="div"
+                    level="body-sm"
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'no-wrap',
+                    }}
+                  >
+                    { layer.layers }
                   </Typography>
                 </ListItemContent>
 
@@ -131,11 +130,17 @@ export const LayersList = () => {
                   />
                 </IconButton>
               </Stack>
-              <AccordionDetails variant="soft" sx={{
+              <AccordionDetails variant="solid" sx={{
                 // remove default margin that doesn't work well in our situation.
                 marginInline: 0,
               }}>
-                Lorem ipsum ad deserunt adipisicing deserunt sint deserunt qui occaecat consequat aliquip.
+                <Box component="pre" sx={{
+                  fontSize: '75%',
+                  color: '#def',
+                  backgroundColor: 'transparent',
+                }}>
+                  { JSON.stringify(layer.properties, null, 2) }
+                </Box>
               </AccordionDetails>
             </Accordion>
           )

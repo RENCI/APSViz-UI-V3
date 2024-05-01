@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import React, { Fragment } from 'react'
 import { Map } from '@components/map'
 import { Sidebar } from '@components/sidebar'
 

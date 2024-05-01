@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import {
   // useToggleLocalStorage,
   useToggleState,
-} from '@hooks'
+} from '@hooks';
 
 export const SettingsContext = createContext({});
-export const useSettings = () => useContext(SettingsContext)
+export const useSettings = () => useContext(SettingsContext);
 
 export const SettingsProvider = ({ children }) => {
-  const booleanValue = useToggleState()
+  const booleanValue = useToggleState();
   // to persist the value in the device's local
   // storage, use `useToggleLocalStorage` instead:
   //   const booleanValue = useToggleLocalStorage('boolean-value')
@@ -18,8 +18,8 @@ export const SettingsProvider = ({ children }) => {
     <SettingsContext.Provider value={{ booleanValue }}>
       { children }
     </SettingsContext.Provider>
-  )
-}
+  );
+};
 
 
 SettingsProvider.propTypes = {

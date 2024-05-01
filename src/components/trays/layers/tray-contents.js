@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button, Stack } from '@mui/joy'
 import {
   Add as AddLayerIcon,
@@ -6,16 +6,12 @@ import {
 } from '@mui/icons-material'
 import { LayersList } from './list'
 import { AddLayerForm } from './form'
-import { useLayers } from '@context'
 
 const FORM = 'FORM'
 const LIST = 'LIST'
 
 export const TrayContents = () => {
   const [state, setState] = useState(LIST)
-  const layers = useLayers()
-
-  console.log(layers)
 
   const handleClickToggleState = () => {
     if (state === FORM) {
