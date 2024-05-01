@@ -1,10 +1,10 @@
 import React from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
 import { useLayers } from '@context';
-import 'leaflet/dist/leaflet.css'
+import 'leaflet/dist/leaflet.css';
 
-const DEFAULT_CENTER = [30.0, -73.0]
+const DEFAULT_CENTER = [30.0, -73.0];
 
 export const Map = () => {
     const {
@@ -25,5 +25,5 @@ export const Map = () => {
           />
           <DefaultLayers/>
       </MapContainer>
-    )
-  }
+    );
+  };

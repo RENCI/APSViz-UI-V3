@@ -8,5 +8,5 @@ export const App = () => {
       <Map/>
       <Sidebar />
     </Fragment>
-  )
-}
+  );
+};
