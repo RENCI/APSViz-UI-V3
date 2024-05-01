@@ -21,6 +21,16 @@ export const LayersList = () => {
   const { defaultModelLayers, toggleLayerVisibility } = useLayers();
   const layers = [...defaultModelLayers];
 
+  // convert the product type to a readable layer name
+  const layer_names = {
+    obs: "Observations",
+    maxwvel63: "Maximum Wind Velocity",
+    maxele63: "Maximum Water Level",
+    swan_HS_max63: "Maximum Wave Height",
+    maxele_level_downscaled_epsg4326: "Hi-Res Maximum Water Level",
+    hec_ras_water_surface: "HEC/RAS Water Surface",
+  };
+
   console.table(layers[0]);
 
   const [expandedIds, setExpandedIds] = useState(new Set());
@@ -42,6 +52,10 @@ export const LayersList = () => {
         layers.map(layer => {
           const isExpanded = expandedIds.has(layer.id);
           const isVisible = layer.state.visible;
+          const layerTitle = layer_names[layer.properties.product_type] + " " +
+                        layer.properties.run_date + " " +
+                        layer.properties.cycle;
+
 
           return (
             <Accordion
@@ -85,7 +99,7 @@ export const LayersList = () => {
 
                 <ListItemContent>
                   <Typography level="title-md">
-                    { layer.id }
+                    {layerTitle}
                   </Typography>
                   <Typography
                     component="div"
