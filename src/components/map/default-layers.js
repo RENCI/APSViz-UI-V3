@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WMSTileLayer, GeoJSON } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
@@ -87,7 +87,12 @@ export const DefaultLayers = () => {
               data.workbench.forEach(function (layer_id) {
                 const layer = getCatalogEntry(data.catalog, layer_id);
                 if (layer)
-                    layer_list.push(layer);
+                    layer_list.push({
+                        ...layer,
+                        state: {
+                            visible: true,
+                        }
+                    });
 
                     // TODO: do we really need to do this here??!
                     // if this is an obs layer, need to retrieve
@@ -130,15 +135,12 @@ export const DefaultLayers = () => {
         getDefaultLayers().then();
       }, []);
 
-    //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
-
-    return (
-        <>
-        {defaultModelLayers.map((layer, index) => {
+    return defaultModelLayers
+        .filter(layer => layer.state.visible)
+        .map((layer, index) => {
             const pieces = layer.id.split('-');
             const type = pieces[pieces.length-1];
-            //console.log("type: " + JSON.stringify(type, null, 2))
-            if( type === "obs" && obsData !== "") {
+            if (type === "obs" && obsData !== "") {
                 //console.log("obsData: " + JSON.stringify(obsData, null, 2));
                 return (
                     <GeoJSON
@@ -148,8 +150,7 @@ export const DefaultLayers = () => {
                         onEachFeature = {onEachObsFeature}
                     />
                 );
-            }
-            else {
+            } else {
                 return (
                     <WMSTileLayer
                         key = {index}
@@ -168,7 +169,5 @@ export const DefaultLayers = () => {
                     />
                 );
             }
-        })};
-        </>
-    );
+        });
 };

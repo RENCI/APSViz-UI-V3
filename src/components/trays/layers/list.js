@@ -18,15 +18,12 @@ import {
 import { useLayers } from '@context';
 
 export const LayersList = () => {
-  const { defaultModelLayers } = useLayers();
+  const { defaultModelLayers, toggleLayerVisibility } = useLayers();
   const layers = [...defaultModelLayers];
 
-  console.log(layers);
+  console.table(layers[0]);
 
   const [expandedIds, setExpandedIds] = useState(new Set());
-  // of course, this is dummy state.
-  // real state will be maintained in some higher-up context.
-  const [visibleIds, setVisibleIds] = useState(new Set());
 
   const handleToggleExpansion = id => () => {
     const _expandedIds = new Set([...expandedIds]);
@@ -39,23 +36,12 @@ export const LayersList = () => {
     setExpandedIds(_expandedIds);
   };
 
-  const handleToggleVisibilitySwitch = id => () => {
-    const _visibleIds = new Set([...visibleIds]);
-    if (_visibleIds.has(id)) {
-      _visibleIds.delete(id);
-      setVisibleIds(_visibleIds);
-      return;
-    }
-    _visibleIds.add(id);
-    setVisibleIds(_visibleIds);
-  };
-
   return (
     <AccordionGroup variant="soft">
       {
         layers.map(layer => {
           const isExpanded = expandedIds.has(layer.id);
-          const isVisible = visibleIds.has(layer.id);
+          const isVisible = layer.state.visible;
 
           return (
             <Accordion
@@ -107,7 +93,7 @@ export const LayersList = () => {
                     sx={{
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      whiteSpace: 'no-wrap',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     { layer.layers }
@@ -116,8 +102,8 @@ export const LayersList = () => {
 
                 <Switch
                   size="sm"
-                  onChange={ handleToggleVisibilitySwitch(layer.id) }
                   checked={ isVisible }
+                  onChange={ () => toggleLayerVisibility(layer.id) }
                 />
 
                 <IconButton onClick={ handleToggleExpansion(layer.id) }>
