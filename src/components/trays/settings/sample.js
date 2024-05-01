@@ -1,13 +1,13 @@
-import React from 'react'
-import { IconButton, Stack, Typography } from '@mui/joy'
+import React from 'react';
+import { IconButton, Stack, Typography } from '@mui/joy';
 import {
   CheckCircle as OnIcon,
   Cancel as OffIcon,
-} from '@mui/icons-material'
-import { useSettings } from '@context'
+} from '@mui/icons-material';
+import { useSettings } from '@context';
 
 export const SampleToggle = () => {
-  const { booleanValue } = useSettings()
+  const { booleanValue } = useSettings();
   
   return (
     <Stack
@@ -29,15 +29,15 @@ export const SampleToggle = () => {
         </Typography>
       </div>
     </Stack>
-  )
-}
+  );
+};
 
 export const Toggler = () => {
-  const { booleanValue } = useSettings()
+  const { booleanValue } = useSettings();
 
   const handleClick = () => {
-    booleanValue.toggle()
-  }
+    booleanValue.toggle();
+  };
 
   return (
     <IconButton
@@ -52,5 +52,5 @@ export const Toggler = () => {
           : <OffIcon color="neutral" />
       }
     </IconButton>
-  )
-}
+  );
+};

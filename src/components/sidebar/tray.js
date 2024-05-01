@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   DialogContent,
   DialogTitle,
@@ -7,10 +7,10 @@ import {
   IconButton,
   Sheet,
   Stack,
-} from '@mui/joy'
+} from '@mui/joy';
 import {
   KeyboardDoubleArrowLeft as CloseTrayIcon,
-} from '@mui/icons-material'
+} from '@mui/icons-material';
 
 export const Tray = ({ active, Contents, title, closeHandler }) => {
   return (
@@ -59,8 +59,8 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         <Contents />
       </DialogContent>
     </Sheet>
-  )
-}
+  );
+};
 
 Tray.propTypes = {
   active: PropTypes.bool.isRequired,
@@ -70,4 +70,4 @@ Tray.propTypes = {
   ]).isRequired,
   title: PropTypes.string.isRequired,
   closeHandler: PropTypes.func.isRequired,
-}
+};

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Stack } from '@mui/joy'
+import React from 'react';
+import { Stack } from '@mui/joy';
 
 export const AddLayerForm = () => {
   return (
@@ -8,5 +8,5 @@ export const AddLayerForm = () => {
     }}>
       FORM!
     </Stack>
-  )
-}
+  );
+};

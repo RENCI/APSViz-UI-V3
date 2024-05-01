@@ -1,12 +1,13 @@
-import { IconButton } from '@mui/joy'
+import React from 'react'
+import { IconButton } from '@mui/joy';
 import {
   Menu as HamburgerIcon,
   Close as CloseMenuIcon,
-} from '@mui/icons-material'
-import { useLayout } from '@context'
+} from '@mui/icons-material';
+import { useLayout } from '@context';
 
 export const DrawerToggler = () => {
-  const { drawer } = useLayout()
+  const { drawer } = useLayout();
 
   return (
     <IconButton
@@ -17,5 +18,5 @@ export const DrawerToggler = () => {
     >
       { drawer.isOpen ? <CloseMenuIcon /> : <HamburgerIcon /> }
   </IconButton>
-  )
-}
+  );
+};

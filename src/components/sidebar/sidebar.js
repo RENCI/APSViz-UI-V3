@@ -1,26 +1,26 @@
-import React from 'react'
-import { Fragment, useCallback, useState } from 'react'
+import React from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import {
   List,
   Sheet,
-} from '@mui/joy'
-import { Tray } from './tray'
-import { MenuItem } from './menu-item'
-import SidebarTrays from '../trays'
+} from '@mui/joy';
+import { Tray } from './tray';
+import { MenuItem } from './menu-item';
+import SidebarTrays from '../trays';
 
 export const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(-1)
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const handleClickMenuItem = useCallback(newIndex => {
     // if the incoming new index equals the old index,
     // then the user wants to close the currently open tray.
     if (newIndex === activeIndex) {
-      setActiveIndex(-1)
-      return
+      setActiveIndex(-1);
+      return;
     }
     // otherwise, open desired tray.
-    setActiveIndex(newIndex)
-  }, [activeIndex])
+    setActiveIndex(newIndex);
+  }, [activeIndex]);
 
   return (
     <Fragment>
@@ -61,7 +61,7 @@ export const Sidebar = () => {
                     Icon={ SidebarTrays[key].icon }
                     onClick={ () => handleClickMenuItem(index) }
                   />
-                )
+                );
               })
             }
         </List>
@@ -76,9 +76,9 @@ export const Sidebar = () => {
               Contents={ SidebarTrays[key].trayContents }
               closeHandler={ () => setActiveIndex(-1) }
             />
-          )
+          );
         })
       }
     </Fragment>
-  )
-}
+  );
+};
