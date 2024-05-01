@@ -14,6 +14,8 @@ import locationIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.
 // https://fonts.google.com/icons?selected=Material+Symbols+Outlined:location_searching:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=location
 export const markClicked = (map, event) => {
 
+  const L = window.L;
+
   const targetIcon = L.icon({
       iconUrl: locationIcon,
       iconSize: [38, 38],
