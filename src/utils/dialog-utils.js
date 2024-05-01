@@ -42,7 +42,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function BaseFloatingDialog({ title, dialogText, openDialogImmediately} ) { //, dialogObject
+export default function BaseFloatingDialog({ title, description, openDialogImmediately, dialogObject} ) {
   const [open, setOpen] = React.useState(openDialogImmediately);
 
   // closes the dialog
@@ -59,14 +59,23 @@ export default function BaseFloatingDialog({ title, dialogText, openDialogImmedi
         PaperComponent={PaperComponent}
         TransitionComponent={Transition}
         aria-labelledby="draggable-dialog-title"
+        disableEnforceFocus
+        style={{ pointerEvents: 'none', opacity: '100%' }}
+        PaperProps={{ style: { pointerEvents: 'auto'} }}
+        sx={{
+          '.MuiBackdrop-root': {
+            backgroundColor: 'transparent',
+          }
+        }}
       >
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
           { title }
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            { dialogText }
+            { description }
           </DialogContentText>
+          { dialogObject }
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
@@ -81,7 +90,7 @@ export default function BaseFloatingDialog({ title, dialogText, openDialogImmedi
 // define the properties of this component
 BaseFloatingDialog.propTypes = {
   title: PropTypes.string,
-  dialogText: PropTypes.string,
-  openDialogImmediately: PropTypes.bool
-  // dialogObject: PropTypes.any
+  description: PropTypes.string,
+  openDialogImmediately: PropTypes.bool,
+  dialogObject: PropTypes.any
 };
