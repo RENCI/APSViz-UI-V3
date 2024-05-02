@@ -1,4 +1,5 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import {
   List,
   Sheet,
@@ -17,7 +18,7 @@ export const Sidebar = () => {
       setActiveIndex(-1);
       return;
     }
-    // otherwise, open the desired tray.
+    // otherwise, open desired tray.
     setActiveIndex(newIndex);
   }, [activeIndex]);
 

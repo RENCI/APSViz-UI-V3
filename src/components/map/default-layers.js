@@ -90,7 +90,12 @@ export const DefaultLayers = () => {
               data.workbench.forEach(function (layer_id) {
                 const layer = getCatalogEntry(data.catalog, layer_id);
                 if (layer)
-                    layer_list.push(layer);
+                    layer_list.push({
+                        ...layer,
+                        state: {
+                            visible: true,
+                        }
+                    });
 
                     // TODO: do we really need to do this here??!
                     // if this is an obs layer, need to retrieve

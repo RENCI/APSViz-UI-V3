@@ -1,4 +1,5 @@
-import React, { IconButton } from '@mui/joy';
+import React from 'react';
+import { IconButton } from '@mui/joy';
 import {
   Menu as HamburgerIcon,
   Close as CloseMenuIcon,

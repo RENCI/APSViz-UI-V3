@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionGroup,
   AccordionDetails,
+  Box,
   Divider,
   IconButton,
   ListItemContent,
@@ -11,30 +12,28 @@ import {
   Typography,
 } from '@mui/joy';
 import {
+  DragIndicator as DragHandleIcon,
   KeyboardArrowDown as ExpandIcon,
 } from '@mui/icons-material';
-import { DragIndicator as DragHandleIcon } from '@mui/icons-material';
-
-const dummyLayers = [
-  {
-    id: '234567',
-    name: 'Ullamco anim ad',
-  },
-  {
-    id: '0987654',
-    name: 'In ad tempor',
-  },
-  {
-    id: '9846351',
-    name: 'Eu in laborum',
-  },
-];
+import { useLayers } from '@context';
 
 export const LayersList = () => {
+  const { defaultModelLayers, toggleLayerVisibility } = useLayers();
+  const layers = [...defaultModelLayers];
+
+  // convert the product type to a readable layer name
+  const layer_names = {
+    obs: "Observations",
+    maxwvel63: "Maximum Wind Velocity",
+    maxele63: "Maximum Water Level",
+    swan_HS_max63: "Maximum Wave Height",
+    maxele_level_downscaled_epsg4326: "Hi-Res Maximum Water Level",
+    hec_ras_water_surface: "HEC/RAS Water Surface",
+  };
+
+  console.table(layers[0]);
+
   const [expandedIds, setExpandedIds] = useState(new Set());
-  // of course, this is dummy state.
-  // real state will be maintained in some higher-up context.
-  const [visibleIds, setVisibleIds] = useState(new Set());
 
   const handleToggleExpansion = id => () => {
     const _expandedIds = new Set([...expandedIds]);
@@ -47,29 +46,22 @@ export const LayersList = () => {
     setExpandedIds(_expandedIds);
   };
 
-  const handleToggleVisibilitySwitch = id => () => {
-    const _visibleIds = new Set([...visibleIds]);
-    if (_visibleIds.has(id)) {
-      _visibleIds.delete(id);
-      setVisibleIds(_visibleIds);
-      return;
-    }
-    _visibleIds.add(id);
-    setVisibleIds(_visibleIds);
-  };
-
   return (
     <AccordionGroup variant="soft">
       {
-        dummyLayers.map(layer => {
+        layers.map(layer => {
           const isExpanded = expandedIds.has(layer.id);
-          const isVisible = visibleIds.has(layer.id);
+          const isVisible = layer.state.visible;
+          const layerTitle = layer_names[layer.properties.product_type] + " " +
+                        layer.properties.run_date + " " +
+                        layer.properties.cycle;
+
 
           return (
             <Accordion
               key={ `layer-${ layer.id }-${ isVisible ? 'visible' : 'hidden' }` }
               expanded={ isExpanded }
-              onChange={ handleToggleVisibilitySwitch }
+              onChange={ handleToggleExpansion }
               sx={{ p: 0 }}
             >
               {/*
@@ -107,18 +99,25 @@ export const LayersList = () => {
 
                 <ListItemContent>
                   <Typography level="title-md">
-                    { layer.name }
+                    {layerTitle}
                   </Typography>
-                  <Typography level="body-sm">
-                    some details.
-                    some details.
+                  <Typography
+                    component="div"
+                    level="body-sm"
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    { layer.layers }
                   </Typography>
                 </ListItemContent>
 
                 <Switch
                   size="sm"
-                  onChange={ handleToggleVisibilitySwitch(layer.id) }
                   checked={ isVisible }
+                  onChange={ () => toggleLayerVisibility(layer.id) }
                 />
 
                 <IconButton onClick={ handleToggleExpansion(layer.id) }>
@@ -131,11 +130,18 @@ export const LayersList = () => {
                   />
                 </IconButton>
               </Stack>
-              <AccordionDetails variant="soft" sx={{
+              <AccordionDetails variant="solid" sx={{
                 // remove default margin that doesn't work well in our situation.
                 marginInline: 0,
               }}>
-                Lorem ipsum ad deserunt adipisicing deserunt sint deserunt qui occaecat consequat aliquip.
+                <Box component="pre" sx={{
+                  fontSize: '75%',
+                  color: '#def',
+                  backgroundColor: 'transparent',
+                  overflowX: 'auto',
+                }}>
+                  { JSON.stringify(layer.properties, null, 2) }
+                </Box>
               </AccordionDetails>
             </Accordion>
           );
