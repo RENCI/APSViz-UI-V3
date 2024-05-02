@@ -19,7 +19,10 @@ export default [
         ecmaFeatures: {
           jsx: true,
         }},
-      globals: globals.browser
+      globals: {
+          ...globals.node,
+          ...globals.browser
+      }
     },
     rules: {
       "no-unused-vars": "warn",
