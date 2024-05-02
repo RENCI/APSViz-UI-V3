@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLayers } from '@context/map-context';
-import { Sheet, ButtonGroup, Button, Typography, IconButton } from '@mui/joy';
+import { Sheet, ButtonGroup, Button, Typography, IconButton, Box } from '@mui/joy';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import apsLogo from '@images/aps-trans-logo.png';
 
 
 //import { useLayers } from '@context';
@@ -12,6 +13,7 @@ export const ControlPanel = () => {
   const layers = [...defaultModelLayers];
 
   return (
+    <>
     <Sheet
         variant="plain"
         sx={{
@@ -27,7 +29,14 @@ export const ControlPanel = () => {
             borderRadius: 10,
 
         }}
-    >   { (layers.length) &&
+    >
+        <Box
+            component="img"
+            sx={{height: 64,}}
+            alt="ADCIRC Prediction System"
+            src={apsLogo}
+        />
+        { (layers.length) &&
             <p style={{paddingLeft: 30, color: 'white'}}>model run date: {layers[0].properties.run_date}</p>
         }
         <Typography sx={{ paddingLeft: 10, color: "white" }} component="label" endDecorator={<ButtonGroup>
@@ -59,5 +68,6 @@ export const ControlPanel = () => {
         })};
         </ButtonGroup>
     </Sheet>
+    </>
   );
 };
