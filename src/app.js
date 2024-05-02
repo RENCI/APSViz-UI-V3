@@ -1,12 +1,10 @@
-import { Fragment } from 'react'
-import { Map } from '@components/map'
-import { Sidebar } from '@components/sidebar'
+import React, { Fragment } from 'react';
+import { Map } from '@components/map';
 
 export const App = () => {
   return (
     <Fragment>
-      <Map/>
-      <Sidebar />
+      <Map />
     </Fragment>
-  )
-}
+  );
+};

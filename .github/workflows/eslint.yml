@@ -5,20 +5,21 @@
 
 name: ES Lint the repo
 
-# trigger event is on a pull request
+# trigger event is on a push or a pull request
 on:
   workflow_dispatch:
-  #push
+  push:
+  pull_request:
 
 jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: mrdivyansh/eslint-action@v1.0.7
-
+      - uses: actions/checkout@v4
         with:
-          #repo-token: ${{secrets.GITHUB_TOKEN}}
-          eslint-rc: .eslintrc.js
-          execute-on-files:
-            - ./packages
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run lint
