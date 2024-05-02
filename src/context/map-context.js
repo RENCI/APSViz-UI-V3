@@ -5,7 +5,6 @@ export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
 export const LayersProvider = ({ children }) => {
-
     const [defaultModelLayers, setDefaultModelLayers] = useState([]);
     const [filteredModelLayers, setFilteredModelLayers] = useState([]);
     const [map, setMap] = useState(null);
