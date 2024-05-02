@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const DotenvPlugin = require('dotenv-webpack')
 const { HotModuleReplacementPlugin } = require('webpack')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+//const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 let mode = 'development'
 let target = 'web'
@@ -17,7 +17,7 @@ const plugins = [
     favicon: './src/images/favicon.png',
   }),
 
-  new BundleAnalyzerPlugin(),
+  //new BundleAnalyzerPlugin(),
 
   new ESLintPlugin({
     extensions: ['src', 'js', 'js*'], eslintPath: "eslint/use-at-your-own-risk", configType: "flat"
