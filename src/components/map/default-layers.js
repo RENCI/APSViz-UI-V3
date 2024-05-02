@@ -5,7 +5,6 @@ import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
 const newLayerDefaultState = layer => {
-    console.log(layer.properties.product_type)
     const { product_type } = layer.properties
 
     if (['obs', 'maxele63'].includes(product_type)) {
