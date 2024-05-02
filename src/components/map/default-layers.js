@@ -5,12 +5,12 @@ import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
 const newLayerDefaultState = layer => {
-    const { product_type } = layer.properties
+    const { product_type } = layer.properties;
 
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
             visible: true
-        })
+        });
     }
 
     return ({
