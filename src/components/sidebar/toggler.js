@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { IconButton } from '@mui/joy';
 import {
   Menu as HamburgerIcon,

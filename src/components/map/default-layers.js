@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { WMSTileLayer, GeoJSON } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
+import { markClicked } from '@utils/map-utils';
 
 export const DefaultLayers = () => {
 
     const [obsData, setObsData] = useState("");
+    const map = useMap();
 
     const {
         defaultModelLayers,
@@ -59,10 +61,11 @@ export const DefaultLayers = () => {
           layer.on("mouseout", function () {
             this.closePopup();
           });
-          layer.on("click", function () {
+          layer.on("click", function (e) {
             // Do stuff here for retrieving time series data, in csv fomat,
             // from the feature.properties.csv_url and create a fancy plot
             console.log("Observation Station '" + feature.properties.location_name + "' clicked");
+            markClicked(map, e);
           });
         }
     };
@@ -135,12 +138,15 @@ export const DefaultLayers = () => {
         getDefaultLayers().then();
       }, []);
 
-    return defaultModelLayers
-        .filter(layer => layer.state.visible)
-        .map((layer, index) => {
+    //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
+
+    return (
+        <>
+        {defaultModelLayers.map((layer, index) => {
             const pieces = layer.id.split('-');
             const type = pieces[pieces.length-1];
-            if (type === "obs" && obsData !== "") {
+            //console.log("type: " + JSON.stringify(type, null, 2))
+            if( type === "obs" && obsData !== "") {
                 //console.log("obsData: " + JSON.stringify(obsData, null, 2));
                 return (
                     <GeoJSON
@@ -150,7 +156,8 @@ export const DefaultLayers = () => {
                         onEachFeature = {onEachObsFeature}
                     />
                 );
-            } else {
+            }
+            else {
                 return (
                     <WMSTileLayer
                         key = {index}
@@ -169,5 +176,7 @@ export const DefaultLayers = () => {
                     />
                 );
             }
-        });
+        })};
+        </>
+    );
 };
