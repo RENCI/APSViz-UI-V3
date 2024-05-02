@@ -1,12 +1,12 @@
-import * as layers from './layers'
+import * as layers from './layers';
 // import * as hurricanes from './hurricanes'
-import * as settings from './settings'
+import * as settings from './settings';
 
 export default {
   layers,
   // hurricanes,
   settings,
-}
+};
 
 /*
   a new menu/tray item, must have these named exports:

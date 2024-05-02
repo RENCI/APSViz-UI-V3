@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Accordion,
   AccordionGroup,
@@ -9,11 +9,11 @@ import {
   Stack,
   Switch,
   Typography,
-} from '@mui/joy'
+} from '@mui/joy';
 import {
   KeyboardArrowDown as ExpandIcon,
-} from '@mui/icons-material'
-import { DragIndicator as DragHandleIcon } from '@mui/icons-material'
+} from '@mui/icons-material';
+import { DragIndicator as DragHandleIcon } from '@mui/icons-material';
 
 const dummyLayers = [
   {
@@ -28,42 +28,42 @@ const dummyLayers = [
     id: '9846351',
     name: 'Eu in laborum',
   },
-]
+];
 
 export const LayersList = () => {
-  const [expandedIds, setExpandedIds] = useState(new Set())
+  const [expandedIds, setExpandedIds] = useState(new Set());
   // of course, this is dummy state.
   // real state will be maintained in some higher-up context.
-  const [visibleIds, setVisibleIds] = useState(new Set())
+  const [visibleIds, setVisibleIds] = useState(new Set());
 
   const handleToggleExpansion = id => () => {
-    const _expandedIds = new Set([...expandedIds])
+    const _expandedIds = new Set([...expandedIds]);
     if (_expandedIds.has(id)) {
-      _expandedIds.delete(id)
-      setExpandedIds(_expandedIds)
-      return
+      _expandedIds.delete(id);
+      setExpandedIds(_expandedIds);
+      return;
     }
-    _expandedIds.add(id)
-    setExpandedIds(_expandedIds)
-  }
+    _expandedIds.add(id);
+    setExpandedIds(_expandedIds);
+  };
 
   const handleToggleVisibilitySwitch = id => () => {
-    const _visibleIds = new Set([...visibleIds])
+    const _visibleIds = new Set([...visibleIds]);
     if (_visibleIds.has(id)) {
-      _visibleIds.delete(id)
-      setVisibleIds(_visibleIds)
-      return
+      _visibleIds.delete(id);
+      setVisibleIds(_visibleIds);
+      return;
     }
-    _visibleIds.add(id)
-    setVisibleIds(_visibleIds)
-  }
+    _visibleIds.add(id);
+    setVisibleIds(_visibleIds);
+  };
 
   return (
     <AccordionGroup variant="soft">
       {
         dummyLayers.map(layer => {
-          const isExpanded = expandedIds.has(layer.id)
-          const isVisible = visibleIds.has(layer.id)
+          const isExpanded = expandedIds.has(layer.id);
+          const isVisible = visibleIds.has(layer.id);
 
           return (
             <Accordion
@@ -138,10 +138,10 @@ export const LayersList = () => {
                 Lorem ipsum ad deserunt adipisicing deserunt sint deserunt qui occaecat consequat aliquip.
               </AccordionDetails>
             </Accordion>
-          )
+          );
         })
       }
       <Divider />
     </AccordionGroup>
-  )
-}
+  );
+};

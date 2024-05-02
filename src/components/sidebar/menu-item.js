@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   IconButton,
   ListItem,
   Tooltip,
-} from '@mui/joy'
+} from '@mui/joy';
 
 export const MenuItem = ({ Icon, title, onClick, active }) => {
   return (
@@ -23,13 +25,13 @@ export const MenuItem = ({ Icon, title, onClick, active }) => {
         </IconButton>
       </Tooltip>
     </ListItem>
-  )
-}
+  );
+};
 
 MenuItem.propTypes = {
   active: PropTypes.bool.isRequired,
   Icon: PropTypes.node.isRequired,
   onClick: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-}
+};
 

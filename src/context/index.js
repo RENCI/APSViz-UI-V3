@@ -1,2 +1,2 @@
-export * from './map-context'
-export * from './settings'
+export * from './map-context';
+export * from './settings';

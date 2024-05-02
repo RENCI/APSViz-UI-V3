@@ -1,25 +1,25 @@
-import { useCallback, useState } from 'react'
-import { Button, Stack } from '@mui/joy'
+import React, { useCallback, useState } from 'react';
+import { Button, Stack } from '@mui/joy';
 import {
   Add as AddLayerIcon,
   Close as CloseIcon,
-} from '@mui/icons-material'
-import { LayersList } from './list'
-import { AddLayerForm } from './form'
+} from '@mui/icons-material';
+import { LayersList } from './list';
+import { AddLayerForm } from './form';
 
-const FORM = 'FORM'
-const LIST = 'LIST'
+const FORM = 'FORM';
+const LIST = 'LIST';
 
 export const TrayContents = () => {
-  const [state, setState] = useState(LIST)
+  const [state, setState] = useState(LIST);
 
   const handleClickToggleState = () => {
     if (state === FORM) {
-      setState(LIST)
-      return
+      setState(LIST);
+      return;
     }
-    setState(FORM)
-  }
+    setState(FORM);
+  };
 
   const TrayFooter = useCallback(() => {
     if (state === LIST) {
@@ -31,7 +31,7 @@ export const TrayContents = () => {
             onClick={ handleClickToggleState }
           >Add a Layer</Button>
         </Stack>
-      )
+      );
     }
     return (
       <Stack p={ 2 }>
@@ -42,8 +42,8 @@ export const TrayContents = () => {
           onClick={ handleClickToggleState }
         >Cancel</Button>
       </Stack>
-    )
-  }, [state])
+    );
+  }, [state]);
 
   return (
     <Stack sx={{
@@ -57,5 +57,5 @@ export const TrayContents = () => {
 
       <TrayFooter />
     </Stack>
-  )
-}
+  );
+};
