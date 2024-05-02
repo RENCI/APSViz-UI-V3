@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
 import { Map } from '@components/map';
+import { Sidebar } from '@components/sidebar';
 
 export const App = () => {
   return (
     <Fragment>
-      <Map />
+      <Map/>
+      <Sidebar />
     </Fragment>
   );
 };

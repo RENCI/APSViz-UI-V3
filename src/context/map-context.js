@@ -5,10 +5,25 @@ export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
 export const LayersProvider = ({ children }) => {
+  const [defaultModelLayers, setDefaultModelLayers] = useState([]);
+  const [filteredModelLayers, setFilteredModelLayers] = useState([]);
+  const [map, setMap] = useState(null);
 
-    const [defaultModelLayers, setDefaultModelLayers] = useState([]);
-    const [filteredModelLayers, setFilteredModelLayers] = useState([]);
-    const [map, setMap] = useState(null);
+  const toggleLayerVisibility = id => {
+    const newLayers = [...defaultModelLayers];
+    const index = newLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      new Error('Could not locate layer', id);
+      return;
+    }
+    const alteredLayer = newLayers[index];
+    alteredLayer.state.visible = !alteredLayer.state.visible;
+    setDefaultModelLayers([
+      ...newLayers.slice(0, index),
+      { ...alteredLayer },
+      ...newLayers.slice(index + 1),
+    ]);
+  };
 
   return (
     <LayersContext.Provider
@@ -18,7 +33,8 @@ export const LayersProvider = ({ children }) => {
         defaultModelLayers,
         setDefaultModelLayers,
         filteredModelLayers,
-        setFilteredModelLayers
+        setFilteredModelLayers,
+        toggleLayerVisibility,
       }}
     >
       {children}
