@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { WMSTileLayer, GeoJSON } from 'react-leaflet';
+import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
