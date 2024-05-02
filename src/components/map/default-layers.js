@@ -142,40 +142,42 @@ export const DefaultLayers = () => {
 
     return (
         <>
-        {defaultModelLayers.map((layer, index) => {
-            const pieces = layer.id.split('-');
-            const type = pieces[pieces.length-1];
-            //console.log("type: " + JSON.stringify(type, null, 2))
-            if( type === "obs" && obsData !== "") {
-                //console.log("obsData: " + JSON.stringify(obsData, null, 2));
-                return (
-                    <GeoJSON
-                        key = {index}
-                        data = {obsData}
-                        pointToLayer = {obsPointToLayer}
-                        onEachFeature = {onEachObsFeature}
-                    />
-                );
-            }
-            else {
-                return (
-                    <WMSTileLayer
-                        key = {index}
-                        /* eventHandlers={{
-                            click: () => {
-                            console.log('marker clicked')
-                            },
-                        }} */
-                        url={gs_wms_url}
-                        layers={layer.layers}
-                        params={{
-                            format:"image/png",
-                            transparent: true,
-                        }}
-        
-                    />
-                );
-            }
+        {defaultModelLayers
+            .filter(({state }) => state.visible)
+            .map((layer, index) => {
+                const pieces = layer.id.split('-');
+                const type = pieces[pieces.length-1];
+                //console.log("type: " + JSON.stringify(type, null, 2))
+                if( type === "obs" && obsData !== "") {
+                    //console.log("obsData: " + JSON.stringify(obsData, null, 2));
+                    return (
+                        <GeoJSON
+                            key = {index}
+                            data = {obsData}
+                            pointToLayer = {obsPointToLayer}
+                            onEachFeature = {onEachObsFeature}
+                        />
+                    );
+                }
+                else {
+                    return (
+                        <WMSTileLayer
+                            key = {index}
+                            /* eventHandlers={{
+                                click: () => {
+                                console.log('marker clicked')
+                                },
+                            }} */
+                            url={gs_wms_url}
+                            layers={layer.layers}
+                            params={{
+                                format:"image/png",
+                                transparent: true,
+                            }}
+            
+                        />
+                    );
+                }
         })};
         </>
     );
