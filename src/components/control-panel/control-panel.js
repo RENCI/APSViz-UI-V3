@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLayers } from '@context/map-context';
-import { Sheet, ButtonGroup, Button, Typography, IconButton, Box } from '@mui/joy';
+import { Sheet, ButtonGroup, Button, Typography, IconButton, Box, Switch } from '@mui/joy';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
@@ -21,7 +21,7 @@ export const ControlPanel = () => {
             bottom: 0, right: 0,
             overflow: 'hidden',
             p: 0,
-            backgroundColor: '#f0f4f820', //: '#f0f4f8',
+            backgroundColor: '#f0f4f820',
             height: '40vh',
             width: '300px',
             zIndex: 999,
@@ -47,11 +47,17 @@ export const ControlPanel = () => {
                 <ArrowDownward/>
             </IconButton>
         </ButtonGroup>}>
+            {/* NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
+                      Also probabaly want to add a switch for hurricane layers - which
+                      involves making a request to the MetGet API */}
             cycle {layers.length && layers[0].properties.cycle}
         </Typography>
         { (layers.length) &&
             <p style={{paddingLeft: 30, color: 'white'}}>{layers[0].properties.grid_type} grid</p>
         }
+        <Typography sx={{ paddingLeft: 10, color: "white" }} component="label" endDecorator={<Switch/>}>
+            observations
+        </Typography>
         <ButtonGroup
             disabled={false}
             orientation="vertical"
