@@ -4,6 +4,21 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
+const newLayerDefaultState = layer => {
+    const { product_type } = layer.properties;
+
+    if (['obs', 'maxele63'].includes(product_type)) {
+        return ({
+            visible: true
+        });
+    }
+
+    return ({
+        visible: false
+    });
+};
+
+
 export const DefaultLayers = () => {
 
     const [obsData, setObsData] = useState("");
@@ -96,9 +111,7 @@ export const DefaultLayers = () => {
                 if (layer)
                     layer_list.push({
                         ...layer,
-                        state: {
-                            visible: true,
-                        }
+                        state: newLayerDefaultState(layer)
                     });
 
                     // TODO: do we really need to do this here??!
