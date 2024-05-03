@@ -42,7 +42,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
         if (dataKey !== undefined) {
             // remove this item from the data list
             // TODO: change location_name to an id element added to the data
-            setDataList(dataList.filter(item => item.location_name !== dataKey));
+            setDataList(dataList.filter(item => item.id !== dataKey));
         }
     };
 
