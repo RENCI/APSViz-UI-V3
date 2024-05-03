@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Map } from '@components/map';
 import ObservationDialog from "@components/map/observation-dialog";
 import { useLayers } from '@context';
+import { Sidebar } from '@components/sidebar';
 
 export const App = () => {
     // install the selected observation list from the layer context
@@ -19,6 +20,7 @@ export const App = () => {
             })
         }
         <Map />
+        <Sidebar />
      </Fragment>
     );
 };
