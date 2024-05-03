@@ -80,8 +80,12 @@ export const DefaultLayers = () => {
           layer.on("click", function (e) {
             // Do stuff here for retrieving time series data, in csv fomat,
             // from the feature.properties.csv_url and create a fancy plot
-            console.log("Observation Station '" + feature.properties.location_name + "' clicked");
+            //console.log("Observation Station '" + feature.properties.location_name + "' clicked");
             markClicked(map, e);
+
+            // add in a record id.
+            // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
+            feature.properties.id = feature.properties.station_name;
 
             // populate selectedObservations list with the newly selected observation point
             setSelectedObservations(previous => [...previous, feature.properties]);
