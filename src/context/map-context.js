@@ -7,6 +7,10 @@ export const useLayers = () => useContext(LayersContext);
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [filteredModelLayers, setFilteredModelLayers] = useState([]);
+
+  // this object contains data for graph rendering
+  const [selectedObservations, setSelectedObservations] = useState([]);
+
   const [map, setMap] = useState(null);
 
   const toggleLayerVisibility = id => {
@@ -35,6 +39,8 @@ export const LayersProvider = ({ children }) => {
         filteredModelLayers,
         setFilteredModelLayers,
         toggleLayerVisibility,
+        selectedObservations,
+        setSelectedObservations
       }}
     >
       {children}

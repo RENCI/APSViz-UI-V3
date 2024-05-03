@@ -27,6 +27,7 @@ export const DefaultLayers = () => {
     const {
         defaultModelLayers,
         setDefaultModelLayers,
+        setSelectedObservations
     } = useLayers();
 
     // Create the authorization header
@@ -81,6 +82,9 @@ export const DefaultLayers = () => {
             // from the feature.properties.csv_url and create a fancy plot
             console.log("Observation Station '" + feature.properties.location_name + "' clicked");
             markClicked(map, e);
+
+            // populate selectedObservations list with the newly selected observation point
+            setSelectedObservations(previous => [...previous, feature.properties]);
           });
         }
     };
