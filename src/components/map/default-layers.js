@@ -4,17 +4,19 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
-const newLayerDefaultState = layer => {
+const newLayerDefaultState = (layer, order) => {
     const { product_type } = layer.properties;
 
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
-            visible: true
+            order,
+            visible: true,
         });
     }
 
     return ({
-        visible: false
+        order,
+        visible: false,
     });
 };
 
@@ -111,7 +113,7 @@ export const DefaultLayers = () => {
                 if (layer)
                     layer_list.push({
                         ...layer,
-                        state: newLayerDefaultState(layer)
+                        state: newLayerDefaultState(layer, layer_list.length)
                     });
 
                     // TODO: do we really need to do this here??!
@@ -160,7 +162,8 @@ export const DefaultLayers = () => {
     return (
         <>
         {defaultModelLayers
-            .filter(({state }) => state.visible)
+            .filter(({ state }) => state.visible)
+            .sort((a, b) => a.state.order - b.state.order)
             .map((layer, index) => {
                 const pieces = layer.id.split('-');
                 const type = pieces[pieces.length-1];

@@ -17,7 +17,7 @@ export const LayersProvider = ({ children }) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
-      new Error('Could not locate layer', id);
+      console.error('Could not locate layer', id);
       return;
     }
     const alteredLayer = newLayers[index];
@@ -28,6 +28,41 @@ export const LayersProvider = ({ children }) => {
       ...newLayers.slice(index + 1),
     ]);
   };
+
+  const swapLayers = (i, j) => {
+    const ithLayerIndex = defaultModelLayers
+      .findIndex(({ state }) => state.order === i);
+    const jthLayerIndex = defaultModelLayers
+      .findIndex(({ state }) => state.order === j);
+    if (ithLayerIndex === -1 || jthLayerIndex === -1) {
+      return defaultModelLayers;
+    }
+    const newLayers = [...defaultModelLayers]  ;
+    newLayers[ithLayerIndex].state.order = j;
+    newLayers[jthLayerIndex].state.order = i;
+    setDefaultModelLayers(newLayers);
+  };
+
+  const removeLayer = id => {
+    const index = defaultModelLayers.findIndex(l => l.id === id)
+    if (index === -1) {
+      return
+    }
+    const thisPosition = defaultModelLayers[index].state.order
+    const newLayers = [...defaultModelLayers.slice(0, index), ...defaultModelLayers.slice(index + 1)]
+      .map(l => {
+        if (l.state.order > thisPosition) {
+          l.state.order -= 1;
+        }
+        return l
+      });
+
+    setDefaultModelLayers(newLayers)
+    /* todo: update `layer.state.order`s
+    layer.state.order - 1 for all layers l with l.state.order > this layer's state.order
+    */
+  };
+
 
   return (
     <LayersContext.Provider
@@ -40,7 +75,9 @@ export const LayersProvider = ({ children }) => {
         setFilteredModelLayers,
         toggleLayerVisibility,
         selectedObservations,
-        setSelectedObservations
+        setSelectedObservations,
+        swapLayers,
+        removeLayer
       }}
     >
       {children}
