@@ -1,8 +1,44 @@
 import React, { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
 
+import {
+  Tsunami as WaveHeightIcon,
+  QueryStats as ObservationIcon,
+  Air as WindVelocityIcon,
+  Water as WaterLevelIcon,
+  BlurOn as WaterSurfaceIcon,
+} from '@mui/icons-material';
+
 export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
+
+// convert the product type to a readable layer name
+const layerTypes = {
+  obs: {
+    name: "Observations",
+    icon: ObservationIcon,
+  },
+  maxwvel63: {
+    name: "Maximum Wind Velocity",
+    icon: WindVelocityIcon,
+  },
+  maxele63: {
+    name: "Maximum Water Level",
+    icon: WaterLevelIcon,
+  },
+  swan_HS_max63: {
+    name: "Maximum Wave Height",
+    icon: WaveHeightIcon,
+  },
+  maxele_level_downscaled_epsg4326: {
+    name: "Hi-Res Maximum Water Level",
+    icon: WaterLevelIcon,
+  },
+  hec_ras_water_surface: {
+    name: "HEC/RAS Water Surface",
+    icon: WaterSurfaceIcon,
+  },
+};
 
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
@@ -80,7 +116,8 @@ export const LayersProvider = ({ children }) => {
         selectedObservations,
         setSelectedObservations,
         swapLayers,
-        removeLayer
+        removeLayer,
+        layerTypes,
       }}
     >
       {children}

@@ -3,11 +3,11 @@ import {
   Accordion,
   AccordionGroup,
   AccordionDetails,
+  Avatar,
   Box,
   ButtonGroup,
   Divider,
   IconButton,
-  ListItemContent,
   Stack,
   Switch,
   Typography,
@@ -17,27 +17,20 @@ import {
   KeyboardArrowDown as ExpandIcon,
   ArrowDropUp as MoveUpArrow,
   ArrowDropDown as MoveDownArrow,
+  Schedule as ClockIcon,
+  DragIndicator as DragHandleIcon,
 } from '@mui/icons-material';
 import { useLayers } from '@context';
 
 export const LayersList = () => {
   const {
     defaultModelLayers,
+    layerTypes,
     removeLayer,
     swapLayers,
     toggleLayerVisibility,
   } = useLayers();
   const layers = [...defaultModelLayers];
-
-  // convert the product type to a readable layer name
-  const layer_names = {
-    obs: "Observations",
-    maxwvel63: "Maximum Wind Velocity",
-    maxele63: "Maximum Water Level",
-    swan_HS_max63: "Maximum Wave Height",
-    maxele_level_downscaled_epsg4326: "Hi-Res Maximum Water Level",
-    hec_ras_water_surface: "HEC/RAS Water Surface",
-  };
 
   const [expandedIds, setExpandedIds] = useState(new Set());
 
@@ -53,8 +46,8 @@ export const LayersList = () => {
   };
 
   const handleClickRemove = id => () => {
-    removeLayer(id)
-  }
+    removeLayer(id);
+  };
 
   return (
     <AccordionGroup variant="soft">
@@ -64,10 +57,7 @@ export const LayersList = () => {
           .map(layer => {
             const isExpanded = expandedIds.has(layer.id);
             const isVisible = layer.state.visible;
-            const layerTitle = layer_names[layer.properties.product_type] + " " +
-                          layer.properties.run_date + " " +
-                          layer.properties.cycle;
-
+            const LayerIcon = layerTypes[layer.properties.product_type].icon;
 
             return (
               <Accordion
@@ -89,38 +79,49 @@ export const LayersList = () => {
                     borderLeft: '6px solid',
                     borderLeftColor: isVisible ? 'primary.400' : 'primary.100',
                     '.MuiIconButton-root': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
-                    '.MuiSwitch-root': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
+                    '.MuiSwitch-root': {
+                      filter: 'opacity(0.1)',
+                      transition: 'filter 250ms',
+                    },
                     '&:hover .MuiIconButton-root': { filter: 'opacity(0.5)' },
                     '&:hover .MuiSwitch-root': { filter: 'opacity(0.5)' },
                     '& .MuiIconButton-root:hover': { filter: 'opacity(1.0)' },
                     '& .MuiSwitch-root:hover': { filter: 'opacity(1.0)' },
                   }}
                 >
-                  <ButtonGroup orientation="vertical" size="sm">
-                    <IconButton
-                      onClick={ () => swapLayers(layer.state.order, layer.state.order - 1) }
-                    ><MoveUpArrow /></IconButton> 
-                    <IconButton
-                      onClick={ () => swapLayers(layer.state.order, layer.state.order + 1) }
-                    ><MoveDownArrow /></IconButton> 
-                  </ButtonGroup>
-                  
-                  <ListItemContent>
-                    <Typography level="title-md">
-                      {layerTitle}
-                    </Typography>
-                    <Typography
-                      component="div"
-                      level="body-sm"
-                      sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      { layer.layers }
-                    </Typography>
-                  </ListItemContent>
+                  <Stack direction="column" sx={{ flex: 1 }}>
+                    <Stack direction="row" alignItems="center" sx={{ flex: 1 }}>
+                      <Avatar sx={{ width: 36, height: 36 }}>
+                        <LayerIcon size="lg" color={ isVisible ? 'primary' : 'disabled' } />
+                      </Avatar>{ console.log(layer)}
+                      <Typography level="title-md">
+                        {layerTypes[layer.properties.product_type].name}
+                      </Typography>
+                    </Stack>
+
+                    <Stack direction="row" alignItems="stretch" sx={{ flex: 1 }}>
+                      <IconButton
+                        size="sm"
+                        sx={{
+                          cursor: 'grab',
+                          filter: 'opacity(0.5)',
+                          transition: 'filter 250ms',
+                          '&:hover': {
+                            filter: 'opacity(1.0)',
+                          },
+                          m: 0,
+                        }}
+                      >
+                        <DragHandleIcon fontSize="sm" />
+                      </IconButton>
+                      <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(layer.properties.run_date).toLocaleString() }
+                        <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center', ml: 3 }}>
+                          Cycle { layer.properties.cycle }
+                        </Typography>
+                      </Typography>
+                    </Stack>
+                  </Stack>
 
                   <Stack justifyContent="space-around">
                     <Switch
@@ -138,7 +139,16 @@ export const LayersList = () => {
                     </IconButton>
                   </Stack>
 
-                  <IconButton onClick={ handleToggleExpansion(layer.id) }>
+                  <ButtonGroup orientation="vertical" size="sm" sx={{ transform: 'scaleX(0.75)' }}>
+                    <IconButton
+                      onClick={ () => swapLayers(layer.state.order, layer.state.order - 1) }
+                    ><MoveUpArrow /></IconButton> 
+                    <IconButton
+                      onClick={ () => swapLayers(layer.state.order, layer.state.order + 1) }
+                    ><MoveDownArrow /></IconButton> 
+                  </ButtonGroup>
+                  
+                  <IconButton onClick={ handleToggleExpansion(layer.id) } size="sm">
                     <ExpandIcon
                       fontSize="sm"
                       sx={{
