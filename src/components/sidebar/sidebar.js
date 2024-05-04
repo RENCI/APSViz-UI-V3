@@ -9,7 +9,7 @@ import { MenuItem } from './menu-item';
 import SidebarTrays from '../trays';
 
 export const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClickMenuItem = useCallback(newIndex => {
     // if the incoming new index equals the old index,

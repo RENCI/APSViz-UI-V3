@@ -54,7 +54,7 @@ export const LayersList = () => {
       {
         layers
           .sort((a, b) => a.state.order - b.state.order)
-          .map(layer => {
+          .map((layer, index) => {
             const isExpanded = expandedIds.has(layer.id);
             const isVisible = layer.state.visible;
             const LayerIcon = layerTypes[layer.properties.product_type].icon;
@@ -84,10 +84,14 @@ export const LayersList = () => {
                   }}
                 >
                   <Stack direction="column" sx={{ flex: 1 }}>
-                    <Stack direction="row" alignItems="center" sx={{ flex: 1 }}>
+                    <Stack direction="row" alignItems="center" sx={{
+                      flex: 1,
+                      filter: isVisible ? 'opacity(1.0)' : 'opacity(0.75)',
+                      transition: 'filter 250ms',
+                    }}>
                       <Avatar sx={{ width: 36, height: 36 }}>
-                        <LayerIcon size="lg" color={ isVisible ? 'primary' : 'disabled' } />
-                      </Avatar>{ console.log(layer)}
+                        <LayerIcon size="lg" color="primary" />
+                      </Avatar>
                       <Typography level="title-md">
                         {layerTypes[layer.properties.product_type].name}
                       </Typography>
@@ -144,11 +148,11 @@ export const LayersList = () => {
                     }}
                   >
                     <IconButton
-                      onClick={ () => swapLayers(layer.state.order, layer.state.order - 1) }
+                      onClick={ () => swapLayers(index, index - 1) }
                       sx={{ flex: 1 }}
                     ><MoveUpArrow /></IconButton> 
                     <IconButton
-                      onClick={ () => swapLayers(layer.state.order, layer.state.order + 1) }
+                      onClick={ () => swapLayers(index, index + 1) }
                       sx={{ flex: 1 }}
                     ><MoveDownArrow /></IconButton> 
                   </ButtonGroup>

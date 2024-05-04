@@ -4,18 +4,16 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
-const newLayerDefaultState = (layer, order) => {
+const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
 
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
-            order,
             visible: true,
         });
     }
 
     return ({
-        order,
         visible: false,
     });
 };
@@ -163,7 +161,6 @@ export const DefaultLayers = () => {
         <>
         {defaultModelLayers
             .filter(({ state }) => state.visible)
-            .sort((a, b) => a.state.order - b.state.order)
             .map((layer, index) => {
                 const pieces = layer.id.split('-');
                 const type = pieces[pieces.length-1];

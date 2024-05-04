@@ -66,17 +66,23 @@ export const LayersProvider = ({ children }) => {
   };
 
   const swapLayers = (i, j) => {
-    const ithLayerIndex = defaultModelLayers
-      .findIndex(({ state }) => state.order === i);
-    const jthLayerIndex = defaultModelLayers
-      .findIndex(({ state }) => state.order === j);
-    if (ithLayerIndex === -1 || jthLayerIndex === -1) {
-      return defaultModelLayers;
-    }
-    const newLayers = [...defaultModelLayers]  ;
-    newLayers[ithLayerIndex].state.order = j;
-    newLayers[jthLayerIndex].state.order = i;
-    setDefaultModelLayers(newLayers);
+    // ensure our pair has i < j
+    const [a, b] = [i, j].sort()
+    // bail out for select (a, b) pairs.
+    if (
+      a === b || a < 0 || b < 0
+      || defaultModelLayers.length - 2 < a
+      || defaultModelLayers.length - 1 < b
+    ) { return }
+    
+    const newLayers = [
+      ...defaultModelLayers.slice(0, a),
+      defaultModelLayers[b],
+      ...defaultModelLayers.slice(a + 1, b),
+      defaultModelLayers[a],
+      ...defaultModelLayers.slice(b + 1),
+    ];
+    setDefaultModelLayers([...newLayers])
   };
 
   const removeLayer = id => {
