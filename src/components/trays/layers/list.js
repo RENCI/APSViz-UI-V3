@@ -78,15 +78,9 @@ export const LayersList = () => {
                     p: 1,
                     borderLeft: '6px solid',
                     borderLeftColor: isVisible ? 'primary.400' : 'primary.100',
-                    '.MuiIconButton-root': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
-                    '.MuiSwitch-root': {
-                      filter: 'opacity(0.1)',
-                      transition: 'filter 250ms',
-                    },
-                    '&:hover .MuiIconButton-root': { filter: 'opacity(0.5)' },
-                    '&:hover .MuiSwitch-root': { filter: 'opacity(0.5)' },
-                    '& .MuiIconButton-root:hover': { filter: 'opacity(1.0)' },
-                    '& .MuiSwitch-root:hover': { filter: 'opacity(1.0)' },
+                    '.actions': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
+                    '&:hover .actions': { filter: 'opacity(0.5)' },
+                    '& .actions:hover': { filter: 'opacity(1.0)' },
                   }}
                 >
                   <Stack direction="column" sx={{ flex: 1 }}>
@@ -123,7 +117,8 @@ export const LayersList = () => {
                     </Stack>
                   </Stack>
 
-                  <Stack justifyContent="space-around">
+                  {/* card actions start */}
+                  <Stack justifyContent="space-around" className="actions">
                     <Switch
                       size="sm"
                       checked={ isVisible }
@@ -139,16 +134,27 @@ export const LayersList = () => {
                     </IconButton>
                   </Stack>
 
-                  <ButtonGroup orientation="vertical" size="sm" sx={{ transform: 'scaleX(0.75)' }}>
+                  <ButtonGroup
+                    orientation="vertical"
+                    size="sm"
+                    className="actions"
+                    sx={{
+                      transform: 'scaleX(0.75)',
+                      '.MuiIconButton-root': { flex: 1 }
+                    }}
+                  >
                     <IconButton
                       onClick={ () => swapLayers(layer.state.order, layer.state.order - 1) }
+                      sx={{ flex: 1 }}
                     ><MoveUpArrow /></IconButton> 
                     <IconButton
                       onClick={ () => swapLayers(layer.state.order, layer.state.order + 1) }
+                      sx={{ flex: 1 }}
                     ><MoveDownArrow /></IconButton> 
                   </ButtonGroup>
+                  {/* card actions end */}
                   
-                  <IconButton onClick={ handleToggleExpansion(layer.id) } size="sm">
+                  <IconButton onClick={ handleToggleExpansion(layer.id) } size="sm" variant="soft">
                     <ExpandIcon
                       fontSize="sm"
                       sx={{

@@ -97,9 +97,6 @@ export const LayersProvider = ({ children }) => {
     }, []);
 
     setDefaultModelLayers(newLayers);
-    /* todo: update `layer.state.order`s
-    layer.state.order - 1 for all layers l with l.state.order > this layer's state.order
-    */
   };
 
 
