@@ -54,11 +54,11 @@ export const DefaultLayers = () => {
         }
         
         return new CircleMarker(latlng, {
-          radius: 6,
-          weight: 0.7,
-          color: '#000000',
-          fillColor: obs_color,
-          fillOpacity: 1
+            radius: 6,
+            weight: 0.7,
+            color: '#000000',
+            fillColor: obs_color,
+            fillOpacity: 1
         });
     });
 
@@ -153,49 +153,35 @@ export const DefaultLayers = () => {
             return entry;
         };
         getDefaultLayers().then();
-      }, []);
+    }, []);
 
-    //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
-
-    return (
-        <>
-        {defaultModelLayers
-            .filter(({ state }) => state.visible)
-            .map((layer, index) => {
-                const pieces = layer.id.split('-');
-                const type = pieces[pieces.length-1];
-                //console.log("type: " + JSON.stringify(type, null, 2))
-                if( type === "obs" && obsData !== "") {
-                    //console.log("obsData: " + JSON.stringify(obsData, null, 2));
-                    return (
-                        <GeoJSON
-                            key = {index}
-                            data = {obsData}
-                            pointToLayer = {obsPointToLayer}
-                            onEachFeature = {onEachObsFeature}
-                        />
-                    );
-                } else {
-                    return (
-                        <WMSTileLayer
-                            key = {index}
-                            /* eventHandlers={{
-                                click: () => {
-                                console.log('marker clicked')
-                                },
-                            }} */
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={{
-                                format:"image/png",
-                                transparent: true,
-                            }}
-            
-                        />
-                    );
-                }
-            })
-        };
-        </>
-    );
+    return defaultModelLayers
+        .filter(({ state }) => state.visible)
+        .reverse()
+        .map((layer, index) => {
+            const pieces = layer.id.split('-');
+            const type = pieces[pieces.length-1];
+            if (type === "obs" && obsData !== "") {
+                return (
+                    <GeoJSON
+                        key={index}
+                        data={obsData}
+                        pointToLayer={obsPointToLayer}
+                        onEachFeature={onEachObsFeature}
+                    />
+                );
+            }
+            return (
+                <WMSTileLayer
+                    key={index}
+                    url={gs_wms_url}
+                    layers={layer.layers}
+                    params={{
+                        format:"image/png",
+                        transparent: true,
+                    }}
+    
+                />
+            );
+        });
 };

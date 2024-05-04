@@ -74,7 +74,7 @@ export const LayersProvider = ({ children }) => {
       || defaultModelLayers.length - 2 < a
       || defaultModelLayers.length - 1 < b
     ) { return }
-    
+
     const newLayers = [
       ...defaultModelLayers.slice(0, a),
       defaultModelLayers[b],
@@ -90,18 +90,7 @@ export const LayersProvider = ({ children }) => {
     if (index === -1) {
       return;
     }
-    const thisPosition = defaultModelLayers[index].state.order;
-    const newLayers = defaultModelLayers.reduce((acc, l) => {
-      if (l.state.order === thisPosition) {
-        return acc;
-      }
-      if (l.state.order > thisPosition) {
-        l.state.order -= 1;
-      }
-      acc.push(l);
-      return acc;
-    }, []);
-
+    const newLayers = defaultModelLayers.filter(l => l.id !== id);
     setDefaultModelLayers(newLayers);
   };
 
