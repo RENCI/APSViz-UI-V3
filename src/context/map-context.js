@@ -49,13 +49,16 @@ export const LayersProvider = ({ children }) => {
       return
     }
     const thisPosition = defaultModelLayers[index].state.order
-    const newLayers = [...defaultModelLayers.slice(0, index), ...defaultModelLayers.slice(index + 1)]
-      .map(l => {
-        if (l.state.order > thisPosition) {
-          l.state.order -= 1;
-        }
-        return l
-      });
+    const newLayers = defaultModelLayers.reduce((acc, l) => {
+      if (l.state.order === thisPosition) {
+        return acc
+      }
+      if (l.state.order > thisPosition) {
+        l.state.order -= 1;
+      }
+      acc.push(l)
+      return acc
+    }, [])
 
     setDefaultModelLayers(newLayers)
     /* todo: update `layer.state.order`s
