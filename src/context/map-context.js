@@ -44,23 +44,23 @@ export const LayersProvider = ({ children }) => {
   };
 
   const removeLayer = id => {
-    const index = defaultModelLayers.findIndex(l => l.id === id)
+    const index = defaultModelLayers.findIndex(l => l.id === id);
     if (index === -1) {
-      return
+      return;
     }
-    const thisPosition = defaultModelLayers[index].state.order
+    const thisPosition = defaultModelLayers[index].state.order;
     const newLayers = defaultModelLayers.reduce((acc, l) => {
       if (l.state.order === thisPosition) {
-        return acc
+        return acc;
       }
       if (l.state.order > thisPosition) {
         l.state.order -= 1;
       }
-      acc.push(l)
-      return acc
-    }, [])
+      acc.push(l);
+      return acc;
+    }, []);
 
-    setDefaultModelLayers(newLayers)
+    setDefaultModelLayers(newLayers);
     /* todo: update `layer.state.order`s
     layer.state.order - 1 for all layers l with l.state.order > this layer's state.order
     */
