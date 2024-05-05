@@ -19,7 +19,6 @@ import {
   ArrowDropUp as MoveUpArrow,
   ArrowDropDown as MoveDownArrow,
   Schedule as ClockIcon,
-  DragIndicator as DragHandleIcon,
   Opacity as OpacityIcon,
   Palette as ColorRampIcon,
 } from '@mui/icons-material';
@@ -53,17 +52,12 @@ export const LayersList = () => {
 const LayerCard = ({ index, layer }) => {
   const {
     layerTypes,
-    removeLayer,
     swapLayers,
     toggleLayerVisibility,
   } = useLayers();
   const expanded = useToggleState(false);
   const isVisible = layer.state.visible;
   const LayerIcon = layerTypes[layer.properties.product_type].icon;
-
-  const handleClickRemove = id => () => {
-    removeLayer(id);
-  };
 
   return (
     <Accordion
@@ -89,67 +83,32 @@ const LayerCard = ({ index, layer }) => {
         }}
       >
         <Stack direction="column" sx={{ flex: 1 }}>
-          <Stack direction="row" alignItems="center" sx={{
-            flex: 1,
+          <Stack direction="row" alignItems="center" gap={ 2 } sx={{
             filter: isVisible ? 'opacity(1.0)' : 'opacity(0.75)',
             transition: 'filter 250ms',
           }}>
-            <Avatar sx={{ width: 36, height: 36 }}>
+            <Avatar variant="outlined">
               <LayerIcon size="lg" color="primary" />
             </Avatar>
             <Typography level="title-md">
               {layerTypes[layer.properties.product_type].name}
             </Typography>
+            <Switch
+              size="sm"
+              checked={ isVisible }
+              onChange={ () => toggleLayerVisibility(layer.id) }
+              className="actions"
+            />
           </Stack>
 
-          <Stack direction="row" alignItems="stretch" sx={{ flex: 1 }}>
-            <IconButton
-              size="sm"
-              sx={{
-                cursor: 'grab',
-                filter: 'opacity(0.5)',
-                transition: 'filter 250ms',
-                '&:hover': {
-                  filter: 'opacity(1.0)',
-                },
-                m: 0,
-              }}
-            >
-              <DragHandleIcon />
-            </IconButton>
+          <Stack direction="row" alignItems="stretch" gap={ 2 } sx={{ flex: 1, pl: '50px' }}>
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
               <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(layer.properties.run_date).toLocaleString() }
-              <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center', ml: 3 }}>
-                Cycle { layer.properties.cycle }
-              </Typography>
+            </Typography>
+            <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+              Cycle { layer.properties.cycle }
             </Typography>
           </Stack>
-        </Stack>
-
-        {/* layer card actions start */}
-        <Stack justifyContent="space-around" className="actions">
-          <Switch
-            size="sm"
-            checked={ isVisible }
-            onChange={ () => toggleLayerVisibility(layer.id) }
-          />
-
-          <IconButton
-            onClick={ handleClickRemove(layer.id) }
-            size="sm"
-            color="danger"
-          >
-            <RemoveIcon />
-          </IconButton>
-        </Stack>
-
-        <Stack justifyContent="space-around" className="actions">
-          <IconButton size="sm" variant="soft" disabled>
-            <OpacityIcon />
-          </IconButton>
-          <IconButton size="sm" variant="soft" disabled>
-            <ColorRampIcon />
-          </IconButton>
         </Stack>
 
         <ButtonGroup
@@ -171,8 +130,6 @@ const LayerCard = ({ index, layer }) => {
           ><MoveDownArrow /></IconButton> 
         </ButtonGroup>
 
-        {/* layer card actions end */}
-        
         <IconButton
           onClick={ expanded.toggle }
           size="sm"
@@ -188,9 +145,15 @@ const LayerCard = ({ index, layer }) => {
         </IconButton>
       </Stack>
       <AccordionDetails variant="solid" sx={{
+        position: 'relative',
         // remove default margin that doesn't work well in our situation.
         marginInline: 0,
+        '.MuiAccordionDetails-content': {
+          paddingInline: 0,
+          paddingBlock: 0,
+        },
       }}>
+        <LayerActions layerId={ layer.id } />
         <Box component="pre" sx={{
           fontSize: '75%',
           color: '#def',
@@ -208,4 +171,44 @@ const LayerCard = ({ index, layer }) => {
 LayerCard.propTypes = {
   index: PropTypes.number.isRequired,
   layer: PropTypes.object.isRequired,
+};
+
+const LayerActions = ({ layerId = 0 }) => {
+  const { removeLayer } = useLayers();
+
+  return (
+    <Stack
+      direction="row"
+      justifyContent="flex-end"
+      gap={ 1 }
+      className="actions"
+      sx={{
+        p: 1,
+        backgroundColor: '#333',
+      }}
+    >
+      <IconButton size="sm" variant="plain" disabled>
+        <OpacityIcon />
+      </IconButton>
+
+      <IconButton size="sm" variant="plain" disabled>
+        <ColorRampIcon />
+      </IconButton>
+
+      <Divider orientation="vertical" />
+
+      <IconButton
+        size="sm"
+        variant="solid"
+        color="warning"
+        onClick={ () => removeLayer(layerId) }
+      >
+        <RemoveIcon />
+      </IconButton>
+    </Stack>
+  );
+};
+
+LayerActions.propTypes = {
+  layerId: PropTypes.string.isRequired,
 };
