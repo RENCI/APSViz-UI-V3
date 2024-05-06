@@ -31,9 +31,6 @@ BaseFloatingDialog.propTypes = {
  * @param setDataList:
  */
 export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataList, setDataList} ) {
-    // define the dialog open/close session state
-    //const [open, setOpen] = React.useState(true);
-
     /**
     * the close dialog handler
     */
