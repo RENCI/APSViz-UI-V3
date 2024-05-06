@@ -12,7 +12,7 @@ export const ActionButtonMenu = ({ children }) => {
       className="action-button-menu"
       sx={{
         p: 1,
-        backgroundColor: 'neutral.softActiveBg',
+        backgroundColor: 'background.surface',
       }}
     >
       { children }

@@ -3,12 +3,14 @@ import { Fragment, useCallback, useState } from 'react';
 import {
   List,
   Sheet,
+  useTheme,
 } from '@mui/joy';
 import { Tray } from './tray';
 import { MenuItem } from './menu-item';
 import SidebarTrays from '../trays';
 
 export const Sidebar = () => {
+  const theme = useTheme();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClickMenuItem = useCallback(newIndex => {
@@ -34,13 +36,15 @@ export const Sidebar = () => {
           maxWidth: '68px',
           overflow: 'hidden',
           p: 0,
-          backgroundColor: activeIndex === -1 ? '#f0f4f899' : '#f0f4f8',
+          backgroundColor: activeIndex === -1
+            ? `rgba(${ theme.palette.mainChannel } / 0.2)`
+            : `rgba(${ theme.palette.mainChannel } / 1.0)`,
           // a drop shadow looks nice. we'll remove it if a tray is open,
           // as they should appear on the same plane.
           filter: activeIndex === -1 ? 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))' : 'drop-shadow(1px 0 0 rgba(0, 0, 0, 0.2))',
           // similarly, here.
           '&:hover': {
-            backgroundColor: '#f0f4f8',
+            backgroundColor: `rgba(${ theme.palette.mainChannel } / 1.0)`,
             transition: 'max-width 250ms, filter 250ms, background-color 150ms',
           },
           // we'll add a delay to this exit animation to give ample time

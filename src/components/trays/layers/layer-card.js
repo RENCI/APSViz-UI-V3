@@ -48,7 +48,12 @@ export const LayerCard = ({ index, layer }) => {
         sx={{
           p: 1,
           borderLeft: '6px solid',
-          borderLeftColor: isVisible ? 'primary.400' : 'primary.100',
+          // borderLeftColor: isVisible
+          //   ? `rgba(${ theme.palette.primary.mainChannel }) / 1.0`
+          //   : `rgba(${ theme.palette.primary.mainChannel }) / 0.2`,
+          borderLeftColor: isVisible
+            ? `primary.plainColor`
+            : `primary.plainDisabledColor`,
           '.action-button': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
           '&:hover .action-button': { filter: 'opacity(0.5)' },
           '& .action-button:hover': { filter: 'opacity(1.0)' },
@@ -119,7 +124,8 @@ export const LayerCard = ({ index, layer }) => {
           />
         </ActionButton>
       </Stack>
-      <AccordionDetails variant="solid" sx={{
+      <AccordionDetails sx={{
+        backgroundColor: 'background.surface',
         position: 'relative',
         // remove default margin that doesn't work well in our situation.
         marginInline: 0,
@@ -131,9 +137,10 @@ export const LayerCard = ({ index, layer }) => {
         <LayerActions layerId={ layer.id } />
         <Box component="pre" sx={{
           fontSize: '75%',
-          color: '#def',
+          color: 'text.primary',
           backgroundColor: 'transparent',
           overflowX: 'auto',
+          p: 1,
         }}>
           { JSON.stringify(layer.properties, null, 2) }
         </Box>
