@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
-import { markClicked } from '@utils/map-utils';
+import { markClicked, markUnclicked } from '@utils/map-utils';
 
 const newLayerDefaultState = layer => {
     const { product_type } = layer.properties;
@@ -78,14 +78,13 @@ export const DefaultLayers = () => {
             this.closePopup();
           });
           layer.on("click", function (e) {
-            // Do stuff here for retrieving time series data, in csv fomat,
-            // from the feature.properties.csv_url and create a fancy plot
-            //console.log("Observation Station '" + feature.properties.location_name + "' clicked");
-            markClicked(map, e);
 
             // add in a record id.
             // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
             feature.properties.id = feature.properties.station_name;
+
+            // create a marker target icon around the observation clicked
+            markClicked(map, e, feature.properties.id);
 
             // populate selectedObservations list with the newly selected observation point
             setSelectedObservations(previous => [...previous, feature.properties]);

@@ -17,7 +17,7 @@ export const Map = () => {
         zoom={5}
         zoomControl={false}
         scrollWheelZoom={true}
-        whenCreated={setMap}
+        ref={setMap}
         style={{ height: '100vh', width:'100wh' }}>
           <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
