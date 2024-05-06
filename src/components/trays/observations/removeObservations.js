@@ -1,0 +1,31 @@
+import React, { Fragment } from 'react';
+import { Button } from '@mui/joy';
+
+import {useLayers} from "@context";
+
+/**
+ * component that handles the removal of all observation selections from the map.
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export const RemoveObservations = () => {
+    // get references to the observation data/list
+    const {
+        selectedObservations,
+        setSelectedObservations
+    } = useLayers();
+
+    // remove the observation selections from state
+    function removeAllObservations() {
+        // remove all items from the data list
+        setSelectedObservations(selectedObservations.filter(item => item === undefined));
+    }
+
+    // render the button
+    return (
+        <Fragment>
+            <Button color="primary" onClick={() => removeAllObservations()}>Remove all observation selections</Button>
+        </Fragment>
+  );
+};
