@@ -1,8 +1,44 @@
 import React, { createContext, useContext, useState } from "react";
 import PropTypes from "prop-types";
 
+import {
+  Tsunami as WaveHeightIcon,
+  QueryStats as ObservationIcon,
+  Air as WindVelocityIcon,
+  Water as WaterLevelIcon,
+  BlurOn as WaterSurfaceIcon,
+} from '@mui/icons-material';
+
 export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
+
+// convert the product type to a readable layer name
+const layerTypes = {
+  obs: {
+    name: "Observations",
+    icon: ObservationIcon,
+  },
+  maxwvel63: {
+    name: "Maximum Wind Velocity",
+    icon: WindVelocityIcon,
+  },
+  maxele63: {
+    name: "Maximum Water Level",
+    icon: WaterLevelIcon,
+  },
+  swan_HS_max63: {
+    name: "Maximum Wave Height",
+    icon: WaveHeightIcon,
+  },
+  maxele_level_downscaled_epsg4326: {
+    name: "Hi-Res Maximum Water Level",
+    icon: WaterLevelIcon,
+  },
+  hec_ras_water_surface: {
+    name: "HEC/RAS Water Surface",
+    icon: WaterSurfaceIcon,
+  },
+};
 
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
@@ -17,7 +53,7 @@ export const LayersProvider = ({ children }) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
-      new Error('Could not locate layer', id);
+      console.error('Could not locate layer', id);
       return;
     }
     const alteredLayer = newLayers[index];
@@ -28,6 +64,33 @@ export const LayersProvider = ({ children }) => {
       ...newLayers.slice(index + 1),
     ]);
   };
+
+  const swapLayers = (i, j) => {
+    // ensure our pair has i < j
+    const [a, b] = [i, j].sort();
+    // bail out for select (a, b) pairs.
+    if (
+      a === b || a < 0 || b < 1
+      || defaultModelLayers.length - 2 < a
+      || defaultModelLayers.length - 1 < b
+    ) { return; }
+
+    const newLayers = [...defaultModelLayers];
+    const temp = newLayers[i];
+    newLayers[i] = newLayers[j];
+    newLayers[j] = temp;
+    setDefaultModelLayers(newLayers);
+  };
+
+  const removeLayer = id => {
+    const index = defaultModelLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      return;
+    }
+    const newLayers = defaultModelLayers.filter(l => l.id !== id);
+    setDefaultModelLayers(newLayers);
+  };
+
 
   return (
     <LayersContext.Provider
@@ -40,7 +103,10 @@ export const LayersProvider = ({ children }) => {
         setFilteredModelLayers,
         toggleLayerVisibility,
         selectedObservations,
-        setSelectedObservations
+        setSelectedObservations,
+        swapLayers,
+        removeLayer,
+        layerTypes,
       }}
     >
       {children}

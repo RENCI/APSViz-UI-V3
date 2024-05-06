@@ -12,6 +12,8 @@ import {
   KeyboardDoubleArrowLeft as CloseTrayIcon,
 } from '@mui/icons-material';
 
+const TRAY_WIDTH = '500px';
+
 export const Tray = ({ active, Contents, title, closeHandler }) => {
   return (
     <Sheet
@@ -23,7 +25,7 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         transform: active ? 'translateX(0)' : 'translateX(-120%)',
         transition: 'transform 250ms',
         height: '100vh',
-        width: '450px',
+        width: TRAY_WIDTH,
         zIndex: 998,
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
         overflowX: 'hidden',
