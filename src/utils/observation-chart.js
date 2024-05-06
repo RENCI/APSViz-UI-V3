@@ -9,10 +9,10 @@ ObservationChart.propTypes = {
 };
 
 /**
- * converts CSV data to json format
+ * converts CSV data into json format
  *
  * @param csvData
- * @returns {string}
+ * @returns {*[]}
  */
 function csvToJSON(csvData) {
     // ensure that there is csv data to convert
@@ -44,7 +44,7 @@ function csvToJSON(csvData) {
             ret_val.push(jsonObj);
         }
 
-        // TODO: return the data as a json string (for now)
+        // return the json data representation
         return ret_val;
     }
 }
@@ -76,23 +76,14 @@ export default function ObservationChart(dataUrl) {
                 });
         };
 
+        // finish off the data retrieval
         fetchData().then();
     }, [dataUrl]);
 
     // render the chart.
     return (
         <Fragment>
-        <LineChart
-          width={500}
-          height={300}
-          data={stationObs}
-          margin={{
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
+        <LineChart width={500} height={300} data={stationObs} margin={{  top: 0, right: 0, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="time" />
           <YAxis type="number" domain={['auto', 'auto']} />
