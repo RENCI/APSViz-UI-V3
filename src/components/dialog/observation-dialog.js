@@ -1,16 +1,7 @@
 import React, {Fragment} from 'react';
-import PropTypes from 'prop-types';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import {useLayers} from "@context";
 import ObservationChart from "@dialog/observation-chart";
-
-// define the properties of this component
-ObservationDialog.propTypes = {
-  obs_data: PropTypes.object
-};
-
-//export default function ObservationDialog(obs_data) {
-export const ObservationDialog = (obs_data)  => {
 
 /**
  * This component renders the observation dialog, including the chart
@@ -19,9 +10,10 @@ export const ObservationDialog = (obs_data)  => {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function ObservationDialog(obs_data) {
+export const ObservationDialog = (obs_data) => {
     // get references to the observation data/list
     const {
+        map,
         selectedObservations,
         setSelectedObservations
     } = useLayers();
