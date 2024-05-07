@@ -83,14 +83,17 @@ export default function ObservationChart(dataUrl) {
     // render the chart.
     return (
         <Fragment>
-        <LineChart width={500} height={300} data={stationObs} margin={{  top: 0, right: 0, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" />
-          <YAxis type="number" domain={['auto', 'auto']} />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="Observations" stroke="#8884d8" strokeWidth={2} dot={false} isAnimationActive={false} />
-          <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="#82ca9d" strokeWidth={2} dot={false} isAnimationActive={false} />
-        </LineChart></Fragment>
+            <LineChart width={550} height={300} data={stationObs} margin={{  top: 0, right: 0, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis />
+                <Tooltip />
+                <Legend verticalAlign="top" height={20} />
+                <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
+            </LineChart>
+        </Fragment>
     );
 };

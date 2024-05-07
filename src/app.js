@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Map } from '@components/map';
-import ObservationDialog from "@components/map/observation-dialog";
+import ObservationDialog from "@components/dialog/observation-dialog";
 import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 

@@ -1,8 +1,8 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import BaseFloatingDialog from "@utils/base-floating-dialog";
+import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import {useLayers} from "@context";
-import ObservationChart from "@utils/observation-chart";
+import ObservationChart from "@dialog/observation-chart";
 
 // define the properties of this component
 ObservationDialog.propTypes = {
