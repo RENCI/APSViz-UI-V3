@@ -1,5 +1,4 @@
 import React, {Fragment} from 'react';
-import PropTypes from 'prop-types';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import {useLayers} from "@context";
 import ObservationChart from "@dialog/observation-chart";
@@ -11,8 +10,7 @@ import ObservationChart from "@dialog/observation-chart";
  * @returns {JSX.Element}
  * @constructor
  */
-export const ObservationDialog = (obs_data)  => {
-
+export const ObservationDialog = (obs_data) => {
     // get references to the observation data/list
     const {
         map,
