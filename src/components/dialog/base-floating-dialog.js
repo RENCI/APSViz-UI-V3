@@ -19,7 +19,7 @@ BaseFloatingDialog.propTypes = {
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
     setDataList: PropTypes.func,
-    map: PropTypes.any,
+    map: PropTypes.any
 };
 
 /**
@@ -39,7 +39,9 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
     const handleClose = () => {
         // if there was a data key defined, use it
         if (dataKey !== undefined) {
+            // remove the bullseye
             markUnclicked(map, dataKey);
+
             // remove this item from the data list
             setDataList(dataList.filter(item => item.id !== dataKey));
         }
