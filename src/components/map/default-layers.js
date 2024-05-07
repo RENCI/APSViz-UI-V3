@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
-import { markClicked, markUnclicked } from '@utils/map-utils';
+import { markClicked } from '@utils/map-utils';
 
 const newLayerDefaultState = layer => {
     const { product_type } = layer.properties;
