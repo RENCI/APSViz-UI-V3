@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
+import { markUnclicked } from '@utils/map-utils';
 
 // define the properties of this component
 BaseFloatingDialog.propTypes = {
@@ -17,7 +18,8 @@ BaseFloatingDialog.propTypes = {
     dialogObject: PropTypes.any,
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
-    setDataList: PropTypes.func
+    setDataList: PropTypes.func,
+    map: PropTypes.any
 };
 
 /**
@@ -39,7 +41,9 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
     const handleClose = () => {
         // if there was a data key defined, use it
         if (dataKey !== undefined) {
+            // remove the bullseye
             markUnclicked(map, dataKey);
+
             // remove this item from the data list
             setDataList(dataList.filter(item => item.id !== dataKey));
         }
