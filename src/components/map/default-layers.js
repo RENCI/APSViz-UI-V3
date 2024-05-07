@@ -84,7 +84,7 @@ export const DefaultLayers = () => {
       markClicked(map, e);
 
       // populate selectedObservations list with the newly selected observation point
-      setSelectedObservations(previous => [...previous, feature.properties]);
+      //setSelectedObservations(previous => [...previous, feature.properties]);
       });
     }
   };
