@@ -41,4 +41,4 @@ export const markUnclicked = (map, id) => {
       }
     }
   });
-}
+};
