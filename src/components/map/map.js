@@ -24,8 +24,8 @@ export const Map = () => {
         whenCreated={setMap}
         style={{ height: '100vh', width:'100wh' }}>
           { darkMode.enabled
-            ? <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu3inqs05v901qlabcfhxsr/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.MAPBOX_TOKEN }` } />
-            : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.MAPBOX_TOKEN }` } />
+            ? <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu3inqs05v901qlabcfhxsr/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
+            : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
           }
           <DefaultLayers/>
       </MapContainer>
