@@ -63,8 +63,8 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
                     TransitionComponent={Transition}
                     disableEnforceFocus
                     style={{ pointerEvents: 'none' }}
-                    PaperProps={{ sx: { width: 1400,  height: 510, pointerEvents: 'auto'} }}
-                    sx={{ width: 1500, height: 510, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
+                    PaperProps={{ sx: { width: 625,  height: 510, pointerEvents: 'auto'} }}
+                    sx={{ width: 625, height: 510, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
                 >
                     <DialogTitle sx={{cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center', fontSize: 14, height: 35, m: 0, p: 1 }} id="draggable-dialog-title"> { title } </DialogTitle>
 
