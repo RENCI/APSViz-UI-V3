@@ -1,31 +1,40 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import BaseFloatingDialog from "@utils/base-floating-dialog";
+import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import {useLayers} from "@context";
-import ObservationChart from "@utils/observation-chart";
+import ObservationChart from "@dialog/observation-chart";
 
 // define the properties of this component
-/* ObservationDialog.propTypes = {
+ObservationDialog.propTypes = {
   obs_data: PropTypes.object
-}; */
+};
 
 //export default function ObservationDialog(obs_data) {
 export const ObservationDialog = (obs_data)  => {
 
+/**
+ * This component renders the observation dialog, including the chart
+ *
+ * @param obs_data
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function ObservationDialog(obs_data) {
     // get references to the observation data/list
     const {
-        map,
         selectedObservations,
         setSelectedObservations
     } = useLayers();
 
     // create a graph using data from this url
     const graphObj = (url) => {
-        const args = {dataUrl: url};
+        // create the data object
+        const args = { dataUrl: url };
 
+        // create the chart
         return (
             <Fragment>
-                <ObservationChart {...args} />
+                <ObservationChart { ...args } />
             </Fragment>
         );
     };
@@ -33,8 +42,7 @@ export const ObservationDialog = (obs_data)  => {
     // create an object for the base dialog
     const floaterArgs = {title: obs_data.obs.location_name, dialogObject: {...graphObj(obs_data.obs.csvurl)}, dataKey: obs_data.obs.station_name, dataList: selectedObservations, setDataList: setSelectedObservations, map: map};
 
-    // render the dialog.
-    // the key here will be used to remove the dialog from the selected observation list when the dialog is closed
+    // render the dialog
     return (
         <Fragment>
             <BaseFloatingDialog {...floaterArgs} />
