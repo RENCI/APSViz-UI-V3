@@ -49,7 +49,8 @@ jobs:
             APP_VERSION=${{ steps.get_version.outputs.VERSION }}
             APP_GS_DATA_URL=${{ secrets.GS_DATA_URL }}
             APP_UI_DATA_URL=${{ secrets.UI_DATA_URL }}
-            APP_UI_DATA_TOKEN=${{ secrets.TOKEN }}
+            APP_UI_DATA_TOKEN=${{ secrets.UI_DATA_TOKEN }}
+            APP_UI_MAPBOX_TOKEN=${{ secrets.UI_MAPBOX_TOKEN }}
 
           tags: |
             ${{ env.REGISTRY }}:latest
