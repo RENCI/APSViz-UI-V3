@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { Button } from '@mui/joy';
 
 import {useLayers} from "@context";
-// import { markUnclicked } from '@utils/map-utils';
-
 
 /**
  * component that handles the removal of all observation selections from the map.
