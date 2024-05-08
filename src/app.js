@@ -1,14 +1,28 @@
 import React, { Fragment } from 'react';
 import { Map } from '@components/map';
+import { ObservationDialog } from "@components/dialog/observation-dialog";
+import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 
 export const App = () => {
-  return (
-    <Fragment>
-      <Map/>
-      <Sidebar />
-      <ControlPanel/>
-    </Fragment>
-  );
+    // install the selected observation list from the layer context
+    const {
+        selectedObservations
+    } = useLayers();
+
+    return (
+        <Fragment>
+        {
+            // for each observation selected
+            selectedObservations.map (function (obs) {
+                // render the observation
+                return <ObservationDialog key={obs["station_name"]} obs={obs} />;
+            })
+        }
+            <Map />
+            <Sidebar />
+            <ControlPanel/>
+        </Fragment>
+    );
 };

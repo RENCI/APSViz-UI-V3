@@ -18,7 +18,6 @@ const newLayerDefaultState = (layer) => {
     });
   };
   
-
 export const DefaultLayers = () => {
 
     const [obsData, setObsData] = useState("");
@@ -27,6 +26,7 @@ export const DefaultLayers = () => {
     const {
         defaultModelLayers,
         setDefaultModelLayers,
+        setSelectedObservations
     } = useLayers();
 
     // Create the authorization header
@@ -77,10 +77,16 @@ export const DefaultLayers = () => {
             this.closePopup();
           });
           layer.on("click", function (e) {
-            // Do stuff here for retrieving time series data, in csv fomat,
-            // from the feature.properties.csv_url and create a fancy plot
-            console.log("Observation Station '" + feature.properties.location_name + "' clicked");
-            markClicked(map, e);
+
+            // add in a record id.
+            // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
+            feature.properties.id = feature.properties.station_name;
+
+            // create a marker target icon around the observation clicked
+            markClicked(map, e, feature.properties.id);
+
+            // populate selectedObservations list with the newly selected observation point
+            setSelectedObservations(previous => [...previous, feature.properties]);
           });
         }
     };
@@ -107,7 +113,7 @@ export const DefaultLayers = () => {
                 if (layer)
                     layer_list.push({
                         ...layer,
-                        state: newLayerDefaultState(layer, layer_list.length)
+                        state: newLayerDefaultState(layer)
                     });
 
                     // TODO: do we really need to do this here??!
@@ -171,8 +177,7 @@ export const DefaultLayers = () => {
                             onEachFeature = {onEachObsFeature}
                         />
                     );
-                }
-                else {
+                } else {
                     return (
                         <WMSTileLayer
                             key = {index}
@@ -191,7 +196,8 @@ export const DefaultLayers = () => {
                         />
                     );
                 }
-        })};
+            })
+        };
         </>
     );
 };
