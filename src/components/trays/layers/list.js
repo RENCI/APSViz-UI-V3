@@ -31,7 +31,7 @@ export const LayersList = () => {
     hec_ras_water_surface: "HEC/RAS Water Surface",
   };
 
-  console.table(layers[0]);
+  //console.table(layers);
 
   const [expandedIds, setExpandedIds] = useState(new Set());
 
