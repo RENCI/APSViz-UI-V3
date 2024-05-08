@@ -99,10 +99,11 @@ module.exports = {
       '@components': path.resolve(__dirname, 'src/components/'),
       '@content': path.resolve(__dirname, 'src/content/'),
       '@context': path.resolve(__dirname, 'src/context/'),
+      '@dialog': path.resolve(__dirname, 'src/components/dialog'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
-      '@utils': path.resolve(__dirname, 'src/utils/'),
-      '@dialog': path.resolve(__dirname, 'src/components/dialog')
+      '@layer-selection': path.resolve(__dirname, 'src/components/layer-selection'),
+      '@utils': path.resolve(__dirname, 'src/utils/')
     }
   },
 

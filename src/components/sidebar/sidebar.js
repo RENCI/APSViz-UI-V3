@@ -1,10 +1,6 @@
 import React from 'react';
 import { Fragment, useCallback, useState } from 'react';
-import {
-  List,
-  Sheet,
-  useTheme,
-} from '@mui/joy';
+import { List, Sheet, useTheme } from '@mui/joy';
 import { Tray } from './tray';
 import { MenuItem } from './menu-item';
 import SidebarTrays from '../trays';

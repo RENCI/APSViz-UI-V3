@@ -1,16 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  DialogContent,
-  DialogTitle,
-  Divider,
-  IconButton,
-  Sheet,
-  Stack,
-} from '@mui/joy';
-import {
-  KeyboardDoubleArrowLeft as CloseTrayIcon,
-} from '@mui/icons-material';
+import { DialogContent, DialogTitle, Divider, IconButton, Sheet, Stack } from '@mui/joy';
+import { KeyboardDoubleArrowLeft as CloseTrayIcon } from '@mui/icons-material';
 
 const TRAY_WIDTH = '500px';
 
