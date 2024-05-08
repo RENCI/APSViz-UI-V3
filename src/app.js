@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Map } from '@components/map';
-import ObservationDialog from "@components/map/observation-dialog";
+import { ObservationDialog } from "@components/dialog/observation-dialog";
 import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 
@@ -11,16 +11,16 @@ export const App = () => {
     } = useLayers();
 
     return (
-    <Fragment>
+        <Fragment>
         {
             // for each observation selected
             selectedObservations.map (function (obs) {
                 // render the observation
-                return <ObservationDialog key={obs.station_name} obs={obs} />;
+                return <ObservationDialog key={obs["station_name"]} obs={obs} />;
             })
         }
-        <Map />
-        <Sidebar />
-     </Fragment>
+            <Map />
+            <Sidebar />
+        </Fragment>
     );
 };

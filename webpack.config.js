@@ -102,6 +102,7 @@ module.exports = {
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
       '@utils': path.resolve(__dirname, 'src/utils/'),
+      '@dialog': path.resolve(__dirname, 'src/components/dialog')
     }
   },
 
