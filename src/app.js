@@ -16,11 +16,11 @@ export const App = () => {
             // for each observation selected
             selectedObservations.map (function (obs) {
                 // render the observation
-                return <ObservationDialog key={obs.station_name} obs={obs} />;
+                return <ObservationDialog key={obs["station_name"]} obs={obs} />;
             })
         }
             <Map />
             <Sidebar />
-     </Fragment>
+        </Fragment>
     );
 };
