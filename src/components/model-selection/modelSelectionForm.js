@@ -1,11 +1,8 @@
 import React, { Fragment } from 'react';
-import Button from '@mui/joy/Button';
-import Input from '@mui/joy/Input';
-import Stack from '@mui/joy/Stack';
-import {Tabs, TabList, Tab, TabPanel} from '@mui/joy';
-
+import {Button, Input, Stack, Tabs, TabList, Tab, TabPanel, Divider} from '@mui/joy';
 import { useLayers } from "@context";
-import CssBaseline from '@mui/material/CssBaseline';
+
+// import {LayerCard} from "@components/trays/layers/layer-card";
 
 /**
  * This component renders the layer selection form
@@ -22,7 +19,6 @@ export const ModelSelectionForm = () => {
     // render the form
     return (
         <Fragment>
-            <CssBaseline />
             <Tabs aria-label="Type tabs" defaultValue={0}>
                 <TabList>
                     <Tab>Tropical</Tab>
@@ -39,6 +35,14 @@ export const ModelSelectionForm = () => {
                             <Button type="submit">Submit</Button>
                             <Button type="reset">Reset</Button>
                         </Stack>
+
+                        <Divider sx={{m: 2}} />
+
+                        <Stack sx={{ maxHeight: "400px", overflow: "auto" }}>
+                            {/* list of search results goes here
+                                may be able to leverage trays/layers/layer-card />
+                            */}
+                        </Stack>
                     </form>
                 </TabPanel>
                 <TabPanel value={1}>
@@ -52,6 +56,14 @@ export const ModelSelectionForm = () => {
                             <Button type="submit">Submit</Button>
                             <Button type="reset">Reset</Button>
                         </Stack>
+
+                        <Divider sx={{m: 2}} />
+
+                        <Stack sx={{ maxHeight: "400px", overflow: "auto" }}>
+                            {/* list of search results goes here
+                                may be able to leverage trays/layers/layer-card />
+                            */}
+                        </Stack>
                     </form>
                 </TabPanel>
             </Tabs>
@@ -59,6 +71,19 @@ export const ModelSelectionForm = () => {
     );
 };
 
+/**
+ * this method populates the controls on the form.
+ *
+ */
+const dataLoader = () => {
+
+};
+
+/**
+ * method to initiate a model search with the filter selections on the form
+ *
+ * @param event
+ */
 const formHandler = (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
