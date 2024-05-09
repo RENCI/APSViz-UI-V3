@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { LayerSelectionForm } from "@layer-selection/layerSelectionForm.js";
+import { ModelSelectionForm } from "@model-selection/modelSelectionForm.js";
 
 /**
  * component that handles the selection of layers for the map.
@@ -7,11 +7,11 @@ import { LayerSelectionForm } from "@layer-selection/layerSelectionForm.js";
  * @returns {JSX.Element}
  * @constructor
  */
-export const LayerSelectionTray = () => {
+export const ModelSelectionTray = () => {
     // render the layer selection component
     return (
         <Fragment>
-            <LayerSelectionForm />
+            <ModelSelectionForm />
         </Fragment>
   );
 };

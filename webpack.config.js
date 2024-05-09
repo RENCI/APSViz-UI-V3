@@ -102,7 +102,7 @@ module.exports = {
       '@dialog': path.resolve(__dirname, 'src/components/dialog'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
-      '@layer-selection': path.resolve(__dirname, 'src/components/layer-selection'),
+      '@model-selection': path.resolve(__dirname, 'src/components/model-selection'),
       '@utils': path.resolve(__dirname, 'src/utils/')
     }
   },
