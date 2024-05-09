@@ -13,7 +13,7 @@ import CssBaseline from '@mui/material/CssBaseline';
  * @returns {JSX.Element}
  * @constructor
  */
-export const LayerSelectionForm = () => {
+export const ModelSelectionForm = () => {
     // get references to the filtered layer state
     const {
         //filteredModelLayers
