@@ -9,7 +9,7 @@ import { LayerSelectionTray } from "./layerSelectionTray.js";
 export const icon = <LayerSelectionIcon />;
 
 // create a title for this tray element
-export const title = 'Layer selection';
+export const title = 'ADCIRC Layer selection';
 
 /**
  * render the removal component
