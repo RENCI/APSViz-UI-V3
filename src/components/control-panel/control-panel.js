@@ -1,20 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLayers } from '@context/map-context';
 import { Sheet, ButtonGroup, Typography, IconButton, Box, Switch, ToggleButtonGroup } from '@mui/joy';
-import { ArrowUpward, ArrowDownward, Tsunami, Water, Air } from '@mui/icons-material';
+import { KeyboardArrowLeft, KeyboardArrowRight, Tsunami, Water, Air } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
 
 export const ControlPanel = () => {
-  //const { defaultModelLayers, toggleLayerVisibility } = useLayers();
-  const { defaultModelLayers, toggleLayerVisibility } = useLayers();
+
+  const { map, defaultModelLayers, toggleLayerVisibility } = useLayers();
 
   const layers = [...defaultModelLayers];
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
+  // keep track of which model run to retrieve
+  let runCycle = 0;
+  let runDate = new Date();
+
   const [value, setValue] = React.useState('maxele63');
   const [checked, setChecked] = React.useState(true);
+
+  useEffect(() => {
+    if (layers[0]) {
+        // set the initial run cycle
+        runCycle = parseInt(layers[0].properties.cycle);
+
+        // set the initial run date string
+        const dateParts = layers[0].properties.run_date.split('-');
+        const currentDate = new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
+        runDate = new Date(currentDate) 
+    }
+
+  }, [layers]);
 
   const layerChange = (event, newValue) => {
 
@@ -28,7 +45,6 @@ export const ControlPanel = () => {
     // turn on the new
     layers.map(layer => {
         if (layer.layers.includes(newValue)) {
-            console.log(newValue);
             toggleLayerVisibility(layer.id);
         }
     });
@@ -37,6 +53,47 @@ export const ControlPanel = () => {
   const toggleObsLayer = (event) => {
     setChecked(event.target.checked);
     toggleLayerVisibility(obs_layer.id);
+  };
+
+  const changeModelRun = async (e) => {
+    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true`;
+    const direction = e.currentTarget.getAttribute("button-key");
+
+    // TODO: Need to update this to also support tropical storms
+  
+    // get the run details
+    if (layers) {
+        const runId = layers[0].id.split('-')[0];
+        const metClass = layers[0].properties.met_class;
+        const eventType = layers[0].properties.event_type;
+
+        if (direction === "next") {
+            // set properties for next model run
+            if (runCycle === 18) { // need to push date to next day
+                runDate.setDate(runDate.getDate() + 1);
+                runCycle = 0;
+            } else {
+                runCycle += 6;
+            }
+        } else {  // previous
+            // set properties for previous model run
+            if (runCycle === 0) { // need to push date to previous day
+                runDate.setDate(runDate.getDate() - 1);
+                runCycle = 18;
+            } else {
+                runCycle -= 6;
+            }
+        }
+
+        // now do the api query to retrieve the data
+        // here are the query parameters
+        console.log("query params:");
+        console.log(runId);
+        console.log(metClass);
+        console.log(eventType);
+        console.log(runDate.toDateString());
+        console.log(runCycle);
+    }
   };
 
   return (
@@ -67,22 +124,21 @@ export const ControlPanel = () => {
         { (layers.length) &&
             <Typography level='h4' sx={{paddingLeft: 3, color: 'white'}}>model run date: {layers[0].properties.run_date}</Typography>
         }
-        <Typography level='h4' sx={{ paddingLeft: 10, color: "white" }} component="label" endDecorator={<ButtonGroup>
-            <IconButton size='small' key='up'>
-                <ArrowUpward/>
+        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, marginLeft: 7}}>
+            <IconButton variant="outlined" button-key='previous' onClick={changeModelRun}>
+                <KeyboardArrowLeft/>
             </IconButton>
-            <IconButton size='small' key='down'>
-                <ArrowDownward/>
+            <Typography level='h4' sx={{ color: "white" }}>cycle {layers.length && layers[0].properties.cycle}</Typography>
+            <IconButton variant="outlined" button-key='next' onClick={changeModelRun}>
+                <KeyboardArrowRight/>
             </IconButton>
-            </ButtonGroup>}>
-            {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
-                      Also probabaly want to add a switch for hurricane layers - which
-                      involves making a request to the MetGet API 
-                      Third need to implement actual code to load different model runs each time 
-                      up/down arrows are clicked. This has to time managed in some way so that
-                      Geoserver is not inundated with requests */}
-                cycle {layers.length && layers[0].properties.cycle}
-        </Typography>
+        </Box>
+        {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
+                    Also probabaly want to add a switch for hurricane layers - which
+                    involves making a request to the MetGet API 
+                    Third need to implement actual code to load different model runs each time 
+                    up/down arrows are clicked. This has to time managed in some way so that
+                    Geoserver is not inundated with requests */}
         { (layers.length) &&
             <Typography level='h5' sx={{ paddingLeft: 7, paddingTop: 1, color: 'white'}}>{layers[0].properties.grid_type} grid</Typography>
         }
