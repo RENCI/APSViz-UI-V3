@@ -8,7 +8,7 @@ import {useLayers} from "@context";
  * @returns {JSX.Element}
  * @constructor
  */
-export const RemoveSelectedObservations = () => {
+export const RemoveObservations = () => {
     // get references to the observation data/list
     const {
         map,

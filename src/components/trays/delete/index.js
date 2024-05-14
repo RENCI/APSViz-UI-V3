@@ -3,7 +3,7 @@ import { Stack } from '@mui/joy';
 import { Delete as RemoveIcon} from '@mui/icons-material';
 
 // import the component that will delete the selected observations from state
-import { RemoveSelectedObservations } from "./remove-observations";
+import { RemoveObservations } from "./remove-observations";
 
 // get an icon for the tray
 export const icon = <RemoveIcon />;
@@ -18,6 +18,6 @@ export const title = 'Remove items';
  */
 export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>
-            <RemoveSelectedObservations />
+            <RemoveObservations />
       </Stack>
     );
