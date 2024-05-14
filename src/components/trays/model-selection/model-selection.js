@@ -7,7 +7,7 @@ import { ModelSelectionForm } from "@model-selection/modelSelectionForm.js";
  * @returns {JSX.Element}
  * @constructor
  */
-export const ModelSelectionTray = () => {
+export const ModelSelection = () => {
     // render the layer selection component
     return (
         <Fragment>

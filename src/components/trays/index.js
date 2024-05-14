@@ -1,14 +1,14 @@
 import * as hurricanes from './hurricanes';
 import * as layers from './layers';
-import * as modelSelection from './model-selection';
-import * as removeObservationSelections from './observations';
+import * as ModelSelection from './model-selection';
+import * as RemoveSelectedObservations from './delete';
 import * as settings from './settings';
 
 export default {
   layers,
-  modelSelection,
+  ModelSelection,
   hurricanes,
-  removeObservationSelections,
+  RemoveSelectedObservations,
   settings
 };
 
@@ -22,7 +22,7 @@ export default {
      https://mui.com/material-ui/material-icons/
   - `trayContents`, ReactNode; the contents of the new tray
   
-  for example, this boilerplate should be sufficient starting place:
+  for example, this boilerplate should be a sufficient starting place:
   
      export const icon = <MyIcon />
      export const title = 'My New Tray'

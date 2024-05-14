@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
 import { Button } from '@mui/joy';
-
 import {useLayers} from "@context";
 
 /**
- * component that handles the removal of all observation selections from the map.
+ * component that handles the removal of things.
  *
  * @returns {JSX.Element}
  * @constructor
  */
-export const RemoveObservations = () => {
+export const RemoveSelectedObservations = () => {
     // get references to the observation data/list
     const {
         map,
@@ -20,7 +19,7 @@ export const RemoveObservations = () => {
     /**
      * remove the observation selections from state and map
      */
-    function removeAllObservations() {
+    function removeObservations() {
         // remove all the targets on the map
         map.eachLayer((layer) => {
             // if this is an observation selection marker
@@ -37,7 +36,7 @@ export const RemoveObservations = () => {
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeAllObservations()}>Remove all observation selections</Button>
+            <Button color="primary" onClick={() => removeObservations()}>Remove selected observations</Button>
         </Fragment>
   );
 };
