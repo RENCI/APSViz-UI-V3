@@ -26,11 +26,12 @@ BaseFloatingDialog.propTypes = {
  * This is a component that displays a floating dialog with the content passed.
  * Note: this component
  *
- * @param title: string
- * @param dialogObject: {JSX.Element}
- * @param dataKey:
- * @param dataList:
- * @param setDataList:
+ * @param title - the name of the dialog: string
+ * @param dialogObject the object to render in the dialog: {JSX.Element}
+ * @param dataKey - the key to the data list elements in state: string
+ * @param dataList - a data list in state: array
+ * @param setDataList - method to update a data list in state: function
+ * @param map - a reference to the map state: object
  */
 export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataList, setDataList, map} ) {
     /**
@@ -84,15 +85,16 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
 function PaperComponent(props) {
     return (
         <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper {...props} />
+            <Paper { ...props } />
         </Draggable>
     );
 }
 
 /**
 * This creates an animated transition for the dialog that pops up
+ *
 * @type {React.ForwardRefExoticComponent<React.PropsWithoutRef<{}> & React.RefAttributes<any>>}
 */
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
+    return <Slide direction="up" ref={ ref } { ...props } />;
 });
