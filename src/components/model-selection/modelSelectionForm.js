@@ -75,9 +75,9 @@ export const ModelSelectionForm = () => {
  * this method populates the controls on the form.
  *
  */
-const dataLoader = () => {
-
-};
+// const dataLoader = () => {
+//
+// };
 
 /**
  * method to initiate a model search with the filter selections on the form
