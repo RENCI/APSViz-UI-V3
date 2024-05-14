@@ -3,7 +3,7 @@ import { Button } from '@mui/joy';
 import {useLayers} from "@context";
 
 /**
- * component that handles the removal of things.
+ * component that handles the removal of observations.
  *
  * @returns {JSX.Element}
  * @constructor
