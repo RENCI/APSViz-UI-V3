@@ -12,7 +12,7 @@ import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { markUnclicked } from '@utils/map-utils';
 
-// define the properties of this component
+// define the properties of this component's input
 BaseFloatingDialog.propTypes = {
     title: PropTypes.string,
     dialogObject: PropTypes.any,
@@ -92,7 +92,7 @@ function PaperComponent(props) {
 
 /**
 * This creates an animated transition for the dialog that pops up
- *
+*
 * @type {React.ForwardRefExoticComponent<React.PropsWithoutRef<{}> & React.RefAttributes<any>>}
 */
 const Transition = React.forwardRef(function Transition(props, ref) {
