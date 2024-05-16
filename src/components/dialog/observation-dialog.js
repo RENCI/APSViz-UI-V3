@@ -28,8 +28,15 @@ export const ObservationDialog = (obs_data) => {
         );
     };
 
-    // create an object for the base dialog
-    const floaterArgs = {title: obs_data.obs.location_name, dialogObject: {...graphObj(obs_data.obs.csvurl)}, dataKey: obs_data.obs.station_name, dataList: selectedObservations, setDataList: setSelectedObservations, map: map};
+    // create a data object for the base dialog to use to render
+    const floaterArgs = {
+        title: obs_data.obs.location_name,
+        dialogObject: {...graphObj(obs_data.obs.csvurl)},
+        dataKey: obs_data.obs.station_name,
+        dataList: selectedObservations,
+        setDataList: setSelectedObservations,
+        map: map
+    };
 
     // render the dialog
     return (
