@@ -1,18 +1,89 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import axios from 'axios';
+import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import PropTypes from 'prop-types';
+const queryClient = new QueryClient();
 
-// define the properties of this component
-ObservationChart.propTypes = {
-  dataUrl: PropTypes.string
-};
+/**
+ * renders the observations as a chart
+ *
+ * @param dataUrl
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function ObservationChart(url) {
+    // render the chart
+    return (
+        <QueryClientProvider client={ queryClient }>
+            <CreateObsChart url={ url.url } />
+        </QueryClientProvider>
+    );
+}
+
+/**
+ * Retrieves and returns the chart data in json format
+ *
+ * @param url
+ * @returns { json }
+ */
+function getObsChartData(url) {
+    // return the data to the caller
+    return useQuery( {
+        // specify the data key and url to use
+        queryKey: ['apsviz-data', url],
+
+        // create the function to call for data
+        queryFn: async () => {
+            // make the call to get the data
+            const { data } = await axios.get(url);
+
+            // return the csv data in json format
+            return csvToJSON(data);
+        }
+    });
+}
+
+/**
+ * Creates the chart.
+ *
+ * @param url
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function CreateObsChart(url) {
+    // call to get the data. expect back some information too
+    const { status, data, error } = getObsChartData(url.url);
+
+    // render the chart
+    return (
+        <Fragment>
+            { status === 'pending' ? (
+                'Loading...'
+            ) : status === 'error' ? (
+                <span>Error: {error.message}</span>
+            ) : (
+                <LineChart width={590} height={300} data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" />
+                    <YAxis domain={['dataMin', 'dataMax']} />
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" height={30} />
+                    <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
+                </LineChart>
+            )}
+        </Fragment>
+    );
+}
 
 /**
  * converts CSV data into json format
  *
  * @param csvData
- * @returns {*[]}
+ * @returns { json [] }
  */
 function csvToJSON(csvData) {
     // ensure that there is csv data to convert
@@ -57,52 +128,3 @@ function csvToJSON(csvData) {
         return ret_val;
     }
 }
-
-/**
- * renders the observations as a chart
- *
- * @param dataUrl
- * @returns {JSX.Element}
- * @constructor
- */
-export default function ObservationChart(dataUrl) {
-    // store the station observation data in state
-    const [stationObs, setStationObs] = useState("");
-
-    // get the data
-    useEffect( () => {
-        const fetchData = () => {
-            return fetch(dataUrl.dataUrl)
-                .then(res => {
-                    return res.text();
-                })
-                .then(data => {
-                    setStationObs(csvToJSON(data));
-                    // console.log(JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        };
-
-        // finish off the data retrieval
-        fetchData().then();
-    }, [dataUrl]);
-
-    // render the chart.
-    return (
-        <Fragment>
-            <LineChart width={590} height={300} data={stationObs} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis domain={['dataMin', 'dataMax']} />
-                <Tooltip />
-                <Legend verticalAlign="bottom" height={30} />
-                <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
-            </LineChart>
-        </Fragment>
-    );
-};

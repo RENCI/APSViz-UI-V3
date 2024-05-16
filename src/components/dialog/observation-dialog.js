@@ -20,13 +20,10 @@ export const ObservationDialog = (obs_data) => {
 
     // create a graph using data from this url
     const graphObj = (url) => {
-        // create the data object
-        const args = { dataUrl: url };
-
         // create the chart
         return (
             <Fragment>
-                <ObservationChart { ...args } />
+                <ObservationChart url={url} />
             </Fragment>
         );
     };
