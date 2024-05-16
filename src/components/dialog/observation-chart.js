@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -67,6 +67,7 @@ function CreateObsChart(url) {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" allowDuplicatedCategory={false} />
                     <YAxis domain={['auto', 'auto']}/>
+                    <Tooltip />
                     <Legend verticalAlign="bottom" height={30} />
                     <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -117,10 +118,25 @@ function csvToJSON(csvData) {
         // remove the timezone from the time value
         ret_val.map(function (e){
             e.time = e.time.substring(0, e.time.split(':', 2).join(':').length);
-            if (e["APS Nowcast"]) e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
-            if (e["Observations"]) e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
-            if (e["NOAA Tidal Predictions"]) e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
-            if (e["Difference (APS-OBS)"]) e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+            if (e["APS Nowcast"])
+                e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
+            else
+                e["APS Nowcast"] = null;
+
+            if (e["Observations"])
+                e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+            else
+                e["Observations"] = null;
+
+            if (e["NOAA Tidal Predictions"])
+                e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
+            else
+                e["NOAA Tidal Predictions"] = null;
+
+            if (e["Difference (APS-OBS)"])
+                e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+            else
+                e["Difference (APS-OBS)"] = null;
         });
 
         // return the json data representation
