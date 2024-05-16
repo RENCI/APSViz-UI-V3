@@ -1,6 +1,6 @@
-import React, {Fragment} from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React from 'react';
 import axios from 'axios';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer } from 'recharts';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -57,17 +57,16 @@ function CreateObsChart(url) {
 
     // render the chart
     return (
-        <Fragment>
+        <ResponsiveContainer width="100%" height="100%">
             { status === 'pending' ? (
-                'Loading...'
+                <div>Loading...</div>
             ) : status === 'error' ? (
-                <span>Error: {error.message}</span>
+                <div>Error: {error.message}</div>
             ) : (
-                <LineChart width={590} height={300} data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                <LineChart width={590} height={300} data={data} margin={{ top: 10, right: 0, left: -10, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" />
-                    <YAxis domain={['dataMin', 'dataMax']} />
-                    <Tooltip />
+                    <XAxis dataKey="time" allowDuplicatedCategory={false} />
+                    <YAxis domain={['auto', 'auto']}/>
                     <Legend verticalAlign="bottom" height={30} />
                     <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -75,7 +74,7 @@ function CreateObsChart(url) {
                     <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
                 </LineChart>
             )}
-        </Fragment>
+        </ResponsiveContainer>
     );
 }
 
