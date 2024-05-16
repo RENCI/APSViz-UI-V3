@@ -68,7 +68,7 @@ export const LayerCard = ({ index, layer }) => {
               <LayerIcon size="lg" color="primary" />
             </Avatar>
             <Typography level="title-md">
-              {layerTypes[layer.properties.product_type].name}
+              {layer.properties.product_name}
             </Typography>
             <Switch
               size="sm"
