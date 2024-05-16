@@ -1,9 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
-import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * renders the observations as a chart
@@ -14,11 +12,7 @@ const queryClient = new QueryClient();
  */
 export default function ObservationChart(url) {
     // render the chart
-    return (
-        <QueryClientProvider client={ queryClient }>
-            <CreateObsChart url={ url.url } />
-        </QueryClientProvider>
-    );
+    return (<CreateObsChart url={ url.url } />);
 }
 
 /**

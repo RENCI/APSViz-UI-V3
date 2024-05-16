@@ -4,6 +4,7 @@ import { App } from './app';
 import { LayersProvider, SettingsProvider } from '@context';
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import {
     experimental_extendTheme as materialExtendTheme,
@@ -14,6 +15,8 @@ import {
 import './index.css';
 import '@fontsource/inter';
 import theme from './theme';
+
+const queryClient = new QueryClient();
 
 // get a reference to the root element used as a rendering target
 const container = document.getElementById('root');
@@ -27,16 +30,18 @@ const materialTheme = materialExtendTheme();
 // render the app specifying the material and joy providers
 const ProvisionedApp = () => {
     return (
-        <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-            <JoyCssVarsProvider theme={ theme }>
-                <CssBaseline enableColorScheme />
-                <SettingsProvider>
-                    <LayersProvider>
-                        <App />
-                    </LayersProvider>
-                </SettingsProvider>
-            </JoyCssVarsProvider>
-        </MaterialCssVarsProvider>
+        <QueryClientProvider client={ queryClient }>
+            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                <JoyCssVarsProvider theme={ theme }>
+                    <CssBaseline enableColorScheme />
+                    <SettingsProvider>
+                        <LayersProvider>
+                            <App />
+                        </LayersProvider>
+                    </SettingsProvider>
+                </JoyCssVarsProvider>
+            </MaterialCssVarsProvider>
+        </QueryClientProvider>
     );
 };
 
