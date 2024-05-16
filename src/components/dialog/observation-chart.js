@@ -118,6 +118,8 @@ function csvToJSON(csvData) {
         // remove the timezone from the time value
         ret_val.map(function (e){
             e.time = e.time.substring(0, e.time.split(':', 2).join(':').length);
+
+            // data that is missing a value will not result in plotting
             if (e["APS Nowcast"])
                 e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
             else
