@@ -1,13 +1,15 @@
-import * as layers from './layers';
 import * as hurricanes from './hurricanes';
-import * as removeObservationSelections from './observations';
+import * as layers from './layers';
+import * as model_selection from './model-selection';
+import * as remove_items from './remove';
 import * as settings from './settings';
 
 export default {
   layers,
   hurricanes,
-  settings,
-  removeObservationSelections
+  model_selection,
+  remove_items,
+  settings
 };
 
 /*
