@@ -1,18 +1,83 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React from 'react';
+import axios from 'axios';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
 
-import PropTypes from 'prop-types';
+/**
+ * renders the observations as a chart
+ *
+ * @param dataUrl
+ * @returns {JSX.Element}
+ * @constructor
+ */
+export default function ObservationChart(url) {
+    // render the chart
+    return (<CreateObsChart url={ url.url } />);
+}
 
-// define the properties of this component
-ObservationChart.propTypes = {
-  dataUrl: PropTypes.string
-};
+/**
+ * Retrieves and returns the chart data in json format
+ *
+ * @param url
+ * @returns { json }
+ */
+function getObsChartData(url) {
+    // return the data to the caller
+    return useQuery( {
+        // specify the data key and url to use
+        queryKey: ['apsviz-data', url],
+
+        // create the function to call for data
+        queryFn: async () => {
+            // make the call to get the data
+            const { data } = await axios.get(url);
+
+            // return the csv data in json format
+            return csvToJSON(data);
+        }
+    });
+}
+
+/**
+ * Creates the chart.
+ *
+ * @param url
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function CreateObsChart(url) {
+    // call to get the data. expect back some information too
+    const { status, data, error } = getObsChartData(url.url);
+
+    // render the chart
+    return (
+        <ResponsiveContainer width="100%" height="100%">
+            { status === 'pending' ? (
+                <div>Loading...</div>
+            ) : status === 'error' ? (
+                <div>Error: {error.message}</div>
+            ) : (
+                <LineChart width={590} height={300} data={data} margin={{ top: 10, right: 0, left: -10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" allowDuplicatedCategory={false} />
+                    <YAxis domain={['auto', 'auto']}/>
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" height={30} />
+                    <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
+                </LineChart>
+            )}
+        </ResponsiveContainer>
+    );
+}
 
 /**
  * converts CSV data into json format
  *
  * @param csvData
- * @returns {*[]}
+ * @returns { json [] }
  */
 function csvToJSON(csvData) {
     // ensure that there is csv data to convert
@@ -47,62 +112,30 @@ function csvToJSON(csvData) {
         // remove the timezone from the time value
         ret_val.map(function (e){
             e.time = e.time.substring(0, e.time.split(':', 2).join(':').length);
-            if (e["APS Nowcast"]) e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
-            if (e["Observations"]) e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
-            if (e["NOAA Tidal Predictions"]) e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
-            if (e["Difference (APS-OBS)"]) e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+
+            // data that is missing a value will not result in plotting
+            if (e["APS Nowcast"])
+                e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
+            else
+                e["APS Nowcast"] = null;
+
+            if (e["Observations"])
+                e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+            else
+                e["Observations"] = null;
+
+            if (e["NOAA Tidal Predictions"])
+                e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
+            else
+                e["NOAA Tidal Predictions"] = null;
+
+            if (e["Difference (APS-OBS)"])
+                e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+            else
+                e["Difference (APS-OBS)"] = null;
         });
 
         // return the json data representation
         return ret_val;
     }
 }
-
-/**
- * renders the observations as a chart
- *
- * @param dataUrl
- * @returns {JSX.Element}
- * @constructor
- */
-export default function ObservationChart(dataUrl) {
-    // store the station observation data in state
-    const [stationObs, setStationObs] = useState("");
-
-    // get the data
-    useEffect( () => {
-        const fetchData = () => {
-            return fetch(dataUrl.dataUrl)
-                .then(res => {
-                    return res.text();
-                })
-                .then(data => {
-                    setStationObs(csvToJSON(data));
-                    // console.log(JSON.stringify(data));
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        };
-
-        // finish off the data retrieval
-        fetchData().then();
-    }, [dataUrl]);
-
-    // render the chart.
-    return (
-        <Fragment>
-            <LineChart width={590} height={300} data={stationObs} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="time" />
-                <YAxis domain={['dataMin', 'dataMax']} />
-                <Tooltip />
-                <Legend verticalAlign="bottom" height={30} />
-                <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
-            </LineChart>
-        </Fragment>
-    );
-};
