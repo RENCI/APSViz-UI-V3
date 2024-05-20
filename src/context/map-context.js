@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -73,7 +73,10 @@ export const LayersProvider = ({ children }) => {
   };
 
   const addObservation = useCallback(obs => {
-    setObservations(prevObservations => [...prevObservations, obs]);
+    setObservations(prevObservations => [
+      ...prevObservations, // spread in existing observations
+      { ...obs, visible: true }, // add new observation, make visible by defualt.
+    ]);
   }, [observations]);
 
   const swapObservations = useCallback((i, j) => {
@@ -87,7 +90,23 @@ export const LayersProvider = ({ children }) => {
   }, [observations]);
   
   const toggleObservationVisibility = useCallback(id => {
-    console.log(`toggle observation ${ id } visibility`);
+    const index = observations.findIndex(obs => obs.id === id);
+    if (index === -1) {
+      // couldn't locate
+      return;
+    }
+    const alteredObservation = observations[index];
+    alteredObservation.visible = !alteredObservation.visible;
+    const newObservations = [
+      ...observations.slice(0, index),
+      alteredObservation,
+      ...observations.slice(index + 1),
+    ];
+    setObservations(newObservations);
+  }, [observations]);
+
+  const visibleObservations = useMemo(() => {
+    return observations.filter(obs => obs.visible);
   }, [observations]);
   
   return (
@@ -107,6 +126,7 @@ export const LayersProvider = ({ children }) => {
         layerTypes,
         observations: {
           current: observations,
+          visible: visibleObservations,
           add: addObservation,
           remove: removeObservation,
           swap: swapObservations,

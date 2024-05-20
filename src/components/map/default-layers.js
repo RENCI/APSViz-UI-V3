@@ -1,8 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { WMSTileLayer, GeoJSON } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
-import { markClicked } from '@utils/map-utils';
 
 const newLayerDefaultState = layer => {
     const { product_type } = layer.properties;
@@ -20,9 +19,7 @@ const newLayerDefaultState = layer => {
 
 
 export const DefaultLayers = () => {
-
     const [obsData, setObsData] = useState("");
-    const map = useMap();
 
     const {
         defaultModelLayers,
@@ -77,14 +74,11 @@ export const DefaultLayers = () => {
           layer.on("mouseout", function () {
             this.closePopup();
           });
-          layer.on("click", function (e) {
+          layer.on("click", function () {
 
             // add in a record id.
             // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
             feature.properties.id = feature.properties.station_name;
-
-            // create a marker target icon around the observation clicked
-            markClicked(map, e, feature.properties.id);
 
             // append feature properties to selected observations
             observations.add(feature.properties);

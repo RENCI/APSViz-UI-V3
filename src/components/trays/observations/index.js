@@ -32,9 +32,14 @@ export const trayContents = () => {
               onClick={ () => observations.swap(index, index + 1) }
               disabled={ index + 1 === observations.current.length }
             >move down</button>
+            <button
+              onClick={ () => observations.toggleVisibility(obs.id) }
+            >show/hide</button>
           </div>
         ))
       }
+      <div>visible observations</div>
+      <pre>{JSON.stringify(observations.visible.map(o => o.id), null, 2)}</pre>
     </Stack>
   );
 };
