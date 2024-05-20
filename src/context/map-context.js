@@ -9,6 +9,8 @@ import {
   BlurOn as WaterSurfaceIcon,
 } from '@mui/icons-material';
 
+import arrayUtils from '@utils/array';
+
 export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
@@ -40,6 +42,7 @@ export const LayersProvider = ({ children }) => {
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
+  const [observations, setObservations] = useState([]);
 
   const [map, setMap] = useState(null);
 
@@ -60,32 +63,24 @@ export const LayersProvider = ({ children }) => {
   };
 
   const swapLayers = (i, j) => {
-    // ensure our pair has i < j
-    const [a, b] = [i, j].sort();
-    // bail out for select (a, b) pairs.
-    if (
-      a === b || a < 0 || b < 1
-      || defaultModelLayers.length - 2 < a
-      || defaultModelLayers.length - 1 < b
-    ) { return; }
-
-    const newLayers = [...defaultModelLayers];
-    const temp = newLayers[i];
-    newLayers[i] = newLayers[j];
-    newLayers[j] = temp;
+    const newLayers = [...arrayUtils.swap(defaultModelLayers, i, j)];
     setDefaultModelLayers(newLayers);
   };
 
   const removeLayer = id => {
-    const index = defaultModelLayers.findIndex(l => l.id === id);
-    if (index === -1) {
-      return;
-    }
-    const newLayers = defaultModelLayers.filter(l => l.id !== id);
+    const newLayers = [...arrayUtils.remove(defaultModelLayers, l => l.id === id)];
     setDefaultModelLayers(newLayers);
   };
 
-
+  const swapObservations = (i, j) => {
+    const newObservations = [...arrayUtils.swap(observations, i, j)];
+    setDefaultModelLayers(newObservations);
+  }
+  
+  const removeObservation = () => {}
+  
+  const toggleObservationVisibility = () => {}
+  
   return (
     <LayersContext.Provider
       value={{
@@ -101,6 +96,12 @@ export const LayersProvider = ({ children }) => {
         swapLayers,
         removeLayer,
         layerTypes,
+        observations: {
+          current: observations,
+          swap: swapObservations,
+          remove: removeObservation,
+          toggleVisibility: toggleObservationVisibility,
+        },
       }}
     >
       {children}
