@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -63,23 +63,32 @@ export const LayersProvider = ({ children }) => {
   };
 
   const swapLayers = (i, j) => {
-    const newLayers = [...arrayUtils.swap(defaultModelLayers, i, j)];
+    const newLayers = arrayUtils.swap(defaultModelLayers, i, j);
     setDefaultModelLayers(newLayers);
   };
 
   const removeLayer = id => {
-    const newLayers = [...arrayUtils.remove(defaultModelLayers, l => l.id === id)];
+    const newLayers = arrayUtils.remove(defaultModelLayers, l => l.id === id);
     setDefaultModelLayers(newLayers);
   };
 
-  const swapObservations = (i, j) => {
-    const newObservations = [...arrayUtils.swap(observations, i, j)];
-    setDefaultModelLayers(newObservations);
-  }
+  const addObservation = useCallback(obs => {
+    setObservations(prevObservations => [...prevObservations, obs]);
+  }, [observations]);
+
+  const swapObservations = useCallback((i, j) => {
+    const newObservations = arrayUtils.swap(observations, i, j);
+    setObservations(newObservations);
+  }, [observations]);
   
-  const removeObservation = () => {}
+  const removeObservation = useCallback(id => {
+    const newObservations = arrayUtils.remove(observations, l => l.id === id);
+    setObservations(newObservations);
+  }, [observations]);
   
-  const toggleObservationVisibility = () => {}
+  const toggleObservationVisibility = useCallback(id => {
+    console.log(`toggle observation ${ id } visibility`);
+  }, [observations]);
   
   return (
     <LayersContext.Provider
@@ -98,8 +107,9 @@ export const LayersProvider = ({ children }) => {
         layerTypes,
         observations: {
           current: observations,
-          swap: swapObservations,
+          add: addObservation,
           remove: removeObservation,
+          swap: swapObservations,
           toggleVisibility: toggleObservationVisibility,
         },
       }}

@@ -26,8 +26,8 @@ export const DefaultLayers = () => {
 
     const {
         defaultModelLayers,
+        observations,
         setDefaultModelLayers,
-        setSelectedObservations
     } = useLayers();
 
     // Create the authorization header
@@ -86,8 +86,8 @@ export const DefaultLayers = () => {
             // create a marker target icon around the observation clicked
             markClicked(map, e, feature.properties.id);
 
-            // populate selectedObservations list with the newly selected observation point
-            setSelectedObservations(previous => [...previous, feature.properties]);
+            // append feature properties to selected observations
+            observations.add(feature.properties);
           });
         }
     };

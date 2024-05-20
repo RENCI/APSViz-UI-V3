@@ -3,12 +3,12 @@ function swap(arr, i, j) {
   const [a, b] = [i, j].sort();
   // bail out for select (a, b) pairs.
   if (
-    a === b // indices aren't different
+    a === b // indices aren't distinct
     || a < 0 // a too small
     || b < 1 // b too small
     || arr.length - 2 < a // a too big
     || arr.length - 1 < b // b too big
-  ) { return; }
+  ) { return arr; }
 
   const newArr = [...arr];
   const temp = newArr[i];

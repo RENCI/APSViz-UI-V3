@@ -1,6 +1,7 @@
 import * as hurricanes from './hurricanes';
 import * as layers from './layers';
 import * as model_selection from './model-selection';
+import * as observations from './observations';
 import * as remove_items from './remove';
 import * as settings from './settings';
 
@@ -8,6 +9,7 @@ export default {
   layers,
   hurricanes,
   model_selection,
+  observations,
   remove_items,
   settings
 };
