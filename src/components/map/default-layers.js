@@ -163,7 +163,8 @@ export const DefaultLayers = () => {
     return (
         <>
         {defaultModelLayers
-            .filter(({state }) => state.visible)
+            .filter(({state}) => state.visible)
+            .reverse()
             .map((layer, index) => {
                 const pieces = layer.id.split('-');
                 const type = pieces[pieces.length-1];
@@ -172,21 +173,16 @@ export const DefaultLayers = () => {
                     //console.log("obsData: " + JSON.stringify(obsData, null, 2));
                     return (
                         <GeoJSON
-                            key = {index}
-                            data = {obsData}
-                            pointToLayer = {obsPointToLayer}
-                            onEachFeature = {onEachObsFeature}
+                            key={`${index}-${layer.id}`}
+                            data={obsData}
+                            pointToLayer={obsPointToLayer}
+                            onEachFeature={onEachObsFeature}
                         />
                     );
                 } else {
                     return (
                         <WMSTileLayer
-                            key = {index}
-                            /* eventHandlers={{
-                                click: () => {
-                                console.log('marker clicked')
-                                },
-                            }} */
+                            key={`${index}-${layer.id}`}
                             url={gs_wms_url}
                             layers={layer.layers}
                             params={{
