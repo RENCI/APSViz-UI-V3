@@ -34,7 +34,7 @@ export const trayContents = () => {
             >move down</button>
             <button
               onClick={ () => observations.toggleVisibility(obs.id) }
-            >show/hide</button>
+            >{ observations.isVisible(obs.id) ? 'hide' : 'show' }</button>
           </div>
         ))
       }

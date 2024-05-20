@@ -73,6 +73,10 @@ export const LayersProvider = ({ children }) => {
   };
 
   const addObservation = useCallback(obs => {
+    const index = observations.findIndex(obs => obs.id === id);
+    if (index !== -1) { // we already have this observation; bail out.
+      return;
+    }
     setObservations(prevObservations => [
       ...prevObservations, // spread in existing observations
       { ...obs, visible: true }, // add new observation, make visible by defualt.
@@ -91,8 +95,7 @@ export const LayersProvider = ({ children }) => {
   
   const toggleObservationVisibility = useCallback(id => {
     const index = observations.findIndex(obs => obs.id === id);
-    if (index === -1) {
-      // couldn't locate
+    if (index === -1) { // couldn't locate
       return;
     }
     const alteredObservation = observations[index];
@@ -108,6 +111,14 @@ export const LayersProvider = ({ children }) => {
   const visibleObservations = useMemo(() => {
     return observations.filter(obs => obs.visible);
   }, [observations]);
+
+  const observationIsVisible = useCallback(id => {
+    const index = observations.findIndex(obs => obs.id === id);
+    if (index === -1) { // couldn't locate
+      return false;
+    }
+    return observations[index].visible
+  }, [visibleObservations])
   
   return (
     <LayersContext.Provider
@@ -131,6 +142,7 @@ export const LayersProvider = ({ children }) => {
           remove: removeObservation,
           swap: swapObservations,
           toggleVisibility: toggleObservationVisibility,
+          isVisible: observationIsVisible,
         },
       }}
     >

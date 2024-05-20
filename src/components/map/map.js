@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
 import {
   useLayers,
@@ -11,9 +11,17 @@ const DEFAULT_CENTER = [30.0, -73.0];
 
 export const Map = () => {
     const { darkMode } = useSettings();
-    const {
-      setMap
-    } = useLayers();
+    const { observations, setMap } = useLayers();
+
+    const observationMarkers = observations.visible
+      .map(({ id, lat, lon }) => (
+        <CircleMarker 
+          key={ `obs-marker-[${lon},${lat}]` }
+          center={[lat, lon]}
+          pathOptions={{ color: 'red' }}
+          radius={ 10 }
+        />
+      ));
 
     return (
       <MapContainer 
@@ -28,6 +36,8 @@ export const Map = () => {
             : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
           }
           <DefaultLayers/>
+          { observationMarkers }
+          { console.log(observationMarkers) }
       </MapContainer>
     );
   };
