@@ -37,7 +37,6 @@ export const Map = () => {
           }
           <DefaultLayers/>
           { observationMarkers }
-          { console.log(observationMarkers) }
       </MapContainer>
     );
   };
