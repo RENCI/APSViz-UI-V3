@@ -73,7 +73,7 @@ export const LayersProvider = ({ children }) => {
   };
 
   const addObservation = useCallback(obs => {
-    const index = observations.findIndex(obs => obs.id === id);
+    const index = observations.findIndex(_obs => _obs.id === obs.id);
     if (index !== -1) { // we already have this observation; bail out.
       return;
     }
@@ -117,8 +117,8 @@ export const LayersProvider = ({ children }) => {
     if (index === -1) { // couldn't locate
       return false;
     }
-    return observations[index].visible
-  }, [visibleObservations])
+    return observations[index].visible;
+  }, [visibleObservations]);
   
   return (
     <LayersContext.Provider

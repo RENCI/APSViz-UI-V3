@@ -14,7 +14,7 @@ export const Map = () => {
     const { observations, setMap } = useLayers();
 
     const observationMarkers = observations.visible
-      .map(({ id, lat, lon }) => (
+      .map(({ lat, lon }) => (
         <CircleMarker 
           key={ `obs-marker-[${lon},${lat}]` }
           center={[lat, lon]}
