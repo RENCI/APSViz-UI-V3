@@ -6,6 +6,7 @@ import {
   useSettings,
 } from '@context';
 import 'leaflet/dist/leaflet.css';
+import './observation-marker.css';
 
 const DEFAULT_CENTER = [30.0, -73.0];
 
@@ -15,12 +16,18 @@ export const Map = () => {
 
     const observationMarkers = useMemo(() => {
       return observations.visible
-        .map(({ lat, lon }) => (
+        .map(({ lat, lon, station_name }) => (
           <CircleMarker 
-            key={ `obs-marker-[${lon},${lat}]` }
+            key={`obs-marker-${lon}-${lat}`}
+            className={`observation-marker station-${station_name}`}
             center={[lat, lon]}
-            pathOptions={{ color: 'red' }}
-            radius={ 10 }
+            pathOptions={{
+              color: 'crimson',
+              weight: 3,
+              fillColor: 'crimson',
+              fillOpacity: 0.2,
+            }}
+            radius={ 15 }
           />
         ));
     }, [observations]);

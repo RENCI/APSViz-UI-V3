@@ -1,0 +1,20 @@
+@keyframes emphasis {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 8;
+  }
+}
+
+.observation-marker {
+  transform-origin: center center;
+  stroke-dasharray: 0;
+}
+
+.observation-marker.hovered {
+  stroke-dasharray: 4px 8px;
+  animation-name: emphasis;
+  animation-duration: 300ms;
+  animation-iteration-count: infinite;
+}
