@@ -149,6 +149,25 @@ const useObservations = () => {
     return observations[index].visible;
   }, [visibleObservations]);
 
+  // we emphasize the observation marker whose
+  // corresponding card is hovered by giving it a `hovered`
+  // class and leveraging css for the visual emphasis.
+  const highlightObservation = station_name => {
+    const marker = document.querySelector(`.observation-marker.station-${station_name}`);
+    if (!marker) {
+      return;
+    }
+    marker.classList.add('hovered');
+  };
+
+  const unhighlightObservation = station_name => {
+    const marker = document.querySelector(`.observation-marker.station-${station_name}`);
+    if (!marker) {
+      return;
+    }
+    marker.classList.remove('hovered');
+  };
+
   return {
     current: observations,
     visible: visibleObservations,
@@ -157,5 +176,7 @@ const useObservations = () => {
     swap: swapObservations,
     toggleVisibility: toggleObservationVisibility,
     isVisible: observationIsVisible,
+    highlight: highlightObservation,
+    unhighlight: unhighlightObservation,
   };
 };
