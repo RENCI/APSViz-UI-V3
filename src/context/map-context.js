@@ -42,7 +42,6 @@ export const LayersProvider = ({ children }) => {
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
-  const [observations, setObservations] = useState([]);
 
   const [map, setMap] = useState(null);
 
@@ -71,6 +70,36 @@ export const LayersProvider = ({ children }) => {
     const newLayers = arrayUtils.remove(defaultModelLayers, l => l.id === id);
     setDefaultModelLayers(newLayers);
   };
+  
+  return (
+    <LayersContext.Provider
+      value={{
+        map,
+        setMap,
+        defaultModelLayers,
+        setDefaultModelLayers,
+        filteredModelLayers,
+        setFilteredModelLayers,
+        toggleLayerVisibility,
+        selectedObservations,
+        setSelectedObservations,
+        swapLayers,
+        removeLayer,
+        layerTypes,
+        observations: useObservations(),
+      }}
+    >
+      {children}
+    </LayersContext.Provider>
+  );
+};
+
+LayersProvider.propTypes = {
+  children: PropTypes.node
+};
+
+const useObservations = () => {
+  const [observations, setObservations] = useState([]);
 
   const addObservation = useCallback(obs => {
     const index = observations.findIndex(_obs => _obs.station_name === obs.station_name);
@@ -119,38 +148,14 @@ export const LayersProvider = ({ children }) => {
     }
     return observations[index].visible;
   }, [visibleObservations]);
-  
-  return (
-    <LayersContext.Provider
-      value={{
-        map,
-        setMap,
-        defaultModelLayers,
-        setDefaultModelLayers,
-        filteredModelLayers,
-        setFilteredModelLayers,
-        toggleLayerVisibility,
-        selectedObservations,
-        setSelectedObservations,
-        swapLayers,
-        removeLayer,
-        layerTypes,
-        observations: {
-          current: observations,
-          visible: visibleObservations,
-          add: addObservation,
-          remove: removeObservation,
-          swap: swapObservations,
-          toggleVisibility: toggleObservationVisibility,
-          isVisible: observationIsVisible,
-        },
-      }}
-    >
-      {children}
-    </LayersContext.Provider>
-  );
-};
 
-LayersProvider.propTypes = {
-  children: PropTypes.node
+  return {
+    current: observations,
+    visible: visibleObservations,
+    add: addObservation,
+    remove: removeObservation,
+    swap: swapObservations,
+    toggleVisibility: toggleObservationVisibility,
+    isVisible: observationIsVisible,
+  };
 };
