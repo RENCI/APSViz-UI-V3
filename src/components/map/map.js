@@ -28,6 +28,7 @@ export const Map = () => {
               fillOpacity: 0.2,
             }}
             radius={ 15 }
+            interactive={ false }
           />
         ));
     }, [observations]);

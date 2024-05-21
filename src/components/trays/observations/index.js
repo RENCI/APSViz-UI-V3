@@ -44,8 +44,6 @@ export const trayContents = () => {
                 fontSize: '66%',
                 p: 1,
               }}
-              onMouseOver={ handleHoverObservationCard(obs.station_name) }
-              onMouseLeave={ handleUnhoverObservationCard(obs.station_name) }
             >{ JSON.stringify(obs, null, 2) }</Sheet>
             <button onClick={ () => observations.remove(obs.station_name) }>delete</button>
             <button
@@ -59,6 +57,10 @@ export const trayContents = () => {
             <button
               onClick={ () => observations.toggleVisibility(obs.station_name) }
             >{ observations.isVisible(obs.station_name) ? 'hide' : 'show' }</button>
+            <button
+              onMouseOver={ handleHoverObservationCard(obs.station_name) }
+              onMouseLeave={ handleUnhoverObservationCard(obs.station_name) }
+            >locate</button>
           </div>
         ))
       }
