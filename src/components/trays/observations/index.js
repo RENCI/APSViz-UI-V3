@@ -12,7 +12,7 @@ export const trayContents = () => {
     <Stack p={ 1 } gap={ 1 }>
       {
         observations.current.map((obs, index) => (
-          <div key={ `obs-${ obs.id }`}>
+          <div key={ `obs-${ obs.station_name }`}>
             <Sheet
               variant="outlined"
               component="pre"
@@ -23,7 +23,7 @@ export const trayContents = () => {
                 p: 1,
               }}
             >{ JSON.stringify(obs, null, 2) }</Sheet>
-            <button onClick={ () => observations.remove(obs.id) }>delete</button>
+            <button onClick={ () => observations.remove(obs.station_name) }>delete</button>
             <button
               onClick={ () => observations.swap(index, index - 1) }
               disabled={ index === 0}
@@ -33,13 +33,13 @@ export const trayContents = () => {
               disabled={ index + 1 === observations.current.length }
             >move down</button>
             <button
-              onClick={ () => observations.toggleVisibility(obs.id) }
-            >{ observations.isVisible(obs.id) ? 'hide' : 'show' }</button>
+              onClick={ () => observations.toggleVisibility(obs.station_name) }
+            >{ observations.isVisible(obs.station_name) ? 'hide' : 'show' }</button>
           </div>
         ))
       }
       <div>visible observations</div>
-      <pre>{JSON.stringify(observations.visible.map(o => o.id), null, 2)}</pre>
+      <pre>{JSON.stringify(observations.visible.map(obs => obs.station_name), null, 2)}</pre>
     </Stack>
   );
 };

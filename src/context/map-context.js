@@ -73,7 +73,7 @@ export const LayersProvider = ({ children }) => {
   };
 
   const addObservation = useCallback(obs => {
-    const index = observations.findIndex(_obs => _obs.id === obs.id);
+    const index = observations.findIndex(_obs => _obs.station_name === obs.station_name);
     if (index !== -1) { // we already have this observation; bail out.
       return;
     }
@@ -88,13 +88,13 @@ export const LayersProvider = ({ children }) => {
     setObservations(newObservations);
   }, [observations]);
   
-  const removeObservation = useCallback(id => {
-    const newObservations = arrayUtils.remove(observations, l => l.id === id);
+  const removeObservation = useCallback(station_name => {
+    const newObservations = arrayUtils.remove(observations, l => l.station_name === station_name);
     setObservations(newObservations);
   }, [observations]);
   
-  const toggleObservationVisibility = useCallback(id => {
-    const index = observations.findIndex(obs => obs.id === id);
+  const toggleObservationVisibility = useCallback(station_name => {
+    const index = observations.findIndex(obs => obs.station_name === station_name);
     if (index === -1) { // couldn't locate
       return;
     }
@@ -112,8 +112,8 @@ export const LayersProvider = ({ children }) => {
     return observations.filter(obs => obs.visible);
   }, [observations]);
 
-  const observationIsVisible = useCallback(id => {
-    const index = observations.findIndex(obs => obs.id === id);
+  const observationIsVisible = useCallback(station_name => {
+    const index = observations.findIndex(obs => obs.station_name === station_name);
     if (index === -1) { // couldn't locate
       return false;
     }

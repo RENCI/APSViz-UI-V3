@@ -75,11 +75,6 @@ export const DefaultLayers = () => {
             this.closePopup();
           });
           layer.on("click", function () {
-
-            // add in a record id.
-            // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
-            feature.properties.id = feature.properties.station_name;
-
             // append feature properties to selected observations
             observations.add(feature.properties);
           });

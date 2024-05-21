@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
 import {
@@ -13,15 +13,17 @@ export const Map = () => {
     const { darkMode } = useSettings();
     const { observations, setMap } = useLayers();
 
-    const observationMarkers = observations.visible
-      .map(({ lat, lon }) => (
-        <CircleMarker 
-          key={ `obs-marker-[${lon},${lat}]` }
-          center={[lat, lon]}
-          pathOptions={{ color: 'red' }}
-          radius={ 10 }
-        />
-      ));
+    const observationMarkers = useMemo(() => {
+      return observations.visible
+        .map(({ lat, lon }) => (
+          <CircleMarker 
+            key={ `obs-marker-[${lon},${lat}]` }
+            center={[lat, lon]}
+            pathOptions={{ color: 'red' }}
+            radius={ 10 }
+          />
+        ));
+    }, [observations]);
 
     return (
       <MapContainer 
@@ -30,10 +32,12 @@ export const Map = () => {
         zoomControl={false}
         scrollWheelZoom={true}
         ref={setMap}
-        style={{ height: '100vh', width:'100wh' }}>
-          { darkMode.enabled
-            ? <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu3inqs05v901qlabcfhxsr/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
-            : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
+        style={{ height: '100vh', width:'100wh' }}
+      >
+          {
+            darkMode.enabled
+              ? <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu3inqs05v901qlabcfhxsr/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
+              : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
           }
           <DefaultLayers/>
           { observationMarkers }
