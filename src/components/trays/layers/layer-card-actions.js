@@ -12,7 +12,6 @@ import {
   Tabs,
   TabPanel,
   Stack,
-  Typography,
 } from '@mui/joy';
 import {
   DeleteForever as RemoveIcon,
@@ -24,7 +23,7 @@ import { ActionButton } from '@components/buttons';
 
 export const LayerActions = ({ layer }) => {
   const { darkMode } = useSettings();
-  const { removeLayer } = useLayers();
+  const { removeLayer, setLayerOpacity } = useLayers();
 
   return (
     <Tabs defaultValue={0}>
@@ -33,12 +32,16 @@ export const LayerActions = ({ layer }) => {
         justifyContent="space-between"
       >
         <TabList size="sm" sx={{ flex: 1 }}>
-          <Tab variant="soft" color="primary">
-            <ListItemDecorator><MetadataIcon fontSize="sm" /></ListItemDecorator>
+          <Tab variant="plain" color="primary">
+            <ListItemDecorator>
+              <MetadataIcon fontSize="sm" />
+            </ListItemDecorator>
             Metadata
           </Tab>
-          <Tab variant="soft" color="primary">
-            <ListItemDecorator><AppearanceIcon fontSize="sm" /></ListItemDecorator>
+          <Tab variant="plain" color="primary">
+            <ListItemDecorator>
+              <AppearanceIcon fontSize="sm" />
+            </ListItemDecorator>
             Appearance
           </Tab>
         </TabList>
@@ -86,6 +89,7 @@ export const LayerActions = ({ layer }) => {
             max={ 1.0 }
             valueLabelDisplay="auto"
             sx={{ mr: '10px'}}
+            onChange={ (event, newValue) => setLayerOpacity(layer.id, newValue) }
           />
         </FormControl>
 

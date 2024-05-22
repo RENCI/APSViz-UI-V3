@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
@@ -9,12 +9,14 @@ const newLayerDefaultState = layer => {
 
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
-            visible: true
+            visible: true,
+            opacity: 1.0,
         });
     }
 
     return ({
-        visible: false
+        visible: false,
+        opacity: 1.0,
     });
 };
 
@@ -160,6 +162,13 @@ export const DefaultLayers = () => {
 
     //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
 
+    // memoizing this params object prevents
+    // that map flicker on state changes.
+    const wmsLayerParams = useMemo(() => ({
+        format:"image/png",
+        transparent: true,
+    }), []);
+
     return (
         <>
         {defaultModelLayers
@@ -168,9 +177,8 @@ export const DefaultLayers = () => {
             .map((layer, index) => {
                 const pieces = layer.id.split('-');
                 const type = pieces[pieces.length-1];
-                //console.log("type: " + JSON.stringify(type, null, 2))
-                if( type === "obs" && obsData !== "") {
-                    //console.log("obsData: " + JSON.stringify(obsData, null, 2));
+                const opacity = layer.state.opacity;
+                if (type === "obs" && obsData !== "") {
                     return (
                         <GeoJSON
                             key={`${index}-${layer.id}`}
@@ -185,11 +193,8 @@ export const DefaultLayers = () => {
                             key={`${index}-${layer.id}`}
                             url={gs_wms_url}
                             layers={layer.layers}
-                            params={{
-                                format:"image/png",
-                                transparent: true,
-                            }}
-            
+                            params={wmsLayerParams}
+                            opacity={opacity}
                         />
                     );
                 }
