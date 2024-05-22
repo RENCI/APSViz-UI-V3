@@ -161,6 +161,10 @@ export const DefaultLayers = () => {
       }, []);
 
     //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
+    const wmsLayerParams = useMemo(() => ({
+        format:"image/png",
+        transparent: true,
+    }), [])
 
     // memoizing this params object prevents
     // that map flicker on state changes.
