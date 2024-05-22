@@ -2,10 +2,32 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useLayers } from '@context/map-context';
 import { useQuery } from '@tanstack/react-query';
-import { Sheet, Typography, IconButton, Box, Switch, ToggleButtonGroup } from '@mui/joy';
-import { KeyboardArrowLeft, KeyboardArrowRight, Tsunami, Water, Air, Flood } from '@mui/icons-material';
+import {
+  Box,
+  Card,
+  Divider,
+  IconButton,
+  Stack,
+  Switch,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/joy';
+import {
+  Air as MaxWindVelocityIcon,
+  Flood as MaxInundationIcon,
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+  Tsunami as SwanIcon,
+  Water as MaxElevationIcon,
+} from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
+const layerIcons = {
+  maxele63: <MaxElevationIcon />,
+  maxwvel63: <MaxWindVelocityIcon />,
+  swan_HS_max63: <SwanIcon />,
+  maxinundepth63: <MaxInundationIcon />,
+};
 
 export const ControlPanel = () => {
 
@@ -19,7 +41,7 @@ export const ControlPanel = () => {
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
-  const [value, setValue] = React.useState('maxele63');
+  const [currentLayerSelection, setCurrentLayerSelection] = React.useState('maxele63');
   const [checked, setChecked] = React.useState(true);
 
    // keep track of which model run to retrieve
@@ -44,7 +66,7 @@ export const ControlPanel = () => {
   const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
   
-    if (['obs', value].includes(product_type)) {
+    if (['obs', currentLayerSelection].includes(product_type)) {
       return ({
         visible: true,
       });
@@ -126,10 +148,10 @@ export const ControlPanel = () => {
   // switch to the model run layer selected via icon button
   const layerChange = async (event, newValue) => {
 
-    setValue(newValue);
+    setCurrentLayerSelection(newValue);
      // turn off the old
      layers.map(layer => {
-        if (layer.layers.includes(value)) {
+        if (layer.layers.includes(currentLayerSelection)) {
             toggleLayerVisibility(layer.id);
         }
     }); 
@@ -195,89 +217,108 @@ export const ControlPanel = () => {
   };
 
   return (
-    <>
-    <Sheet
-        variant="plain"
-        sx={{
-            position: 'absolute',
-            bottom: 0, right: 0,
-            overflow: 'hidden',
-            p: 0,
-            backgroundColor: '#f0f4f800',
-            height: '30vh',
-            width: '300px',
-            zIndex: 999,
-            filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
-            borderRadius: 10,
-            display: 'flex',
-            flexDirection: 'column',
-        }}
+    <Card
+      variant="soft"
+      sx={{
+        p: 0,
+        position: 'absolute',
+        bottom: 'calc(4 * var(--joy-spacing))',
+        right: 'calc(4 * var(--joy-spacing))',
+        transition: 'filter 250ms',
+        filter: 'opacity(0.9)',
+        '&:hover': { filter: 'opacity(1.0)' },
+        height: '350px',
+        width: '300px',
+        zIndex: 999,
+        borderRadius: 'sm',
+      }}
     >
+      <Stack direciton="column" gap={ 1 } alignItems="center">
         <Box
-            component="img"
-            sx={{height: 70, paddingBottom: 1, alignSelf: 'center'}}
-            alt="ADCIRC Prediction System"
-            src={apsLogo}
+          component="img"
+          width="280px"
+          alt="ADCIRC Prediction System"
+          src={apsLogo}
         />
-        { (layers.length) &&
-            // <Typography level='h4' sx={{paddingLeft: 3, color: 'white'}}>model run date: {layers[0].properties.run_date}</Typography>
-            <Typography level='h4' sx={{paddingLeft: 3, color: 'white'}}>model run date: {runDate}</Typography>
-        }
-        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, marginLeft: 7}}>
-            <IconButton variant="outlined" button-key='previous' onClick={changeModelRunCycle}>
-                <KeyboardArrowLeft/>
-            </IconButton>
-            {/* <Typography level='h4' sx={{ color: "white" }}>cycle {layers.length && layers[0].properties.cycle}</Typography> */}
-            <Typography level='h4' sx={{ color: "white" }}>cycle {runCycle}</Typography>
-            <IconButton variant="outlined" button-key='next' onClick={changeModelRunCycle}>
-                <KeyboardArrowRight/>
-            </IconButton>
-        </Box>
-        {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
-                    Also probabaly want to add a switch for hurricane layers - which
-                    involves making a request to the MetGet API 
-                    Third need to implement actual code to load different model runs each time 
-                    up/down arrows are clicked. This has to time managed in some way so that
-                    Geoserver is not inundated with requests */}
-        { (layers.length) &&
-            <Typography level='h5' sx={{ paddingLeft: 7, paddingTop: 1, color: 'white'}}>{layers[0].properties.grid_type} grid</Typography>
-        }
-        { ((layers.filter((layer) => layer.properties.product_type === "obs").length) > 0) &&
-        <Typography sx={{ paddingLeft: 9, paddingTop: 1, color: "white" }} component="label" endDecorator={
-            <Switch checked={checked} onChange={toggleObsLayer}>
-        </Switch>}>
-            observations
-        </Typography>}
-        {<Typography sx={{ paddingLeft: 9, paddingTop: 1, color: "white" }} component="label" endDecorator={<ToggleButtonGroup
-                    value={value}
-                    orientation="horizontal"
-                    variant="solid"
-                    color="primary"
-                    onChange={layerChange}
 
-                // have to do wierd stuff to get maxele first and default button
-            >   { (maxele_layer)  &&
-                    <IconButton value={maxele_layer.properties.product_type} key={maxele_layer.properties.id}>
-                        <Water/>
-                    </IconButton>
-                }
-                { topLayers.map(layer => {
-                    if (layer.properties.product_type != "obs" && layer.properties.product_type != "maxele63")
-                        
-                        return (
-                            <IconButton value={layer.properties.product_type} key={layer.properties.id}>
-                                { (layer.properties.product_type === "maxwvel63") &&
-                                <Air/>}
-                                {(layer.properties.product_type === "swan_HS_max63") &&
-                                <Tsunami/>}
-                                {(layer.properties.product_type === "maxinundepth63") &&
-                                <Flood/>}
-                            </IconButton>
-                        );
-                })}
-            </ToggleButtonGroup>}>
-        </Typography>}
-    </Sheet>
-    </>
+        <Divider />
+
+        {
+          layers.length && (
+            <Typography level="body-sm" alignSelf="center">
+              Model run date: {runDate}
+            </Typography>
+          )
+        }
+
+        <Stack direction="row" alignItems="center" gap={ 1 }>
+            <IconButton
+              variant="outlined"
+              onClick={changeModelRunCycle}
+            ><KeyboardArrowLeft/></IconButton>
+            <Typography level="body-md">Cycle {runCycle}</Typography>
+            <IconButton
+              variant="outlined"
+              onClick={changeModelRunCycle}
+            ><KeyboardArrowRight/></IconButton>
+        </Stack>
+
+        <Divider />
+
+        {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
+          Also probabaly want to add a switch for hurricane layers - which
+          involves making a request to the MetGet API 
+          Third need to implement actual code to load different model runs each time 
+          up/down arrows are clicked. This has to time managed in some way so that
+          Geoserver is not inundated with requests */}
+        
+        { // grid name
+          layers.length && (
+            <Typography level="body-md">{layers[0].properties.grid_type} grid</Typography>
+          )
+        }
+
+        { // observations toggle
+          layers.some(layer => layer.properties.product_type === "obs") && (
+            <Typography
+              component="label"
+              endDecorator={ <Switch checked={checked} onChange={toggleObsLayer} /> }
+            >Observations</Typography>
+          )
+        }
+
+        {/* layer selection */}
+        <ToggleButtonGroup
+          value={currentLayerSelection}
+          orientation="horizontal"
+          variant="solid"
+          color="primary"
+          onChange={layerChange}
+        >
+          { // have to do wierd stuff to get maxele first and default button
+            maxele_layer && (
+              <IconButton
+                value={maxele_layer.properties.product_type}
+                key={maxele_layer.properties.id}
+              >
+                { layerIcons[maxele_layer.properties.product_type] }
+              </IconButton>
+            )
+          }
+          {
+            topLayers
+              .filter(layer => layer.properties.product_type != "obs" && layer.properties.product_type != "maxele63")
+              .map(layer => (
+                <IconButton
+                  key={layer.properties.id}
+                  value={layer.properties.product_type}
+                >
+                  { layerIcons[layer.properties.product_type] }
+                </IconButton>
+              ))
+          }
+        </ToggleButtonGroup>
+      </Stack>
+    </Card>
   );
 };
