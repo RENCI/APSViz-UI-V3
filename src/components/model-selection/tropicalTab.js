@@ -74,6 +74,18 @@ export const TropicalTabForm = () => {
                 setDropDownData(data);
             }
             else {
+                // re-group the data
+                /**
+                    the tropical result tree will look like:
+
+                    date (YYYY-MM-DD)
+                        advisory (4350-001-ofc)
+                            product (4370-001-ofcl-obs)
+                            product...
+                        advisory...
+                    date...
+                */
+
                 // save the catalog data
                 setCatalogData(data);
             }

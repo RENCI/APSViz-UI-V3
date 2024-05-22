@@ -77,20 +77,6 @@ export const SynopticTabForm = () => {
             }
             else {
                 // re-group the data
-                if (finalDataUrl.indexOf('tropical') !== -1) {
-                /**
-                    the tropical result tree will look like:
-
-                    date (YYYY-MM-DD)
-                        advisory (4350-001-ofc)
-                            product (4370-001-ofcl-obs)
-                            product...
-                        advisory...
-                    date...
-                */
-
-                }
-                else {
                 /**
                     the synoptic result tree will look like:
 
@@ -103,9 +89,6 @@ export const SynopticTabForm = () => {
                             model ...
                         date...
                 */
-
-                }
-
 
                 // save the catalog data
                 setCatalogData(data);
