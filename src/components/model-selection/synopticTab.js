@@ -31,7 +31,7 @@ export const SynopticTabForm = () => {
      * @param event
      */
     const formSynopticSubmit = (event) => {
-        // dont do the usual form submit operations
+        // avoid the usual form submit operations
         event.preventDefault();
 
         // gather all the form data
@@ -76,6 +76,37 @@ export const SynopticTabForm = () => {
                 setDropDownData(data);
             }
             else {
+                // re-group the data
+                if (finalDataUrl.indexOf('tropical') !== -1) {
+                /**
+                    the tropical result tree will look like:
+
+                    date (YYYY-MM-DD)
+                        advisory (4350-001-ofc)
+                            product (4370-001-ofcl-obs)
+                            product...
+                        advisory...
+                    date...
+                */
+
+                }
+                else {
+                /**
+                    the synoptic result tree will look like:
+
+                        date (YYYY-MM-DD)
+                            model run (4378-20240417)
+                                cycle (00, 06, etc.)
+                                    product (4378-2024041700-gfsforecast-obs, ...)
+                                    product...
+                                cycle...
+                            model ...
+                        date...
+                */
+
+                }
+
+
                 // save the catalog data
                 setCatalogData(data);
             }
@@ -113,7 +144,7 @@ export const SynopticTabForm = () => {
         // set the query string
         if (synopticInstance !== '' && synopticInstance != null) { query_string += '&instance_name=' + synopticInstance; }
 
-        // set the pulldown data url. this will trigger a data gathering
+        // set the pulldown data url. this will trigger data gathering
         setFinalDataUrl(rootUrl + basePulldownUrl + query_string);
     }
 
@@ -125,7 +156,7 @@ export const SynopticTabForm = () => {
      */
     const disableDate = (date) => {
         // return false if the date is not found in the list of available dates
-        return !dropDownData.run_dates.includes(date.toISOString().split("T")[0]);
+        return !dropDownData['run_dates'].includes(date.toISOString().split("T")[0]);
     };
 
     /**
