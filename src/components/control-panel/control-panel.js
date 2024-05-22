@@ -206,7 +206,7 @@ export const ControlPanel = () => {
     const cycle = String(currentCycle).padStart(2, '0');
     setRunCycle(cycle);
 
-    const newFilters = {"instncae_name": instanceName,
+    const newFilters = {"instance_name": instanceName,
                         "met_class": metClass,
                         "event_type": eventType,
                         "run_date": date2String(currentDate),
