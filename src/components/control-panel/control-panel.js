@@ -23,6 +23,7 @@ import {
 import apsLogo from '@images/aps-trans-logo.png';
 
 const layerIcons = {
+  maxele63: <MaxElevationIcon />,
   maxwvel63: <MaxWindVelocityIcon />,
   swan_HS_max63: <SwanIcon />,
   maxinundepth63: <MaxInundationIcon />,
@@ -300,7 +301,7 @@ export const ControlPanel = () => {
                 value={maxele_layer.properties.product_type}
                 key={maxele_layer.properties.id}
               >
-                <MaxElevationIcon/>
+                { layerIcons[maxele_layer.properties.product_type] }
               </IconButton>
             )
           }
