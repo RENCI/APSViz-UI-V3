@@ -34,15 +34,15 @@ export const LayerActions = ({ layer }) => {
         <TabList size="sm" sx={{ flex: 1 }}>
           <Tab variant="plain" color="primary">
             <ListItemDecorator>
-              <MetadataIcon fontSize="sm" />
-            </ListItemDecorator>
-            Metadata
-          </Tab>
-          <Tab variant="plain" color="primary">
-            <ListItemDecorator>
               <AppearanceIcon fontSize="sm" />
             </ListItemDecorator>
             Appearance
+          </Tab>
+          <Tab variant="plain" color="primary">
+            <ListItemDecorator>
+              <MetadataIcon fontSize="sm" />
+            </ListItemDecorator>
+            Metadata
           </Tab>
         </TabList>
 
@@ -60,20 +60,7 @@ export const LayerActions = ({ layer }) => {
         </ActionButton>
       </Stack>
 
-      <TabPanel value={ 0 }>
-        <Box component="pre" sx={{
-          fontSize: '75%',
-          color: 'text.primary',
-          backgroundColor: 'transparent',
-          overflowX: 'auto',
-          m: 0, p: 1,
-          height: '100px',
-        }}>
-          { JSON.stringify(layer.properties, null, 2) }
-        </Box>
-      </TabPanel>
-      
-      <TabPanel value={ 1 } sx={{
+      <TabPanel value={ 0 } sx={{
         '.MuiFormLabel-root': {
           width: '120px',
           justifyContent: 'flex-end',
@@ -106,6 +93,19 @@ export const LayerActions = ({ layer }) => {
             alignItems: 'center',
           }}>Coming soon...</Box>
         </FormControl>
+      </TabPanel>
+      
+      <TabPanel value={ 1 }>
+        <Box component="pre" sx={{
+          fontSize: '75%',
+          color: 'text.primary',
+          backgroundColor: 'transparent',
+          overflowX: 'auto',
+          m: 0, p: 1,
+          height: '100px',
+        }}>
+          { JSON.stringify(layer.properties, null, 2) }
+        </Box>
       </TabPanel>
     </Tabs>
   );
