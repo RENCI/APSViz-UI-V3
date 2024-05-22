@@ -4,7 +4,6 @@ import {
   Accordion,
   AccordionDetails,
   Avatar,
-  Box,
   ButtonGroup,
   Stack,
   Switch,
@@ -134,16 +133,7 @@ export const LayerCard = ({ index, layer }) => {
           paddingBlock: 0,
         },
       }}>
-        <LayerActions layerId={ layer.id } />
-        <Box component="pre" sx={{
-          fontSize: '75%',
-          color: 'text.primary',
-          backgroundColor: 'transparent',
-          overflowX: 'auto',
-          p: 1,
-        }}>
-          { JSON.stringify(layer.properties, null, 2) }
-        </Box>
+        <LayerActions layer={ layer } />
       </AccordionDetails>
     </Accordion>
 
