@@ -38,7 +38,7 @@ export default function CatalogItems(data) {
         else {
             return (
                 <Fragment>
-                    <AccordionGroup sx={{maxWidth: 410, size: "sm", variant: "soft"}}>
+                    <AccordionGroup sx={{maxWidth: 415, size: "sm", variant: "soft"}}>
                         {
                             data
                                 .data['catalog']
@@ -55,7 +55,7 @@ export default function CatalogItems(data) {
                                             }}>
 
                                             <AccordionSummary>
-                                                Model date: {catalog['id']}
+                                                Date: {catalog['id']}
                                             </AccordionSummary>
 
                                             <AccordionDetails>
