@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
@@ -159,6 +159,10 @@ export const DefaultLayers = () => {
       }, []);
 
     //console.log("defaultModelLayers: " + JSON.stringify(defaultModelLayers, null, 2))
+    const wmsLayerParams = useMemo(() => ({
+        format:"image/png",
+        transparent: true,
+    }), [])
 
     return (
         <>
@@ -185,11 +189,7 @@ export const DefaultLayers = () => {
                             key={`${index}-${layer.id}`}
                             url={gs_wms_url}
                             layers={layer.layers}
-                            params={{
-                                format:"image/png",
-                                transparent: true,
-                            }}
-            
+                            params={wmsLayerParams}            
                         />
                     );
                 }
