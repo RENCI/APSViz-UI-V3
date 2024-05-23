@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { ModelSelectionForm } from "@model-selection/modelSelectionForm.js";
+import { ModelSelectionTray } from "@model-selection/modelSelectionTray.js";
 
 /**
- * component that handles the selection of layers for the map.
+ * component that handles the filtered selections of layers for the map.
  *
  * @returns {JSX.Element}
  * @constructor
@@ -11,7 +11,7 @@ export const ModelSelection = () => {
     // render the layer selection component
     return (
         <Fragment>
-            <ModelSelectionForm />
+            <ModelSelectionTray />
         </Fragment>
   );
 };
