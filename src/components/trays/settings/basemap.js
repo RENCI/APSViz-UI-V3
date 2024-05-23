@@ -1,19 +1,25 @@
 import * as React from 'react';
 import { Popover } from '@mui/material';
 import { 
+    Box,
+    FormLabel,
     IconButton,
+    Radio,
+    radioClasses,
+    RadioGroup,
+    Sheet,
     Stack,
     Typography } from '@mui/joy';
-import Avatar from '@mui/joy/Avatar';
-import FormLabel from '@mui/joy/FormLabel';
-import Radio, { radioClasses } from '@mui/joy/Radio';
-import RadioGroup from '@mui/joy/RadioGroup';
-import Sheet from '@mui/joy/Sheet';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { Map } from '@mui/icons-material';
+import { useLayers } from '@context';
+import { BasemapList } from '@utils/map-utils';
+import { useLocalStorage } from '@hooks';
 
 export function BaseMaps() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { baseMap, setBaseMap } = useLayers();
+  const [storedValue, setStoredValue] = useLocalStorage('basemap', '');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,6 +29,25 @@ export function BaseMaps() {
     setAnchorEl(null);
   };
 
+  const changeBaseMap = (event) => {
+    const basemapTitle = event.target.value;
+    const selectedBasemap = BasemapList.filter((map) => map.title === basemapTitle);
+    if (selectedBasemap.length === 1) {
+      setBaseMap(selectedBasemap[0]);
+      setStoredValue(selectedBasemap[0].title);
+    }
+  };
+
+  React.useEffect(() => {
+    if (storedValue) {
+      const valueList = BasemapList.filter((map) => map.title === storedValue);
+      if (valueList.length > 0) {}
+        setBaseMap(valueList[0]);
+    }
+    else {
+      setBaseMap(BasemapList[0]);
+    }
+  }, []);
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -50,11 +75,11 @@ export function BaseMaps() {
           horizontal: 'right',
         }}
       >
-        <RadioGroup
+        { baseMap && <RadioGroup
             aria-label="platform"
             overlay
             name="platform"
-            defaultValue = "Website"
+            defaultValue = {baseMap.title}
             sx={{
                 flexDirection: 'row',
                 gap: 2,
@@ -79,9 +104,9 @@ export function BaseMaps() {
                 },
             }}
             >
-            {['Website', 'Documents', 'Social Account'].map((value) => (
+            {BasemapList.map((basemap) => (
                 <Sheet
-                key={value}
+                key={basemap.title}
                 variant="outlined"
                 sx={{
                     borderRadius: 'md',
@@ -89,18 +114,23 @@ export function BaseMaps() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: 1.5,
-                    p: 2,
-                    minWidth: 120,
+                    gap: 1,
+                    p: 1,
+                    minWidth: 100,
                 }}
                 >
-                <Radio id={value} value={value} checkedIcon={<CheckCircleRoundedIcon/>} 
-                    sx={{padding: '10px'}}/>
-                <Avatar variant="soft" size="sm" />
-                <FormLabel htmlFor={value}>{value}</FormLabel>
+                <Radio id={basemap.title} value={basemap.title} onChange={changeBaseMap} checkedIcon={<CheckCircleRoundedIcon />} 
+                    sx={{padding: '0px'}}/>
+                <Box
+                    component="img"
+                    sx={{maxWidth: 120, alignSelf: 'center'}}
+                    alt={basemap.title}
+                    src={basemap.thumbnail}
+                />
+                 <FormLabel htmlFor={basemap.title}>{basemap.title}</FormLabel>
                 </Sheet>
             ))}
-            </RadioGroup>
+            </RadioGroup>}
         </Popover>
     </Stack>
   );

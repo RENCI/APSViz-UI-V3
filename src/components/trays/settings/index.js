@@ -3,7 +3,7 @@ import { Stack } from '@mui/joy';
 import { Tune as SettingsIcon } from '@mui/icons-material';
 
 import { DarkModeToggle } from './dark-mode';
-import { BaseMaps } from './base-maps';
+import { BaseMaps } from './basemap';
 
 export const icon = <SettingsIcon />;
 
