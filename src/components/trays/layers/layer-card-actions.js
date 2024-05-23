@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
-  Divider,
+  Button,
   FormControl,
   FormLabel,
   ListItemDecorator,
@@ -11,6 +11,7 @@ import {
   TabList,
   Tabs,
   TabPanel,
+  Typography,
   Stack,
 } from '@mui/joy';
 import {
@@ -19,7 +20,36 @@ import {
   DataObject as MetadataIcon,
 } from '@mui/icons-material';
 import { useLayers, useSettings } from '@context';
-import { ActionButton } from '@components/buttons';
+
+const RemoveLayerButton = ({ onConfirm }) => {
+  const [clicked, setClicked] = useState(false);
+
+  const handleClickConfirm = () => {
+    onConfirm();
+  };
+
+  return clicked ? (
+    <Button
+      color="danger"
+      variant="solid"
+      onClick={ handleClickConfirm }
+      startDecorator={ <RemoveIcon /> }
+    >Are you sure?</Button>
+  ) : (
+    <Button
+      color="danger"
+      variant="outlined"
+      onClick={ () => setClicked(true) }
+      startDecorator={ <RemoveIcon /> }
+    >Remove Layer from Map</Button>
+  );
+};
+
+RemoveLayerButton.propTypes = {
+  onConfirm: PropTypes.func.isRequired,
+};
+
+//
 
 export const LayerActions = ({ layer }) => {
   const { darkMode } = useSettings();
@@ -27,38 +57,26 @@ export const LayerActions = ({ layer }) => {
 
   return (
     <Tabs defaultValue={0}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-      >
-        <TabList size="sm" sx={{ flex: 1 }}>
-          <Tab variant="plain" color="primary">
-            <ListItemDecorator>
-              <AppearanceIcon fontSize="sm" />
-            </ListItemDecorator>
-            Appearance
-          </Tab>
-          <Tab variant="plain" color="primary">
-            <ListItemDecorator>
-              <MetadataIcon fontSize="sm" />
-            </ListItemDecorator>
-            Metadata
-          </Tab>
-        </TabList>
-
-        <Divider orientation="vertical" />
-
-        <ActionButton
-          color="warning"
-          onClick={ () => removeLayer(layer.id) }
-          sx={{
-            borderRadius: 0,
-            borderBottom: '1px solid var(--joy-palette-divider)',
-          }}
-        >
-          <RemoveIcon />
-        </ActionButton>
-      </Stack>
+      <TabList size="sm" sx={{ flex: 1 }}>
+        <Tab variant="plain" color="primary">
+          <ListItemDecorator>
+            <AppearanceIcon fontSize="sm" />
+          </ListItemDecorator>
+          Appearance
+        </Tab>
+        <Tab variant="plain" color="primary">
+          <ListItemDecorator>
+            <MetadataIcon fontSize="sm" />
+          </ListItemDecorator>
+          Metadata
+        </Tab>
+        <Tab variant="plain" color="warning">
+          <ListItemDecorator>
+            <RemoveIcon fontSize="sm" />
+          </ListItemDecorator>
+          Remove
+        </Tab>
+      </TabList>
 
       <TabPanel value={ 0 } sx={{
         '.MuiFormLabel-root': {
@@ -106,6 +124,23 @@ export const LayerActions = ({ layer }) => {
         }}>
           { JSON.stringify(layer.properties, null, 2) }
         </Box>
+      </TabPanel>
+
+      <TabPanel value={ 2 } sx={{ p: 0 }}>
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          gap={ 2 }
+          sx={{
+            height: '120px',
+            backgroundColor: 'var(--joy-palette-danger-softBg)',
+          }}
+        >
+          <RemoveLayerButton onConfirm={ () => removeLayer(layer.id) } />
+          <Typography level="body-sm" sx={{ fontStyle: 'italic' }}>
+            Proceed with caution. This action cannot be undone.
+          </Typography>
+        </Stack>
       </TabPanel>
     </Tabs>
   );
