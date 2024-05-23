@@ -4,7 +4,7 @@ import {SynopticTabForm} from "@model-selection/synopticTab";
 import {TropicalTabForm} from "@model-selection/tropicalTab";
 
 /**
- * This component renders the layer selection form
+ * This component renders the model selection tray
  *
  * @returns {JSX.Element}
  * @constructor
@@ -30,11 +30,3 @@ export const ModelSelectionTray = () => {
         </Fragment>
     );
 };
-
-/**
- * this method populates the controls on the form.
- *
- */
-// const dataLoader = () => {
-//
-// };
