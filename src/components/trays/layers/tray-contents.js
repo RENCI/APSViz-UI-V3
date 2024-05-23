@@ -29,7 +29,7 @@ export const TrayContents = () => {
             size="lg"
             startDecorator={ <AddLayerIcon /> }
             onClick={ handleClickToggleState }
-          >Add a Layer</Button>
+          >Add a Model Run</Button>
         </Stack>
       );
     }
