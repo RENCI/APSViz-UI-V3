@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { ModelSelectionTray } from "@model-selection/modelSelectionTray.js";
 
 /**
- * component that handles the selection of layers for the map.
+ * component that handles the filtered selections of layers for the map.
  *
  * @returns {JSX.Element}
  * @constructor

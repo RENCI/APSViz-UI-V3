@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { HelpAboutTray } from "@help-about/helpAboutTray.js";
 
 /**
- * component that handles the selection of layers for the map.
+ * component that renders the help/about tray.
  *
  * @returns {JSX.Element}
  * @constructor

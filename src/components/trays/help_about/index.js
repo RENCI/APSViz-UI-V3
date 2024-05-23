@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack } from '@mui/joy';
 import { Blind as HelpAboutIcon} from '@mui/icons-material';
 
-// import the component that will allow the user to make model selections
+// import the component that will allow the user to view things about the app
 import { HelpAbout } from "./help_about.js";
 
 // get an icon for the tray
