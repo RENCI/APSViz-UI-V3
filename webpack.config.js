@@ -103,7 +103,8 @@ module.exports = {
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
       '@model-selection': path.resolve(__dirname, 'src/components/model-selection'),
-      '@utils': path.resolve(__dirname, 'src/utils/')
+      '@utils': path.resolve(__dirname, 'src/utils/'),
+      '@help-about': path.resolve(__dirname, 'src/components/help-about/'),
     }
   },
 

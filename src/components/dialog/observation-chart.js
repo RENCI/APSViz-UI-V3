@@ -16,6 +16,17 @@ export default function ObservationChart(url) {
 }
 
 /**
+ * this suppresses the re-chart errors on the x/y-axis rendering.
+ *
+ * @type {{(message?: any, ...optionalParams: any[]): void, (...data: any[]): void}}
+ */
+const error = console.error;
+console.error = (...args) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};
+
+/**
  * Retrieves and returns the chart data in json format
  *
  * @param url

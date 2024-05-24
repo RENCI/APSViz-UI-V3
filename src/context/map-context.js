@@ -101,6 +101,17 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers(newLayers);
   };
 
+  const setLayerOpacity = (id, newOpacity) => {
+    const newLayers = [...defaultModelLayers];
+    const index = newLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      return;
+    }
+    newLayers[index].state.opacity = newOpacity;
+    setDefaultModelLayers([...newLayers]);
+  };
+
+
   return (
     <LayersContext.Provider
       value={{
@@ -117,6 +128,7 @@ export const LayersProvider = ({ children }) => {
         removeLayer,
         layerTypes,
         makeAllRasterLayersInvisible,
+        setLayerOpacity,
       }}
     >
       {children}

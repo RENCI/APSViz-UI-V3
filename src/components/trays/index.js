@@ -3,13 +3,15 @@ import * as layers from './layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';
 import * as settings from './settings';
+import * as help_about from './help_about';
 
 export default {
   layers,
   hurricanes,
   model_selection,
   remove_items,
-  settings
+  settings,
+  help_about
 };
 
 /*
