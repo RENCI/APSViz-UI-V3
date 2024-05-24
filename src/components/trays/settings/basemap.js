@@ -79,7 +79,7 @@ export function BaseMaps() {
             aria-label="platform"
             overlay
             name="platform"
-            defaultValue = {baseMap.title}
+            value = {baseMap.title}
             sx={{
                 flexDirection: 'row',
                 gap: 2,
