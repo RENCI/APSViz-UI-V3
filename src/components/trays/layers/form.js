@@ -1,12 +1,8 @@
 import React from 'react';
-import { Stack } from '@mui/joy';
+import { ModelSelection } from '../model-selection/model-selection';
 
 export const AddLayerForm = () => {
   return (
-    <Stack sx={{
-      flex: 1,
-    }}>
-      FORM!
-    </Stack>
+    <ModelSelection />
   );
 };
