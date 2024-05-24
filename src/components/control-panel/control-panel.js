@@ -254,11 +254,15 @@ export const ControlPanel = () => {
         <Stack direction="row" alignItems="center" gap={ 1 }>
             <IconButton
               variant="outlined"
+              key='previous'
+              button-key='previous'
               onClick={changeModelRunCycle}
             ><KeyboardArrowLeft/></IconButton>
             <Typography level="body-md">Cycle {runCycle}</Typography>
             <IconButton
               variant="outlined"
+              key='next'
+              button-key='next'
               onClick={changeModelRunCycle}
             ><KeyboardArrowRight/></IconButton>
         </Stack>
