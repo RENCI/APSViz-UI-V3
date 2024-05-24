@@ -4,23 +4,22 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { markClicked } from '@utils/map-utils';
 
-const newLayerDefaultState = layer => {
+const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
-
+  
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
             visible: true,
             opacity: 1.0,
         });
     }
-
+  
     return ({
         visible: false,
         opacity: 1.0,
     });
-};
-
-
+  };
+  
 export const DefaultLayers = () => {
 
     const [obsData, setObsData] = useState("");

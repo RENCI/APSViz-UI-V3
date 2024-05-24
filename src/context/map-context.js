@@ -7,6 +7,7 @@ import {
   Air as WindVelocityIcon,
   Water as WaterLevelIcon,
   BlurOn as WaterSurfaceIcon,
+  Flood as FloodIcon,
 } from '@mui/icons-material';
 
 export const LayersContext = createContext({});
@@ -32,7 +33,11 @@ const layerTypes = {
   hec_ras_water_surface: {
     icon: WaterSurfaceIcon,
   },
+  maxinundepth63: {
+    icon: FloodIcon,
+  },
 };
+
 
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
@@ -57,6 +62,17 @@ export const LayersProvider = ({ children }) => {
       { ...alteredLayer },
       ...newLayers.slice(index + 1),
     ]);
+  };
+
+  const makeAllRasterLayersInvisible = () => {
+    const newLayers = [];
+    const currentLayers = [...defaultModelLayers];
+    currentLayers.forEach((layer, idx) => {
+        const alteredLayer = currentLayers[idx];
+        alteredLayer.state.visible = false;
+        newLayers.push(alteredLayer);
+    });
+    setDefaultModelLayers([...newLayers]);
   };
 
   const swapLayers = (i, j) => {
@@ -111,6 +127,7 @@ export const LayersProvider = ({ children }) => {
         swapLayers,
         removeLayer,
         layerTypes,
+        makeAllRasterLayersInvisible,
         setLayerOpacity,
       }}
     >
