@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
+import { StormLayers } from './storm-layers';
 import {
   useLayers,
   useSettings,
@@ -28,6 +29,7 @@ export const Map = () => {
             : <TileLayer url={ `https://api.mapbox.com/styles/v1/mvvatson/clvu2u7iu061901ph15n55v2e/tiles/256/{z}/{x}/{y}@2x?access_token=${ process.env.REACT_APP_MAPBOX_TOKEN }` } />
           }
           <DefaultLayers/>
+          <StormLayers/>
       </MapContainer>
     );
   };

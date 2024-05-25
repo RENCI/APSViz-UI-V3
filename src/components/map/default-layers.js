@@ -118,7 +118,6 @@ export const DefaultLayers = () => {
                         state: newLayerDefaultState(layer)
                     });
 
-                    // TODO: do we really need to do this here??!
                     // if this is an obs layer, need to retrieve
                     // the json data for it from GeoServer
                     const pieces = layer.id.split('-');
@@ -136,7 +135,6 @@ export const DefaultLayers = () => {
             if (obs_url) {
                 const obs_response = await fetch(obs_url);
                 const obs_data = await obs_response.json();
-                //console.log("obs_data 1: " + JSON.stringify(obs_data, null, 2))
 
                 setObsData(obs_data);
             }
@@ -159,7 +157,7 @@ export const DefaultLayers = () => {
         getDefaultLayers().then();
       }, []);
 
-    // memoizing this params object prevents
+    // memorizing this params object prevents
     // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
         format:"image/png",

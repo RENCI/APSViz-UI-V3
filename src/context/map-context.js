@@ -41,7 +41,7 @@ const layerTypes = {
 
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
-  const [filteredModelLayers, setFilteredModelLayers] = useState([]);
+  const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
@@ -119,8 +119,8 @@ export const LayersProvider = ({ children }) => {
         setMap,
         defaultModelLayers,
         setDefaultModelLayers,
-        filteredModelLayers,
-        setFilteredModelLayers,
+        hurricaneTrackLayers,
+        setHurricaneTrackLayers,
         toggleLayerVisibility,
         selectedObservations,
         setSelectedObservations,
