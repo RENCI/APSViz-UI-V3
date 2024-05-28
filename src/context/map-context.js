@@ -48,6 +48,22 @@ export const LayersProvider = ({ children }) => {
 
   const [map, setMap] = useState(null);
 
+  const toggleHurricaneLayerVisibility = id => {
+    const newLayers = [...hurricaneTrackLayers];
+    const index = newLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      console.error('Could not locate layer', id);
+      return;
+    }
+    const alteredLayer = newLayers[index];
+    alteredLayer.state.visible = !alteredLayer.state.visible;
+    setHurricaneTrackLayers([
+      ...newLayers.slice(0, index),
+      { ...alteredLayer },
+      ...newLayers.slice(index + 1),
+    ]);
+  };
+
   const toggleLayerVisibility = id => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
@@ -121,6 +137,7 @@ export const LayersProvider = ({ children }) => {
         setDefaultModelLayers,
         hurricaneTrackLayers,
         setHurricaneTrackLayers,
+        toggleHurricaneLayerVisibility,
         toggleLayerVisibility,
         selectedObservations,
         setSelectedObservations,

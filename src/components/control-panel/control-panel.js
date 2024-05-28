@@ -32,11 +32,12 @@ const layerIcons = {
 export const ControlPanel = () => {
 
   //const { defaultModelLayers, setDefaultModelLayers, toggleLayerVisibility, makeAllLayersInvisible } = useLayers();
-  const { defaultModelLayers, setDefaultModelLayers, toggleLayerVisibility } = useLayers();
+  const { defaultModelLayers,
+          setDefaultModelLayers,
+          toggleLayerVisibility,
+          toggleHurricaneLayerVisibility } = useLayers();
 
   const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data?limit=1&use_v3_sp=true`;
-  //const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
-
   const layers = [...defaultModelLayers];
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
@@ -175,9 +176,9 @@ export const ControlPanel = () => {
 
   // switch on/off the hurricane track layer, if it exists
   const toggleHurricaneLayer = (event) => {
-    console.log(event);
     setCheckedHurr(event.target.checked);
-    //toggleLayerVisibility(obs_layer.id);
+    const layerID = obs_layer.id.substr(0, obs_layer.id.lastIndexOf("-")) + '-hurr';
+    toggleHurricaneLayerVisibility(layerID);
   };
 
   // cycle to the next model run cycle and retrieve the
@@ -277,13 +278,6 @@ export const ControlPanel = () => {
         </Stack>
 
         <Divider />
-
-        {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
-          Also probabaly want to add a switch for hurricane layers - which
-          involves making a request to the MetGet API 
-          Third need to implement actual code to load different model runs each time 
-          up/down arrows are clicked. This has to time managed in some way so that
-          Geoserver is not inundated with requests */}
         
         { // grid name
           layers.length && (

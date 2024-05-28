@@ -215,11 +215,11 @@ export function getTrackGeojson(trackData, timezone, storm_name = "") {
       features: bufferFeatures
     });
   // add some styling to the cone
-  coneFeatureCollection.features[0].properties = {
+  /* coneFeatureCollection.features[0].properties = {
     "fill-opacity": 0,
     stroke: "#858585",
     "stroke-opacity": 0.7
-  };
+  }; */
 
   return {
     cone: coneFeatureCollection,
@@ -229,7 +229,7 @@ export function getTrackGeojson(trackData, timezone, storm_name = "") {
     },
     line: {
       type: "Feature",
-      properties: {},
+     // properties: {},
       geometry: {
         type: "LineString",
         coordinates: pointFeatures.map((point) => point.geometry.coordinates)
