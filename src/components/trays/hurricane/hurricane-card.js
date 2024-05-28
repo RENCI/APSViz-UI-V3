@@ -12,12 +12,13 @@ import {
 import { useLayers } from '@context';
 import { useToggleState } from '@hooks';
 
-export const HurricaneCard = ( index, layer ) => {
+export const HurricaneCard = ( layer ) => {
   const {
-    toggleLayerVisibility,
+    toggleHurricaneLayerVisibility,
   } = useLayers();
   const expanded = useToggleState(false);
-  const isVisible = true;
+  const hlayer = layer.layer;
+  const isVisible = hlayer.state.visible;
 
   return (
     <Accordion
@@ -47,19 +48,19 @@ export const HurricaneCard = ( index, layer ) => {
           '& .action-button:hover': { filter: 'opacity(1.0)' },
         }}
       >
-        {layer.properties &&
+        {hlayer &&
         <Stack direction="column" sx={{ flex: 1 }}>
           <Stack direction="row" alignItems="center" gap={ 2 } sx={{
             filter: isVisible ? 'opacity(1.0)' : 'opacity(0.75)',
             transition: 'filter 250ms',
           }}>
             <Typography level="title-md">
-              {layer.properties.storm_name}
+              {hlayer.stormName}
             </Typography>
             <Switch
               size="sm"
               checked={ isVisible }
-              onChange={ () => toggleLayerVisibility(layer.id) }
+              onChange={ () => toggleHurricaneLayerVisibility(hlayer.id) }
               className="action-button"
             />
           </Stack>
@@ -72,10 +73,10 @@ export const HurricaneCard = ( index, layer ) => {
             sx={{ flex: 1, pl: '50px' }}
           >
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(layer.properties.run_date).toUTCString }
+              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(hlayer.runDate).toUTCString() }
             </Typography>
             <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              Cycle { layer.properties.advisory }
+              Advisory { hlayer.advisory }
             </Typography>
           </Stack>
         </Stack>}
