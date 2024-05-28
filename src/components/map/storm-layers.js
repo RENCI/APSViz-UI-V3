@@ -26,7 +26,7 @@ export const StormLayers = () => {
   const layer_list = defaultModelLayers;
   const topLayer = layer_list[0];
 
-  function coneStyle(feature) {
+  function coneStyle() {
     return {
     fillColor: '#858585',
     weight: 2,
@@ -37,7 +37,7 @@ export const StormLayers = () => {
    };
   }
 
-  function lineStyle(feature) {
+  function lineStyle() {
     return {
     weight: 2,
     opacity: 1,
@@ -108,54 +108,73 @@ export const StormLayers = () => {
         this.closePopup();
       });
     }
-};
+  };
+
+  // compare the hurricane layers list to the layers list and 
+  // remove any hurricane layers that are related to model run layers
+  // that have been removed
+  const removeAnyOrphanHurricaneLayers = () => {
+
+    hurricaneTrackLayers.map((hurrLayer) => {
+      if (! layer_list.some(layer => layer.id.substr(0, layer.id.lastIndexOf("-")) + '-hurr' === hurrLayer.id)) {
+        const newHurricaneTrackLayers = hurricaneTrackLayers.filter((layerToRemove) => layerToRemove.id !== hurrLayer.id);
+        setHurricaneTrackLayers(newHurricaneTrackLayers);
+      }
+    });
+  };
+
 
   useEffect(() => {
 
     async function getStormLayers() {
-      
-     if (topLayer && topLayer.properties.met_class === 'synoptic') {
-      const id = topLayer.id.substr(0, topLayer.id.lastIndexOf("-")) + '-hurr';
-      // get year, storm number, and advisory for this storm
-      const year = topLayer.properties.run_date.substring(0, 4);
-      let stormNumber = topLayer.properties.storm_number;
-      // storm number can sometimes start with "al" so must remove if so
-      if (stormNumber && stormNumber.length > 3)
-        stormNumber = stormNumber.slice(2);
-      const advisory = topLayer.properties.advisory_number;
-      const stormName = topLayer.properties.advisory_number;
+      // create id fro new hurricane layer
+      if (topLayer && topLayer.properties.met_class === 'synoptic') {
+        const id = topLayer.id.substr(0, topLayer.id.lastIndexOf("-")) + '-hurr';
 
-      //getTrackData(year, stormNumber, advisory).then((track) => {
-      getTrackData("2023", "10", "17").then((track) => {
-        if (track != null) {
-          const trackGeojson = getTrackGeojson(
-            track,
-            "utc",
-            'IDALIA'
-          );
-          
-          // now create some metadata for this layer
-          // and save in hurricaneTrackLayers
-          const trackLayer = [{
-            id: id,
-            stormName: stormName,
-            stormNumber: stormNumber,
-            runDate: topLayer.properties.run_date,
-            advisory: advisory,
-            instanceName: topLayer.properties.instance_name,
-            eventType: topLayer.properties.event_type,
-            state: newLayerDefaultState()
-          }];
+        // first check to make sure this layer doesn't already exist
+        if (!hurricaneTrackLayers.some(layer => layer.id === id)) {
+          // get year, storm number, and advisory for this storm
+          const year = topLayer.properties.run_date.substring(0, 4);
+          let stormNumber = topLayer.properties.storm_number;
+          // storm number can sometimes start with "al" so must remove if so
+          if (stormNumber && stormNumber.length > 3)
+            stormNumber = stormNumber.slice(2);
+          const advisory = topLayer.properties.advisory_number;
+          const stormName = topLayer.properties.advisory_number;
 
-          // check to make sure we actually got geojson data
-          // before creating layer
-          if (trackGeojson) {
-            setHurricaneData(trackGeojson);
-            setHurricaneTrackLayers([...trackLayer, ...hurricaneTrackLayers]);
-          }
+          //getTrackData(year, stormNumber, advisory).then((track) => {
+          getTrackData("2023", "10", "17").then((track) => {
+            if (track != null) {
+              const trackGeojson = getTrackGeojson(
+                track,
+                "utc",
+                'IDALIA'
+              );
+              
+              // now create some metadata for this layer
+              // and save in hurricaneTrackLayers
+              const trackLayer = [{
+                id: id,
+                stormName: stormName,
+                stormNumber: stormNumber,
+                runDate: topLayer.properties.run_date,
+                advisory: advisory,
+                instanceName: topLayer.properties.instance_name,
+                eventType: topLayer.properties.event_type,
+                state: newLayerDefaultState()
+              }];
+
+              // check to make sure we actually got geojson data
+              // before creating layer
+              if (trackGeojson) {
+                setHurricaneData(trackGeojson);
+                setHurricaneTrackLayers([...trackLayer, ...hurricaneTrackLayers]);
+              }
+            }
+          });
         }
-      });
-     }
+        removeAnyOrphanHurricaneLayers();
+      }
     }
 
     getStormLayers().then();

@@ -10,8 +10,6 @@ export const HurricaneList = () => {
   const { hurricaneTrackLayers } = useLayers();
   const layers = [...hurricaneTrackLayers];
 
-  console.log(layers);
-
   return (
     <AccordionGroup variant="soft">
       {
