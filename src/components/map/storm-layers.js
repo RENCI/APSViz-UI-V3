@@ -121,6 +121,11 @@ export const StormLayers = () => {
         setHurricaneTrackLayers(newHurricaneTrackLayers);
       }
     });
+    // also check to see if indeed there is anything left in layer_list
+    // if not remove all hurricane layers
+    if (layer_list.length === 0) {
+      setHurricaneTrackLayers([]);
+    }
   };
 
 
@@ -128,7 +133,7 @@ export const StormLayers = () => {
 
     async function getStormLayers() {
       // create id fro new hurricane layer
-      if (topLayer && topLayer.properties.met_class === 'synoptic') {
+      if (topLayer && topLayer.properties.met_class === 'tropical') {
         const id = topLayer.id.substr(0, topLayer.id.lastIndexOf("-")) + '-hurr';
 
         // first check to make sure this layer doesn't already exist
@@ -173,8 +178,8 @@ export const StormLayers = () => {
             }
           });
         }
-        removeAnyOrphanHurricaneLayers();
       }
+      removeAnyOrphanHurricaneLayers();
     }
 
     getStormLayers().then();
