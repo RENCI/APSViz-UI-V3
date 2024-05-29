@@ -147,8 +147,9 @@ export const StormLayers = () => {
           const advisory = topLayer.properties.advisory_number;
           const stormName = topLayer.properties.advisory_number;
 
-          //getTrackData(year, stormNumber, advisory).then((track) => {
-          getTrackData("2023", "10", "17").then((track) => {
+          getTrackData(year, stormNumber, advisory).then((track) => {
+          //for testing ...
+          //getTrackData("2023", "10", "17").then((track) => {
             if (track != null) {
               const trackGeojson = getTrackGeojson(
                 track,
@@ -189,7 +190,6 @@ export const StormLayers = () => {
     <>
       {hurricaneTrackLayers
           .filter(({state}) => state.visible)
-          //.reverse()
           .map((layer, index) => {
             return (
               <Fragment key={`${index}-${layer.id}`}>
