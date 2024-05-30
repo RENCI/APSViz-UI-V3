@@ -145,7 +145,7 @@ export const StormLayers = () => {
           if (stormNumber && stormNumber.length > 3)
             stormNumber = stormNumber.slice(2);
           const advisory = topLayer.properties.advisory_number;
-          const stormName = topLayer.properties.advisory_number;
+          const stormName = topLayer.properties.storm_name;
 
           getTrackData(year, stormNumber, advisory).then((track) => {
           //for testing ...
@@ -154,7 +154,7 @@ export const StormLayers = () => {
               const trackGeojson = getTrackGeojson(
                 track,
                 "utc",
-                'IDALIA'
+                stormName
               );
               
               // now create some metadata for this layer
