@@ -76,20 +76,6 @@ export const SynopticTabForm = () => {
                 setDropDownData(data);
             }
             else {
-                // re-group the data
-                /**
-                    the synoptic result tree will look like:
-
-                        date (YYYY-MM-DD)
-                            model run (4378-20240417)
-                                cycle (00, 06, etc.)
-                                    product (4378-2024041700-gfsforecast-obs, ...)
-                                    product...
-                                cycle...
-                            model ...
-                        date...
-                */
-
                 // save the catalog data
                 setCatalogData(data);
             }
