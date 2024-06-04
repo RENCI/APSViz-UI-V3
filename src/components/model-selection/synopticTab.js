@@ -166,7 +166,7 @@ export const SynopticTabForm = () => {
 
                 <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
                 {
-                    <CatalogItems data={ catalogData } />
+                    <CatalogItems data={ catalogData } isTropical = { false } />
                 }
                 </Stack>
             </form>
