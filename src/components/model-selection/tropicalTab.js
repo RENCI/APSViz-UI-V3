@@ -171,7 +171,7 @@ export const TropicalTabForm = () => {
 
                 <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
                 {
-                    <CatalogItems data={ catalogData } />
+                    <CatalogItems data={ catalogData } isTropical={ true } />
                 }
                 </Stack>
             </form>
