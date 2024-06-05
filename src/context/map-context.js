@@ -7,6 +7,7 @@ import {
   Air as WindVelocityIcon,
   Water as WaterLevelIcon,
   BlurOn as WaterSurfaceIcon,
+  //SettingsTwoTone,
   Flood as FloodIcon,
 } from '@mui/icons-material';
 
@@ -111,6 +112,8 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers([...newLayers]);
   };
 
+  const [baseMap, setBaseMap] = React.useState();
+
 
   return (
     <LayersContext.Provider
@@ -127,6 +130,8 @@ export const LayersProvider = ({ children }) => {
         swapLayers,
         removeLayer,
         layerTypes,
+        baseMap,
+        setBaseMap,
         makeAllRasterLayersInvisible,
         setLayerOpacity,
       }}
