@@ -22,7 +22,7 @@ export default function CatalogItems(data) {
 
     // do not render if there is no data
     if (data.data != null) {
-        // if there is a warning getting the result
+        // if there was a warning getting the result
         if (data.data['Warning'] !== undefined) {
             return (
                 <div>
@@ -30,7 +30,7 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
-        // if there is an error getting the result
+        // if there was an error getting the result
         else if(data.data['Error'] !== undefined) {
             return (
                 <div>
@@ -41,15 +41,16 @@ export default function CatalogItems(data) {
         // return all the data cards
         else {
             // save the name of the element for advisory or cycle numbers
-            if (data.isTropical === true) {
+            if (data.isTropical) {
                 numberName = ' Advisory: ';
                 numberElement = 'advisory_number';
             }
-            else if (data.isTropical === false) {
+            else if (!data.isTropical) {
                 numberName = ' Cycle: ';
                 numberElement = 'cycle';
             }
 
+            // render the results of the data query
             return (
                 <Fragment>
                     <AccordionGroup sx={{maxWidth: 415, size: "sm", variant: "soft"}}>
@@ -66,8 +67,7 @@ export default function CatalogItems(data) {
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => {
                                                 setAccordianDateIndex(expanded ? itemIndex : null);
-                                            }}
-                                        >
+                                            }}>
                                             <AccordionSummary>
                                                 {catalog['id']}
                                             </AccordionSummary>
