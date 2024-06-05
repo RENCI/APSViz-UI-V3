@@ -79,7 +79,8 @@ export default function CatalogItems(data) {
                                                             t['group'] === val['group']))))
                                                     .map((member, memberIndex) => (
                                                         <Checkbox sx={{ m: .5 }} key={ memberIndex } label={ numberName + member['properties'][numberElement] + ' (' + member['properties']['grid_type'] + ')' }/>
-                                                )) }
+                                                    ))
+                                                }
                                             </AccordionDetails>
                                         </Accordion>
                                     </Stack>
