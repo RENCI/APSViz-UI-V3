@@ -1,12 +1,9 @@
-//import { useLayers } from '@context';
 import locationIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.png';
 
-/* const {
-  defaultModelLayers,
-  setDefaultModelLayers,
-  filteredModelLayers,
-  setFilteredModelLayers
-  } = useLayers(); */
+// import basemap thumbnails
+import USGSTopo from '@images/basemaps/USGS-US-Topo.png';
+import USGSImagery from '@images/basemaps/USGS-US-Imagery.png';
+import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
 
 
 // function to add a location marker where ever and obs mod layer
@@ -42,3 +39,23 @@ export const markUnclicked = (map, id) => {
     }
   });
 };
+
+// add any new basemaps here
+// TODO: need to figure out how to deal with Dark Mode
+export const BasemapList = [
+  {url: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}',
+   attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
+   title: 'USGS Topo',
+   thumbnail: USGSTopo
+  },
+  {url: 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
+    title: 'USGS Imagery Topo',
+    thumbnail: USGSImagery
+  },
+  {url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    title: 'CartoDB-Positron',
+    thumbnail: CartoDBPositron
+  }
+];
