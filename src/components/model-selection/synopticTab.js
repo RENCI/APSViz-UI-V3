@@ -90,14 +90,28 @@ export const SynopticTabForm = () => {
      */
     useEffect(() => {
         // build the new data url
-        buildDataUrl();
+        buildDropDownDataUrl();
     });
+
+    /**
+     * resets the form
+     */
+    function resetForm() {
+        // reset the form controls
+        setSynopticDate('');
+        setSynopticCycle('');
+        setSynopticGrid('');
+        setSynopticInstance('');
+
+        // and clear out any data retrieved
+        setCatalogData(null);
+    }
 
     /**
      * method to build the query sting to get data
      *
      */
-    function buildDataUrl() {
+    function buildDropDownDataUrl() {
         // init the query string
         let query_string = '';
 
@@ -138,28 +152,29 @@ export const SynopticTabForm = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             name="synoptic-date"
+                            // value={ synopticDate }
                             shouldDisableDate={ disableDate }
                             slotProps={{textField: {size: 'small'}, field: { clearable: true }}}
                             onChange={ (newValue) => { setSynopticDate(newValue); }}/>
                     </LocalizationProvider>
 
-                    <Select name="synoptic-cycle" placeholder="Please select a cycle" onChange={(e, newValue) => {
+                    <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={(e, newValue) => {
                         setSynopticCycle(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'cycles'} />
                     </Select>
 
-                    <Select name="synoptic-grid" placeholder="Please select a grid" onChange={(e, newValue) => {
+                    <Select name="synoptic-grid" value={ synopticGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
                         setSynopticGrid(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'grid_types'} />
                     </Select>
 
-                    <Select name="synoptic-instance" placeholder="Please select an instance" onChange={(e, newValue) => {
+                    <Select name="synoptic-instance" value={ synopticInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
                         setSynopticInstance(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'instance_names'} />
                     </Select>
 
                     <Button type="submit">Submit</Button>
-                    <Button type="reset">Reset</Button>
+                    <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
                 <Divider sx={{m: 2}}/>
