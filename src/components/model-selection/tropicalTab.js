@@ -5,12 +5,18 @@ import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 
+/**
+ * Form to filter/selt tropical runs
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const TropicalTabForm = () => {
     // declare state variables for all tropical tab controls
-    const [tropicalStorm, setTropicalStorm] = useState('');
-    const [tropicalAdvisory, setTropicalAdvisory] = useState('');
-    const [tropicalGrid, setTropicalGrid] = useState('');
-    const [tropicalInstance, setTropicalInstance] = useState('');
+    const [tropicalStorm, setTropicalStorm] = useState(null);
+    const [tropicalAdvisory, setTropicalAdvisory] = useState(null);
+    const [tropicalGrid, setTropicalGrid] = useState(null);
+    const [tropicalInstance, setTropicalInstance] = useState(null);
 
 
     // init the data urls
@@ -32,16 +38,12 @@ export const TropicalTabForm = () => {
         // avoid doing the usual submit operations
         event.preventDefault();
 
-        // gather all the form data
-        const formData = new FormData(event.target);
-        const formJson = Object.fromEntries(formData.entries());
-
         // build the query string from the submitted form data
         const queryString =
-            ((formJson['tropical-storm-name'] !== "") ? '&storm_name=' + formJson['tropical-storm-name'] : '') +
-            ((formJson['tropical-advisory'] !== "") ? '&advisory_number=' + formJson['tropical-advisory'] : '') +
-            ((formJson['tropical-grid'] !== "") ? '&grid_type=' + formJson['tropical-grid'] : '') +
-            ((formJson['tropical-instance'] !== "") ? '&instance=' + formJson['tropical-instance'] : '');
+            ((tropicalStorm) ? '&storm_name=' + tropicalStorm : '') +
+            ((tropicalAdvisory) ? '&advisory_number=' + tropicalAdvisory : '') +
+            ((tropicalGrid) ? '&grid_type=' + tropicalGrid : '') +
+            ((tropicalInstance) ? '&instance=' + tropicalInstance : '');
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -96,10 +98,10 @@ export const TropicalTabForm = () => {
      */
     function resetForm() {
         // reset the form controls
-        setTropicalStorm('');
-        setTropicalAdvisory('');
-        setTropicalGrid('');
-        setTropicalInstance('');
+        setTropicalStorm(null);
+        setTropicalAdvisory(null);
+        setTropicalGrid(null);
+        setTropicalInstance(null);
 
         // and clear out any data retrieved
         setCatalogData(null);

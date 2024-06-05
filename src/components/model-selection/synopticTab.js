@@ -8,12 +8,18 @@ import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 
+/**
+ * Form to filter/selt synoptic runs
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const SynopticTabForm = () => {
     // declare all state variables for the synoptic tab dropdown data
-    const [synopticDate, setSynopticDate] = useState('');
-    const [synopticCycle, setSynopticCycle] = useState('');
-    const [synopticGrid, setSynopticGrid] = useState('');
-    const [synopticInstance, setSynopticInstance] = useState('');
+    const [synopticDate, setSynopticDate] = useState(null);
+    const [synopticCycle, setSynopticCycle] = useState(null);
+    const [synopticGrid, setSynopticGrid] = useState(null);
+    const [synopticInstance, setSynopticInstance] = useState(null);
 
     // init the data urls
     const rootUrl = `${process.env.REACT_APP_UI_DATA_URL}`;
@@ -31,19 +37,15 @@ export const SynopticTabForm = () => {
      * @param event
      */
     const formSynopticSubmit = (event) => {
-        // avoid the usual form submit operations
+        // avoid doing the usual form submit operations
         event.preventDefault();
-
-        // gather all the form data
-        const formData = new FormData(event.target);
-        const formJson = Object.fromEntries(formData.entries());
 
         // build the query string from the submitted form data
         const queryString =
-            ((formJson['synoptic-date'] !== "") ? '&run_date=' + formJson['synoptic-date'] : '') +
-            ((formJson['synoptic-cycle'] !== "") ? '&cycle=' + formJson['synoptic-cycle'] : '') +
-            ((formJson['synoptic-grid'] !== "") ? '&grid_type=' + formJson['synoptic-grid'] : '') +
-            ((formJson['synoptic-instance'] !== "") ? '&instance=' + formJson['synoptic-instance'] : '');
+            ((synopticDate) ? '&run_date=' + synopticDate.toISOString() : '') +
+            ((synopticCycle) ? '&cycle=' + synopticCycle : '') +
+            ((synopticGrid) ? '&grid_type=' + synopticGrid : '') +
+            ((synopticInstance) ? '&instance=' + synopticInstance : '');
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -98,10 +100,10 @@ export const SynopticTabForm = () => {
      */
     function resetForm() {
         // reset the form controls
-        setSynopticDate('');
-        setSynopticCycle('');
-        setSynopticGrid('');
-        setSynopticInstance('');
+        setSynopticDate(null);
+        setSynopticCycle(null);
+        setSynopticGrid(null);
+        setSynopticInstance(null);
 
         // and clear out any data retrieved
         setCatalogData(null);
@@ -152,10 +154,9 @@ export const SynopticTabForm = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             name="synoptic-date"
-                            // value={ synopticDate }
                             shouldDisableDate={ disableDate }
-                            slotProps={{textField: {size: 'small'}, field: { clearable: true }}}
-                            onChange={ (newValue) => { setSynopticDate(newValue); }}/>
+                            slotProps={{ textField: {size: 'small'}, field: { clearable: true } }}
+                            onChange={ (newValue) => { setSynopticDate(newValue.$d); }}/>
                     </LocalizationProvider>
 
                     <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={(e, newValue) => {
