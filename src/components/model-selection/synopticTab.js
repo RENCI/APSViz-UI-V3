@@ -8,12 +8,18 @@ import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 
+/**
+ * Form to filter/selt synoptic runs
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const SynopticTabForm = () => {
     // declare all state variables for the synoptic tab dropdown data
-    const [synopticDate, setSynopticDate] = useState('');
-    const [synopticCycle, setSynopticCycle] = useState('');
-    const [synopticGrid, setSynopticGrid] = useState('');
-    const [synopticInstance, setSynopticInstance] = useState('');
+    const [synopticDate, setSynopticDate] = useState(null);
+    const [synopticCycle, setSynopticCycle] = useState(null);
+    const [synopticGrid, setSynopticGrid] = useState(null);
+    const [synopticInstance, setSynopticInstance] = useState(null);
 
     // init the data urls
     const rootUrl = `${process.env.REACT_APP_UI_DATA_URL}`;
@@ -31,19 +37,15 @@ export const SynopticTabForm = () => {
      * @param event
      */
     const formSynopticSubmit = (event) => {
-        // dont do the usual form submit operations
+        // avoid doing the usual form submit operations
         event.preventDefault();
-
-        // gather all the form data
-        const formData = new FormData(event.target);
-        const formJson = Object.fromEntries(formData.entries());
 
         // build the query string from the submitted form data
         const queryString =
-            ((formJson['synoptic-date'] !== "") ? '&run_date=' + formJson['synoptic-date'] : '') +
-            ((formJson['synoptic-cycle'] !== "") ? '&cycle=' + formJson['synoptic-cycle'] : '') +
-            ((formJson['synoptic-grid'] !== "") ? '&grid_type=' + formJson['synoptic-grid'] : '') +
-            ((formJson['synoptic-instance'] !== "") ? '&instance=' + formJson['synoptic-instance'] : '');
+            ((synopticDate) ? '&run_date=' + synopticDate.toISOString() : '') +
+            ((synopticCycle) ? '&cycle=' + synopticCycle : '') +
+            ((synopticGrid) ? '&grid_type=' + synopticGrid : '') +
+            ((synopticInstance) ? '&instance=' + synopticInstance : '');
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -90,14 +92,28 @@ export const SynopticTabForm = () => {
      */
     useEffect(() => {
         // build the new data url
-        buildDataUrl();
+        buildDropDownDataUrl();
     });
+
+    /**
+     * resets the form
+     */
+    function resetForm() {
+        // reset the form controls
+        setSynopticDate(null);
+        setSynopticCycle(null);
+        setSynopticGrid(null);
+        setSynopticInstance(null);
+
+        // and clear out any data retrieved
+        setCatalogData(null);
+    }
 
     /**
      * method to build the query sting to get data
      *
      */
-    function buildDataUrl() {
+    function buildDropDownDataUrl() {
         // init the query string
         let query_string = '';
 
@@ -113,7 +129,7 @@ export const SynopticTabForm = () => {
         // set the query string
         if (synopticInstance !== '' && synopticInstance != null) { query_string += '&instance_name=' + synopticInstance; }
 
-        // set the pulldown data url. this will trigger a data gathering
+        // set the pulldown data url. this will trigger data gathering
         setFinalDataUrl(rootUrl + basePulldownUrl + query_string);
     }
 
@@ -125,7 +141,7 @@ export const SynopticTabForm = () => {
      */
     const disableDate = (date) => {
         // return false if the date is not found in the list of available dates
-        return !dropDownData.run_dates.includes(date.toISOString().split("T")[0]);
+        return !dropDownData['run_dates'].includes(date.toISOString().split("T")[0]);
     };
 
     /**
@@ -139,34 +155,34 @@ export const SynopticTabForm = () => {
                         <DatePicker
                             name="synoptic-date"
                             shouldDisableDate={ disableDate }
-                            slotProps={{textField: {size: 'small'}, field: { clearable: true }}}
-                            onChange={ (newValue) => { setSynopticDate(newValue); }}/>
+                            slotProps={{ textField: {size: 'small'}, field: { clearable: true } }}
+                            onChange={ (newValue) => { setSynopticDate(newValue.$d); }}/>
                     </LocalizationProvider>
 
-                    <Select name="synoptic-cycle" placeholder="Please select a cycle" onChange={(e, newValue) => {
+                    <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={(e, newValue) => {
                         setSynopticCycle(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'cycles'} />
                     </Select>
 
-                    <Select name="synoptic-grid" placeholder="Please select a grid" onChange={(e, newValue) => {
+                    <Select name="synoptic-grid" value={ synopticGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
                         setSynopticGrid(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'grid_types'} />
                     </Select>
 
-                    <Select name="synoptic-instance" placeholder="Please select an instance" onChange={(e, newValue) => {
+                    <Select name="synoptic-instance" value={ synopticInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
                         setSynopticInstance(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'instance_names'} />
                     </Select>
 
                     <Button type="submit">Submit</Button>
-                    <Button type="reset">Reset</Button>
+                    <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
                 <Divider sx={{m: 2}}/>
 
                 <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
                 {
-                    <CatalogItems data={ catalogData } />
+                    <CatalogItems data={ catalogData } isTropical = { false } />
                 }
                 </Stack>
             </form>

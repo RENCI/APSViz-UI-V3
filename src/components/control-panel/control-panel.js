@@ -119,21 +119,18 @@ export const ControlPanel = () => {
 
 
   const date2String = (date) => {
-    const str = date.getFullYear() +  
+    return date.getFullYear() +
                 '-' + String(date.getMonth() + 1).padStart(2, '0') +
                 '-' + String(date.getDate()).padStart(2, '0');
-
-    return str;
   };
 
   const string2Date = (str) => {
     const dateParts = str.split('-');
-    const newDate = new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
 
-    return newDate;
+    return new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
   };
 
-  // set initial values the currently display layers
+  // set initial values for the current display layers
   useEffect(() => {
     if ((layers[0]) && (!initialDataFetched)) {
         setInstanceName(layers[0].properties.instance_name);
@@ -168,7 +165,7 @@ export const ControlPanel = () => {
     });
   };
 
-  // switch on/off the observation layer, if it exists
+  // switch on/off the observation layer if it exists
   const toggleObsLayer = (event) => {
     setCheckedObs(event.target.checked);
     toggleLayerVisibility(obs_layer.id);
@@ -192,7 +189,7 @@ export const ControlPanel = () => {
     // const metClass = layers[0].properties.met_class;
     // const eventType = layers[0].properties.event_type;
     const currentDate = string2Date(runDate);
-    let currentCycle = Number(runCycle) + 0;
+    let currentCycle = Number(runCycle);
 
     if (direction === "next") {
         // set properties for next model run
@@ -315,7 +312,7 @@ export const ControlPanel = () => {
             maxele_layer && (
               <IconButton
                 value={maxele_layer.properties.product_type}
-                key={maxele_layer.properties.id}
+                key={maxele_layer.id}
               >
                 { layerIcons[maxele_layer.properties.product_type] }
               </IconButton>
@@ -323,10 +320,10 @@ export const ControlPanel = () => {
           }
           {
             topLayers
-              .filter(layer => layer.properties.product_type != "obs" && layer.properties.product_type != "maxele63")
+              .filter(layer => layer.properties.product_type !== "obs" && layer.properties.product_type !== "maxele63")
               .map(layer => (
                 <IconButton
-                  key={layer.properties.id}
+                  key={layer.id}
                   value={layer.properties.product_type}
                 >
                   { layerIcons[layer.properties.product_type] }
