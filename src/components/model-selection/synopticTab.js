@@ -24,7 +24,7 @@ export const SynopticTabForm = () => {
     // init the data urls
     const rootUrl = `${process.env.REACT_APP_UI_DATA_URL}`;
     const basePulldownUrl = 'get_pulldown_data?met_class=synoptic&use_v3_sp=true';
-    const baseDataUrl = 'get_ui_data_secure?met_class=synoptic&use_v3_sp=true';
+    const baseDataUrl = 'get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true';
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
 
     // storage for received data to render pulldowns
@@ -41,11 +41,19 @@ export const SynopticTabForm = () => {
         event.preventDefault();
 
         // build the query string from the submitted form data
-        const queryString =
+        let queryString =
             ((synopticDate) ? '&run_date=' + synopticDate.toISOString() : '') +
             ((synopticCycle) ? '&cycle=' + synopticCycle : '') +
             ((synopticGrid) ? '&grid_type=' + synopticGrid : '') +
             ((synopticInstance) ? '&instance=' + synopticInstance : '');
+
+        // set different limits on the data returned if no filter params were passed
+        if (queryString === '') {
+            queryString += '&limit=60';
+        }
+        else {
+            queryString += '&limit=10';
+        }
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -115,22 +123,22 @@ export const SynopticTabForm = () => {
      */
     function buildDropDownDataUrl() {
         // init the query string
-        let query_string = '';
+        let queryString = '';
 
         // set the query string
-        if (synopticDate !== '' && synopticDate != null) { query_string += '&run_date=' + synopticDate.toISOString().split("T")[0]; }
+        if (synopticDate !== '' && synopticDate != null) { queryString += '&run_date=' + synopticDate.toISOString().split("T")[0]; }
 
         // set the query string
-        if (synopticCycle !== '' && synopticCycle != null) { query_string += '&cycle=' + synopticCycle; }
+        if (synopticCycle !== '' && synopticCycle != null) { queryString += '&cycle=' + synopticCycle; }
 
         // set the query string
-        if (synopticGrid !== '' && synopticGrid != null) { query_string += '&grid_type=' + synopticGrid; }
+        if (synopticGrid !== '' && synopticGrid != null) { queryString += '&grid_type=' + synopticGrid; }
 
         // set the query string
-        if (synopticInstance !== '' && synopticInstance != null) { query_string += '&instance_name=' + synopticInstance; }
+        if (synopticInstance !== '' && synopticInstance != null) { queryString += '&instance_name=' + synopticInstance; }
 
         // set the pulldown data url. this will trigger data gathering
-        setFinalDataUrl(rootUrl + basePulldownUrl + query_string);
+        setFinalDataUrl(rootUrl + basePulldownUrl + queryString);
     }
 
     /**
@@ -180,10 +188,8 @@ export const SynopticTabForm = () => {
 
                 <Divider sx={{m: 2}}/>
 
-                <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
-                {
-                    <CatalogItems data={ catalogData } isTropical = { false } />
-                }
+                <Stack>
+                    { <CatalogItems data={ catalogData } isTropical = { false } /> }
                 </Stack>
             </form>
         </Fragment>
