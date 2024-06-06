@@ -69,7 +69,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
 
                     <DialogContent sx={{backgroundColor: 'white', fontSize: 14, m: 0, width: 590, height: 350 }}>{ dialogObject }</DialogContent>
 
-                    <DialogActions sx={{backgroundColor: 'lightgray', height: 35, m: 0, p: 1}}><Button style={{fontSize: 14}} autoFocus onClick={handleClose}> Close </Button></DialogActions>
+                    <DialogActions sx={{backgroundColor: 'lightgray', height: 35, m: 0, p: 1}}><Button style={{fontSize: 14}} autoFocus onClick={ handleClose }> Close </Button></DialogActions>
                 </Dialog>
         </Fragment>
     );

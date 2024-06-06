@@ -34,19 +34,23 @@ const layerIcons = {
 export const ControlPanel = () => {
 
   //const { defaultModelLayers, setDefaultModelLayers, toggleLayerVisibility, makeAllLayersInvisible } = useLayers();
-  const { defaultModelLayers, setDefaultModelLayers, toggleLayerVisibility } = useLayers();
+  const { defaultModelLayers,
+          setDefaultModelLayers,
+          toggleLayerVisibility,
+          toggleHurricaneLayerVisibility } = useLayers();
 
   const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data?limit=1&use_v3_sp=true`;
-
   const layers = [...defaultModelLayers];
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
   const [currentLayerSelection, setCurrentLayerSelection] = React.useState('maxele63');
-  const [checked, setChecked] = React.useState(true);
+  const [checkedObs, setCheckedObs] = React.useState(true);
+  const [checkedHurr, setCheckedHurr] = React.useState(true);
 
    // keep track of which model run to retrieve
   const [ runCycle, setRunCycle] = React.useState(0);
+  const [ runAdvisory, setRunAdvisory] = React.useState(0);
   const [ runDate, setRunDate] = React.useState("");
   const [ instanceName, setInstanceName] = React.useState("");
   const [ metClass, setMetClass] = React.useState("");
@@ -134,7 +138,7 @@ export const ControlPanel = () => {
         setInstanceName(layers[0].properties.instance_name);
         setMetClass(layers[0].properties.met_class);
         setEventType(layers[0].properties.event_type);
-
+        setRunAdvisory(layers[0].properties.advisory_number);
         setRunCycle(parseInt(layers[0].properties.cycle));
         setRunDate(layers[0].properties.run_date);
         setInitialDataFetched(true);
@@ -165,8 +169,15 @@ export const ControlPanel = () => {
 
   // switch on/off the observation layer if it exists
   const toggleObsLayer = (event) => {
-    setChecked(event.target.checked);
+    setCheckedObs(event.target.checked);
     toggleLayerVisibility(obs_layer.id);
+  };
+
+  // switch on/off the hurricane track layer, if it exists
+  const toggleHurricaneLayer = (event) => {
+    setCheckedHurr(event.target.checked);
+    const layerID = obs_layer.id.substr(0, obs_layer.id.lastIndexOf("-")) + '-hurr';
+    toggleHurricaneLayerVisibility(layerID);
   };
 
   // cycle to the next model run cycle and retrieve the
@@ -261,7 +272,7 @@ export const ControlPanel = () => {
               button-key='previous'
               onClick={changeModelRunCycle}
             ><KeyboardArrowLeft/></IconButton>
-            <Typography level="body-md">Cycle {runCycle}</Typography>
+            <Typography level="body-md">{metClass === 'synoptic'? `Cycle ${runCycle}` : `Advisory ${runAdvisory}`}</Typography>
             <IconButton
               variant="outlined"
               key='next'
@@ -271,13 +282,6 @@ export const ControlPanel = () => {
         </Stack>
 
         <Divider />
-
-        {/* TODO:  NOTE: If this is a tropical storm run, we need to change cycle to advisoy 
-          Also probabaly want to add a switch for hurricane layers - which
-          involves making a request to the MetGet API 
-          Third need to implement actual code to load different model runs each time 
-          up/down arrows are clicked. This has to time managed in some way so that
-          Geoserver is not inundated with requests */}
         
         { // grid name
           layers.length && (
@@ -289,8 +293,17 @@ export const ControlPanel = () => {
           layers.some(layer => layer.properties.product_type === "obs") && (
             <Typography
               component="label"
-              endDecorator={ <Switch checked={checked} onChange={toggleObsLayer} /> }
+              endDecorator={ <Switch checked={checkedObs} onChange={toggleObsLayer} /> }
             >Observations</Typography>
+          )
+        }
+
+        { // hurricane track toggle
+          layers.some(layer => layer.properties.met_class === "tropical") && (
+            <Typography
+              component="label"
+              endDecorator={ <Switch checked={checkedHurr} onChange={toggleHurricaneLayer} /> }
+            >Hurricane Track</Typography>
           )
         }
 
