@@ -39,11 +39,19 @@ export const TropicalTabForm = () => {
         event.preventDefault();
 
         // build the query string from the submitted form data
-        const queryString =
+        let queryString =
             ((tropicalStorm) ? '&storm_name=' + tropicalStorm : '') +
             ((tropicalAdvisory) ? '&advisory_number=' + tropicalAdvisory : '') +
             ((tropicalGrid) ? '&grid_type=' + tropicalGrid : '') +
             ((tropicalInstance) ? '&instance=' + tropicalInstance : '');
+
+        // set different limits on the data returned if no filter params were passed
+        if (queryString === '') {
+            queryString += '&limit=60';
+        }
+        else {
+            queryString += '&limit=10';
+        }
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -114,22 +122,22 @@ export const TropicalTabForm = () => {
      */
     function buildDropDownDataUrl() {
         // init the query string
-        let query_string = '';
+        let queryString = '';
 
         // set the storm query string
-        if (tropicalStorm !== '' && tropicalStorm !== null) { query_string += '&storm_name=' + tropicalStorm; }
+        if (tropicalStorm !== '' && tropicalStorm !== null) { queryString += '&storm_name=' + tropicalStorm; }
 
         // set the advisory query string
-        if (tropicalAdvisory !== '' && tropicalAdvisory !== null) { query_string += '&advisory_number=' + tropicalAdvisory; }
+        if (tropicalAdvisory !== '' && tropicalAdvisory !== null) { queryString += '&advisory_number=' + tropicalAdvisory; }
 
         // set the grin query string
-        if (tropicalGrid !== '' && tropicalGrid !== null) {query_string += '&grid_type=' + tropicalGrid; }
+        if (tropicalGrid !== '' && tropicalGrid !== null) { queryString += '&grid_type=' + tropicalGrid; }
 
         // set the instance query string
-        if (tropicalInstance !== '' && tropicalInstance !== null) {query_string += '&instance_name=' + tropicalInstance; }
+        if (tropicalInstance !== '' && tropicalInstance !== null) { queryString += '&instance_name=' + tropicalInstance; }
 
         // set the pulldown data url. this will trigger a data pull
-        setFinalDataUrl(rootUrl + basePulldownUrl + query_string);
+        setFinalDataUrl(rootUrl + basePulldownUrl + queryString);
     }
 
     /**
@@ -160,12 +168,10 @@ export const TropicalTabForm = () => {
                     <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
-                <Divider sx={{m: 2}}/>
+                <Divider sx={{ m: 2 }}/>
 
-                <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
-                {
-                    <CatalogItems data={ catalogData } isTropical={ true } />
-                }
+                <Stack>
+                { <CatalogItems data={ catalogData } isTropical={ true } /> }
                 </Stack>
             </form>
     </Fragment>);
