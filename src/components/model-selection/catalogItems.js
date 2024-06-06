@@ -16,9 +16,13 @@ export default function CatalogItems(data) {
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
 
-    // variables for the met-class type data
-    let numberName = '';
-    let numberElement = '';
+    // variables for the data display
+    let typeName = null;
+    let typeEle = null;
+    let modelName = null;
+    let modelEle = null;
+    let numberName = null;
+    let numberEle = null;
 
     // do not render if there is no data
     if (data.data != null) {
@@ -42,18 +46,24 @@ export default function CatalogItems(data) {
         else {
             // save the name of the element for advisory or cycle numbers
             if (data.isTropical) {
+                typeName = 'Storm: ';
+                typeEle = 'storm_name';
+                // modelName = 'Model: ';
+                // modelElement = 'meteorological_model';
                 numberName = ' Advisory: ';
-                numberElement = 'advisory_number';
+                numberEle = 'advisory_number';
             }
             else if (!data.isTropical) {
+                modelName = 'Model: ';
+                modelEle = 'model';
                 numberName = ' Cycle: ';
-                numberElement = 'cycle';
+                numberEle = 'cycle';
             }
 
             // render the results of the data query
             return (
                 <Fragment>
-                    <AccordionGroup sx={{maxWidth: 415, size: "sm", variant: "soft"}}>
+                    <AccordionGroup sx={{ maxWidth: 415, size: "sm", variant: "soft" }}>
                         {
                             data.data['catalog']
                             .filter(catalogs => catalogs !== "")
@@ -72,13 +82,26 @@ export default function CatalogItems(data) {
                                                 {catalog['id']}
                                             </AccordionSummary>
 
-                                            <AccordionDetails>
-                                                { catalog['members']
+                                            <AccordionDetails> {
+                                                // loop through the data members and put them away
+                                                catalog['members']
+                                                    // filter by the group name
                                                     .filter((val, idx, self) => (
                                                         idx === self.findIndex((t)=> (
                                                             t['group'] === val['group']))))
-                                                    .map((member, memberIndex) => (
-                                                        <Checkbox sx={{ m: .5 }} key={ memberIndex } label={ numberName + member['properties'][numberElement] + ' (' + member['properties']['grid_type'] + ')' }/>
+                                                    // output summarized details of each group member
+                                                    .map((mbr, mbrIdx) => (
+                                                        // create the checkbox
+                                                        <Checkbox
+                                                            sx={{ m: .5 }}
+                                                            key={ mbrIdx }
+                                                            label={
+                                                                ((typeName) ? typeName + mbr['properties'][typeEle].toUpperCase() + ', ' : '') +
+                                                                ((modelName) ? modelName + mbr['properties'][modelEle].toUpperCase() + ', ' : '') +
+                                                                numberName + mbr['properties'][numberEle]
+                                                                // + ', Grid: ' + member['properties']['grid_type']
+                                                            }
+                                                        />
                                                     ))
                                                 }
                                             </AccordionDetails>
