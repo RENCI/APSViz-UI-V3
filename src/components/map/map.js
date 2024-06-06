@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
+import { StormLayers } from './storm-layers';
 import { BaseMap } from './base-map';
 import {
   useLayers,
@@ -25,6 +26,7 @@ export const Map = () => {
         style={{ height: '100vh', width:'100wh' }}>
           <BaseMap />
           <DefaultLayers/>
+          <StormLayers/>
       </MapContainer>
     );
   };
