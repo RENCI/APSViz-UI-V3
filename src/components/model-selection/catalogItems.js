@@ -1,6 +1,9 @@
 import React, {Fragment, useState} from "react";
 import PropTypes from 'prop-types';
-import {AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack} from '@mui/joy';
+import {AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox} from '@mui/joy';
+
+// set component prop types
+CatalogItems.propTypes = { data: PropTypes.any};
 
 /**
  * returns a list of drop down options for that data/type.
@@ -10,15 +13,16 @@ import {AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack} fr
  * @constructor
  */
 export default function CatalogItems(data) {
-    // set component prop types
-    CatalogItems.propTypes = { data: PropTypes.any };
-
     // create some state for what catalog accordian is expanded/not expanded
-    const [accordianIndex, setAccordianIndex] = useState(-1);
+    const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
+
+    // variables for the met-class type data
+    let numberName = '';
+    let numberElement = '';
 
     // do not render if there is no data
     if (data.data != null) {
-        // if there is a warning getting the result
+        // if there was a warning getting the result
         if (data.data['Warning'] !== undefined) {
             return (
                 <div>
@@ -26,7 +30,7 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
-        // if there is an error getting the result
+        // if there was an error getting the result
         else if(data.data['Error'] !== undefined) {
             return (
                 <div>
@@ -36,34 +40,47 @@ export default function CatalogItems(data) {
         }
         // return all the data cards
         else {
+            // save the name of the element for advisory or cycle numbers
+            if (data.isTropical) {
+                numberName = ' Advisory: ';
+                numberElement = 'advisory_number';
+            }
+            else if (!data.isTropical) {
+                numberName = ' Cycle: ';
+                numberElement = 'cycle';
+            }
+
+            // render the results of the data query
             return (
                 <Fragment>
-                    <AccordionGroup sx={{maxWidth: 410, size: "sm", variant: "soft"}}>
+                    <AccordionGroup sx={{maxWidth: 415, size: "sm", variant: "soft"}}>
                         {
-                            data
-                                .data['catalog']
-                                .filter(catalogs => catalogs !== "")
-                                .map((catalog, itemIndex) =>
+                            data.data['catalog']
+                            .filter(catalogs => catalogs !== "")
+                            .map(
+                                (catalog, itemIndex) =>
                                 (
-                                    <Stack key={ itemIndex } spacing={1}>
+                                    <Stack key={ itemIndex } spacing={ 1 }>
                                         <Accordion
                                             key={ itemIndex }
                                             sx={{ p: 0 }}
-                                            expanded={accordianIndex === itemIndex}
+                                            expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => {
-                                                setAccordianIndex(expanded ? itemIndex : null);
+                                                setAccordianDateIndex(expanded ? itemIndex : null);
                                             }}>
-
                                             <AccordionSummary>
-                                                Model date: {catalog['id']}
+                                                {catalog['id']}
                                             </AccordionSummary>
 
                                             <AccordionDetails>
-                                                {catalog['members'].map((member, memberIndex) => (
-                                                    <Stack key={ memberIndex }>
-                                                         {member['id'] }
-                                                    </Stack>
-                                                ))}
+                                                { catalog['members']
+                                                    .filter((val, idx, self) => (
+                                                        idx === self.findIndex((t)=> (
+                                                            t['group'] === val['group']))))
+                                                    .map((member, memberIndex) => (
+                                                        <Checkbox sx={{ m: .5 }} key={ memberIndex } label={ numberName + member['properties'][numberElement] + ' (' + member['properties']['grid_type'] + ')' }/>
+                                                    ))
+                                                }
                                             </AccordionDetails>
                                         </Accordion>
                                     </Stack>
