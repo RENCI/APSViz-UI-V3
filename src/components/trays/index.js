@@ -1,4 +1,4 @@
-import * as hurricanes from './hurricanes';
+import * as hurricanes from './hurricane';
 import * as layers from './layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';

@@ -5,12 +5,18 @@ import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 
+/**
+ * Form to filter/selt tropical runs
+ *
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const TropicalTabForm = () => {
     // declare state variables for all tropical tab controls
-    const [tropicalStorm, setTropicalStorm] = useState('');
-    const [tropicalAdvisory, setTropicalAdvisory] = useState('');
-    const [tropicalGrid, setTropicalGrid] = useState('');
-    const [tropicalInstance, setTropicalInstance] = useState('');
+    const [tropicalStorm, setTropicalStorm] = useState(null);
+    const [tropicalAdvisory, setTropicalAdvisory] = useState(null);
+    const [tropicalGrid, setTropicalGrid] = useState(null);
+    const [tropicalInstance, setTropicalInstance] = useState(null);
 
 
     // init the data urls
@@ -29,19 +35,15 @@ export const TropicalTabForm = () => {
      * @param event
      */
     const formTropicalHandler = (event) => {
-        // dont do the usual submit operations
+        // avoid doing the usual submit operations
         event.preventDefault();
-
-        // gather all the form data
-        const formData = new FormData(event.target);
-        const formJson = Object.fromEntries(formData.entries());
 
         // build the query string from the submitted form data
         const queryString =
-            ((formJson['tropical-storm-name'] !== "") ? '&storm_name=' + formJson['tropical-storm-name'] : '') +
-            ((formJson['tropical-advisory'] !== "") ? '&advisory_number=' + formJson['tropical-advisory'] : '') +
-            ((formJson['tropical-grid'] !== "") ? '&grid_type=' + formJson['tropical-grid'] : '') +
-            ((formJson['tropical-instance'] !== "") ? '&instance=' + formJson['tropical-instance'] : '');
+            ((tropicalStorm) ? '&storm_name=' + tropicalStorm : '') +
+            ((tropicalAdvisory) ? '&advisory_number=' + tropicalAdvisory : '') +
+            ((tropicalGrid) ? '&grid_type=' + tropicalGrid : '') +
+            ((tropicalInstance) ? '&instance=' + tropicalInstance : '');
 
         // set the url to go after ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
@@ -95,14 +97,17 @@ export const TropicalTabForm = () => {
      * resets the form
      */
     function resetForm() {
-        setTropicalStorm('');
-        setTropicalAdvisory('');
-        setTropicalGrid('');
-        setTropicalInstance('');
+        // reset the form controls
+        setTropicalStorm(null);
+        setTropicalAdvisory(null);
+        setTropicalGrid(null);
+        setTropicalInstance(null);
 
-        buildDropDownDataUrl();
+        // and clear out any data retrieved
+        setCatalogData(null);
     }
 
+    // buildDropDownDataUrl();
     /**
      * method to build the query sting to get data
      *
@@ -123,7 +128,7 @@ export const TropicalTabForm = () => {
         // set the instance query string
         if (tropicalInstance !== '' && tropicalInstance !== null) {query_string += '&instance_name=' + tropicalInstance; }
 
-        // set the pulldown data url. this will trigger a data gathering
+        // set the pulldown data url. this will trigger a data pull
         setFinalDataUrl(rootUrl + basePulldownUrl + query_string);
     }
 
@@ -134,19 +139,19 @@ export const TropicalTabForm = () => {
         <Fragment>
             <form name={"Tropical"} onSubmit={formTropicalHandler}>
                 <Stack spacing={1}>
-                    <Select name="tropical-storm-name" defaultValue="" placeholder="Please select a tropical storm" onChange={(e, newValue) => {
+                    <Select name="tropical-storm-name" value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
                         setTropicalStorm(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'storm_names'} />
                     </Select>
-                    <Select name="tropical-advisory" placeholder="Please select an advisory" onChange={(e, newValue) => {
+                    <Select name="tropical-advisory" value={ tropicalAdvisory } placeholder="Please select an advisory" onChange={(e, newValue) => {
                         setTropicalAdvisory(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'advisory_numbers' } />
                     </Select>
-                    <Select name="tropical-grid" placeholder="Please select a grid" onChange={(e, newValue) => {
+                    <Select name="tropical-grid" value={ tropicalGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
                         setTropicalGrid(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'grid_types' } />
                     </Select>
-                    <Select name="tropical-instance" placeholder="Please select an instance" onChange={(e, newValue) => {
+                    <Select name="tropical-instance" value={ tropicalInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
                         setTropicalInstance(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'instance_names' } />
                     </Select>
@@ -159,7 +164,7 @@ export const TropicalTabForm = () => {
 
                 <Stack sx={{maxHeight: "400px", overflow: "auto"}}>
                 {
-                    <CatalogItems data={ catalogData } />
+                    <CatalogItems data={ catalogData } isTropical={ true } />
                 }
                 </Stack>
             </form>
