@@ -4,10 +4,23 @@ import { useLayers } from '@context';
 
 export const MapLegend = () => {
 
+    // set correct map styles for layer name
+    // may want to move this somewhere else later
+    // for the implementation of user designed styles
+    const layerStyles = {
+        'maxele63': 'maxele_style_v3ui',
+        'maxwvel63': 'maxwvel_style_v3ui',
+        'swan_HS_max63': 'swan_style_v3ui',
+        'maxinundepth63': 'maxele_style_v3ui',
+        'maxele_level_downscaled_epsg4326': 'maxele_style_v3ui',
+        'hec_ras_water_surface': 'maxele_style_v3ui'
+    };
+
     const {
         defaultModelLayers,
         layerTypes,
     } = useLayers();
+    let legendVisibilty = "hidden";
 
     let LegendIcon = layerTypes['maxele63'].icon;
     let legendUrl = '';
@@ -20,10 +33,21 @@ export const MapLegend = () => {
         // now build appropriate url for retrieving the legend graphic
         const workspace = legendLayer.layers.split(':')[0];
         const layerName = legendLayer.layers.split(':')[1];
+        const style = layerStyles[layerName.substring(layerName.indexOf('_')+1)];
+
         legendUrl = `${process.env.REACT_APP_GS_DATA_URL}` + 
                     workspace + "/" +
                     "ows?service=WMS&request=GetLegendGraphic&TRANSPARENT=TRUE&LEGEND_OPTIONS=layout:verticle&format=image%2Fpng&width=20&height=20&layer=" +
-                    layerName;
+                    layerName + 
+                    "&style=" + style;
+    
+        // all set - show the legend
+        legendVisibilty = "visible";
+
+    }
+    else {
+        // if no layers turned on, hide legend
+        legendVisibilty = "hidden";
     }
 
     return (
@@ -42,6 +66,7 @@ export const MapLegend = () => {
             padding: '10px',
             zIndex: 999,
             borderRadius: 'sm',
+            visibility: legendVisibilty,
         }}         
         >
             <Stack 
