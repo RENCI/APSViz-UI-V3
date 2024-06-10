@@ -51,7 +51,7 @@ jobs:
             APP_UI_DATA_URL=${{ secrets.UI_DATA_URL }}
             APP_UI_DATA_TOKEN=${{ secrets.UI_DATA_TOKEN }}
             APP_UI_MAPBOX_TOKEN=${{ secrets.UI_MAPBOX_TOKEN }}
-
+            APP_UI_HURRICANE_ICON_URL=${{ secrets.UI_HURRICANE_ICON_URL }}
           tags: |
             ${{ env.REGISTRY }}:latest
             ${{ env.REGISTRY }}:${{ steps.get_version.outputs.VERSION }}
