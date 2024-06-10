@@ -31,9 +31,9 @@ const layerIcons = {
 
 export const ControlPanel = () => {
 
-  //const { defaultModelLayers, setDefaultModelLayers, toggleLayerVisibility, makeAllLayersInvisible } = useLayers();
   const { defaultModelLayers,
           setDefaultModelLayers,
+          getAllLayersInvisible,
           toggleLayerVisibility,
           toggleHurricaneLayerVisibility } = useLayers();
 
@@ -43,7 +43,6 @@ export const ControlPanel = () => {
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
   const [currentLayerSelection, setCurrentLayerSelection] = React.useState('maxele63');
-  const [checkedObs, setCheckedObs] = React.useState(true);
   const [checkedHurr, setCheckedHurr] = React.useState(true);
 
    // keep track of which model run to retrieve
@@ -96,9 +95,9 @@ export const ControlPanel = () => {
                 state: newLayerDefaultState(layer)
             });
         });
-        //makeAllLayersInvisible();
+        const currentLayers = getAllLayersInvisible();
         setTopLayers([...newLayers]);
-        setDefaultModelLayers([...newLayers, ...defaultModelLayers]);
+        setDefaultModelLayers([...newLayers, ...currentLayers]);
     }
   };
 
@@ -166,8 +165,7 @@ export const ControlPanel = () => {
   };
 
   // switch on/off the observation layer if it exists
-  const toggleObsLayer = (event) => {
-    setCheckedObs(event.target.checked);
+  const toggleObsLayer = () => {
     toggleLayerVisibility(obs_layer.id);
   };
 
@@ -286,7 +284,7 @@ export const ControlPanel = () => {
           layers.some(layer => layer.properties.product_type === "obs") && (
             <Typography
               component="label"
-              endDecorator={ <Switch checked={checkedObs} onChange={toggleObsLayer} /> }
+              endDecorator={ <Switch checked={obs_layer.state.visible} onChange={toggleObsLayer} /> }
             >Observations</Typography>
           )
         }
