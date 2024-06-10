@@ -1,10 +1,10 @@
-import React, {Fragment, useState} from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from 'prop-types';
-import {AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox} from '@mui/joy';
+import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox } from '@mui/joy';
 import { useLayers } from "@context/map-context";
 
 // set component prop types
-CatalogItems.propTypes = { data: PropTypes.any};
+CatalogItems.propTypes = { data: PropTypes.any };
 
 /**
  * returns a list of drop down options for that data/type.
