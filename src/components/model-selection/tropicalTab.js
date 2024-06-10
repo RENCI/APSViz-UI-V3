@@ -1,5 +1,5 @@
-import React, {Fragment, useState, useEffect} from 'react';
-import {Button, Divider, Select, Stack} from '@mui/joy';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Button, Divider, Select, Stack } from '@mui/joy';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
@@ -45,7 +45,7 @@ export const TropicalTabForm = () => {
             ((tropicalGrid) ? '&grid_type=' + tropicalGrid : '') +
             ((tropicalInstance) ? '&instance=' + tropicalInstance : '');
 
-        // set different limits on the data returned if no filter params were passed
+        // set different limits on the data returned if no filter params were passed (in days)
         if (queryString === '') {
             queryString += '&limit=60';
         }
@@ -53,7 +53,7 @@ export const TropicalTabForm = () => {
             queryString += '&limit=10';
         }
 
-        // set the url to go after ui data
+        // build the url to get the ui data
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
     };
 

@@ -9,12 +9,13 @@ import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 
 /**
- * Form to filter/selt synoptic runs
+ * Form to filter/select synoptic runs
  *
  * @returns {JSX.Element}
  * @constructor
  */
 export const SynopticTabForm = () => {
+
     // declare all state variables for the synoptic tab dropdown data
     const [synopticDate, setSynopticDate] = useState(null);
     const [synopticCycle, setSynopticCycle] = useState(null);
@@ -50,8 +51,7 @@ export const SynopticTabForm = () => {
         // set different limits on the data returned if no filter params were passed
         if (queryString === '') {
             queryString += '&limit=60';
-        }
-        else {
+        } else {
             queryString += '&limit=10';
         }
 
@@ -59,13 +59,13 @@ export const SynopticTabForm = () => {
         setFinalDataUrl(rootUrl + baseDataUrl + queryString);
     };
 
-     /**
+    /**
      * Retrieves and returns the model data in json format
      *
      * @param url
      * @returns { json }
      */
-    useQuery( {
+    useQuery({
         // specify the data key and url to use
         queryKey: ['apsviz-synoptic-model-data', finalDataUrl],
 
@@ -126,16 +126,24 @@ export const SynopticTabForm = () => {
         let queryString = '';
 
         // set the query string
-        if (synopticDate !== '' && synopticDate != null) { queryString += '&run_date=' + synopticDate.toISOString().split("T")[0]; }
+        if (synopticDate !== '' && synopticDate != null) {
+            queryString += '&run_date=' + synopticDate.toISOString().split("T")[0];
+        }
 
         // set the query string
-        if (synopticCycle !== '' && synopticCycle != null) { queryString += '&cycle=' + synopticCycle; }
+        if (synopticCycle !== '' && synopticCycle != null) {
+            queryString += '&cycle=' + synopticCycle;
+        }
 
         // set the query string
-        if (synopticGrid !== '' && synopticGrid != null) { queryString += '&grid_type=' + synopticGrid; }
+        if (synopticGrid !== '' && synopticGrid != null) {
+            queryString += '&grid_type=' + synopticGrid;
+        }
 
         // set the query string
-        if (synopticInstance !== '' && synopticInstance != null) { queryString += '&instance_name=' + synopticInstance; }
+        if (synopticInstance !== '' && synopticInstance != null) {
+            queryString += '&instance_name=' + synopticInstance;
+        }
 
         // set the pulldown data url. this will trigger data gathering
         setFinalDataUrl(rootUrl + basePulldownUrl + queryString);
@@ -157,39 +165,44 @@ export const SynopticTabForm = () => {
      */
     return (
         <Fragment>
-            <form name={"Synoptic"} onSubmit={ formSynopticSubmit }>
+            <form name={"Synoptic"} onSubmit={formSynopticSubmit}>
                 <Stack spacing={1}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             name="synoptic-date"
-                            shouldDisableDate={ disableDate }
-                            slotProps={{ textField: {size: 'small'}, field: { clearable: true } }}
-                            onChange={ (newValue) => { setSynopticDate(newValue.$d); }}/>
+                            shouldDisableDate={disableDate}
+                            slotProps={{textField: {size: 'small'}, field: {clearable: true}}}
+                            onChange={(newValue) => {
+                                setSynopticDate(newValue.$d);
+                            }}/>
                     </LocalizationProvider>
 
-                    <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={(e, newValue) => {
-                        setSynopticCycle(newValue); }}>
-                        <DropDownOptions data={dropDownData} type={'cycles'} />
+                    <Select name="synoptic-cycle" value={synopticCycle} placeholder="Please select a cycle" onChange={(e, newValue) => {
+                        setSynopticCycle(newValue);
+                    }}>
+                        <DropDownOptions data={dropDownData} type={'cycles'}/>
                     </Select>
 
-                    <Select name="synoptic-grid" value={ synopticGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
-                        setSynopticGrid(newValue); }}>
-                        <DropDownOptions data={dropDownData} type={'grid_types'} />
+                    <Select name="synoptic-grid" value={synopticGrid} placeholder="Please select a grid" onChange={(e, newValue) => {
+                        setSynopticGrid(newValue);
+                    }}>
+                        <DropDownOptions data={dropDownData} type={'grid_types'}/>
                     </Select>
 
-                    <Select name="synoptic-instance" value={ synopticInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
-                        setSynopticInstance(newValue); }}>
-                        <DropDownOptions data={dropDownData} type={'instance_names'} />
+                    <Select name="synoptic-instance" value={synopticInstance} placeholder="Please select an instance" onChange={(e, newValue) => {
+                        setSynopticInstance(newValue);
+                    }}>
+                        <DropDownOptions data={dropDownData} type={'instance_names'}/>
                     </Select>
 
                     <Button type="submit">Submit</Button>
-                    <Button type="reset" onClick={ resetForm }>Reset</Button>
+                    <Button type="reset" onClick={resetForm}>Reset</Button>
                 </Stack>
 
                 <Divider sx={{m: 2}}/>
 
                 <Stack>
-                    { <CatalogItems data={ catalogData } isTropical = { false } /> }
+                    {<CatalogItems data={catalogData} isTropical={false}/>}
                 </Stack>
             </form>
         </Fragment>
