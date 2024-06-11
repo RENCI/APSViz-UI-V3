@@ -80,7 +80,7 @@ export default function CatalogItems(data) {
             // loop through the select layers in the group and add the default layer state
             selectedLayers.forEach((layer) => {
                 // add the item to the list with the default state
-                newLayers.push({ ...layer, state: { visible: false }});
+                newLayers.push({ ...layer, state: { visible: false, opacity: 1.0 }});
             });
 
             // reset the visible layer states for all layers in the layer tray.
@@ -104,17 +104,17 @@ export default function CatalogItems(data) {
      *
      * @param layer
      * @param group
-     * @returns {{ visible: boolean }}
+     * @returns {{ visible: boolean, opacity: 1.0 }}
      */
     const newLayerDefaultState = (layer, group) => {
         // if this is an obs layer and is the one just added
         if (layer.group === group &&
             (layer.properties['product_type'] === 'obs' || layer.properties['product_type'] === 'maxele63'))
             // make this layer visible
-            return ({ visible: true });
+            return ({ visible: true, opacity: 1.0 });
         else
             // make this layer invisible
-            return ({ visible: false });
+            return ({ visible: false, opacity: 1.0 });
     };
 
     // do not render if there is no data
