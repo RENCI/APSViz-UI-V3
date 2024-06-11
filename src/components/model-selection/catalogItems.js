@@ -178,7 +178,7 @@ export default function CatalogItems(data) {
                                                     // filter by the group name
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
-                                                    .sort((a, b) => a['properties'][numberEle] > b['properties'][numberEle] ? 1 : -1)
+                                                    .sort((a, b) => a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
