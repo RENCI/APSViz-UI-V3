@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { useLayers } from '@context/map-context';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +21,7 @@ import {
   KeyboardArrowRight,
   Tsunami as SwanIcon,
   Water as MaxElevationIcon,
+  Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
@@ -29,6 +30,7 @@ const layerIcons = {
   maxwvel63: <MaxWindVelocityIcon />,
   swan_HS_max63: <SwanIcon />,
   maxinundepth63: <MaxInundationIcon />,
+  maxele_level_downscaled_epsg4326: <HIResMaxElevationIcon />,
 };
 
 export const ControlPanel = () => {
@@ -41,25 +43,49 @@ export const ControlPanel = () => {
 
   const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data?limit=1&use_v3_sp=true`;
   const layers = [...defaultModelLayers];
+
+   // keep track of which model run to retrieve
+  let runCycle = "";
+  let runAdvisory = "";
+  let runDate = "";
+  let instanceName = "";
+  let metClass = "";
+  let eventType = "";
+  let currentLayerSelection = "";
+  
+  // collect the top layers - those are all we are concerned with
+  //  in the control panel
+  let firstId = "";
+  const topLayers  = layers.filter((layer, idx) => {
+    if (idx == 0) {
+      firstId = layer.id.substr(0, layer.id.lastIndexOf("-"));
+    }
+    // check to make sure they are all from the same model run
+    if (layer.id.substr(0, layer.id.lastIndexOf("-")) === firstId) {
+      return {
+        ...layer
+      };
+    };
+  });
+  if (topLayers[0]) {
+    runCycle = topLayers[0].properties.cycle;
+    runAdvisory = topLayers[0].properties.advisory_number;
+    runDate = topLayers[0].properties.run_date;
+    instanceName = topLayers[0].properties.instance_name;
+    metClass = topLayers[0].properties.met_class;
+    eventType = topLayers[0].properties.event_type;
+    // find the current layer selection
+    const selectedLayer = topLayers.find((layer) => layer.properties.product_type !== "obs" && layer.state.visible === true);
+    if (selectedLayer) {
+      currentLayerSelection = selectedLayer.properties.product_type;
+    }
+  }   
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
-  const [currentLayerSelection, setCurrentLayerSelection] = React.useState('maxele63');
   const [checkedHurr, setCheckedHurr] = React.useState(true);
+  const [filters, setFilters] = React.useState();
 
-   // keep track of which model run to retrieve
-  const [ runCycle, setRunCycle] = React.useState(0);
-  const [ runAdvisory, setRunAdvisory] = React.useState(0);
-  const [ runDate, setRunDate] = React.useState("");
-  const [ instanceName, setInstanceName] = React.useState("");
-  const [ metClass, setMetClass] = React.useState("");
-  const [ eventType, setEventType] = React.useState("");
-  const [ topLayers, setTopLayers ] = React.useState([]);
-
-  const ll = layers.map((layer, idx) => {
-    console.log(layer);
-    console.log(idx);
-  })
   // when cycle buttons are pushed on the control panel
   // either the previous or next cycle of the displayed 
   // adcirc model run will be displayed on the map
@@ -68,8 +94,6 @@ export const ControlPanel = () => {
   // retrieve adcirc data and layers from filter data provided
   // then populate default layers state
   // all params are strings, and runDate format is YYYY-MM-DD
-  const [filters, setFilters] = React.useState();
-  const [initialDataFetched, setInitialDataFetched] = React.useState(false);
 
   const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -92,19 +116,20 @@ export const ControlPanel = () => {
     // first see if this set of layers already exists in default layers
     if (d.catalog[0].members && defaultModelLayers.find(layer => layer.id === d.catalog[0].members[0].id)) {
         console.log("already have this one");
+        // TODO: have to turn off all layers and move these
+        // to the top of the list
     }
     // if not, add these layers to default layers
     else {
         // add visibity state property to retrieved catalog layers
         const newLayers = [];
         d.catalog[0].members.forEach((layer) => {
-            newLayers.push({
+          newLayers.push({
                 ...layer,
                 state: newLayerDefaultState(layer)
             });
         });
         const currentLayers = getAllLayersInvisible();
-        setTopLayers([...newLayers]);
         setDefaultModelLayers([...newLayers, ...currentLayers]);
     }
   };
@@ -137,27 +162,10 @@ export const ControlPanel = () => {
     return new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
   };
 
-  // set initial values for the current display layers
-  // also need to handle layers added or deleted outside
-  // of the control panel
-  useEffect(() => {
-    if ((layers[0]) && (!initialDataFetched)) {
-      setInstanceName(layers[0].properties.instance_name);
-      setMetClass(layers[0].properties.met_class);
-      setEventType(layers[0].properties.event_type);
-      setRunAdvisory(layers[0].properties.advisory_number);
-      setRunCycle(parseInt(layers[0].properties.cycle));
-      setRunDate(layers[0].properties.run_date);
-      setInitialDataFetched(true);
-      setTopLayers([...defaultModelLayers]);
-    }
-
-  }, [layers]);
-
   // switch to the model run layer selected via icon button
   const layerChange = async (event, newValue) => {
 
-    setCurrentLayerSelection(newValue);
+    currentLayerSelection = newValue;
      // turn off the old
      layers.map(layer => {
         if (layer.layers.includes(currentLayerSelection)) {
@@ -186,16 +194,8 @@ export const ControlPanel = () => {
     toggleHurricaneLayerVisibility(layerID);
   };
 
-  // cycle to the next model run cycle and retrieve the
-  // layers associated with that cycle/date
-  const changeModelRunCycle = (e) => {
+  const changeSynopticCycle = (direction) => {
 
-    const direction = e.currentTarget.getAttribute("button-key");
-
-    // TODO: Need to update this to also support tropical storms
-    // const runId = layers[0].id.split('-')[0];
-    // const metClass = layers[0].properties.met_class;
-    // const eventType = layers[0].properties.event_type;
     const currentDate = string2Date(runDate);
     let currentCycle = Number(runCycle);
 
@@ -217,18 +217,29 @@ export const ControlPanel = () => {
         }
     }
 
-    setRunDate(date2String(currentDate));
-    const cycle = String(currentCycle).padStart(2, '0');
-    setRunCycle(cycle);
+    runDate = date2String(currentDate);
+    runCycle = String(currentCycle).padStart(2, '0');
 
     const newFilters = {"instance_name": instanceName,
                         "met_class": metClass,
                         "event_type": eventType,
-                        "run_date": date2String(currentDate),
-                        "cycle": cycle
+                        "run_date": runDate,
+                        "cycle": runCycle
     };
 
     setFilters(newFilters);
+  };
+
+  const changeTropicalAdvisory = (direction) => {
+    console.log(direction);
+  };
+
+  // cycle to the next model run cycle or advisory
+  // and retrieve the layers associated with that
+  // cycle/date or advisory
+  const changeModelRunCycle = (e) => {
+    const direction = e.currentTarget.getAttribute("button-key");
+    metClass === "synoptic" ? changeSynopticCycle(direction) : changeTropicalAdvisory(direction);
   };
 
   return (
