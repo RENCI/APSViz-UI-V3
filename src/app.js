@@ -4,6 +4,7 @@ import { ObservationDialog } from "@components/dialog/observation-dialog";
 import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
+import { MapLegend } from '@components/legend';
 
 export const App = () => {
     // install the selected observation list from the layer context
@@ -23,6 +24,7 @@ export const App = () => {
             <Map />
             <Sidebar />
             <ControlPanel/>
+            <MapLegend />
         </Fragment>
     );
 };

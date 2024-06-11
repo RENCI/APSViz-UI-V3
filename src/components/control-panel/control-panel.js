@@ -3,8 +3,10 @@ import axios from 'axios';
 import { useLayers } from '@context/map-context';
 import { useQuery } from '@tanstack/react-query';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Card,
   Divider,
   IconButton,
   Stack,
@@ -222,8 +224,9 @@ export const ControlPanel = () => {
   };
 
   return (
-    <Card
+    <Accordion
       variant="soft"
+      defaultExpanded={true}
       sx={{
         p: 0,
         position: 'absolute',
@@ -232,22 +235,26 @@ export const ControlPanel = () => {
         transition: 'filter 250ms',
         filter: 'opacity(0.9)',
         '&:hover': { filter: 'opacity(1.0)' },
-        height: '350px',
+        height: 'auto',
         width: '300px',
         zIndex: 999,
         borderRadius: 'sm',
       }}
     >
-      <Stack direciton="column" gap={ 1 } alignItems="center">
+      <AccordionSummary slotProps={{buttonClasses: {size: 'xx-large'}}}>
+      {/* <ExpandMoreIcon sx={{ color: 'blue', size: 'xx-large' }} /> */}
+      <Stack direction="column" gap={ 1 } alignItems="center">
         <Box
           component="img"
-          width="280px"
+          width="250px"
           alt="ADCIRC Prediction System"
           src={apsLogo}
         />
-
+      </Stack>
+      </AccordionSummary>
+      <AccordionDetails sx={{'marginBottom': '15px'}}>
+      <Stack direciton="column" gap={ 1 } alignItems="center">
         <Divider />
-
         {
           layers.length && (
             <Typography level="body-md" alignSelf="center">
@@ -330,6 +337,7 @@ export const ControlPanel = () => {
           }
         </ToggleButtonGroup>
       </Stack>
-    </Card>
+      </AccordionDetails>
+    </Accordion>
   );
 };
