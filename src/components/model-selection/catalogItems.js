@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
-import PropTypes from 'prop-types';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox } from '@mui/joy';
+import PropTypes from 'prop-types';
 import { useLayers } from "@context/map-context";
 
 // set component prop types
@@ -14,29 +14,41 @@ CatalogItems.propTypes = { data: PropTypes.any };
  * @constructor
  */
 export default function CatalogItems(data) {
+    // get the layers in state
     const { defaultModelLayers, setDefaultModelLayers } = useLayers();
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
 
-    // variables for the data display
+    // variables for the display of checkbox labels
     let stormOrModelName = null;
     let stormOrModelEle = null;
     let numberName = null;
     let numberEle = null;
 
     /**
-     * handles the model selection click
+     * handles the model checkbox click
      *
      * @param catalogMembers
      * @param layerGroup
+     * @param checked
      */
-    const handleCheckBox = (catalogMembers, layerGroup, checked) => {
+    const handleCBClick = (catalogMembers, layerGroup, checked) => {
         // get the layers selected
         const layers = catalogMembers.filter( catalogMembers => catalogMembers.group === layerGroup );
 
         // add or remove the layer group
         handleSelectedLayers(layerGroup, layers, checked);
+    };
+
+    /**
+     * checks to see if this checkbox needs to be set based on the layers currently in layer state.
+     *
+     * @param layerGroup
+     */
+    const getCheckedState = ( layerGroup ) => {
+        // return the checked state
+        return defaultModelLayers.some(item => item.group === layerGroup);
     };
 
     /**
@@ -92,7 +104,7 @@ export default function CatalogItems(data) {
      *
      * @param layer
      * @param group
-     * @returns {{visible: boolean}}
+     * @returns {{ visible: boolean }}
      */
     const newLayerDefaultState = (layer, group) => {
         // if this is an obs layer and is the one just added
@@ -111,7 +123,7 @@ export default function CatalogItems(data) {
         if (data.data['Warning'] !== undefined) {
             return (
                 <div>
-                    Warning: {data.data['Warning']}
+                    Warning: { data.data['Warning'] }
                 </div>
             );
         }
@@ -119,7 +131,7 @@ export default function CatalogItems(data) {
         else if(data.data['Error'] !== undefined) {
             return (
                 <div>
-                    Error: {data.data['Error']}
+                    Error: { data.data['Error'] }
                 </div>
             );
         }
@@ -156,32 +168,30 @@ export default function CatalogItems(data) {
                                             key={ itemIndex }
                                             sx={{ p: 0 }}
                                             expanded={accordianDateIndex === itemIndex}
-                                            onChange={(event, expanded) => {
-                                                setAccordianDateIndex(expanded ? itemIndex : null);
-                                            }}>
-                                            <AccordionSummary>
-                                                {catalog['id']}
-                                            </AccordionSummary>
+                                            onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
+
+                                            <AccordionSummary> {catalog['id']} </AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
                                                 catalog['members']
                                                     // filter by the group name
-                                                    .filter((val, idx, self) => (
-                                                        idx === self.findIndex((t)=> (
-                                                            t['group'] === val['group']))))
+                                                    .filter((val, idx, self) =>
+                                                        ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
                                                         <Checkbox
                                                             sx={{ m: .5 }}
                                                             key={ mbrIdx }
+                                                            checked={ getCheckedState(mbr.group) }
                                                             label={
                                                                 stormOrModelName + mbr['properties'][stormOrModelEle].toUpperCase() + ', ' +
                                                                 numberName + mbr['properties'][numberEle] +
                                                                 ', Type: ' + mbr['properties']['event_type']
                                                             }
-                                                            onChange={ (event) => handleCheckBox( catalog['members'], mbr['group'], event.target.checked) }
+                                                            onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
+                                                                event.target.checked) }
                                                         />
                                                     ))
                                                 }
