@@ -139,9 +139,9 @@ export default function CatalogItems(data) {
         else {
             // save the name of the element for tropical storms and advisory numbers
             if (data.isTropical) {
-                stormOrModelName = 'Storm: ';
+                stormOrModelName = '';
                 stormOrModelEle = 'storm_name';
-                numberName = ' Advisory: ';
+                numberName = ' Adv: ';
                 numberEle = 'advisory_number';
             }
             // save the name of the synoptic ADCIRC models and cycle numbers
@@ -183,13 +183,14 @@ export default function CatalogItems(data) {
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
                                                         <Checkbox
-                                                            sx={{ m: .5 }}
+                                                            sx={{ m: .5, fontSize: 13 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={
                                                                 stormOrModelName + mbr['properties'][stormOrModelEle].toUpperCase() + ', ' +
                                                                 numberName + mbr['properties'][numberEle] +
-                                                                ', Type: ' + mbr['properties']['event_type']
+                                                                ', Type: ' + mbr['properties']['event_type'] +
+                                                                ', Grid: ' + mbr['properties']['grid_type']
                                                             }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
