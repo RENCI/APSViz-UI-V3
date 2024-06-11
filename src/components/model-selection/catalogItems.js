@@ -146,7 +146,7 @@ export default function CatalogItems(data) {
             }
             // save the name of the synoptic ADCIRC models and cycle numbers
             else if (!data.isTropical) {
-                stormOrModelName = 'Model: ';
+                stormOrModelName = '';
                 stormOrModelEle = 'model';
                 numberName = ' Cycle: ';
                 numberEle = 'cycle';
@@ -170,7 +170,7 @@ export default function CatalogItems(data) {
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
 
-                                            <AccordionSummary> {catalog['id']} </AccordionSummary>
+                                            <AccordionSummary sx={{ fontSize: 15 }}> {catalog['id']} </AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
@@ -183,7 +183,7 @@ export default function CatalogItems(data) {
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
                                                         <Checkbox
-                                                            sx={{ m: .5, fontSize: 13 }}
+                                                            sx={{ m: .5, fontSize: 12 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={
