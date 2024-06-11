@@ -228,7 +228,7 @@ export const ControlPanel = () => {
   return (
     <Accordion
       variant="soft"
-      defaultExpanded='true'
+      defaultExpanded={true}
       sx={{
         p: 0,
         position: 'absolute',
@@ -254,7 +254,7 @@ export const ControlPanel = () => {
         />
       </Stack>
       </AccordionSummary>
-      <AccordionDetails sx={{'margin-bottom': '15px'}}>
+      <AccordionDetails sx={{'marginBottom': '15px'}}>
       <Stack direciton="column" gap={ 1 } alignItems="center">
         <Divider />
         {
