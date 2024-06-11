@@ -53,7 +53,7 @@ export const LayerCard = ({ index, layer }) => {
           borderLeftColor: isVisible
             ? `primary.plainColor`
             : `primary.plainDisabledColor`,
-          '.action-button': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
+          '.action-button': { filter: 'opacity(0.5)', transition: 'filter 250ms' },
           '&:hover .action-button': { filter: 'opacity(0.5)' },
           '& .action-button:hover': { filter: 'opacity(1.0)' },
         }}
@@ -85,7 +85,7 @@ export const LayerCard = ({ index, layer }) => {
             sx={{ flex: 1, pl: '50px' }}
           >
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(layer.properties.run_date).toLocaleString() }
+              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { layer.properties.run_date }
             </Typography>
             <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
               Cycle { layer.properties.cycle }
