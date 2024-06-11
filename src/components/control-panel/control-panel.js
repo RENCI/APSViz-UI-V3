@@ -56,6 +56,10 @@ export const ControlPanel = () => {
   const [ eventType, setEventType] = React.useState("");
   const [ topLayers, setTopLayers ] = React.useState([]);
 
+  const ll = layers.map((layer, idx) => {
+    console.log(layer);
+    console.log(idx);
+  })
   // when cycle buttons are pushed on the control panel
   // either the previous or next cycle of the displayed 
   // adcirc model run will be displayed on the map
@@ -73,11 +77,13 @@ export const ControlPanel = () => {
     if (['obs', currentLayerSelection].includes(product_type)) {
       return ({
         visible: true,
+        opacity: 1,
       });
     }
   
     return ({
       visible: false,
+      opacity: 1,
     });
   };
 
@@ -110,10 +116,10 @@ export const ControlPanel = () => {
 
     if (isError) {
         alert(error);
-    } else {}
+    } else {
         // add data returned to default layers, if they are not already there.
         parseAndAddLayers(data);
-
+    }
     return(data);
   };
   useQuery( {queryKey: ['apsviz-data', filters], queryFn: setNewLayers, enabled: !!filters});
@@ -132,17 +138,19 @@ export const ControlPanel = () => {
   };
 
   // set initial values for the current display layers
+  // also need to handle layers added or deleted outside
+  // of the control panel
   useEffect(() => {
     if ((layers[0]) && (!initialDataFetched)) {
-        setInstanceName(layers[0].properties.instance_name);
-        setMetClass(layers[0].properties.met_class);
-        setEventType(layers[0].properties.event_type);
-        setRunAdvisory(layers[0].properties.advisory_number);
-        setRunCycle(parseInt(layers[0].properties.cycle));
-        setRunDate(layers[0].properties.run_date);
-        setInitialDataFetched(true);
-        setTopLayers([...defaultModelLayers]);
-     }
+      setInstanceName(layers[0].properties.instance_name);
+      setMetClass(layers[0].properties.met_class);
+      setEventType(layers[0].properties.event_type);
+      setRunAdvisory(layers[0].properties.advisory_number);
+      setRunCycle(parseInt(layers[0].properties.cycle));
+      setRunDate(layers[0].properties.run_date);
+      setInitialDataFetched(true);
+      setTopLayers([...defaultModelLayers]);
+    }
 
   }, [layers]);
 
