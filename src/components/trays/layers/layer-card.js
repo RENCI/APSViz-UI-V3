@@ -53,7 +53,7 @@ export const LayerCard = ({ index, layer }) => {
           borderLeftColor: isVisible
             ? `primary.plainColor`
             : `primary.plainDisabledColor`,
-          '.action-button': { filter: 'opacity(0.1)', transition: 'filter 250ms' },
+          '.action-button': { filter: 'opacity(0.5)', transition: 'filter 250ms' },
           '&:hover .action-button': { filter: 'opacity(0.5)' },
           '& .action-button:hover': { filter: 'opacity(1.0)' },
         }}
