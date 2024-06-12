@@ -75,8 +75,8 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
     "react-timeago": "^7.2.0",
-    "react-to-print": "^2.15.1",
-    "recharts": "^2.12.6"
+    "recharts": "^2.12.6",
+    "use-react-screenshot": "^4.0.0"
   },
   "overrides": {
     "json5": "^2.2.2",
