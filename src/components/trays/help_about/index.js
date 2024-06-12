@@ -9,7 +9,7 @@ import { HelpAbout } from "./help_about.js";
 export const icon = <HelpAboutIcon />;
 
 // create a title for this tray element
-export const title = 'ADCIRC Help/About';
+export const title = 'APSViz Help/About';
 
 /**
  * render the removal component
