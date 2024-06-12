@@ -81,15 +81,18 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const makeAllRasterLayersInvisible = () => {
-    const newLayers = [];
+  const getAllLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
-    currentLayers.forEach((layer, idx) => {
-        const alteredLayer = currentLayers[idx];
-        alteredLayer.state.visible = false;
-        newLayers.push(alteredLayer);
-    });
-    setDefaultModelLayers([...newLayers]);
+    const alteredLayers = currentLayers
+      .map((layer) => {
+        const opacity = layer.state.opacity;
+        return {
+          ...layer,
+          state: {visible: false, opacity: opacity}
+        };
+      });
+  
+    return alteredLayers;
   };
 
   const swapLayers = (i, j) => {
@@ -142,6 +145,7 @@ export const LayersProvider = ({ children }) => {
         setHurricaneTrackLayers,
         toggleHurricaneLayerVisibility,
         toggleLayerVisibility,
+        getAllLayersInvisible,
         selectedObservations,
         setSelectedObservations,
         swapLayers,
@@ -149,7 +153,6 @@ export const LayersProvider = ({ children }) => {
         layerTypes,
         baseMap,
         setBaseMap,
-        makeAllRasterLayersInvisible,
         setLayerOpacity,
       }}
     >
