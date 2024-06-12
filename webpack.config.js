@@ -104,7 +104,8 @@ module.exports = {
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
       '@model-selection': path.resolve(__dirname, 'src/components/trays/model-selection'),
-      '@utils': path.resolve(__dirname, 'src/utils/'),
+      '@share': path.resolve(__dirname, 'src/components/share'),
+      '@utils': path.resolve(__dirname, 'src/utils/')
     }
   },
 
