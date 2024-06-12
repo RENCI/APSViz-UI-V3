@@ -115,22 +115,42 @@ export const ControlPanel = () => {
 
     // first see if this set of layers already exists in default layers
     if (d.catalog[0].members && defaultModelLayers.find(layer => layer.id === d.catalog[0].members[0].id)) {
-        console.log("already have this one");
-        // TODO: have to turn off all layers and move these
-        // to the top of the list
+      // get all layers in defaultModelLayers that match
+      // the new catalog member layers
+      const tLayers = defaultModelLayers.filter(t =>
+        d.catalog[0].members.some(member => member.id === t.id)
+      );
+
+      // now get get layers in defaultModelLayers that
+      // remain after new catalog member layers are removed
+      const rLayers = defaultModelLayers.filter(r =>
+        !d.catalog[0].members.some(member => member.id === r.id)
+      );
+
+      // set default state for new layers going on top.
+      tLayers.forEach(r => {
+          r.state = newLayerDefaultState(r);
+      });
+      // all remaining layers should be turned off
+      rLayers.forEach(r => {
+        r.state = { visible: false, opacity: 1, };
+      });
+
+      // now repopulate defaultModelLayers with memberlayers on top
+      setDefaultModelLayers([...tLayers, ...rLayers]);
     }
     // if not, add these layers to default layers
     else {
-        // add visibity state property to retrieved catalog layers
-        const newLayers = [];
-        d.catalog[0].members.forEach((layer) => {
-          newLayers.push({
-                ...layer,
-                state: newLayerDefaultState(layer)
-            });
-        });
-        const currentLayers = getAllLayersInvisible();
-        setDefaultModelLayers([...newLayers, ...currentLayers]);
+      const currentLayers = getAllLayersInvisible();
+      // add visibity state property to retrieved catalog layers
+      const newLayers = [];
+      d.catalog[0].members.forEach((layer) => {
+        newLayers.push({
+              ...layer,
+              state: newLayerDefaultState(layer)
+          });
+      });
+      setDefaultModelLayers([...newLayers, ...currentLayers]);
     }
   };
 
@@ -234,9 +254,9 @@ export const ControlPanel = () => {
     console.log(direction);
   };
 
-  // cycle to the next model run cycle or advisory
-  // and retrieve the layers associated with that
-  // cycle/date or advisory
+  // cycle to the next/previous model run cycle
+  // or advisory and retrieve the layers associated
+  // with that cycle/date or advisory
   const changeModelRunCycle = (e) => {
     const direction = e.currentTarget.getAttribute("button-key");
     metClass === "synoptic" ? changeSynopticCycle(direction) : changeTropicalAdvisory(direction);
