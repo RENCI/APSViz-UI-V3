@@ -1,4 +1,4 @@
-import React, { Fragment, createRef } from 'react';
+import React, { Fragment, useRef } from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { Map } from '@components/map';
 import { ObservationDialog } from "@components/dialog/observation-dialog";
@@ -49,7 +49,7 @@ const Content = () => {
  */
 export const App = () => {
     // create a reference
-    const ref = createRef(null);
+    const ref = useRef(null);
 
     // render the application
     return (
