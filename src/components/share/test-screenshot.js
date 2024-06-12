@@ -1,4 +1,4 @@
-import React, { createRef, Fragment } from 'react';
+import React, { useRef, Fragment } from 'react';
 import { ScreenShot } from './screenshot.js';
 
 /**
@@ -9,7 +9,7 @@ import { ScreenShot } from './screenshot.js';
  */
 export const TestScreenshot = () => {
     // create a reference
-    const ref = createRef(null);
+    const ref = useRef(null);
 
     // render the test
     return (
