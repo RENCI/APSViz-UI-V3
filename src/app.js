@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, Button } from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { Map } from '@components/map';
 import { ObservationDialog } from "@components/dialog/observation-dialog";
@@ -7,9 +7,11 @@ import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 import { MapLegend } from '@components/legend';
 import { Share } from '@share/share';
-import { ScreenShot } from "@share/screenshot";
+// import { ScreenShot } from "@share/screenshot";
 // TODO: For testing screenshot route ->
 // import {TestScreenshot} from "@share/test-screenshot";
+
+import exportAsImage from '@utils/exportAsImage';
 
 /**
  * renders the main content
@@ -19,9 +21,7 @@ import { ScreenShot } from "@share/screenshot";
  */
 const Content = () => {
     // install the selected observation list from the layer context
-    const {
-        selectedObservations
-    } = useLayers();
+    const { selectedObservations } = useLayers();
 
     // render all the application content
     return (
@@ -54,16 +54,18 @@ export const App = () => {
     // render the application
     return (
         <Fragment>
-        <ScreenShot ref={ref}/>
-        <div ref={ref}>
+        {/*<ScreenShot ref={ref}/>*/}
+        {/*<div ref={ref}>*/}
+        {/*<Button onClick={() => exportAsImage(ref.current, "test")}> Capture Image </Button>*/}
+        {/*</div>            */}
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={ <Content/> } />
                     <Route path="/share" element={ <Share/> } />
-                    {/*<Route path="/testscreenshot" element={ <TestScreenshot/> } />*/}
+                    {/*TODO: <Route path="/testscreenshot" element={ <TestScreenshot/> } />*/}
                 </Routes>
             </BrowserRouter>
-        </div>
+
         </Fragment>
     );
 };
