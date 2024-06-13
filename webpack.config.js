@@ -99,12 +99,12 @@ module.exports = {
       '@components': path.resolve(__dirname, 'src/components/'),
       '@content': path.resolve(__dirname, 'src/content/'),
       '@context': path.resolve(__dirname, 'src/context/'),
-      '@dialog': path.resolve(__dirname, 'src/components/dialog'),
+      '@dialog': path.resolve(__dirname, 'src/components/dialog/'),
       '@help-about': path.resolve(__dirname, 'src/components/trays/help-about/'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
-      '@model-selection': path.resolve(__dirname, 'src/components/trays/model-selection'),
-      '@share': path.resolve(__dirname, 'src/components/share'),
+      '@model-selection': path.resolve(__dirname, 'src/components/trays/model-selection/'),
+      '@share': path.resolve(__dirname, 'src/components/share/'),
       '@utils': path.resolve(__dirname, 'src/utils/')
     }
   },
