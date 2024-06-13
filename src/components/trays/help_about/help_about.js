@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { HelpAboutTray } from "@help-about/helpAboutTray.js";
+import { HelpAboutTray } from "./helpAboutTray.js";
 
 /**
  * component that renders the help/about tray.
