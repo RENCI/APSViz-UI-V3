@@ -100,7 +100,7 @@ module.exports = {
       '@content': path.resolve(__dirname, 'src/content/'),
       '@context': path.resolve(__dirname, 'src/context/'),
       '@dialog': path.resolve(__dirname, 'src/components/dialog'),
-      '@help-about': path.resolve(__dirname, 'src/components/help-about/'),
+      '@help-about': path.resolve(__dirname, 'src/components/trays/help-about/'),
       '@hooks': path.resolve(__dirname, 'src/hooks/'),
       '@images': path.resolve(__dirname, 'src/images/'),
       '@model-selection': path.resolve(__dirname, 'src/components/trays/model-selection'),
