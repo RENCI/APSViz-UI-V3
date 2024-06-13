@@ -50,7 +50,6 @@ export const App = () => {
                 <Routes>
                     <Route path="/" element={ <Content/> } />
                     <Route path="/share" element={ <Share/> } />
-                    {/*TODO: <Route path="/testscreenshot" element={ <TestScreenshot/> } />*/}
                 </Routes>
             </BrowserRouter>
         </Fragment>
