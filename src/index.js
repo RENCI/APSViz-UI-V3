@@ -1,4 +1,4 @@
-import React, { useRef, Button, Fragment } from 'react';
+import React, { useRef, Fragment } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app';
 import { LayersProvider, SettingsProvider } from '@context';
@@ -15,6 +15,7 @@ import {
 import './index.css';
 import '@fontsource/inter';
 import theme from './theme';
+import { ScreenShot } from "@share/screenshot";
 
 const queryClient = new QueryClient();
 
@@ -29,19 +30,28 @@ const materialTheme = materialExtendTheme();
 
 // render the app specifying the material and joy providers
 const ProvisionedApp = () => {
+    // init a reference to use for the screenshot
+    const screenRef= useRef();
+
+    // render the app
     return (
-        <QueryClientProvider client={ queryClient }>
-            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-                <JoyCssVarsProvider theme={ theme }>
-                    <CssBaseline enableColorScheme />
-                    <SettingsProvider>
-                        <LayersProvider>
-                            <App />
-                        </LayersProvider>
-                    </SettingsProvider>
-                </JoyCssVarsProvider>
-            </MaterialCssVarsProvider>
-        </QueryClientProvider>
+        <Fragment>
+            <div ref={screenRef}>
+                <ScreenShot ref={screenRef}/>
+                <QueryClientProvider client={ queryClient }>
+                    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                        <JoyCssVarsProvider theme={ theme }>
+                            <CssBaseline enableColorScheme />
+                            <SettingsProvider>
+                                <LayersProvider>
+                                    <App />
+                                </LayersProvider>
+                            </SettingsProvider>
+                        </JoyCssVarsProvider>
+                    </MaterialCssVarsProvider>
+                </QueryClientProvider>
+            </div>
+        </Fragment>
     );
 };
 
