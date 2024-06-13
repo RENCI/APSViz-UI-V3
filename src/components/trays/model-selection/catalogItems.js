@@ -190,7 +190,8 @@ export default function CatalogItems(data) {
                                                                 stormOrModelName + mbr['properties'][stormOrModelEle].toUpperCase() + ', ' +
                                                                 numberName + mbr['properties'][numberEle] +
                                                                 ', Type: ' + mbr['properties']['event_type'] +
-                                                                ', Grid: ' + mbr['properties']['grid_type']
+                                                                ', Grid: ' + mbr['properties']['grid_type'] +
+                                                                ', ' +  mbr['properties']['meteorological_model']
                                                             }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
