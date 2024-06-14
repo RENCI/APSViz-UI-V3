@@ -19,7 +19,7 @@ export const Screenshot = forwardRef((props, ref) => {
     });
 
     // create the imaginary link to download the image
-    const download = (image, { name = "img", extension = "jpg" } = {}) => {
+    const download = (image, { name = "sreencap-" + new Date().toISOString(), extension = "jpg" } = {}) => {
         // create a target element
         const a = document.createElement("a");
 
