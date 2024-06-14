@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack } from '@mui/joy';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import {ScreenShot} from './screen_shot';
+import {Screenshot} from './screenshot';
 import {screenRef} from '../../../index';
 
 // get an icon for the tray
@@ -17,6 +17,6 @@ export const title = 'Screen shot';
  */
 export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>
-          <ScreenShot ref={screenRef}/>
+          <Screenshot ref={screenRef}/>
       </Stack>
     );

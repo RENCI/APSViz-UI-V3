@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {screenRef} from "../../../index";
-import {ScreenShot} from "@components/trays/screen-shot/screen_shot";
+import {Screenshot} from "./screenshot";
 
 /**
  * This component renders the model selection tray
@@ -12,7 +12,7 @@ export const ScreenShotTray = () => {
     // render the form
     return (
         <Fragment>
-            <ScreenShot ref={ screenRef }/>
+            <Screenshot ref={ screenRef }/>
         </Fragment>
     );
 };
