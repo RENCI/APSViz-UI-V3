@@ -12,7 +12,6 @@ export const HelpAboutTray = () => {
 
     // render the form
     return (
-
         <Fragment>
             <Stack gap={ 3 }>
                 <AccordionGroup sx={{size: "sm", variant: "soft"}}>
