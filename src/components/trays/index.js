@@ -3,7 +3,8 @@ import * as layers from './layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';
 import * as settings from './settings';
-import * as help_about from './help_about';
+import * as help_about from './help-about';
+import * as screen_shot from './screen-shot';
 
 export default {
   layers,
@@ -11,7 +12,8 @@ export default {
   model_selection,
   remove_items,
   settings,
-  help_about
+  help_about,
+  screen_shot
 };
 
 /*
