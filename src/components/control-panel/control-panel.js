@@ -25,6 +25,9 @@ import {
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
+import { screenRef } from "../../index";
+import { Screenshot } from "@screen-shot/screenshot";
+
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
   maxwvel63: <MaxWindVelocityIcon />,
@@ -32,6 +35,7 @@ const layerIcons = {
   maxinundepth63: <MaxInundationIcon />,
   maxele_level_downscaled_epsg4326: <HIResMaxElevationIcon />,
 };
+
 
 export const ControlPanel = () => {
 
@@ -374,7 +378,11 @@ export const ControlPanel = () => {
                 </IconButton>
               ))
           }
+          {
+            <Screenshot ref={ screenRef }/>
+          }
         </ToggleButtonGroup>
+
       </Stack>
       </AccordionDetails>
     </Accordion>
