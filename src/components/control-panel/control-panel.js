@@ -377,11 +377,7 @@ export const ControlPanel = () => {
                 </IconButton>
               ))
           }
-          {
-            <Screenshot />
-          }
-        </ToggleButtonGroup>
-
+</ToggleButtonGroup>
       </Stack>
       </AccordionDetails>
     </Accordion>
