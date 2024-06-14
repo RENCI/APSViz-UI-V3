@@ -32,26 +32,24 @@ export let screenRef = null;
 
 // render the app specifying the material and joy providers
 const ProvisionedApp = () => {
-    // init a reference to use for the screenshot
-    screenRef = useRef();
+    // init a reference to use for the screenshot functionality
+    screenRef = useRef(container);
 
     // render the app
     return (
         <Fragment>
-            <div ref={screenRef}>
-                <QueryClientProvider client={ queryClient }>
-                    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-                        <JoyCssVarsProvider theme={ theme }>
-                            <CssBaseline enableColorScheme />
-                            <SettingsProvider>
-                                <LayersProvider>
-                                    <App />
-                                </LayersProvider>
-                            </SettingsProvider>
-                        </JoyCssVarsProvider>
-                    </MaterialCssVarsProvider>
-                </QueryClientProvider>
-            </div>
+            <QueryClientProvider client={ queryClient }>
+                <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                    <JoyCssVarsProvider theme={ theme }>
+                        <CssBaseline enableColorScheme />
+                        <SettingsProvider>
+                            <LayersProvider>
+                                <App />
+                            </LayersProvider>
+                        </SettingsProvider>
+                    </JoyCssVarsProvider>
+                </MaterialCssVarsProvider>
+            </QueryClientProvider>
         </Fragment>
     );
 };
