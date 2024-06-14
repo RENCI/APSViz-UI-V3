@@ -34,7 +34,7 @@ export const Screenshot = () => {
     };
 
     // click handler to initiate the image download
-    const downloadScreenshot = () => takeScreenShot(document.getElementById('root')).then(download);
+    const downloadScreenshot = () => takeScreenShot(document.body).then(download);
 
     // render the button to download the image
     return (
