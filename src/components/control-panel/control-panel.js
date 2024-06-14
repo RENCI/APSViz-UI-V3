@@ -25,7 +25,6 @@ import {
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 
-import { screenRef } from "../../index";
 import { Screenshot } from "@screen-shot/screenshot";
 
 const layerIcons = {
@@ -379,7 +378,7 @@ export const ControlPanel = () => {
               ))
           }
           {
-            <Screenshot ref={ screenRef }/>
+            <Screenshot />
           }
         </ToggleButtonGroup>
 

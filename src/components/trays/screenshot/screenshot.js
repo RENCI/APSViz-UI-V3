@@ -1,4 +1,4 @@
-import React, { forwardRef, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useScreenshot, createFileName } from 'use-react-screenshot';
 import { IconButton } from '@mui/joy';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -10,7 +10,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
  * @returns {JSX.Element}
  * @constructor
  */
-export const Screenshot = forwardRef((props, ref) => {
+export const Screenshot = () => {
     // create the screenshot component
     // eslint-disable-next-line no-unused-vars
     const [image, takeScreenShot] = useScreenshot({
@@ -34,7 +34,7 @@ export const Screenshot = forwardRef((props, ref) => {
     };
 
     // click handler to initiate the image download
-    const downloadScreenshot = () => takeScreenShot(ref.current).then(download);
+    const downloadScreenshot = () => takeScreenShot(document.getElementById('root')).then(download);
 
     // render the button to download the image
     return (
@@ -44,4 +44,4 @@ export const Screenshot = forwardRef((props, ref) => {
             </IconButton>
         </Fragment>
     );
-});
+};

@@ -1,4 +1,4 @@
-import React, { useRef, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app';
 import { LayersProvider, SettingsProvider } from '@context';
@@ -27,14 +27,8 @@ const root = createRoot(container);
 // create a new material theme. this is so it can be differentiated from the joy theme
 const materialTheme = materialExtendTheme();
 
-// init a reference to use for the screenshot
-export let screenRef = null;
-
 // render the app specifying the material and joy providers
 const ProvisionedApp = () => {
-    // init a reference to use for the screenshot functionality
-    screenRef = useRef(container);
-
     // render the app
     return (
         <Fragment>
