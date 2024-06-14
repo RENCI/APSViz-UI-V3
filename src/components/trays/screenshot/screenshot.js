@@ -1,6 +1,7 @@
 import React, { forwardRef, Fragment } from 'react';
 import { useScreenshot, createFileName } from 'use-react-screenshot';
-import { Button } from '@mui/joy';
+import { IconButton } from '@mui/joy';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 /**
  * creates a screenshot of the app surface. this method expects a
@@ -9,7 +10,7 @@ import { Button } from '@mui/joy';
  * @returns {JSX.Element}
  * @constructor
  */
-export const ScreenShot = forwardRef((props, ref) => {
+export const Screenshot = forwardRef((props, ref) => {
     // create the screenshot component
     // eslint-disable-next-line no-unused-vars
     const [image, takeScreenShot] = useScreenshot({
@@ -38,7 +39,9 @@ export const ScreenShot = forwardRef((props, ref) => {
     // render the button to download the image
     return (
         <Fragment>
-            <Button onClick={downloadScreenshot}>Download a screenshot</Button>
+            <IconButton sx={{marginLeft: 10}} onClick={downloadScreenshot}>
+                <AddAPhotoIcon />
+            </IconButton>
         </Fragment>
     );
 });
