@@ -32,6 +32,7 @@ const Content = () => {
             <Sidebar />
             <ControlPanel/>
             <MapLegend />
+            <Share />
         </Fragment>
     );
 };
