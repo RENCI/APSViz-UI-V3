@@ -3,11 +3,13 @@ import { IconButton } from '@mui/joy';
 import * as htmlToImage from "html-to-image";
 import AddAPhotoRoundedIcon from '@mui/icons-material/AddAPhotoRounded';
 
-
-
 /**
  * creates a screenshot of the app surface. this method expects a
  * reference to the parent view that will be turned into an image.
+ * usage:
+ *
+ * import { Screenshot } from "@screen-shot/screenshot";
+ *     <Screenshot />
  *
  * @returns {JSX.Element}
  * @constructor
@@ -68,7 +70,7 @@ export const Screenshot = () => {
     return (
         <Fragment>
             <IconButton sx={{ marginLeft: 2 }} onClick={ downloadScreenshot }>
-                <AddAPhotoRoundedIcon />
+                <AddAPhotoRoundedIcon  color={'primary'} />
             </IconButton>
         </Fragment>
     );

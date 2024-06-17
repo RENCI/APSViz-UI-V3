@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Card, Stack } from '@mui/joy';
+import { BuildLink } from './buildlink';
+import { Screenshot } from './screenshot';
 
 /**
  * renders the shared content on the app as defined in the query string
@@ -8,12 +10,35 @@ import { useSearchParams } from 'react-router-dom';
  * @constructor
  */
 export const Share = () => {
-    // get the query string
-    const [searchParams] = useSearchParams();
-
     return (
         <Fragment>
-            <div>Sharing. params: {JSON.stringify(searchParams.get('test'))}</div>
+            <Card
+                sx={{
+                    p: 0,
+                    position: 'absolute',
+                    top: 'calc(4 * var(--joy-spacing))',
+                    right: 150,
+                    transition: 'filter 250ms',
+                    filter: 'opacity(0.9)',
+                    '&:hover': { filter: 'opacity(1.0)' },
+                    height: 50,
+                    width: 125,
+                    padding: '0px',
+                    zIndex: 999,
+                    borderRadius: 'sm'
+              }}>
+                <Stack
+                    sx={{
+                        p: 0,
+                        m: 0,
+                        height: '100%'}}
+                        direction="row"
+                        //gap={ 1 }
+                    alignItems="center">
+                    <BuildLink />
+                    <Screenshot />
+                </Stack>
+            </Card>
         </Fragment>
     );
 };
