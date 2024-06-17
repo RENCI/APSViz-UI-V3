@@ -37,17 +37,23 @@ export const BuildLink = () => {
             // tell the user what just happened
             alert('The share link has been copied to the clipboard.');
         }
+        // no layers were selected on the map
         else
-            // no layers were selected on the map
             alert('There were no layers selected.');
     };
 
-    // async function to copy the share link to the clipboard
+    /**
+     *  async function to copy the share link to the clipboard
+     *
+     * @param text
+     * @returns {Promise<void>}
+     */
     async function copyTextToClipboard(text) {
         // wait for the copy to complete
         return await navigator.clipboard.writeText(text);
     }
 
+    // render the button
     return (
         <Fragment>
             <IconButton sx={{ marginLeft: 2 }} onClick={ createLink }>
