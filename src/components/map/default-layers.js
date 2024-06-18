@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { markClicked } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
@@ -30,14 +32,6 @@ export const DefaultLayers = () => {
         setDefaultModelLayers,
         setSelectedObservations
     } = useLayers();
-
-    // Create the authorization header
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_UI_DATA_TOKEN}`
-        }
-    };
 
     const obsPointToLayer = ((feature, latlng) => {
         let obs_color = "#FFFFFF";
@@ -98,46 +92,49 @@ export const DefaultLayers = () => {
     const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
     const gs_wfs_url = `${process.env.REACT_APP_GS_DATA_URL}`;
 
-    useEffect(() => {
-        // React advises to declare the async function directly inside useEffect
-        // TODO: Need to store this url in some website config file and
-        //       it should change to reflect the namspace we are running in
-        async function getDefaultLayers() {
-            const layer_list = [];
-            const response = await fetch(data_url, requestOptions);
-            const data = await response.json();
-          
-            if (data) {
-              // get layer id in workbench and find catalog entries for each
-              data.workbench.forEach(function (layer_id) {
+    // retrieve the catalog member with the provided id
+    const getCatalogEntry = (catalog, id)  => {
+        let entry = "";
+        
+        for (const idx in catalog) {
+            catalog[idx].members.forEach (function (e) {
+            if (e.id === id) {
+                entry = e;
+            }
+            });
+        }
+        return entry;
+    };
+
+    // useQuery function
+    const getDefaultLayers = async() => {
+        const layer_list = [];
+        // create the authorization header
+        const requestOptions = {
+            method: 'GET',
+            headers: {Authorization: `Bearer ${process.env.REACT_APP_UI_DATA_TOKEN}`}
+        };
+
+        // make the call to get the data
+        const {data} = await axios.get(data_url, requestOptions);
+
+        if (data) {
+            // get layer id in workbench and find catalog entries for each
+            data.workbench.forEach(function (layer_id) {
                 const layer = getCatalogEntry(data.catalog, layer_id);
                 if (layer)
                     layer_list.push({
                         ...layer,
                         state: newLayerDefaultState(layer)
                     });
-              });
-
-              setDefaultModelLayers(layer_list);
-            }
+            });
+            setDefaultModelLayers(layer_list);
         }
+        return(data);
+    };
+    useQuery( {queryKey: ['apsviz-default-data', data_url], queryFn: getDefaultLayers, enable: !!data_url});
 
-        // retrieve the catalog member with the provided id
-        const getCatalogEntry = (catalog, id)  => {
-            let entry = "";
-            
-            for (const idx in catalog) {
-                catalog[idx].members.forEach (function (e) {
-                if (e.id === id) {
-                    entry = e;
-                }
-                });
-            }
-            return entry;
-        };
-        getDefaultLayers().then();
-      }, []);
-
+    // maybe should convert this one to use useQuery - not sure how to do that yet
     useEffect(() => {
         async function getObsGeoJsonData() {
             const obsLayer = defaultModelLayers.find((layer) => layer.properties.product_type === "obs"  && layer.state.visible);
@@ -146,9 +143,8 @@ export const DefaultLayers = () => {
                                 "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
                                 "&typeName=" +
                                 obsLayer.layers;
-                const obs_response = await fetch(obs_url);
-                const obs_data = await obs_response.json();
-                setObsData(obs_data);
+                const {data} = await axios.get(obs_url);
+                setObsData(data);
             }
         }
         getObsGeoJsonData().then();
