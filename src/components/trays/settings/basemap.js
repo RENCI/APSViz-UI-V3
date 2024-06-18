@@ -94,7 +94,7 @@ export function BaseMaps() {
                 [`& .${radioClasses.radio}`]: {
                 display: 'contents',
                 '& > svg': {
-                    zIndex: 2,
+                    zIndex: 1,
                     position: 'absolute',
                     top: '-8px',
                     right: '-8px',
