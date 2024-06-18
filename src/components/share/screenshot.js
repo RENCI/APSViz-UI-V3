@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { IconButton } from '@mui/joy';
-import * as htmlToImage from "html-to-image";
 import AddAPhotoRoundedIcon from '@mui/icons-material/AddAPhotoRounded';
+import { toJpeg } from 'html-to-image'; // toPng, toBlob, toPixelData, toSvg
 
 /**
  * creates a screenshot of the app surface. this method expects a
@@ -15,7 +15,6 @@ import AddAPhotoRoundedIcon from '@mui/icons-material/AddAPhotoRounded';
  * @constructor
  */
 export const Screenshot = () => {
-
     /**
      * Creates a filename for the download target
      *
@@ -24,10 +23,12 @@ export const Screenshot = () => {
      * @returns {string}
      */
     const createFileName = (extension = "", ...names) => {
+        // no file extension will result in no file name returned
         if (!extension) {
             return "";
         }
 
+        // return the filename
         return `${names.join("")}.${extension}`;
     };
 
@@ -39,7 +40,7 @@ export const Screenshot = () => {
      */
     const takeScreenShot = async (node) => {
         // return the rendering
-        return await htmlToImage.toJpeg(node);
+        return await toJpeg(node);
     };
 
     /**
