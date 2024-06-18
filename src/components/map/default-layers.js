@@ -106,7 +106,6 @@ export const DefaultLayers = () => {
             const layer_list = [];
             const response = await fetch(data_url, requestOptions);
             const data = await response.json();
-            let obs_url = null;
           
             if (data) {
               // get layer id in workbench and find catalog entries for each
@@ -117,28 +116,10 @@ export const DefaultLayers = () => {
                         ...layer,
                         state: newLayerDefaultState(layer)
                     });
-
-                    // if this is an obs layer, need to retrieve
-                    // the json data for it from GeoServer
-                    const pieces = layer.id.split('-');
-                    const type = pieces[pieces.length-1];
-                    if( type === "obs") {
-                        obs_url = gs_wfs_url +
-                            "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
-                            "&typeName=" +
-                        layer.layers;
-                    }
               });
+
               setDefaultModelLayers(layer_list);
             }
-
-            if (obs_url) {
-                const obs_response = await fetch(obs_url);
-                const obs_data = await obs_response.json();
-
-                setObsData(obs_data);
-            }
-
         }
 
         // retrieve the catalog member with the provided id
@@ -156,6 +137,22 @@ export const DefaultLayers = () => {
         };
         getDefaultLayers().then();
       }, []);
+
+    useEffect(() => {
+        async function getObsGeoJsonData() {
+            const obsLayer = defaultModelLayers.find((layer) => layer.properties.product_type === "obs"  && layer.state.visible);
+            if (obsLayer) {
+                const obs_url = gs_wfs_url +
+                                "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
+                                "&typeName=" +
+                                obsLayer.layers;
+                const obs_response = await fetch(obs_url);
+                const obs_data = await obs_response.json();
+                setObsData(obs_data);
+            }
+        }
+        getObsGeoJsonData().then();
+    }, [defaultModelLayers]); 
 
     // memorizing this params object prevents
     // that map flicker on state changes.
@@ -176,7 +173,7 @@ export const DefaultLayers = () => {
                 if (type === "obs" && obsData !== "") {
                     return (
                         <GeoJSON
-                            key={`${index}-${layer.id}`}
+                            key={Math.random() + index}
                             data={obsData}
                             pointToLayer={obsPointToLayer}
                             onEachFeature={onEachObsFeature}
