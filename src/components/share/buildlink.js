@@ -32,7 +32,7 @@ export const BuildLink = () => {
         // check to see if there was one or more groups selected
         if (groups !== '') {
             // copy the link to the cut/paste buffer
-            copyTextToClipboard(window.location.href + 'share?groups=' + groups).then();
+            copyTextToClipboard(window.location.href + '#share=' + groups).then();
 
             // tell the user what just happened
             alert('The share link has been copied to the clipboard.');
