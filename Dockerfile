@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: BSD 3-Clause
 # build phase one, create the build
-FROM node:20-alpine as build
+FROM node:20-bullseye-slim as build
 
 # get some credit
 LABEL maintainer="powen@renci.org"
