@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Map } from '@components/map';
 import { ObservationDialog } from "@components/dialog/observation-dialog";
 import { useLayers } from '@context';
@@ -50,8 +50,7 @@ export const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={ <Content/> } />
-                    <Route path="/share" element={ <Share/> } />
-                </Routes>
+               </Routes>
             </BrowserRouter>
         </Fragment>
     );
