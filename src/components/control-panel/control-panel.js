@@ -185,21 +185,22 @@ export const ControlPanel = () => {
   // switch to the model run layer selected via icon button
   const layerChange = async (event, newValue) => {
 
-    currentLayerSelection = newValue;
      // turn off the old
-     layers.map(layer => {
-        if (layer.layers.includes(currentLayerSelection)) {
-            toggleLayerVisibility(layer.id);
-        }
+    layers.map(layer => {
+      if (layer.layers.includes(currentLayerSelection)) {
+          toggleLayerVisibility(layer.id);
+      }
     }); 
+  
     // Yikes! need another way to do this - but it works for now
     await new Promise(r => setTimeout(r, 1));
     // turn on the new
     layers.map(layer => {
-        if (layer.layers.includes(newValue)) {
-            toggleLayerVisibility(layer.id);
-        }
+      if (layer.layers.includes(newValue)) {
+          toggleLayerVisibility(layer.id);
+      }
     });
+    currentLayerSelection = newValue;
   };
 
   // switch on/off the observation layer if it exists
