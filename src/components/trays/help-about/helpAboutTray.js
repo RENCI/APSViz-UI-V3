@@ -9,6 +9,7 @@ import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, T
 export const HelpAboutTray = () => {
     // used to collapse other open accordions
     const [index, setIndex] = React.useState(0);
+    const [subIndex, setSubIndex] = React.useState(0);
 
     // render the form
     return (
@@ -37,6 +38,63 @@ export const HelpAboutTray = () => {
                         <Accordion expanded={index === 3} onChange={(event, expanded) => { setIndex(expanded ? 3 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">What FAQs should we put in here?</Typography> </AccordionSummary>
                             <AccordionDetails> What sort of things should we be putting in the FAQs? Below are some examples... </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion expanded={index === 4} onChange={(event, expanded) => { setIndex(expanded ? 4 : null); }}>
+                            <AccordionSummary> <Typography level="title-lg">How do I capture a screenshot ?</Typography> </AccordionSummary>
+                            <AccordionDetails>
+                                <AccordionGroup>
+                                    <Accordion  expanded={subIndex === 0} onChange={(event, expanded) => { setSubIndex(expanded ? 0 : null); }}>
+                                        <AccordionSummary>Edge</AccordionSummary>
+                                            <AccordionDetails>
+                                                    <ul>
+                                                        <li>Right click the browser surface that appears.</li>
+                                                        <li>Select `Screenshot` from the context menu.</li>
+                                                        <li>At the top of the browser you can select to capture a portion of the browser or the entire browser surface.</li>
+                                                        <li>A dialog of the screenshot will appear where you can save it to the Downloads folder or the cut/paste buffer. </li>
+                                                    </ul>
+                                            </AccordionDetails>
+                                    </Accordion>
+
+                                    <Accordion  expanded={subIndex === 1} onChange={(event, expanded) => { setSubIndex(expanded ? 1 : null); }}>
+                                        <AccordionSummary>Firefox</AccordionSummary>
+                                            <AccordionDetails>
+                                                <ul>
+                                                    <li>Right click the browser surface</li>
+                                                    <li>Select `Take screenshot` from the context menu that appears</li>
+                                                    <li>At the top of the browser you can select to capture the visible portion of the browser or the entire browser surface.</li>
+                                                    <li>A dialog of the screenshot will appear where you can save it to the Downloads folder or the cut/paste buffer.</li>
+                                                </ul>
+                                            </AccordionDetails>
+                                    </Accordion>
+
+                                    <Accordion  expanded={subIndex === 2} onChange={(event, expanded) => { setSubIndex(expanded ? 2 : null); }}>
+                                        <AccordionSummary>Chrome</AccordionSummary>
+                                            <AccordionDetails>
+                                                <ul>
+                                                    <li>Install and activate the Chrome Full Page Screen Capture browser extension.</li>
+                                                    <li>A small camera icon will appear in the top right corner of the browser.</li>
+                                                    <li>Click the camera icon.</li>
+                                                    <li>Click the “download image” icon and the image will be saved to the Downloads folder.</li>
+                                                </ul>
+                                            </AccordionDetails>
+                                    </Accordion>
+
+                                    <Accordion  expanded={subIndex === 3} onChange={(event, expanded) => { setSubIndex(expanded ? 3 : null); }}>
+                                        <AccordionSummary>Safari</AccordionSummary>
+                                            <AccordionDetails>
+                                                <ul>
+                                                    <li>Install and activate Awesome Screenshot</li>
+                                                    <li>Navigate to the target page in Safari</li>
+                                                    <li>Click the Awesome Screenshot icon (looks like a tiny camera lens) to the left of the Safari address bar</li>
+                                                    <li>Click “Capture entire page.” An image opens in a new tab.</li>
+                                                    <li>Click the “Done” button.</li>
+                                                    <li>Follow the directions to save the file.</li>
+                                                </ul>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </AccordionGroup>
+                            </AccordionDetails>
                         </Accordion>
 
                         <Accordion expanded={index === 4} onChange={(event, expanded) => { setIndex(expanded ? 4 : null); }}>
