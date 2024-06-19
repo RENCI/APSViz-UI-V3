@@ -56,7 +56,7 @@ export const BuildLink = () => {
     // render the button
     return (
         <Fragment>
-            <IconButton sx={{ marginLeft: 2 }} onClick={ createLink }>
+            <IconButton onClick={ createLink }>Share&nbsp;
                 <ShareRoundedIcon color={'primary'} />
             </IconButton>
         </Fragment>
