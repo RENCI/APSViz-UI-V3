@@ -2,10 +2,19 @@
 #
 # SPDX-License-Identifier: BSD 3-Clause
 # build phase one, create the build
-FROM node:20-alpine3.17 as build
+FROM node:20-alpine3.19 as build
 
 # get some credit
 LABEL maintainer="powen@renci.org"
+
+RUN apk update
+
+RUN apk add --upgrade apk-tools
+
+RUN apk upgrade --available
+
+# update the image
+#apk upgrade --no-cache
 
 # Create and set the working directory
 RUN mkdir /src
@@ -47,10 +56,10 @@ COPY . /src
 # Build the app
 RUN npm run build
 
-###################
-# startup the nginx server
-###################
-FROM nginxinc/nginx-unprivileged
+####################
+## startup the nginx server
+####################
+FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine3.19
 
 # get the source files for the site in the right place
 COPY --from=build /src/dist /usr/share/nginx/html
