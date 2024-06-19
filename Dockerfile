@@ -7,10 +7,9 @@ FROM node:20-alpine3.19 as build
 # get some credit
 LABEL maintainer="powen@renci.org"
 
+# update the base image
 RUN apk update
-
 RUN apk add --upgrade apk-tools
-
 RUN apk upgrade --available
 
 # update the image
