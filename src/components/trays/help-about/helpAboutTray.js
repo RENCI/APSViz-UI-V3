@@ -97,47 +97,47 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 4} onChange={(event, expanded) => { setIndex(expanded ? 4 : null); }}>
+                        <Accordion expanded={index === 5} onChange={(event, expanded) => { setIndex(expanded ? 5 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">What are some features of this application?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 5} onChange={(event, expanded) => { setIndex(expanded ? 5 : null); }}>
+                        <Accordion expanded={index === 6} onChange={(event, expanded) => { setIndex(expanded ? 6 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I add/remove Layers on the map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 6} onChange={(event, expanded) => { setIndex(expanded ? 6 : null); }}>
+                        <Accordion expanded={index === 7} onChange={(event, expanded) => { setIndex(expanded ? 7 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I move through synoptic cycles?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 7} onChange={(event, expanded) => { setIndex(expanded ? 7 : null); }}>
+                        <Accordion expanded={index === 8} onChange={(event, expanded) => { setIndex(expanded ? 8 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">What do the icons on the left mean?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 8} onChange={(event, expanded) => { setIndex(expanded ? 8 : null); }}>
+                        <Accordion expanded={index === 9} onChange={(event, expanded) => { setIndex(expanded ? 9 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">What are some user settings?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 9} onChange={(event, expanded) => { setIndex(expanded ? 9 : null); }}>
+                        <Accordion expanded={index === 10} onChange={(event, expanded) => { setIndex(expanded ? 10 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I change the base map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 10} onChange={(event, expanded) => { setIndex(expanded ? 10 : null); }}>
+                        <Accordion expanded={index === 11} onChange={(event, expanded) => { setIndex(expanded ? 11 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I view observation data?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 11} onChange={(event, expanded) => { setIndex(expanded ? 11 : null); }}>
+                        <Accordion expanded={index === 12} onChange={(event, expanded) => { setIndex(expanded ? 12 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I show/hide layers?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 12} onChange={(event, expanded) => { setIndex(expanded ? 12 : null); }}>
+                        <Accordion expanded={index === 13} onChange={(event, expanded) => { setIndex(expanded ? 13 : null); }}>
                             <AccordionSummary> <Typography level="title-lg">How do I reorder layers on the map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
