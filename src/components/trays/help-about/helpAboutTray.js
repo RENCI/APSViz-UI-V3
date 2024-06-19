@@ -9,7 +9,7 @@ import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, T
 export const HelpAboutTray = () => {
     // used to collapse other open accordions
     const [index, setIndex] = React.useState(0);
-    const [subIndex, setSubIndex] = React.useState(0);
+    const [subIndex, setSubIndex] = React.useState(-1);
 
     // render the form
     return (
@@ -48,8 +48,8 @@ export const HelpAboutTray = () => {
                                         <AccordionSummary>Edge</AccordionSummary>
                                             <AccordionDetails>
                                                     <ul>
-                                                        <li>Right click the browser surface that appears.</li>
-                                                        <li>Select `Screenshot` from the context menu.</li>
+                                                        <li>Right click the browser surface.</li>
+                                                        <li>Select `Screenshot` from the context menu that appears.</li>
                                                         <li>At the top of the browser you can select to capture a portion of the browser or the entire browser surface.</li>
                                                         <li>A dialog of the screenshot will appear where you can save it to the Downloads folder or the cut/paste buffer. </li>
                                                     </ul>
