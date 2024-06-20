@@ -95,6 +95,20 @@ export const LayersProvider = ({ children }) => {
     return alteredLayers;
   };
 
+  const getAllHurricaneLayersInvisible = () => {
+    const currentLayers = [...hurricaneTrackLayers];
+    const alteredLayers = currentLayers
+      .map((layer) => {
+        const opacity = layer.state.opacity;
+        return {
+          ...layer,
+          state: {visible: false, opacity: opacity}
+        };
+      });
+  
+    return alteredLayers;
+  };
+
   const swapLayers = (i, j) => {
     // ensure our pair has i < j
     const [a, b] = [i, j].sort();
@@ -146,6 +160,7 @@ export const LayersProvider = ({ children }) => {
         toggleHurricaneLayerVisibility,
         toggleLayerVisibility,
         getAllLayersInvisible,
+        getAllHurricaneLayersInvisible,
         selectedObservations,
         setSelectedObservations,
         swapLayers,

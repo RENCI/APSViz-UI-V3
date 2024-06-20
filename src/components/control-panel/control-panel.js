@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import axios from 'axios';
 import { useLayers } from '@context/map-context';
 import { useQuery } from '@tanstack/react-query';
@@ -36,6 +36,7 @@ const layerIcons = {
 export const ControlPanel = () => {
 
   const { defaultModelLayers,
+          hurricaneTrackLayers,
           setDefaultModelLayers,
           getAllLayersInvisible,
           toggleLayerVisibility,
@@ -43,6 +44,7 @@ export const ControlPanel = () => {
 
   const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data?limit=1&use_v3_sp=true`;
   const layers = [...defaultModelLayers];
+  const hurrLayers = [...hurricaneTrackLayers];
 
    // keep track of which model run to retrieve
   let runCycle = "";
@@ -51,6 +53,9 @@ export const ControlPanel = () => {
   let instanceName = "";
   let metClass = "";
   let eventType = "";
+  let stormName = "";
+  let runGrid = "";
+  let topRunId = "";
   let currentLayerSelection = "";
   
   // collect the top layers - those are all we are concerned with
@@ -74,6 +79,10 @@ export const ControlPanel = () => {
     instanceName = topLayers[0].properties.instance_name;
     metClass = topLayers[0].properties.met_class;
     eventType = topLayers[0].properties.event_type;
+    runGrid = topLayers[0].properties.grid_type;
+    stormName = topLayers[0].properties.storm_name;
+    topRunId = topLayers[0].id.split("-")[0];
+
     // find the current layer selection
     const selectedLayer = topLayers.find((layer) => layer.properties.product_type !== "obs" && layer.state.visible === true);
     if (selectedLayer) {
@@ -83,8 +92,10 @@ export const ControlPanel = () => {
   const maxele_layer = layers.find((layer) => layer.properties.product_type === "maxele63");
   const obs_layer = layers.find((layer) => layer.properties.product_type === "obs");
 
-  const [checkedHurr, setCheckedHurr] = React.useState(true);
-  const [filters, setFilters] = React.useState();
+  //const [topRunId, setTopRunId] = useState();
+  const [filters, setFilters] = useState();
+
+ // if (topLayers[0]) setTopRunId(topLayers[0].id);
 
   // when cycle buttons are pushed on the control panel
   // either the previous or next cycle of the displayed 
@@ -109,6 +120,10 @@ export const ControlPanel = () => {
       visible: false,
       opacity: 1,
     });
+  };
+
+  const matchNewTropicalRunId = (layer) => {
+    return (layer.id.split("-")[0] === topRunId);
   };
 
   const parseAndAddLayers = (d) => {
@@ -145,10 +160,12 @@ export const ControlPanel = () => {
       // add visibity state property to retrieved catalog layers
       const newLayers = [];
       d.catalog[0].members.forEach((layer) => {
-        newLayers.push({
-              ...layer,
-              state: newLayerDefaultState(layer)
-          });
+        if (matchNewTropicalRunId(layer)) {
+          newLayers.push({
+                ...layer,
+                state: newLayerDefaultState(layer)
+            });
+        }
       });
       setDefaultModelLayers([...newLayers, ...currentLayers]);
     }
@@ -181,12 +198,12 @@ export const ControlPanel = () => {
 
     return new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
   };
-
+  
   // switch to the model run layer selected via icon button
   const layerChange = async (event, newValue) => {
 
-     // turn off the old
-    layers.map(layer => {
+     // turn off the old just check for top instance
+    topLayers.map(layer => {
       if (layer.layers.includes(currentLayerSelection)) {
           toggleLayerVisibility(layer.id);
       }
@@ -195,7 +212,7 @@ export const ControlPanel = () => {
     // Yikes! need another way to do this - but it works for now
     await new Promise(r => setTimeout(r, 1));
     // turn on the new
-    layers.map(layer => {
+    topLayers.map(layer => {
       if (layer.layers.includes(newValue)) {
           toggleLayerVisibility(layer.id);
       }
@@ -209,8 +226,7 @@ export const ControlPanel = () => {
   };
 
   // switch on/off the hurricane track layer, if it exists
-  const toggleHurricaneLayer = (event) => {
-    setCheckedHurr(event.target.checked);
+  const toggleHurricaneLayer = () => {
     const layerID = obs_layer.id.substr(0, obs_layer.id.lastIndexOf("-")) + '-hurr';
     toggleHurricaneLayerVisibility(layerID);
   };
@@ -244,7 +260,7 @@ export const ControlPanel = () => {
     const newFilters = {"instance_name": instanceName,
                         "met_class": metClass,
                         "event_type": eventType,
-                        "run_date": runDate,
+                        "storm_name": stormName,
                         "cycle": runCycle
     };
 
@@ -252,7 +268,27 @@ export const ControlPanel = () => {
   };
 
   const changeTropicalAdvisory = (direction) => {
-    console.log(direction);
+    let currentAdvisory = Number(runAdvisory);
+
+    // set properties for next model run
+    if (direction === "next") {
+        currentAdvisory += 1;
+    } else {  // previous
+        // set properties for previous model run
+        currentAdvisory -= 1;
+    }
+
+    runAdvisory = String(currentAdvisory).padStart(3, '0');
+
+    const newFilters = {"instance_name": instanceName,
+                        "met_class": metClass,
+                        "event_type": eventType,
+                        "storm_name": stormName,
+                        "advisory_number": runAdvisory,
+                        "grid_type": runGrid
+    };
+
+    setFilters(newFilters);
   };
 
   // cycle to the next/previous model run cycle
@@ -297,9 +333,14 @@ export const ControlPanel = () => {
         <Divider />
         {
           layers.length && (
+            <Fragment>
+            <Typography level="body-md" alignSelf="center">
+              {metClass === 'tropical'? `Storm Name ${stormName}` : ''}
+            </Typography>
             <Typography level="body-md" alignSelf="center">
               Model run date: {runDate}
             </Typography>
+            </Fragment>
           )
         }
 
@@ -337,10 +378,10 @@ export const ControlPanel = () => {
         }
 
         { // hurricane track toggle
-          layers.some(layer => layer.properties.met_class === "tropical") && (
+          layers.some(layer => layer.properties.met_class === "tropical") && hurrLayers[0] && (
             <Typography
               component="label"
-              endDecorator={ <Switch checked={checkedHurr} onChange={toggleHurricaneLayer} /> }
+              endDecorator={ <Switch checked={hurrLayers[0].state.visible} onChange={toggleHurricaneLayer} /> }
             >Hurricane Track</Typography>
           )
         }
@@ -357,7 +398,7 @@ export const ControlPanel = () => {
             maxele_layer && (
               <IconButton
                 value={maxele_layer.properties.product_type}
-                key={maxele_layer.id}
+                key={Math.random()}
               >
                 { layerIcons[maxele_layer.properties.product_type] }
               </IconButton>
@@ -366,9 +407,9 @@ export const ControlPanel = () => {
           {
             topLayers
               .filter(layer => layer.properties.product_type !== "obs" && layer.properties.product_type !== "maxele63")
-              .map(layer => (
+              .map((layer, index) => (
                 <IconButton
-                  key={layer.id}
+                  key={Math.random() + index}
                   value={layer.properties.product_type}
                 >
                   { layerIcons[layer.properties.product_type] }
