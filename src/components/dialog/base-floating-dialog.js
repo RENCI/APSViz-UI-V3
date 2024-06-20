@@ -55,7 +55,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
         <Fragment>
             <CssBaseline />
             <Dialog
-                aria-labelledby="draggable-dialog-title"
+                aria-labelledby="draggable-dialog"
                 open={ true }
                 onClose={ handleClose }
                 PaperComponent={ PaperComponent }
@@ -66,7 +66,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
                 sx={{ zIndex: 402, width: 750, height: 465, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
             >
                 <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
-                                fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog-title"> { title }
+                                fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog"> { title }
                 </DialogTitle>
 
                 <IconButton size="small" autoFocus onClick={ handleClose } sx={{ position: 'absolute', right: 8, top: 5 }}>
@@ -88,7 +88,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
 */
 function PaperComponent(props) {
     return (
-        <Draggable  defaultPosition={{x: 110, y: 110}} handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Draggable  defaultPosition={{x: 0, y: 0 }} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
             <Paper { ...props } />
         </Draggable>
     );
