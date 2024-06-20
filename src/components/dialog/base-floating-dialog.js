@@ -2,15 +2,15 @@ import React, {Fragment} from 'react';
 import Draggable from 'react-draggable';
 import PropTypes from 'prop-types';
 
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { markUnclicked } from '@utils/map-utils';
+import CloseIcon from '@mui/icons-material/Close';
 
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
@@ -54,28 +54,27 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
     return (
         <Fragment>
             <CssBaseline />
-                <Dialog
-                    aria-labelledby="draggable-dialog-title"
-                    open={true}
-                    onClose={handleClose}
-                    PaperComponent={PaperComponent}
-                    TransitionComponent={Transition}
-                    disableEnforceFocus
-                    style={{ pointerEvents: 'none' }}
-                    PaperProps={{ sx: { width: 750,  height: 485, pointerEvents: 'auto'} }}
-                    sx={{ zIndex: 402, width: 750, height: 485, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
-                >
-                    <DialogTitle
-                        sx={{cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
-                            fontSize: 14, height: 35, m: 0, p: 1 }} id="draggable-dialog-title"> { title } </DialogTitle>
+            <Dialog
+                aria-labelledby="draggable-dialog-title"
+                open={ true }
+                onClose={ handleClose }
+                PaperComponent={ PaperComponent }
+                TransitionComponent={ Transition }
+                disableEnforceFocus
+                style={{ pointerEvents: 'none' }}
+                PaperProps={{ sx: { width: 750,  height: 465, pointerEvents: 'auto' } }}
+                sx={{ zIndex: 402, width: 750, height: 465, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
+            >
+                <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
+                                fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog-title"> { title }
+                </DialogTitle>
 
-                    <DialogContent
-                        sx={{backgroundColor: 'white', fontSize: 14, m: 0, width: 590, height: 350 }}>{ dialogObject }</DialogContent>
+                <IconButton size="small" autoFocus onClick={ handleClose }
+                            sx={{ position: 'absolute', right: 8, top: 5 }}
+                > <CloseIcon/> </IconButton>
 
-                    <DialogActions
-                        sx={{backgroundColor: 'lightgray', height: 35, m: 0, p: 1}}>
-                        <Button style={{fontSize: 14}} autoFocus onClick={ handleClose }> Close </Button></DialogActions>
-                </Dialog>
+                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, width: 590, height: 350 }}>{ dialogObject }</DialogContent>
+            </Dialog>
         </Fragment>
     );
 };
@@ -89,7 +88,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
 */
 function PaperComponent(props) {
     return (
-        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Draggable  defaultPosition={{x: 110, y: 110}} handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
             <Paper { ...props } />
         </Draggable>
     );
