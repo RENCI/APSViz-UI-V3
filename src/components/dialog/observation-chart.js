@@ -74,7 +74,7 @@ function CreateObsChart(url) {
                     <YAxis domain={['auto', 'auto']}/>
                     <Tooltip />
                     <Legend align={ 'center' } />
-                    <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />

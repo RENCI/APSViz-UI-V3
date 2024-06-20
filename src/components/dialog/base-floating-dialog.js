@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { markUnclicked } from '@utils/map-utils';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
@@ -69,9 +69,9 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
                                 fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog-title"> { title }
                 </DialogTitle>
 
-                <IconButton size="small" autoFocus onClick={ handleClose }
-                            sx={{ position: 'absolute', right: 8, top: 5 }}
-                > <CloseIcon/> </IconButton>
+                <IconButton size="small" autoFocus onClick={ handleClose } sx={{ position: 'absolute', right: 8, top: 5 }}>
+                    <CloseOutlinedIcon color={"primary"}/>
+                </IconButton>
 
                 <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, width: 590, height: 350 }}>{ dialogObject }</DialogContent>
             </Dialog>
