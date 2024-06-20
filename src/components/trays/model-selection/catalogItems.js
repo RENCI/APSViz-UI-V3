@@ -76,6 +76,7 @@ export default function CatalogItems(data) {
             // reload the default layers less the layer group that was unselected
             setDefaultModelLayers(newLayers);
         }
+        // else add these layers to state
         else if (!defaultModelLayers.find(layer => layer.group === layerGroup) && checked) {
             // loop through the select layers in the group and add the default layer state
             selectedLayers.forEach((layer) => {
@@ -92,9 +93,6 @@ export default function CatalogItems(data) {
             // save the items to state so they can be rendered
             setDefaultModelLayers([...newLayers, ...defaultModelLayers]);
         }
-        else
-            // TODO: the checkbox checked value should follow what is in the defaultModelLayers state
-            console.warn(`Layer group ${layerGroup} already exists.`);
     };
 
     /**

@@ -64,7 +64,7 @@ export const MapLegend = () => {
             height: 'auto',
             width: '100px',
             padding: '10px',
-            zIndex: 999,
+            zIndex: 401,
             borderRadius: 'sm',
             visibility: legendVisibilty,
         }}         
