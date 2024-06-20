@@ -5,6 +5,7 @@ import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { markClicked } from '@utils/map-utils';
+import { useLocation } from "react-router-dom";
 
 const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -23,9 +24,17 @@ const newLayerDefaultState = (layer) => {
   };
   
 export const DefaultLayers = () => {
-
     const [obsData, setObsData] = useState("");
     const map = useMap();
+
+    // get the hash location (if any)
+    const { hash } = useLocation();
+
+    let share_run = '';
+
+    if (hash !== '') {
+        share_run = '&run_id=' + hash.split('=')[1];
+    }
 
     const {
         defaultModelLayers,
@@ -88,7 +97,7 @@ export const DefaultLayers = () => {
     };
 
     // create the URLs to the data endpoints
-    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true`;
+    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true` + share_run;
     const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
     const gs_wfs_url = `${process.env.REACT_APP_GS_DATA_URL}`;
 

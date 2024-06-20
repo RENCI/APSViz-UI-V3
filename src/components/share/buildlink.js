@@ -21,7 +21,7 @@ export const BuildLink = () => {
         const groups = defaultModelLayers
             // get all the distinct groups
             .filter((val, idx, self) =>
-                ( idx === self.findIndex((t)=> ( t['group'] === val['group']))))
+                ( idx === self.findIndex((t)=> ( t['group'] === val['group'] ))))
             // return the group name
             .map((mbr) => (
                 mbr['group']
@@ -32,7 +32,7 @@ export const BuildLink = () => {
         // check to see if there was one or more groups selected
         if (groups !== '') {
             // copy the link to the cut/paste buffer
-            copyTextToClipboard(window.location.href + '#share=' + groups).then();
+            copyTextToClipboard(window.location.origin + '/#share=' + groups).then();
 
             // tell the user what just happened
             alert('The share link has been copied to the clipboard.');
