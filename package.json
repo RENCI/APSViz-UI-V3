@@ -64,6 +64,7 @@
     "d3": "^7.8.5",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
+    "html-to-image": "^1.11.11",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.1.2",
     "prop-types": "^15.8.1",
@@ -73,6 +74,7 @@
     "react-leaflet": "^4.2.1",
     "react-map-gl": "^7.1.7",
     "react-query": "^3.39.3",
+    "react-router-dom": "^6.23.1",
     "react-timeago": "^7.2.0",
     "recharts": "^2.12.6"
   },

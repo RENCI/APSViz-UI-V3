@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app';
 import { LayersProvider, SettingsProvider } from '@context';
@@ -29,19 +29,22 @@ const materialTheme = materialExtendTheme();
 
 // render the app specifying the material and joy providers
 const ProvisionedApp = () => {
+    // render the app
     return (
-        <QueryClientProvider client={ queryClient }>
-            <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
-                <JoyCssVarsProvider theme={ theme }>
-                    <CssBaseline enableColorScheme />
-                    <SettingsProvider>
-                        <LayersProvider>
-                            <App />
-                        </LayersProvider>
-                    </SettingsProvider>
-                </JoyCssVarsProvider>
-            </MaterialCssVarsProvider>
-        </QueryClientProvider>
+        <Fragment>
+            <QueryClientProvider client={ queryClient }>
+                <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+                    <JoyCssVarsProvider theme={ theme }>
+                        <CssBaseline enableColorScheme />
+                        <SettingsProvider>
+                            <LayersProvider>
+                                <App />
+                            </LayersProvider>
+                        </SettingsProvider>
+                    </JoyCssVarsProvider>
+                </MaterialCssVarsProvider>
+            </QueryClientProvider>
+        </Fragment>
     );
 };
 
