@@ -34,6 +34,7 @@ export const DefaultLayers = () => {
 
     if (hash !== '') {
         share_run = '&run_id=' + hash.split('=')[1];
+        share_run = share_run.split(',')[0];
     }
 
     const {
