@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material';
 import { LayersList } from './list';
 import { AddLayerForm } from './form';
+import { ShareComment } from '@share/share-comment';
 
 const FORM = 'FORM';
 const LIST = 'LIST';
@@ -52,7 +53,9 @@ export const TrayContents = () => {
       '.MuiListItem-root': { my: 1 },
     }}>
       { state === LIST && <LayersList /> }
-      
+
+        <ShareComment/>
+
       { state === FORM && <AddLayerForm /> }
 
       <TrayFooter />
