@@ -32,7 +32,7 @@ export const ObservationDialog = (obs_data) => {
     const floaterArgs = {
         title: obs_data.obs['location_name'],
         dialogObject: {...graphObj(obs_data.obs['csvurl'])},
-        dataKey: obs_data.obs['station_name'],
+        dataKey: obs_data.obs['id'],
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
         map: map
