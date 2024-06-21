@@ -4,7 +4,6 @@ import locationIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.
 import USGSTopo from '@images/basemaps/USGS-US-Topo.png';
 import USGSImagery from '@images/basemaps/USGS-US-Imagery.png';
 import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
-
 import { useLocation } from "react-router-dom";
 
 // function to add a location marker where ever and obs mod layer
@@ -62,13 +61,13 @@ export const parseSharedURL = () => {
         // did we get a valid payload?
         if (payload.length === 3) {
             // get the run id. this is used on another data query string so add the param
-            run_id = (payload[0].split('run_id:')[1] !== undefined) ? '&run_id=' + payload[0].split('run_id:')[1] : '';
+            run_id = (payload[0].split('run_id:')[1] !== undefined && payload[0].split('run_id:')[1] !== '') ? '&run_id=' + payload[0].split('run_id:')[1] : '';
 
             // get the comment
-            comment = (payload[1].split('comment=')[1] !== undefined) ? decodeURI(payload[1].split('comment=')[1]) : '';
+            comment = (payload[1].split('comment=')[1] !== undefined && payload[1].split('comment=')[1] !== '') ? decodeURI(payload[1].split('comment=')[1]) : '';
 
             // get the selected observations
-            obs = (payload[2].split('obs=')[1] !== undefined) ? JSON.parse(decodeURI(payload[2].split('obs=')[1])) : '';
+            obs = (payload[2].split('obs=')[1] !== undefined && payload[2].split('obs=')[1] !== '') ? JSON.parse(decodeURI(payload[2].split('obs=')[1])) : '';
         }
     }
 
