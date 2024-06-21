@@ -12,7 +12,7 @@ import { useLayers } from "@context/map-context";
  */
 export const BuildLink = () => {
     // get the layers from state
-    const { defaultModelLayers } = useLayers();
+    const { defaultModelLayers, selectedObservations } = useLayers();
 
     // used to set the dialog view state
     const [open, setOpen] = useState(false);
@@ -21,8 +21,8 @@ export const BuildLink = () => {
      * create the query string that can be used to share the current view
      */
     const createLink = (comment) => {
-        // get the list of selected layers
-        const groups = defaultModelLayers
+        // get the list of selected layers from state
+        const run_id = defaultModelLayers
             // get all the distinct groups
             .filter((val, idx, self) =>
                 ( idx === self.findIndex((t)=> ( t['group'] === val['group'] ))))
@@ -33,10 +33,19 @@ export const BuildLink = () => {
             // generate a run id
             .join(',').split(',')[0];
 
+        // capture the selected observations from state
+        const observations = selectedObservations.map(
+            (x) => (
+                JSON.stringify({'id': x.id, 'lat': x.lat, 'lng': x.lon, 'location_name': x.location_name, 'station_name': x.station_name, 'csvurl': x.csvurl})
+            )
+        )
+        // generate a query string
+        .join(',');
+
         // check to see if there was one or more groups selected
-        if (groups !== '') {
+        if (run_id !== '') {
             // copy the link to the cut/paste buffer
-            copyTextToClipboard(encodeURI(window.location.origin + '/#share=' + groups + ',' + comment)).then();
+            copyTextToClipboard(encodeURI(window.location.origin + '/#share=run_id:' + run_id + "~comment=" + comment + '~obs=[' + observations + ']')).then();
         }
         // no layers were selected on the map
         else
