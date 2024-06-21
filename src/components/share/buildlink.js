@@ -29,18 +29,14 @@ export const BuildLink = () => {
             // return the group name
             .map((mbr) => (
                 mbr['group']
-            ))
-            // generate a run id
-            .join(',').split(',')[0];
+            )).join(',').split(',')[0];
 
         // capture the selected observations from state
         const observations = selectedObservations.map(
             (x) => (
                 JSON.stringify({'id': x.id, 'lat': x.lat, 'lng': x.lon, 'location_name': x.location_name, 'station_name': x.station_name, 'csvurl': x.csvurl})
             )
-        )
-        // generate a query string
-        .join(',');
+        ).join(',');
 
         // check to see if there was one or more groups selected
         if (run_id !== '') {
