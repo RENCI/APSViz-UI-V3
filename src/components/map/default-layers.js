@@ -27,16 +27,6 @@ export const DefaultLayers = () => {
     const [obsData, setObsData] = useState("");
     const map = useMap();
 
-    // get the hash location (if any)
-    const { hash } = useLocation();
-
-    let share_run = '';
-
-    if (hash !== '') {
-        share_run = '&run_id=' + hash.split('=')[1];
-        share_run = share_run.split(',')[0];
-    }
-
     const {
         defaultModelLayers,
         setDefaultModelLayers,
@@ -97,8 +87,29 @@ export const DefaultLayers = () => {
         }
     };
 
+    // get the hash location from the URL (if any)
+    const { hash } = useLocation();
+
+    // init the run id used for targeted data gathering
+    let run_id = '';
+
+    // if we got a hash link strip it out and use it in the data gathering URL
+    if (hash !== '') {
+        // get the payload
+        let payload = hash.split('=')[1];
+
+        // split the payload into run id and comment
+        payload = payload.split(',');
+
+        // did we get a valid payload?
+        if (payload.length === 2) {
+            // get the run id
+            run_id = '&run_id=' + payload[0];
+        }
+    }
+
     // create the URLs to the data endpoints
-    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true` + share_run;
+    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${run_id}`;
     const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
     const gs_wfs_url = `${process.env.REACT_APP_GS_DATA_URL}`;
 
