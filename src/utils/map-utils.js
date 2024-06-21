@@ -5,6 +5,7 @@ import USGSTopo from '@images/basemaps/USGS-US-Topo.png';
 import USGSImagery from '@images/basemaps/USGS-US-Imagery.png';
 import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
 
+import { useLocation } from "react-router-dom";
 
 // function to add a location marker where ever and obs mod layer
 // feature is clicked icon downloaded as png from here: 
@@ -38,6 +39,59 @@ export const markUnclicked = (map, id) => {
       }
     }
   });
+};
+
+/**
+ * parses the hash section of the url used for sharing
+ *
+ */
+export const parseSharedURL = () => {
+    // get the hash location from the URL (if any)
+    const { hash } = useLocation();
+
+    // init the return variables
+    let run_id = '';
+    let comment = '';
+    let obs = '';
+
+    // if there was a hash code
+    if (hash !== '') {
+        // get the hash payload
+        const payload = hash.split('~');
+
+        // did we get a valid payload?
+        if (payload.length === 3) {
+            // get the run id. this is used on another data query string so add the param
+            run_id = (payload[0].split('run_id:')[1] !== undefined) ? '&run_id=' + payload[0].split('run_id:')[1] : '';
+
+            // get the comment
+            comment = (payload[1].split('comment=')[1] !== undefined) ? decodeURI(payload[1].split('comment=')[1]) : '';
+
+            // get the selected observations
+            obs = (payload[2].split('obs=')[1] !== undefined) ? JSON.parse(decodeURI(payload[2].split('obs=')[1])) : '';
+        }
+    }
+
+    // return the shared URL to the caller
+    return {'run_id': run_id, 'comment': comment, 'obs': obs};
+};
+
+/**
+ * Adds the observations that come in on the shared query string
+ *
+ * @param map
+ * @param obs
+ * @param setSelectedObservations
+ */
+export const addSharedObservations = (map, obs, setSelectedObservations )=> {
+    // put a target icon on the map and observation data in state
+    obs.forEach(r => {
+        // put the target icons on the map
+        markClicked(map, {'latlng': {'lat': r.lat, 'lng': r.lng}}, r.id);
+
+        // add the selected observation data into state
+        setSelectedObservations(previous => [...previous, r]);
+    });
 };
 
 // add any new basemaps here
