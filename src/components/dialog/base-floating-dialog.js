@@ -45,11 +45,8 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
             // remove the bullseye
             markUnclicked(map, dataKey);
 
-            // recreate the data list
-            const new_data_list = dataList.filter(item => item.id !== dataKey);
-
             // remove this item from the data list
-            setDataList(new_data_list);
+            setDataList(dataList.filter(item => item.id !== dataKey));
         }
     };
 
