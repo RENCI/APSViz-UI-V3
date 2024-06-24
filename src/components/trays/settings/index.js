@@ -4,14 +4,16 @@ import { Tune as SettingsIcon } from '@mui/icons-material';
 
 import { DarkModeToggle } from './dark-mode';
 import { BaseMaps } from './basemap';
+import { ObsChartYAxis } from './chart-yaxis';
 
 export const icon = <SettingsIcon />;
 
 export const title = 'Settings';
 
 export const trayContents = () => (
-  <Stack gap={ 2 } p={ 2 }>
+  <Stack gap={ 1 } p={ 1 }>
     <DarkModeToggle />
     <BaseMaps />
+    <ObsChartYAxis />
   </Stack>
 );
