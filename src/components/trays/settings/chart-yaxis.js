@@ -46,6 +46,7 @@ export const ObsChartYAxis = () => {
                         marks={ marks }
                         min={-20}
                         max={20}
+                        disableSwap
                         sx={{
                             "--Slider-thumbWidth": "8px",
                             "--Slider-valueLabelArrowSize": "-1px",
