@@ -1,6 +1,6 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
-import {useLayers} from "@context";
+import { useLayers } from "@context";
 import ObservationChart from "@dialog/observation-chart";
 
 /**
