@@ -23,7 +23,7 @@ export const ObservationDialog = (obs_data) => {
         // create the chart
         return (
             <Fragment>
-                <ObservationChart url={url} />
+                <ObservationChart url={ url } />
             </Fragment>
         );
     };
@@ -32,7 +32,7 @@ export const ObservationDialog = (obs_data) => {
     const floaterArgs = {
         title: obs_data.obs['location_name'],
         index: obs_data.obs['index'],
-        dialogObject: {...graphObj(obs_data.obs['csvurl'])},
+        dialogObject: { ...graphObj(obs_data.obs['csvurl']) },
         dataKey: obs_data.obs['id'],
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
@@ -42,7 +42,7 @@ export const ObservationDialog = (obs_data) => {
     // render the dialog
     return (
         <Fragment>
-            <BaseFloatingDialog {...floaterArgs} />
+            <BaseFloatingDialog { ...floaterArgs } />
         </Fragment>
     );
 };
