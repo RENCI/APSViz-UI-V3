@@ -83,14 +83,17 @@ export const parseSharedURL = () => {
  * @param setSelectedObservations
  */
 export const addSharedObservations = (map, obs, setSelectedObservations )=> {
-    // put a target icon on the map and observation data in state
-    obs.forEach(r => {
-        // put the target icons on the map
-        markClicked(map, {'latlng': {'lat': r.lat, 'lng': r.lng}}, r.id);
+    // if there are observations, put them on the map
+    if(obs) {
+        // put a target icon on the map and observation data in state
+        obs.forEach(r => {
+            // put the target icons on the map
+            markClicked(map, {'latlng': {'lat': r.lat, 'lng': r.lng}}, r.id);
 
-        // add the selected observation data into state
-        setSelectedObservations(previous => [...previous, r]);
-    });
+            // add the selected observation data into state
+            setSelectedObservations(previous => [...previous, r]);
+        });
+    }
 };
 
 // add any new basemaps here
