@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
+import { useSettings } from "@context";
 
 /**
  * renders the observations as a chart
@@ -57,6 +58,9 @@ function getObsChartData(url) {
  * @constructor
  */
 function CreateObsChart(url) {
+    // get the settings for the Y-axis min/max values
+    const { obsChartY } = useSettings();
+
     // call to get the data. expect back some information too
     const { status, data, error } = getObsChartData(url.url);
 
@@ -70,8 +74,8 @@ function CreateObsChart(url) {
             ) : (
                 <LineChart data={data} margin={{ left: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={false} />
-                    <YAxis domain={['auto', 'auto']}/>
+                    <XAxis dataKey="time" allowDuplicatedCategory={ false } />
+                    <YAxis domain={ obsChartY } />
                     <Tooltip />
                     <Legend align={ 'center' } />
                     <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
