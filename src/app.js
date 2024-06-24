@@ -23,8 +23,11 @@ const Content = () => {
         <Fragment>
             {
                 // for each observation selected
-                selectedObservations.map (function (obs) {
-                    // render the observation
+                selectedObservations.map (function (obs, idx) {
+                    // add in an index used to cascade the dialogs
+                    obs['index']=idx;
+
+                    // render the observation draggable dialog
                     return <ObservationDialog key={obs["station_name"]} obs={obs} />;
                 })
             }
