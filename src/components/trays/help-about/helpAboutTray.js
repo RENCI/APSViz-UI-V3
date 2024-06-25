@@ -15,15 +15,15 @@ export const HelpAboutTray = () => {
     return (
         <Fragment>
             <Stack gap={ 3 }>
-                <AccordionGroup sx={{size: "sm", variant: "soft"}}>
+                <AccordionGroup sx={{ size: "sm", variant: "soft" }}>
                 <Typography level="title-lg"> About </Typography>
                     <Stack spacing={1}>
-                        <Accordion expanded={index === 0} onChange={(event, expanded) => { setIndex(expanded ? 0 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg"> Application version </Typography> </AccordionSummary>
-                            <AccordionDetails> Version: {process.env.REACT_APP_VERSION}</AccordionDetails>
+                        <Accordion expanded={index === 0} onChange={ (event, expanded) => { setIndex(expanded ? 0 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}> Application version </Typography> </AccordionSummary>
+                            <AccordionDetails> Version: { process.env.REACT_APP_VERSION }</AccordionDetails>
                         </Accordion>
-                        <Accordion expanded={index === 1} onChange={(event, expanded) => { setIndex(expanded ? 1 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg"> Application description </Typography> </AccordionSummary>
+                        <Accordion expanded={index === 1} onChange={ (event, expanded) => { setIndex(expanded ? 1 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}> Application description </Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
                     </Stack>
@@ -31,21 +31,21 @@ export const HelpAboutTray = () => {
             </Stack>
 
             <Stack>
-                <AccordionGroup sx={{size: "sm", variant: "soft"}}>
+                <AccordionGroup sx={{ size: "sm", variant: "soft" }}>
                     <Typography level="h4">FAQs</Typography>
                     <Stack spacing={1}>
 
-                        <Accordion expanded={index === 3} onChange={(event, expanded) => { setIndex(expanded ? 3 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">What FAQs should we put in here?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 3} onChange={ (event, expanded) => { setIndex(expanded ? 3 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>What FAQs should we put in here?</Typography> </AccordionSummary>
                             <AccordionDetails> What sort of things should we be putting in the FAQs? Below are some examples... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 4} onChange={(event, expanded) => { setIndex(expanded ? 4 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I capture a screenshot ?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 4} onChange={ (event, expanded) => { setIndex(expanded ? 4 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I capture a screenshot ?</Typography> </AccordionSummary>
                             <AccordionDetails>
                                 <AccordionGroup>
-                                    <Accordion  expanded={subIndex === 0} onChange={(event, expanded) => { setSubIndex(expanded ? 0 : null); }}>
-                                        <AccordionSummary>Edge</AccordionSummary>
+                                    <Accordion  expanded={ subIndex === 0 } onChange={ (event, expanded) => { setSubIndex(expanded ? 0 : null); }}>
+                                        <AccordionSummary sx={{fontStyle: 'italic'}}>Edge</AccordionSummary>
                                             <AccordionDetails>
                                                     <ul>
                                                         <li>Right click the browser surface.</li>
@@ -56,8 +56,8 @@ export const HelpAboutTray = () => {
                                             </AccordionDetails>
                                     </Accordion>
 
-                                    <Accordion  expanded={subIndex === 1} onChange={(event, expanded) => { setSubIndex(expanded ? 1 : null); }}>
-                                        <AccordionSummary>Firefox</AccordionSummary>
+                                    <Accordion  expanded={ subIndex === 1 } onChange={ (event, expanded) => { setSubIndex(expanded ? 1 : null); }}>
+                                        <AccordionSummary sx={{ fontStyle: 'italic' }}>Firefox</AccordionSummary>
                                             <AccordionDetails>
                                                 <ul>
                                                     <li>Right click the browser surface</li>
@@ -68,8 +68,8 @@ export const HelpAboutTray = () => {
                                             </AccordionDetails>
                                     </Accordion>
 
-                                    <Accordion  expanded={subIndex === 2} onChange={(event, expanded) => { setSubIndex(expanded ? 2 : null); }}>
-                                        <AccordionSummary>Chrome</AccordionSummary>
+                                    <Accordion  expanded={ subIndex === 2 } onChange={ (event, expanded) => { setSubIndex(expanded ? 2 : null); }}>
+                                        <AccordionSummary sx={{ fontStyle: 'italic' }}>Chrome</AccordionSummary>
                                             <AccordionDetails>
                                                 <ul>
                                                     <li>Install and activate the Chrome Full Page Screen Capture browser extension.</li>
@@ -80,8 +80,8 @@ export const HelpAboutTray = () => {
                                             </AccordionDetails>
                                     </Accordion>
 
-                                    <Accordion  expanded={subIndex === 3} onChange={(event, expanded) => { setSubIndex(expanded ? 3 : null); }}>
-                                        <AccordionSummary>Safari</AccordionSummary>
+                                    <Accordion  expanded={ subIndex === 3 } onChange={ (event, expanded) => { setSubIndex(expanded ? 3 : null); }}>
+                                        <AccordionSummary sx={{ fontStyle: 'italic' }}>Safari</AccordionSummary>
                                             <AccordionDetails>
                                                 <ul>
                                                     <li>Install and activate Awesome Screenshot</li>
@@ -97,48 +97,48 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 5} onChange={(event, expanded) => { setIndex(expanded ? 5 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">What are some features of this application?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 5} onChange={ (event, expanded) => { setIndex(expanded ? 5 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>What are some features of this application?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 6} onChange={(event, expanded) => { setIndex(expanded ? 6 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I add/remove Layers on the map?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 6} onChange={ (event, expanded) => { setIndex(expanded ? 6 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I add/remove Layers on the map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 7} onChange={(event, expanded) => { setIndex(expanded ? 7 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I move through synoptic cycles?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 7} onChange={ (event, expanded) => { setIndex(expanded ? 7 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I move through synoptic cycles?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 8} onChange={(event, expanded) => { setIndex(expanded ? 8 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">What do the icons on the left mean?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 8} onChange={ (event, expanded) => { setIndex(expanded ? 8 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>What do the icons on the left mean?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 9} onChange={(event, expanded) => { setIndex(expanded ? 9 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">What are some user settings?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 9} onChange={ (event, expanded) => { setIndex(expanded ? 9 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>What are some user settings?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 10} onChange={(event, expanded) => { setIndex(expanded ? 10 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I change the base map?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 10} onChange={ (event, expanded) => { setIndex(expanded ? 10 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I change the base map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 11} onChange={(event, expanded) => { setIndex(expanded ? 11 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I view observation data?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 11} onChange={ (event, expanded) => { setIndex(expanded ? 11 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I view observation data?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 12} onChange={(event, expanded) => { setIndex(expanded ? 12 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I show/hide layers?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 12} onChange={ (event, expanded) => { setIndex(expanded ? 12 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I show/hide layers?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 13} onChange={(event, expanded) => { setIndex(expanded ? 13 : null); }}>
-                            <AccordionSummary> <Typography level="title-lg">How do I reorder layers on the map?</Typography> </AccordionSummary>
+                        <Accordion expanded={index === 13} onChange={ (event, expanded) => { setIndex(expanded ? 13 : null); }}>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I reorder layers on the map?</Typography> </AccordionSummary>
                             <AccordionDetails> Add some content here... </AccordionDetails>
                         </Accordion>
 
