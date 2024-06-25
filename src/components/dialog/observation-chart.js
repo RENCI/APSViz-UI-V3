@@ -70,12 +70,12 @@ function CreateObsChart(url) {
             { status === 'pending' ? (
                 <div>Loading...</div>
             ) : status === 'error' ? (
-                <div>Error: {error.message}</div>
+                <div>Error: { error.message }</div>
             ) : (
-                <LineChart data={data} margin={{ left: -10 }}>
+                <LineChart data={ data } margin={{ left: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="time" allowDuplicatedCategory={ false } />
-                    <YAxis domain={ obsChartY } />
+                    <YAxis tickCount="10" domain={ obsChartY } />
                     <Tooltip />
                     <Legend align={ 'center' } />
                     <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
