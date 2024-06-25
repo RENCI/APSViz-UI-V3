@@ -261,7 +261,8 @@ export const ControlPanel = () => {
                         "met_class": metClass,
                         "event_type": eventType,
                         "storm_name": stormName,
-                        "cycle": runCycle
+                        "cycle": runCycle,
+                        "run_date": runDate
     };
 
     setFilters(newFilters);
