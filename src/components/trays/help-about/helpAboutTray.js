@@ -41,7 +41,7 @@ export const HelpAboutTray = () => {
                         </Accordion>
 
                         <Accordion expanded={index === 4} onChange={ (event, expanded) => { setIndex(expanded ? 4 : null); }}>
-                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I capture a screenshot ?</Typography> </AccordionSummary>
+                            <AccordionSummary> <Typography level="title-md" sx={{ fontStyle: 'italic', fontWeight: 'bold' }}>How do I capture a screenshot?</Typography> </AccordionSummary>
                             <AccordionDetails>
                                 <AccordionGroup>
                                     <Accordion  expanded={ subIndex === 0 } onChange={ (event, expanded) => { setSubIndex(expanded ? 0 : null); }}>
