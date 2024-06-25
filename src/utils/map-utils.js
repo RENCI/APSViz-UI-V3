@@ -30,7 +30,6 @@ export const markClicked = (map, event, id) => {
 
 
 export const markUnclicked = (map, id) => {
-
   map.eachLayer((layer) => {
     if (layer.options && layer.options.pane === "markerPane") {
       if (layer._id === id) {
@@ -85,6 +84,9 @@ export const parseSharedURL = () => {
 export const addSharedObservations = (map, obs, setSelectedObservations )=> {
     // if there are observations, put them on the map
     if(obs) {
+        // clear out the current selected observation dialogs
+        setSelectedObservations([]);
+
         // put a target icon on the map and observation data in state
         obs.forEach(r => {
             // put the target icons on the map
