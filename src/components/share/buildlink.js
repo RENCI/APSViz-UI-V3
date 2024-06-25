@@ -22,6 +22,7 @@ export const BuildLink = () => {
      */
     const createLink = (comment) => {
         // get the list of selected layers from state
+        // this forces the group at the top to be the reproduced in the share line
         const run_id = defaultModelLayers
             // get all the distinct groups
             .filter((val, idx, self) =>
