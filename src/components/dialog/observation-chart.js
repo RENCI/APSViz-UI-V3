@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
+import { useSettings } from "@context";
 
 /**
  * renders the observations as a chart
@@ -57,6 +58,9 @@ function getObsChartData(url) {
  * @constructor
  */
 function CreateObsChart(url) {
+    // get the settings for the Y-axis min/max values
+    const { obsChartY } = useSettings();
+
     // call to get the data. expect back some information too
     const { status, data, error } = getObsChartData(url.url);
 
@@ -66,17 +70,18 @@ function CreateObsChart(url) {
             { status === 'pending' ? (
                 <div>Loading...</div>
             ) : status === 'error' ? (
-                <div>Error: {error.message}</div>
+                <div>Error: { error.message }</div>
             ) : (
-                <LineChart width={590} height={300} data={data} margin={{ top: 10, right: 0, left: -10, bottom: 0 }}>
+                <LineChart data={ data } margin={{ left: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={false} />
-                    <YAxis domain={['auto', 'auto']}/>
+                    <XAxis dataKey="time" allowDuplicatedCategory={ false } />
+                    <YAxis tickCount="10" domain={ obsChartY } />
                     <Tooltip />
-                    <Legend verticalAlign="bottom" height={30} />
-                    <Line type="monotone" dataKey="Observations" stroke="gray" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Legend align={ 'center' } />
+                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
                 </LineChart>
             )}
@@ -129,6 +134,11 @@ function csvToJSON(csvData) {
                 e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
             else
                 e["APS Nowcast"] = null;
+
+            if (e["APS Forecast"])
+                e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(4);
+            else
+                e["APS Forecast"] = null;
 
             if (e["Observations"])
                 e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);

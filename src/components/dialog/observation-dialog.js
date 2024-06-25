@@ -1,6 +1,6 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
-import {useLayers} from "@context";
+import { useLayers } from "@context";
 import ObservationChart from "@dialog/observation-chart";
 
 /**
@@ -23,7 +23,7 @@ export const ObservationDialog = (obs_data) => {
         // create the chart
         return (
             <Fragment>
-                <ObservationChart url={url} />
+                <ObservationChart url={ url } />
             </Fragment>
         );
     };
@@ -31,8 +31,9 @@ export const ObservationDialog = (obs_data) => {
     // create a data object for the base dialog to use to render
     const floaterArgs = {
         title: obs_data.obs['location_name'],
-        dialogObject: {...graphObj(obs_data.obs['csvurl'])},
-        dataKey: obs_data.obs['station_name'],
+        index: obs_data.obs['index'],
+        dialogObject: { ...graphObj(obs_data.obs['csvurl']) },
+        dataKey: obs_data.obs['id'],
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
         map: map
@@ -41,7 +42,7 @@ export const ObservationDialog = (obs_data) => {
     // render the dialog
     return (
         <Fragment>
-            <BaseFloatingDialog {...floaterArgs} />
+            <BaseFloatingDialog { ...floaterArgs } />
         </Fragment>
     );
 };

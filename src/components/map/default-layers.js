@@ -4,8 +4,7 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { markClicked } from '@utils/map-utils';
-import { useLocation } from "react-router-dom";
+import {markClicked, parseSharedURL, addSharedObservations} from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -27,20 +26,11 @@ export const DefaultLayers = () => {
     const [obsData, setObsData] = useState("");
     const map = useMap();
 
-    // get the hash location (if any)
-    const { hash } = useLocation();
-
-    let share_run = '';
-
-    if (hash !== '') {
-        share_run = '&run_id=' + hash.split('=')[1];
-        share_run = share_run.split(',')[0];
-    }
-
     const {
         defaultModelLayers,
         setDefaultModelLayers,
-        setSelectedObservations
+        setSelectedObservations,
+        setShowShareComment
     } = useLayers();
 
     const obsPointToLayer = ((feature, latlng) => {
@@ -83,9 +73,7 @@ export const DefaultLayers = () => {
             this.closePopup();
           });
           layer.on("click", function (e) {
-
-            // add in a record id.
-            // this is used to remove the selected observation from the selectedObservations list when the dialog is closed
+            // this id is used to remove a selected observation from the selectedObservations list when the dialog is closed
             feature.properties.id = feature.properties.station_name;
 
             // create a marker target icon around the observation clicked
@@ -97,8 +85,11 @@ export const DefaultLayers = () => {
         }
     };
 
+    // parse the hash of the sharing URL
+    const shared_params = parseSharedURL();
+
     // create the URLs to the data endpoints
-    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true` + share_run;
+    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
     const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
     const gs_wfs_url = `${process.env.REACT_APP_GS_DATA_URL}`;
 
@@ -154,7 +145,15 @@ export const DefaultLayers = () => {
                                 "&typeName=" +
                                 obsLayer.layers;
                 const {data} = await axios.get(obs_url);
+
+                // save the observation data
                 setObsData(data);
+
+                // turn on the show comment state
+                setShowShareComment(true);
+
+                // update the selected observations specified on the share link
+                addSharedObservations(map, shared_params['obs'], setSelectedObservations);
             }
         }
         getObsGeoJsonData().then();
