@@ -17,7 +17,7 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         transition: 'transform 250ms',
         height: '100vh',
         width: TRAY_WIDTH,
-        zIndex: 401,
+        zIndex: 410,
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
         overflowX: 'hidden',
         overflowY: 'auto',

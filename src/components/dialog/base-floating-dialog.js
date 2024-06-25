@@ -15,6 +15,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
     title: PropTypes.string,
+    index: PropTypes.any,
     dialogObject: PropTypes.any,
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
@@ -27,13 +28,14 @@ BaseFloatingDialog.propTypes = {
  * Note: this component
  *
  * @param title - the name of the dialog: string
+ * @param index - the index of the data
  * @param dialogObject the object to render in the dialog: {JSX.Element}
  * @param dataKey - the key to the data list elements in state: string
  * @param dataList - a data list in state: array
  * @param setDataList - method to update a data list in state: function
  * @param map - a reference to the map state: object
  */
-export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataList, setDataList, map} ) {
+export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
     /**
     * the close dialog handler
     */
@@ -62,8 +64,9 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
                 TransitionComponent={ Transition }
                 disableEnforceFocus
                 style={{ pointerEvents: 'none' }}
-                PaperProps={{ sx: { width: 750,  height: 465, pointerEvents: 'auto' } }}
-                sx={{ zIndex: 402, width: 750, height: 465, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}
+                PaperProps={{ sx: { width: 800,  height: 465, pointerEvents: 'auto' } }}
+                sx={{ zIndex: 405, width: 800, height: 465, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
+                        left: index * 20, top: 20 + index * 43 }}
             >
                 <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
                                 fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog"> { title }
@@ -73,7 +76,7 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
                     <CloseOutlinedIcon color={"primary"}/>
                 </IconButton>
 
-                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, width: 590, height: 350 }}>{ dialogObject }</DialogContent>
+                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, width: "100%", height: 350 }}>{ dialogObject }</DialogContent>
             </Dialog>
         </Fragment>
     );
@@ -87,15 +90,19 @@ export default function BaseFloatingDialog({ title, dialogObject, dataKey, dataL
 * @constructor
 */
 function PaperComponent(props) {
+    // create a reference to avoid the findDOMNode deprecation issue
+    const nodeRef = React.useRef(null);
+
+    // render the component
     return (
-        <Draggable  defaultPosition={{x: 0, y: 0 }} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper { ...props } />
+        <Draggable nodeRef={nodeRef} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper ref={nodeRef} {...props} />
         </Draggable>
     );
 }
 
 /**
-* This creates an animated transition for the dialog that pops up
+ * This creates an animated transition for the dialog that pops up
 *
 * @type {React.ForwardRefExoticComponent<React.PropsWithoutRef<{}> & React.RefAttributes<any>>}
 */

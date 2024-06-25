@@ -3,7 +3,9 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useState
 } from "react";
+
 import PropTypes from "prop-types";
 import { useColorScheme } from '@mui/joy/styles';
 import {
@@ -25,13 +27,18 @@ export const SettingsProvider = ({ children }) => {
     setMode(darkMode ? 'light' : 'dark');
   }, [mode]);
 
+  // used to capture the selected observation chart min/max Y-axis
+  const [obsChartY, setObsChartY] = useState([-2, 2]);
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
+
       darkMode: {
         enabled: darkMode,
         toggle: toggleDarkMode,
       },
+      obsChartY, setObsChartY,
     }}>
       { children }
     </SettingsContext.Provider>

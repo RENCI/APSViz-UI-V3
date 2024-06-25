@@ -83,7 +83,8 @@ export const LayersProvider = ({ children }) => {
 
   const getAllLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
-    const alteredLayers = currentLayers
+
+    return currentLayers
       .map((layer) => {
         const opacity = layer.state.opacity;
         return {
@@ -91,8 +92,6 @@ export const LayersProvider = ({ children }) => {
           state: {visible: false, opacity: opacity}
         };
       });
-  
-    return alteredLayers;
   };
 
   const swapLayers = (i, j) => {
@@ -133,6 +132,8 @@ export const LayersProvider = ({ children }) => {
 
   const [baseMap, setBaseMap] = React.useState();
 
+  // used to track the view state of the share comment
+  const [ showShareComment, setShowShareComment ] = useState(true);
 
   return (
     <LayersContext.Provider
@@ -146,8 +147,8 @@ export const LayersProvider = ({ children }) => {
         toggleHurricaneLayerVisibility,
         toggleLayerVisibility,
         getAllLayersInvisible,
-        selectedObservations,
-        setSelectedObservations,
+        selectedObservations, setSelectedObservations,
+        showShareComment, setShowShareComment,
         swapLayers,
         removeLayer,
         layerTypes,
