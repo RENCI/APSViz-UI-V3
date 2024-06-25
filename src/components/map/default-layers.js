@@ -29,7 +29,8 @@ export const DefaultLayers = () => {
     const {
         defaultModelLayers,
         setDefaultModelLayers,
-        setSelectedObservations
+        setSelectedObservations,
+        setShowShareComment
     } = useLayers();
 
     const obsPointToLayer = ((feature, latlng) => {
@@ -147,6 +148,9 @@ export const DefaultLayers = () => {
 
                 // save the observation data
                 setObsData(data);
+
+                // turn on the show comment state
+                setShowShareComment(true);
 
                 // update the selected observations specified on the share link
                 addSharedObservations(map, shared_params['obs'], setSelectedObservations);

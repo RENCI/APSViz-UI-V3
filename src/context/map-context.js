@@ -132,6 +132,8 @@ export const LayersProvider = ({ children }) => {
 
   const [baseMap, setBaseMap] = React.useState();
 
+  // used to track the view state of the share comment
+  const [ showShareComment, setShowShareComment ] = useState(true);
 
   return (
     <LayersContext.Provider
@@ -146,6 +148,7 @@ export const LayersProvider = ({ children }) => {
         toggleLayerVisibility,
         getAllLayersInvisible,
         selectedObservations, setSelectedObservations,
+        showShareComment, setShowShareComment,
         swapLayers,
         removeLayer,
         layerTypes,
