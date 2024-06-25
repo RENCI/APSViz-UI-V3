@@ -24,7 +24,7 @@ export const Share = () => {
                     height: 50,
                     width: 80,
                     padding: '0px',
-                    zIndex: 401,
+                    zIndex: 410,
                     borderRadius: 'sm'
               }}>
                 <Stack
