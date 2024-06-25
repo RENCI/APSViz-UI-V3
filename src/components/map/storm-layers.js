@@ -215,7 +215,7 @@ export const StormLayers = () => {
     }
 
     GetStormTrackGeoJson().then();
-  }, [hurrLayers]);
+  }, [hurricaneTrackLayers]);
 
   return(
     <>
