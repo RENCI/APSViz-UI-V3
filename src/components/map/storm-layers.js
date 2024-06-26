@@ -1,11 +1,6 @@
-import React, { useState, useEffect, Fragment} from 'react';
-import { GeoJSON } from 'react-leaflet';
-import { Marker } from 'leaflet';
-import {
-    getTrackData,
-    getTrackGeojson
-} from "@utils/hurricane/track";
+import React, { useEffect, Fragment} from 'react';
 import { useLayers } from '@context';
+import { HurricaneTrackGeoJson } from './hurricane-layer';
 
 const newLayerDefaultState = () => {
     return ({
@@ -22,95 +17,10 @@ export const StormLayers = () => {
     setHurricaneTrackLayers,
     getAllHurricaneLayersInvisible,
   } = useLayers();
-  const [hurricaneData, setHurricaneData] = useState();
 
   const layer_list = [...defaultModelLayers];
   const topLayer = layer_list[0];
   const hurrLayers = [...hurricaneTrackLayers];
-
-  function coneStyle() {
-    return {
-    fillColor: '#858585',
-    weight: 2,
-    opacity: 1,
-    color: '#858585',
-    fillOpacity: 0.2,
-    dashArray: '5',
-   };
-  }
-
-  function lineStyle() {
-    return {
-    weight: 2,
-    opacity: 1,
-    color: 'red',
-   };
-  }
-
-  const hurrPointToLayer = ((feature, latlng) => {
-    const icon_url = `${process.env.REACT_APP_HURRICANE_ICON_URL}`;
-    let iconName = null;
-    const L = window.L;
-    const iconSize = [20, 40];
-    const iconAnchor = 15;
-
-    switch (feature.properties.storm_type) {
-      default:
-      case 'TD':
-        iconName="dep.png";
-        break;
-      case 'TS':
-        iconName="storm.png";
-        break;
-      case 'CAT1':
-        iconName="cat_1.png";
-        break;
-      case 'CAT2':
-        iconName="cat_2.png";
-        break;
-      case 'CAT3':
-        iconName="cat_3.png";
-        break;
-      case 'CAT4':
-        iconName="cat_4.png";
-        break;
-      case 'CAT5':
-        iconName="cat5.png";
-        break;
-    }
-
-    const url = icon_url + iconName;
-    const icon = L.icon({
-      iconUrl: url,
-      iconSize: [iconSize, iconSize],
-      iconAnchor: [iconAnchor, iconAnchor],
-      popupAnchor: [0, 0],
-    });
-
-    return new Marker(latlng, {
-      icon:icon
-    });
-  });
-
-  const onEachHurrFeature = (feature, layer) => {
-    if (feature.properties && feature.properties.time_utc) {
-      const popupContent = feature.properties.storm_name + ": " +
-                           feature.properties.time_utc + ", " +
-                           feature.properties.max_wind_speed_mph + "mph";
-
-      layer.on("mouseover", function (e) {
-        this.bindPopup(popupContent).openPopup(e.latlng);
-      });
-
-      layer.on("mousemove", function (e) {
-        this.getPopup().setLatLng(e.latlng);
-      });
-
-      layer.on("mouseout", function () {
-        this.closePopup();
-      });
-    }
-  };
 
   // compare the hurricane layers list to the layers list and 
   // remove any hurricane layers that are related to model run layers
@@ -191,54 +101,16 @@ export const StormLayers = () => {
     getStormLayers().then();
   }, [defaultModelLayers]);
 
-  useEffect(() => {
-
-    async function GetStormTrackGeoJson() {
-
-      if (hurrLayers[0]) {
-        getTrackData(hurrLayers[0].year, hurrLayers[0].stormNumber, hurrLayers[0].advisory).then((track) => {
-            if (track != null) {
-              const trackGeojson = getTrackGeojson(
-                track,
-                "utc",
-                hurrLayers[0].stormName
-              );
-
-              // check to make sure we actually got geojson data
-              // before creating layer
-              if (trackGeojson) {
-                setHurricaneData(trackGeojson);
-              }
-            }
-        });
-      }
-    }
-
-    GetStormTrackGeoJson().then();
-  }, [hurricaneTrackLayers]);
-
   return(
     <>
-      {hurricaneData && hurrLayers
+      {hurrLayers
           .filter(({state}) => state.visible)
           .map((layer, index) => {
             return (
               <Fragment key={`${index}-${layer.id}`}>
-                <GeoJSON
-                    key={`${layer.id}-"cone"`}
-                    data={hurricaneData["cone"]}
-                    style={coneStyle}
-                />
-                <GeoJSON
-                    key={`${layer.id}-"line"`}
-                    data={hurricaneData["line"]}
-                    style={lineStyle}
-                />
-                <GeoJSON
-                    key={`${layer.id}-"points"`}
-                    data={hurricaneData["points"]}
-                    pointToLayer={hurrPointToLayer}
-                    onEachFeature={onEachHurrFeature}
+                <HurricaneTrackGeoJson
+                    key={Math.random() + index}
+                    index={index}
                 />
               </Fragment>
             );
