@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment} from 'react';
 import { useLayers } from '@context';
-import { HurricaneTrackGeoJson } from './hurricane-layer';
+import { HurricaneTrackGeoJson } from './hurricane-track';
 
 const newLayerDefaultState = () => {
     return ({
