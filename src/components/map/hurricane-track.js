@@ -63,7 +63,7 @@ export const HurricaneTrackGeoJson = ({index}) => {
         iconName="cat_4.png";
         break;
       case 'CAT5':
-        iconName="cat5.png";
+        iconName="cat_5.png";
         break;
     }
 
