@@ -89,8 +89,8 @@ export const DefaultLayers = () => {
     const shared_params = parseSharedURL();
 
     // create the URLs to the data endpoints
-    const data_url = `${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_URL')]}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
-    const gs_wfs_url = `${process.env[getNamespacedEnvParam('REACT_APP_GS_DATA_URL')]}`;
+    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
+    const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
 
     // retrieve the catalog member with the provided id
@@ -113,7 +113,7 @@ export const DefaultLayers = () => {
         // create the authorization header
         const requestOptions = {
             method: 'GET',
-            headers: {Authorization: `Bearer ${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')]}`}
+            headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }` }
         };
 
         // make the call to get the data

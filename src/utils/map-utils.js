@@ -7,7 +7,37 @@ import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
 import { useLocation } from "react-router-dom";
 
 /**
- * gets a env param that includes the namespace for env param retrieval
+ * deconstructs the app params
+ *
+ */
+export const config = {
+    // AWS params
+    REACT_APP_GS_DATA_URL_AWS: process.env.REACT_APP_GS_DATA_URL_AWS,
+    REACT_APP_UI_DATA_URL_AWS: process.env.REACT_APP_UI_DATA_URL_AWS,
+    REACT_APP_UI_DATA_TOKEN_AWS: process.env.REACT_APP_UI_DATA_TOKEN_AWS,
+    REACT_APP_HURRICANE_ICON_URL_AWS: process.env.REACT_APP_HURRICANE_ICON_URL_AWS,
+
+    // Production params
+    REACT_APP_GS_DATA_URL_PROD: process.env.REACT_APP_GS_DATA_URL_PROD,
+    REACT_APP_UI_DATA_URL_PROD: process.env.REACT_APP_UI_DATA_URL_PROD,
+    REACT_APP_UI_DATA_TOKEN_PROD: process.env.REACT_APP_UI_DATA_TOKEN_PROD,
+    REACT_APP_HURRICANE_ICON_URL_PROD: process.env.REACT_APP_HURRICANE_ICON_URL_PROD,
+
+    // Dev params
+    REACT_APP_GS_DATA_URL_DEV: process.env.REACT_APP_GS_DATA_URL_DEV,
+    REACT_APP_UI_DATA_URL_DEV: process.env.REACT_APP_UI_DATA_URL_DEV,
+    REACT_APP_UI_DATA_TOKEN_DEV: process.env.REACT_APP_UI_DATA_TOKEN_DEV,
+    REACT_APP_HURRICANE_ICON_URL_DEV: process.env.REACT_APP_HURRICANE_ICON_URL_DEV,
+
+    // local (debug) params
+    REACT_APP_GS_DATA_URL_LOCAL: process.env.REACT_APP_GS_DATA_URL_LOCAL,
+    REACT_APP_UI_DATA_URL_LOCAL: process.env.REACT_APP_UI_DATA_URL_LOCAL,
+    REACT_APP_UI_DATA_TOKEN_LOCAL: process.env.REACT_APP_UI_DATA_TOKEN_LOCAL,
+    REACT_APP_HURRICANE_ICON_URL_LOCAL: process.env.REACT_APP_HURRICANE_ICON_URL_LOCAL
+};
+
+/**
+ * gets an env param that includes the namespace for env param retrieval
  *
  * @param param
  * @returns {string}
@@ -44,11 +74,12 @@ export const getNamespacedEnvParam = (param) => {
 
     // make sure the namespace exists
     if (namespace.length) {
+        // build the return value
         ret_val = param + '_' + namespace;
     }
 
-    // return the hostname value type
-    return ret_val.toString();
+    // return the param value type
+    return config[ret_val];
 };
 
 // function to add a location marker where ever and obs mod layer

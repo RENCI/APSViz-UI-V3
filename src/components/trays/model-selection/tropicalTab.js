@@ -20,7 +20,7 @@ export const TropicalTabForm = () => {
     const [tropicalInstance, setTropicalInstance] = useState(null);
 
     // init the data urls
-    const rootUrl = `${process.env[[getNamespacedEnvParam('REACT_APP_UI_DATA_URL')]]}`;
+    const rootUrl = getNamespacedEnvParam('REACT_APP_UI_DATA_URL') ;
     const basePulldownUrl = 'get_pulldown_data?met_class=tropical&use_v3_sp=true';
     const baseDataUrl = 'get_ui_data_secure?met_class=tropical&use_v3_sp=true';
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
@@ -73,7 +73,7 @@ export const TropicalTabForm = () => {
             // create the authorization header
             const requestOptions = {
                 method: 'GET',
-                headers: {Authorization: `Bearer ${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')]}`}
+                headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
             };
             // make the call to get the data
             const {data} = await axios.get(finalDataUrl, requestOptions);
@@ -145,7 +145,7 @@ export const TropicalTabForm = () => {
      */
     return (
         <Fragment>
-            <form name={"Tropical"} onSubmit={formTropicalHandler}>
+            <form name={ "Tropical" } onSubmit={ formTropicalHandler }>
                 <Stack spacing={1}>
                     <Select name="tropical-storm-name" value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
                         setTropicalStorm(newValue); }}>

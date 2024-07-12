@@ -7,6 +7,7 @@ import {
     getTrackGeojson
 } from "@utils/hurricane/track";
 import { useLayers } from '@context';
+import { getNamespacedEnvParam } from "@utils";
 
 
 export const HurricaneTrackGeoJson = ({index}) => {
@@ -36,7 +37,7 @@ export const HurricaneTrackGeoJson = ({index}) => {
   }
 
   const hurrPointToLayer = ((feature, latlng) => {
-    const icon_url = `${process.env.REACT_APP_HURRICANE_ICON_URL}`;
+    const icon_url = `${ getNamespacedEnvParam('REACT_APP_HURRICANE_ICON_URL') }`;
     let iconName = null;
     const L = window.L;
     const iconSize = [20, 40];
