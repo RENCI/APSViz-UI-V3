@@ -43,7 +43,7 @@ export const ControlPanel = () => {
           toggleLayerVisibility,
           toggleHurricaneLayerVisibility } = useLayers();
 
-  const data_url = `${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_URL')]}` + 'get_ui_data?limit=1&use_v3_sp=true';
+  const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }` + 'get_ui_data_secure?limit=1&use_v3_sp=true';
   const layers = [...defaultModelLayers];
   const hurrLayers = [...hurricaneTrackLayers];
 
@@ -174,8 +174,15 @@ export const ControlPanel = () => {
 
   // useQuery function
   const setNewLayers = async() => {
+      // create the authorization header
+        const requestOptions = {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }` },
+            params: filters
+        };
+
     // retrieve the set of layers for the new cycle
-    const { isError, data, error } = await axios.get(data_url, {params: filters});
+    const { isError, data, error } = await axios.get(data_url, requestOptions);
 
     if (isError) {
         alert(error);
