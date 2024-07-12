@@ -24,7 +24,7 @@ export const SynopticTabForm = () => {
     const [synopticInstance, setSynopticInstance] = useState(null);
 
     // init the data urls
-    const rootUrl = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL_LOCAL') }`;
+    const rootUrl = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
     const basePulldownUrl = 'get_pulldown_data?met_class=synoptic&use_v3_sp=true';
     const baseDataUrl = 'get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true';
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
