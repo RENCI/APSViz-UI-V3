@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
+import { getNamespacedEnvParam } from "@utils/map-utils";
 
 /**
  * Form to filter/select synoptic runs
@@ -22,8 +23,14 @@ export const SynopticTabForm = () => {
     const [synopticGrid, setSynopticGrid] = useState(null);
     const [synopticInstance, setSynopticInstance] = useState(null);
 
+    const tmp = 'REACT_APP_UI_DATA_URL_LOCAL';
+
     // init the data urls
-    const rootUrl = `${process.env.REACT_APP_UI_DATA_URL}`;
+    const rootUrl = `${ process.env.REACT_APP_UI_DATA_URL_LOCAL }`;
+    const rootUrl2 = `${ process.env[tmp] }`;
+    const rootUrl3 = `${ process.env['REACT_APP_UI_DATA_URL_LOCAL'] }`;
+    const rootUrl4 = getNamespacedEnvParam('REACT_APP_UI_DATA_URL');
+
     const basePulldownUrl = 'get_pulldown_data?met_class=synoptic&use_v3_sp=true';
     const baseDataUrl = 'get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true';
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
@@ -74,7 +81,7 @@ export const SynopticTabForm = () => {
             // create the authorization header
             const requestOptions = {
                 method: 'GET',
-                headers: {Authorization: `Bearer ${process.env.REACT_APP_UI_DATA_TOKEN}`}
+                headers: {Authorization: `Bearer ${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')]}`}
             };
 
             // make the call to get the data

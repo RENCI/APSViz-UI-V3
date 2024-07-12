@@ -6,6 +6,51 @@ import USGSImagery from '@images/basemaps/USGS-US-Imagery.png';
 import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
 import { useLocation } from "react-router-dom";
 
+/**
+ * gets a env param that includes the namespace for env param retrieval
+ *
+ * @param param
+ * @returns {string}
+ */
+export const getNamespacedEnvParam = (param) => {
+    // init the return value
+    let namespace = '';
+
+    // make sure there is a param to work with
+    if (param.length)  {
+        // determine the host name values
+        if(window.location.href.includes('local')) {
+            // use local host values
+            namespace = 'LOCAL';
+        }
+        else if (window.location.href.includes('renci')) {
+            // use dev host values if dev is in the hostname
+            if (window.location.href.includes('-dev')) {
+                namespace = 'DEV';
+            }
+            // else use prod host values
+            else {
+                namespace = 'PROD';
+            }
+        }
+        else if (window.location.href.includes('adcirc')) {
+            // use AWS hostname values
+            namespace = 'AWS';
+        }
+    }
+
+    // init the return variable
+    let ret_val ='';
+
+    // make sure the namespace exists
+    if (namespace.length) {
+        ret_val = param + '_' + namespace;
+    }
+
+    // return the hostname value type
+    return ret_val.toString();
+};
+
 // function to add a location marker where ever and obs mod layer
 // feature is clicked icon downloaded as png from here: 
 // https://fonts.google.com/icons?selected=Material+Symbols+Outlined:location_searching:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=location

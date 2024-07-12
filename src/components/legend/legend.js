@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, Box, Card, Stack } from '@mui/joy';
 import { useLayers } from '@context';
+import { getNamespacedEnvParam } from "@utils";
 
 export const MapLegend = () => {
 
@@ -35,7 +36,7 @@ export const MapLegend = () => {
         const layerName = legendLayer.layers.split(':')[1];
         const style = layerStyles[layerName.substring(layerName.indexOf('_')+1)];
 
-        legendUrl = `${process.env.REACT_APP_GS_DATA_URL}` + 
+        legendUrl = `${process.env[getNamespacedEnvParam('REACT_APP_GS_DATA_URL')]}` +
                     workspace + "/" +
                     "ows?service=WMS&request=GetLegendGraphic&TRANSPARENT=TRUE&LEGEND_OPTIONS=layout:verticle&format=image%2Fpng&width=20&height=20&layer=" +
                     layerName + 
