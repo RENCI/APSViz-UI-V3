@@ -72,6 +72,7 @@ export const DefaultLayers = () => {
           layer.on("mouseout", function () {
             this.closePopup();
           });
+
           layer.on("click", function (e) {
             // this id is used to remove a selected observation from the selectedObservations list when the dialog is closed
             feature.properties.id = feature.properties.station_name;
