@@ -24,6 +24,7 @@ import {
   Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
+import { getNamespacedEnvParam } from "@utils/map-utils";
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
@@ -41,7 +42,7 @@ export const ControlPanel = () => {
           toggleLayerVisibility,
           toggleHurricaneLayerVisibility } = useLayers();
 
-  const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data?limit=1&use_v3_sp=true`;
+  const data_url = `${process.env[getNamespacedEnvParam('REACT_APP_UI_DATA_URL')]}` + 'get_ui_data?limit=1&use_v3_sp=true';
   const layers = [...defaultModelLayers];
 
    // keep track of which model run to retrieve
@@ -57,7 +58,7 @@ export const ControlPanel = () => {
   //  in the control panel
   let firstId = "";
   const topLayers  = layers.filter((layer, idx) => {
-    if (idx == 0) {
+    if (idx === 0) {
       firstId = layer.id.substr(0, layer.id.lastIndexOf("-"));
     }
     // check to make sure they are all from the same model run
@@ -65,7 +66,7 @@ export const ControlPanel = () => {
       return {
         ...layer
       };
-    };
+    }
   });
   if (topLayers[0]) {
     runCycle = topLayers[0].properties.cycle;
