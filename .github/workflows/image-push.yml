@@ -47,11 +47,22 @@ jobs:
           push: true
           build-args: |
             APP_VERSION=${{ steps.get_version.outputs.VERSION }}
-            APP_GS_DATA_URL=${{ secrets.GS_DATA_URL }}
-            APP_UI_DATA_URL=${{ secrets.UI_DATA_URL }}
-            APP_UI_DATA_TOKEN=${{ secrets.UI_DATA_TOKEN }}
             APP_UI_MAPBOX_TOKEN=${{ secrets.UI_MAPBOX_TOKEN }}
-            APP_UI_HURRICANE_ICON_URL=${{ secrets.UI_HURRICANE_ICON_URL }}
+            
+            APP_GS_DATA_AWS_URL=${{ secrets.GS_DATA_AWS_URL }}
+            APP_UI_DATA_AWS_URL=${{ secrets.UI_DATA_AWS_URL }}
+            APP_UI_DATA_AWS_TOKEN=${{ secrets.UI_DATA_AWS_TOKEN }}
+            APP_UI_HURRICANE_ICON_AWS_URL=${{ secrets.UI_HURRICANE_ICON_AWS_URL }}
+                        
+            APP_GS_DATA_PROD_URL=${{ secrets.GS_DATA_PROD_URL }}
+            APP_UI_DATA_PROD_URL=${{ secrets.UI_DATA_PROD_URL }}
+            APP_UI_DATA_PROD_TOKEN=${{ secrets.UI_DATA_PROD_TOKEN }}
+            APP_UI_HURRICANE_PROD_ICON_URL=${{ secrets.UI_HURRICANE_ICON_PROD_URL }}
+            
+            APP_GS_DATA_DEV_URL=${{ secrets.GS_DATA_DEV_URL }}
+            APP_UI_DATA_DEV_URL=${{ secrets.UI_DATA_DEV_URL }}
+            APP_UI_DATA_DEV_TOKEN=${{ secrets.UI_DATA_DEV_TOKEN }}
+            APP_UI_HURRICANE_ICON_DEV_URL=${{ secrets.UI_HURRICANE_ICON_DEV_URL }}
           tags: |
             ${{ env.REGISTRY }}:latest
             ${{ env.REGISTRY }}:${{ steps.get_version.outputs.VERSION }}
