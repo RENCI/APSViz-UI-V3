@@ -4,7 +4,7 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import {markClicked, parseSharedURL, addSharedObservations} from '@utils/map-utils';
+import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -72,6 +72,7 @@ export const DefaultLayers = () => {
           layer.on("mouseout", function () {
             this.closePopup();
           });
+
           layer.on("click", function (e) {
             // this id is used to remove a selected observation from the selectedObservations list when the dialog is closed
             feature.properties.id = feature.properties.station_name;
@@ -89,9 +90,9 @@ export const DefaultLayers = () => {
     const shared_params = parseSharedURL();
 
     // create the URLs to the data endpoints
-    const data_url = `${process.env.REACT_APP_UI_DATA_URL}get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
-    const gs_wms_url = `${process.env.REACT_APP_GS_DATA_URL}wms`;
-    const gs_wfs_url = `${process.env.REACT_APP_GS_DATA_URL}`;
+    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
+    const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
+    const gs_wms_url = gs_wfs_url + 'wms';
 
     // retrieve the catalog member with the provided id
     const getCatalogEntry = (catalog, id)  => {
@@ -113,7 +114,7 @@ export const DefaultLayers = () => {
         // create the authorization header
         const requestOptions = {
             method: 'GET',
-            headers: {Authorization: `Bearer ${process.env.REACT_APP_UI_DATA_TOKEN}`}
+            headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }` }
         };
 
         // make the call to get the data
