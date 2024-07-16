@@ -37,13 +37,31 @@ export const config = {
 };
 
 /**
+ * gets a query string param based on the FQDN
+ *
+ */
+export const getBrandingHandler = () =>  {
+    // init the return value
+    let ret_val = '';
+
+    // if this is a nopp branding
+    if(window.location.href.includes('nopp')) {
+        // use local host values
+        ret_val = '&project_code=nopp';
+    }
+
+    // return the query string
+    return ret_val;
+};
+
+/**
  * gets an env param that includes the namespace for env param retrieval
  *
  * @param param
  * @returns {string}
  */
 export const getNamespacedEnvParam = (param) => {
-    // init the return value
+    // init the namespace value
     let namespace = '';
 
     // make sure there is a param to work with
