@@ -24,8 +24,8 @@ import {
   Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
-import { getNamespacedEnvParam } from "@utils/map-utils";
 import noppLogo from '@images/nopp-logo.png';
+import { getNamespacedEnvParam } from "@utils/map-utils";
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
