@@ -25,7 +25,7 @@ import {
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
 import noppLogo from '@images/nopp-logo.png';
-import { getNamespacedEnvParam } from "@utils/map-utils";
+import { getBrandingHandler, getNamespacedEnvParam } from "@utils/map-utils";
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
@@ -44,7 +44,7 @@ export const ControlPanel = () => {
           toggleLayerVisibility,
           toggleHurricaneLayerVisibility } = useLayers();
 
-  const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }` + 'get_ui_data_secure?limit=1&use_v3_sp=true';
+  const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }` + `get_ui_data_secure?limit=1&use_v3_sp=true${ getBrandingHandler() }`;
   const layers = [...defaultModelLayers];
   const hurrLayers = [...hurricaneTrackLayers];
 

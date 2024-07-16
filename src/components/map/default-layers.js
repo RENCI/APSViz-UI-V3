@@ -4,7 +4,7 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam } from '@utils/map-utils';
+import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -90,7 +90,7 @@ export const DefaultLayers = () => {
     const shared_params = parseSharedURL();
 
     // create the URLs to the data endpoints
-    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ shared_params['run_id'] }`;
+    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ getBrandingHandler() }${ shared_params['run_id'] }`;
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
 
