@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
-import { getNamespacedEnvParam } from "@utils/map-utils";
+import { getNamespacedEnvParam, getBrandingHandler } from "@utils/map-utils";
 
 /**
  * Form to filter/select synoptic runs
@@ -25,8 +25,8 @@ export const SynopticTabForm = () => {
 
     // init the data urls
     const rootUrl = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
-    const basePulldownUrl = 'get_pulldown_data?met_class=synoptic&use_v3_sp=true';
-    const baseDataUrl = 'get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true';
+    const basePulldownUrl = `get_pulldown_data?met_class=synoptic&use_v3_sp=true${ getBrandingHandler() }`;
+    const baseDataUrl = `get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true${ getBrandingHandler() }`;
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
 
     // storage for received data to render pulldowns
