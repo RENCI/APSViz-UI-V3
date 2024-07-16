@@ -24,6 +24,7 @@ import {
   Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
 import apsLogo from '@images/aps-trans-logo.png';
+import noppLogo from '@images/nopp-logo.png';
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
@@ -320,10 +321,16 @@ export const ControlPanel = () => {
     >
       <AccordionSummary slotProps={{buttonClasses: {size: 'xx-large'}}}>
       {/* <ExpandMoreIcon sx={{ color: 'blue', size: 'xx-large' }} /> */}
-      <Stack direction="column" gap={ 1 } alignItems="center">
+      <Stack direction="row" gap={ 0 } alignItems="center">
         <Box
           component="img"
-          width="250px"
+          width="100px"
+          alt="ADCIRC Prediction System"
+          src={noppLogo}
+        />
+         <Box
+          component="img"
+          width="200px"
           alt="ADCIRC Prediction System"
           src={apsLogo}
         />
