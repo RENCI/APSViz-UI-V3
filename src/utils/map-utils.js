@@ -39,7 +39,6 @@ export const config = {
 /**
  * gets a query string param based on the FQDN
  *
- * @param param
  */
 export const getBrandingHandler = () =>  {
     // init the return value
@@ -47,8 +46,8 @@ export const getBrandingHandler = () =>  {
 
     // if this is a nopp branding
     if(window.location.href.includes('nopp')) {
-            // use local host values
-            ret_val = '&project_code=nopp';
+        // use local host values
+        ret_val = '&project_code=nopp';
     }
 
     // return the query string
