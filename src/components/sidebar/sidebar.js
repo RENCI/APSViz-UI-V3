@@ -7,7 +7,7 @@ import SidebarTrays from '../trays';
 
 export const Sidebar = () => {
   const theme = useTheme();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const handleClickMenuItem = useCallback(newIndex => {
     // if the incoming new index equals the old index,

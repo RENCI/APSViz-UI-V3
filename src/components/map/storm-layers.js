@@ -91,7 +91,7 @@ export const StormLayers = () => {
             state: newLayerDefaultState()
           }];
           const currentLayers = getAllHurricaneLayersInvisible();
-                
+
           setHurricaneTrackLayers([...trackLayer, ...currentLayers]);
         }
       }

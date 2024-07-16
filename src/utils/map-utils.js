@@ -6,6 +6,82 @@ import USGSImagery from '@images/basemaps/USGS-US-Imagery.png';
 import CartoDBPositron from '@images/basemaps/CartoDB-Positron.png';
 import { useLocation } from "react-router-dom";
 
+/**
+ * deconstructs the app params
+ *
+ */
+export const config = {
+    // AWS params
+    REACT_APP_GS_DATA_URL_AWS: process.env.REACT_APP_GS_DATA_URL_AWS,
+    REACT_APP_UI_DATA_URL_AWS: process.env.REACT_APP_UI_DATA_URL_AWS,
+    REACT_APP_UI_DATA_TOKEN_AWS: process.env.REACT_APP_UI_DATA_TOKEN_AWS,
+    REACT_APP_HURRICANE_ICON_URL_AWS: process.env.REACT_APP_HURRICANE_ICON_URL_AWS,
+
+    // Production params
+    REACT_APP_GS_DATA_URL_PROD: process.env.REACT_APP_GS_DATA_URL_PROD,
+    REACT_APP_UI_DATA_URL_PROD: process.env.REACT_APP_UI_DATA_URL_PROD,
+    REACT_APP_UI_DATA_TOKEN_PROD: process.env.REACT_APP_UI_DATA_TOKEN_PROD,
+    REACT_APP_HURRICANE_ICON_URL_PROD: process.env.REACT_APP_HURRICANE_ICON_URL_PROD,
+
+    // Dev params
+    REACT_APP_GS_DATA_URL_DEV: process.env.REACT_APP_GS_DATA_URL_DEV,
+    REACT_APP_UI_DATA_URL_DEV: process.env.REACT_APP_UI_DATA_URL_DEV,
+    REACT_APP_UI_DATA_TOKEN_DEV: process.env.REACT_APP_UI_DATA_TOKEN_DEV,
+    REACT_APP_HURRICANE_ICON_URL_DEV: process.env.REACT_APP_HURRICANE_ICON_URL_DEV,
+
+    // local (debug) params
+    REACT_APP_GS_DATA_URL_LOCAL: process.env.REACT_APP_GS_DATA_URL_LOCAL,
+    REACT_APP_UI_DATA_URL_LOCAL: process.env.REACT_APP_UI_DATA_URL_LOCAL,
+    REACT_APP_UI_DATA_TOKEN_LOCAL: process.env.REACT_APP_UI_DATA_TOKEN_LOCAL,
+    REACT_APP_HURRICANE_ICON_URL_LOCAL: process.env.REACT_APP_HURRICANE_ICON_URL_LOCAL
+};
+
+/**
+ * gets an env param that includes the namespace for env param retrieval
+ *
+ * @param param
+ * @returns {string}
+ */
+export const getNamespacedEnvParam = (param) => {
+    // init the return value
+    let namespace = '';
+
+    // make sure there is a param to work with
+    if (param.length)  {
+        // determine the host name values
+        if(window.location.href.includes('local')) {
+            // use local host values
+            namespace = 'LOCAL';
+        }
+        else if (window.location.href.includes('renci')) {
+            // use dev host values if dev is in the hostname
+            if (window.location.href.includes('-dev')) {
+                namespace = 'DEV';
+            }
+            // else use prod host values
+            else {
+                namespace = 'PROD';
+            }
+        }
+        else if (window.location.href.includes('adcirc')) {
+            // use AWS hostname values
+            namespace = 'AWS';
+        }
+    }
+
+    // init the return variable
+    let ret_val ='';
+
+    // make sure the namespace exists
+    if (namespace.length) {
+        // build the return value
+        ret_val = param + '_' + namespace;
+    }
+
+    // return the param value type
+    return config[ret_val];
+};
+
 // function to add a location marker where ever and obs mod layer
 // feature is clicked icon downloaded as png from here: 
 // https://fonts.google.com/icons?selected=Material+Symbols+Outlined:location_searching:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=location
