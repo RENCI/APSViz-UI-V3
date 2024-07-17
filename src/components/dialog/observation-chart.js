@@ -28,7 +28,7 @@ console.error = (...args) => {
 };
 
 // define a global variable for the error message
-let errorMsg = "";
+const errorMsg = "";
 
 /**
  * Retrieves and returns the chart data in json format
@@ -46,17 +46,17 @@ function getObsChartData(url) {
         queryFn: async () => {
             // make the call to get the data
             const ret_val = await axios
+                // make the call to get the data
                 .get(url)
+                // use the data returned
                 .then (( response ) => {
                     // return the data
                     return response.data;
                 })
+                // otherwise post the issue to the console log
                 .catch (( error ) => {
-                    // capture the error message in the response
-                    errorMsg = error.message;
-
-                    // push the error to the console
-                    console.error(errorMsg);
+                    // send the error message to the console
+                    console.error(error.message);
 
                     // make sure we dont render anything
                     return "";
@@ -66,45 +66,6 @@ function getObsChartData(url) {
             return csvToJSON(ret_val);
         }
     });
-}
-
-/**
- * Creates the chart.
- *
- * @param url
- * @returns {JSX.Element}
- * @constructor
- */
-function CreateObsChart(url) {
-    // get the settings for the Y-axis min/max values
-    const { obsChartY } = useSettings();
-
-    // call to get the data. expect back some information too
-    const { status, data } = getObsChartData(url.url);
-
-    // render the chart
-    return (
-        <ResponsiveContainer width="100%" height="100%">
-            { status === 'pending' ? (
-                <div>Gathering chart data...</div>
-            ) : status === 'error' ? (
-                <div>Error: { errorMsg }</div>
-            ) : (
-                <LineChart data={ data } margin={{ left: -10 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={ false } />
-                    <YAxis tickCount="10" domain={ obsChartY } />
-                    <Tooltip />
-                    <Legend align={ 'center' } />
-                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
-                </LineChart>
-            )}
-        </ResponsiveContainer>
-    );
 }
 
 /**
@@ -177,4 +138,43 @@ function csvToJSON(csvData) {
         // return the json data representation
         return ret_val;
     }
+}
+
+/**
+ * Creates the chart.
+ *
+ * @param url
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function CreateObsChart(url) {
+    // get the settings for the Y-axis min/max values
+    const { obsChartY } = useSettings();
+
+    // call to get the data. expect back some information too
+    const { status, data } = getObsChartData(url.url);
+
+    // render the chart
+    return (
+        <ResponsiveContainer width="100%" height="100%">
+            { status === 'pending' ? (
+                <div>Gathering chart data...</div>
+            ) : status === 'error' ? (
+                <div>There was a problem getting observation data for this location.</div>
+            ) : (
+                <LineChart data={ data } margin={{ left: -10 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" allowDuplicatedCategory={ false } />
+                    <YAxis tickCount="10" domain={ obsChartY } />
+                    <Tooltip />
+                    <Legend align={ 'center' } />
+                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
+                </LineChart>
+            )}
+        </ResponsiveContainer>
+    );
 }
