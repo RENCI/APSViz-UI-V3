@@ -24,7 +24,7 @@ export const Branding = () => {
                 <Box
                     component="img"
                     width="100px"
-                    alt="ADCIRC Prediction System"
+                    alt="National Oceanograhic Partnership Program"
                     src={noppLogo}
                     />
                 <Box
