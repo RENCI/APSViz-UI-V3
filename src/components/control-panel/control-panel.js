@@ -6,7 +6,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Divider,
   IconButton,
   Stack,
@@ -23,9 +22,8 @@ import {
   Water as MaxElevationIcon,
   Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
-import apsLogo from '@images/aps-trans-logo.png';
-import noppLogo from '@images/nopp-logo.png';
 import { getBrandingHandler, getNamespacedEnvParam } from "@utils/map-utils";
+import { Branding } from './branding';
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
@@ -329,7 +327,7 @@ export const ControlPanel = () => {
     >
       <AccordionSummary slotProps={{buttonClasses: {size: 'xx-large'}}}>
       {/* <ExpandMoreIcon sx={{ color: 'blue', size: 'xx-large' }} /> */}
-      <Stack direction="row" gap={ 0 } alignItems="center">
+      {/* <Stack direction="row" gap={ 0 } alignItems="center">
         <Box
           component="img"
           width="100px"
@@ -342,7 +340,8 @@ export const ControlPanel = () => {
           alt="ADCIRC Prediction System"
           src={apsLogo}
         />
-      </Stack>
+      </Stack> */}
+        <Branding/>
       </AccordionSummary>
       <AccordionDetails sx={{'marginBottom': '15px'}}>
       <Stack direciton="column" gap={ 1 } alignItems="center">
