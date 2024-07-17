@@ -33,15 +33,16 @@ export const Branding = () => {
                     alt="ADCIRC Prediction System"
                     src={apsLogo}
             />
-            </Stack>) :
+            </Stack>)
+            :
             ( <Stack direction="column" gap={ 1 } alignItems="center">
-            <Box
-                component="img"
-                width="250px"
-                alt="ADCIRC Prediction System"
-                src={apsLogo}
+                <Box
+                    component="img"
+                    width="250px"
+                    alt="ADCIRC Prediction System"
+                    src={apsLogo}
             />
-        </Stack>)
+            </Stack>)
         }
         </div>
     );
