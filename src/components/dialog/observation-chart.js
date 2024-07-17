@@ -27,6 +27,9 @@ console.error = (...args) => {
   error(...args);
 };
 
+// define a global variable for the error message
+let errorMsg = "";
+
 /**
  * Retrieves and returns the chart data in json format
  *
@@ -42,10 +45,20 @@ function getObsChartData(url) {
         // create the function to call for data
         queryFn: async () => {
             // make the call to get the data
-            const { data } = await axios.get(url);
+            const ret_val = await axios
+                .get(url)
+                .then (( response ) => {
+                    // return the csv data in json format
+                    return response.data;
+                })
+                .catch (( error ) => {
+                    errorMsg = error.message;
+                    console.error(errorMsg);
+                    return "";
+                });
 
             // return the csv data in json format
-            return csvToJSON(data);
+            return csvToJSON(ret_val);
         }
     });
 }
@@ -62,15 +75,15 @@ function CreateObsChart(url) {
     const { obsChartY } = useSettings();
 
     // call to get the data. expect back some information too
-    const { status, data, error } = getObsChartData(url.url);
+    const { status, data } = getObsChartData(url.url);
 
     // render the chart
     return (
         <ResponsiveContainer width="100%" height="100%">
             { status === 'pending' ? (
-                <div>Loading...</div>
+                <div>Gathering chart data...</div>
             ) : status === 'error' ? (
-                <div>Error: { error.message }</div>
+                <div>Error: { errorMsg }</div>
             ) : (
                 <LineChart data={ data } margin={{ left: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
