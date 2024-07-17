@@ -48,12 +48,17 @@ function getObsChartData(url) {
             const ret_val = await axios
                 .get(url)
                 .then (( response ) => {
-                    // return the csv data in json format
+                    // return the data
                     return response.data;
                 })
                 .catch (( error ) => {
+                    // capture the error message in the response
                     errorMsg = error.message;
+
+                    // push the error to the console
                     console.error(errorMsg);
+
+                    // make sure we dont render anything
                     return "";
                 });
 
