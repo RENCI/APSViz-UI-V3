@@ -3,6 +3,11 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { useSettings } from "@context";
+import dayjs from 'dayjs';
+
+// setup to handle dates as UTC
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 /**
  * renders the observations as a chart
@@ -26,9 +31,6 @@ console.error = (...args) => {
   if (/defaultProps/.test(args[0])) return;
   error(...args);
 };
-
-// define a global variable for the error message
-const errorMsg = "";
 
 /**
  * Retrieves and returns the chart data in json format
@@ -106,38 +108,61 @@ function csvToJSON(csvData) {
 
         // remove the timezone from the time value
         ret_val.map(function (e){
-            e.time = e.time.substring(0, e.time.split(':', 2).join(':').length);
+            // only convert records with a valid time
+            if (e.time !== "") {
+                // take off the time zone
+                e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
 
-            // data that is missing a value will not result in plotting
-            if (e["APS Nowcast"])
-                e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
-            else
-                e["APS Nowcast"] = null;
+                // data that is missing a value will not result in plotting
+                if (e["APS Nowcast"])
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
+                else
+                    e["APS Nowcast"] = null;
 
-            if (e["APS Forecast"])
-                e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(4);
-            else
-                e["APS Forecast"] = null;
+                if (e["APS Forecast"])
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(4);
+                else
+                    e["APS Forecast"] = null;
 
-            if (e["Observations"])
-                e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
-            else
-                e["Observations"] = null;
+                if (e["Observations"])
+                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+                else
+                    e["Observations"] = null;
 
-            if (e["NOAA Tidal Predictions"])
-                e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
-            else
-                e["NOAA Tidal Predictions"] = null;
+                if (e["NOAA Tidal Predictions"])
+                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
+                else
+                    e["NOAA Tidal Predictions"] = null;
 
-            if (e["Difference (APS-OBS)"])
-                e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
-            else
-                e["Difference (APS-OBS)"] = null;
+                if (e["Difference (APS-OBS)"])
+                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+                else
+                    e["Difference (APS-OBS)"] = null;
+            }
         });
 
         // return the json data representation
         return ret_val;
     }
+}
+
+/**
+ * reformats the data label shown on the x-axis
+ *
+ * @param time
+ * @returns {string}
+ */
+function formatX_axis(time) {
+    // init the return value
+    let ret_val = "";
+
+    // empty data will be ignored
+    if (time !== "")
+        // do the reformatting
+        ret_val = dayjs.utc(time).format('MM-DD:HH').split('+')[0] + 'Z';
+
+    // return the formatted value
+    return ret_val;
 }
 
 /**
@@ -164,7 +189,7 @@ function CreateObsChart(url) {
             ) : (
                 <LineChart data={ data } margin={{ left: -10 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={ false } />
+                    <XAxis dataKey="time" allowDuplicatedCategory={ false } tickFormatter={ (time) => formatX_axis(time) }/>
                     <YAxis tickCount="10" domain={ obsChartY } />
                     <Tooltip />
                     <Legend align={ 'center' } />
