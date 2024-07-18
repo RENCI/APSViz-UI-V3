@@ -28,7 +28,7 @@ export const SettingsProvider = ({ children }) => {
   }, [mode]);
 
   // used to capture the selected observation chart min/max Y-axis
-  const [obsChartY, setObsChartY] = useState([-2, 2]);
+  const [obsChartY, setObsChartY] = useState([-2, 2.5]);
 
   return (
     <SettingsContext.Provider value={{
