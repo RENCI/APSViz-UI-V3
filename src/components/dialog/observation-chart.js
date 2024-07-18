@@ -5,8 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useSettings } from "@context";
 import dayjs from 'dayjs';
 
-// setup to handle dates as UTC
+// install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
+
+// init the date formatter to use UTC only
 dayjs.extend(utc);
 
 /**
@@ -115,12 +117,12 @@ function csvToJSON(csvData) {
 
                 // data that is missing a value will not result in plotting
                 if (e["APS Nowcast"])
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
                 else
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"])
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(4);
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
                 else
                     e["APS Forecast"] = null;
 
@@ -130,12 +132,12 @@ function csvToJSON(csvData) {
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"])
-                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
+                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
                 else
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["Difference (APS-OBS)"])
-                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
                 else
                     e["Difference (APS-OBS)"] = null;
             }
@@ -152,14 +154,31 @@ function csvToJSON(csvData) {
  * @param time
  * @returns {string}
  */
-function formatX_axis(time) {
+function formatY_axis(value) {
+    // init the return value
+    let ret_val = "";
+
+    // do the reformatting
+    ret_val = value.toFixed(2);
+
+    // return the formatted value
+    return ret_val;
+}
+
+/**
+ * reformats the data label shown on the x-axis
+ *
+ * @param time
+ * @returns {string}
+ */
+function formatX_axis(value) {
     // init the return value
     let ret_val = "";
 
     // empty data will be ignored
-    if (time !== "")
+    if (value !== "")
         // do the reformatting
-        ret_val = dayjs.utc(time).format('MM-DD:HH').split('+')[0] + 'Z';
+        ret_val = dayjs.utc(value).format('MM-DD:HH').split('+')[0] + 'Z';
 
     // return the formatted value
     return ret_val;
@@ -187,12 +206,12 @@ function CreateObsChart(url) {
             ) : status === 'error' ? (
                 <div>There was a problem getting observation data for this location.</div>
             ) : (
-                <LineChart data={ data } margin={{ left: -10 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={ false } tickFormatter={ (time) => formatX_axis(time) }/>
-                    <YAxis tickCount="10" domain={ obsChartY } />
+                <LineChart data={ data } margin={{ left: -25 }}>
+                    <CartesianGrid strokeDasharray="1 1" />
+                    <XAxis tickCount="2" tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (time) => formatX_axis(time) }/>
+                    <YAxis tickCount="10" tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } domain={ obsChartY } />
                     <Tooltip />
-                    <Legend align={ 'center' } />
+                    <Legend align="right"/>
                     <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />

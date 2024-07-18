@@ -76,7 +76,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     <CloseOutlinedIcon color={"primary"}/>
                 </IconButton>
 
-                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, width: "100%", height: 350 }}>{ dialogObject }</DialogContent>
+                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, height: 355 }}>{ dialogObject }</DialogContent>
             </Dialog>
         </Fragment>
     );
