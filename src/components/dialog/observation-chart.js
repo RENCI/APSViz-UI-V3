@@ -151,24 +151,18 @@ function csvToJSON(csvData) {
 /**
  * reformats the data label shown on the x-axis
  *
- * @param time
+ * @param value
  * @returns {string}
  */
 function formatY_axis(value) {
-    // init the return value
-    let ret_val = "";
-
-    // do the reformatting
-    ret_val = value.toFixed(2);
-
     // return the formatted value
-    return ret_val;
+    return value.toFixed(2);
 }
 
 /**
  * reformats the data label shown on the x-axis
  *
- * @param time
+ * @param value
  * @returns {string}
  */
 function formatX_axis(value) {
@@ -208,7 +202,7 @@ function CreateObsChart(url) {
             ) : (
                 <LineChart data={ data } margin={{ left: -25 }}>
                     <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis tickCount="2" tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (time) => formatX_axis(time) }/>
+                    <XAxis tickCount="2" tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
                     <YAxis tickCount="10" tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } domain={ obsChartY } />
                     <Tooltip />
                     <Legend align="right"/>
