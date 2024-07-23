@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
-import { useSettings } from "@context";
 import dayjs from 'dayjs';
 
 // install day.js for UTC visual formatting
@@ -186,14 +185,11 @@ function formatX_axis(value) {
  * @constructor
  */
 function CreateObsChart(url) {
-    // get the settings for the Y-axis min/max values
-    const { obsChartY } = useSettings();
-
     // call to get the data. expect back some information too
     const { status, data } = getObsChartData(url.url);
 
-    // set the default y-axis ticks
-    const yaxis_ticks= [-5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0];
+    // get the domain bounds
+    const maxValue = get_yaxis_ticks(data);
 
     // render the chart
     return (
@@ -209,7 +205,7 @@ function CreateObsChart(url) {
                     <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
 
                     <ReferenceLine y={0} stroke="#000000" />
-                    <YAxis ticks={ yaxis_ticks } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } domain={ obsChartY } />
+                    <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
 
                     <Tooltip />
                     <Legend align="right" />
@@ -222,4 +218,56 @@ function CreateObsChart(url) {
             )}
         </ResponsiveContainer>
     );
+}
+
+/**
+ * gets the max value in the data to set the y-axis range and ticks
+ *
+ * @param data
+ * @returns {null|*[]}
+ */
+function get_yaxis_ticks(data) {
+    // insure there is something to work with
+    if (data !== undefined) {
+        // init the max value found
+        let maxVal = 0;
+
+        // get the keys of the first
+        const theKeys = Object.keys(data[0]);
+
+        // remove time from the array
+        theKeys.shift();
+
+        // get the max value in the data for each key
+        theKeys.forEach((aKey) => {
+            // identify the max value in the array of values
+            const newVal = Math.max(...data
+                // make sure we dont run into any null or undefined values in the data
+                .filter(function(o) { return !(o[aKey] === undefined || o[aKey] === null); })
+                // create the array of all the values
+                .map(o => o[aKey]));
+
+            // if there was a new max value found
+            if (newVal > maxVal) {
+                // save the new max value
+                maxVal = newVal;
+            }
+        });
+
+        // round up to the next integer
+        maxVal = Math.ceil(maxVal);
+
+        // init the return value
+        const ret_val = [];
+
+        // create an array of tick marks based on the mav data value
+        for (let i=-maxVal; i <= maxVal; i += .5)
+            ret_val.push(i);
+
+        // return the new y-axis array range
+        return ret_val;
+    }
+    // else return nothing
+    else
+        return null;
 }
