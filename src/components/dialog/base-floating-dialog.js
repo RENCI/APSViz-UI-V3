@@ -64,8 +64,8 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                 TransitionComponent={ Transition }
                 disableEnforceFocus
                 style={{ pointerEvents: 'none' }}
-                PaperProps={{ sx: { width: 800,  height: 465, pointerEvents: 'auto' } }}
-                sx={{ zIndex: 405, width: 800, height: 465, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
+                PaperProps={{ sx: { width: 800,  height: 505, pointerEvents: 'auto' } }}
+                sx={{ zIndex: 405, width: 800, height: 505, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
                         left: index * 20, top: 20 + index * 43 }}
             >
                 <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
@@ -76,7 +76,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     <CloseOutlinedIcon color={"primary"}/>
                 </IconButton>
 
-                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, height: 355 }}>{ dialogObject }</DialogContent>
+                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, height: 395 }}>{ dialogObject }</DialogContent>
             </Dialog>
         </Fragment>
     );

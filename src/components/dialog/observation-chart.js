@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { useSettings } from "@context";
 import dayjs from 'dayjs';
@@ -198,14 +198,18 @@ function CreateObsChart(url) {
             { status === 'pending' ? (
                 <div>Gathering chart data...</div>
             ) : status === 'error' ? (
-                <div>There was a problem getting observation data for this location.</div>
+                <div>There was a problem with observation data for this location.</div>
             ) : (
-                <LineChart data={ data } margin={{ left: -25 }}>
+                <LineChart data={ data } margin={{ left: -25 }} >
                     <CartesianGrid strokeDasharray="1 1" />
-                    <XAxis tickCount="2" tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
-                    <YAxis tickCount="10" tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } domain={ obsChartY } />
+
+                    <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+
+                    <ReferenceLine y={0} stroke="#000000" />
+                    <YAxis ticks={ yaxis_ticks } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } domain={ obsChartY } />
+
                     <Tooltip />
-                    <Legend align="right"/>
+                    <Legend align="right" />
                     <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -216,3 +220,5 @@ function CreateObsChart(url) {
         </ResponsiveContainer>
     );
 }
+
+const yaxis_ticks = [-5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0];
