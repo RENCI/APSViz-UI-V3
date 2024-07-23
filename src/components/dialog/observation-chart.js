@@ -192,6 +192,9 @@ function CreateObsChart(url) {
     // call to get the data. expect back some information too
     const { status, data } = getObsChartData(url.url);
 
+    // set the default y-axis ticks
+    const yaxis_ticks= [-5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0];
+
     // render the chart
     return (
         <ResponsiveContainer width="100%" height="100%">
@@ -220,5 +223,3 @@ function CreateObsChart(url) {
         </ResponsiveContainer>
     );
 }
-
-const yaxis_ticks = [-5.0, -4.0, -3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0];
