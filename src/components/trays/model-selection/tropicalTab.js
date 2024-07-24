@@ -90,7 +90,10 @@ export const TropicalTabForm = () => {
 
             // return something
             return true;
-        }
+        },
+
+        refetchOnWindowFocus: false
+
     });
 
     /**
