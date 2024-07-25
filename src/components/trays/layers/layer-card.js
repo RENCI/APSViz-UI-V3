@@ -19,6 +19,7 @@ import { useLayers } from '@context';
 import { useToggleState } from '@hooks';
 import { LayerActions } from './layer-card-actions';
 import { ActionButton } from '@components/buttons';
+import { DeleteLayerButton } from './delete-layer-button';
 
 export const LayerCard = ({ index, layer }) => {
   const {
@@ -66,7 +67,7 @@ export const LayerCard = ({ index, layer }) => {
             <Avatar variant="outlined">
               <LayerIcon size="lg" color="primary" />
             </Avatar>
-            <Typography level="title-md">
+            <Typography level="title-md" sx={{ flex: 1 }}>
               {layer.properties.product_name}
             </Typography>
             <Switch
@@ -75,6 +76,7 @@ export const LayerCard = ({ index, layer }) => {
               onChange={ () => toggleLayerVisibility(layer.id) }
               className="action-button"
             />
+            <DeleteLayerButton layerId={ layer.id }/>
           </Stack>
 
           <Stack
