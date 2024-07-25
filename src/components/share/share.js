@@ -22,7 +22,7 @@ export const Share = () => {
                     filter: 'opacity(0.9)',
                     '&:hover': { filter: 'opacity(1.0)' },
                     height: 50,
-                    width: 80,
+                    width: 40,
                     padding: '0px',
                     zIndex: 410,
                     borderRadius: 'sm'

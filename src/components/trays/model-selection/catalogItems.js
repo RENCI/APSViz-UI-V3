@@ -185,7 +185,8 @@ export default function CatalogItems(data) {
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={
-                                                                stormOrModelName + mbr['properties'][stormOrModelEle].toUpperCase() + ', ' +
+                                                                stormOrModelName +
+                                                                ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
                                                                 numberName + mbr['properties'][numberEle] +
                                                                 ', Type: ' + mbr['properties']['event_type'] +
                                                                 ', Grid: ' + mbr['properties']['grid_type'] +

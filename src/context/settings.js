@@ -2,8 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useMemo,
-  useState
+  useMemo
 } from "react";
 
 import PropTypes from "prop-types";
@@ -27,9 +26,6 @@ export const SettingsProvider = ({ children }) => {
     setMode(darkMode ? 'light' : 'dark');
   }, [mode]);
 
-  // used to capture the selected observation chart min/max Y-axis
-  const [obsChartY, setObsChartY] = useState([-2, 2]);
-
   return (
     <SettingsContext.Provider value={{
       booleanValue,
@@ -37,8 +33,7 @@ export const SettingsProvider = ({ children }) => {
       darkMode: {
         enabled: darkMode,
         toggle: toggleDarkMode,
-      },
-      obsChartY, setObsChartY,
+      }
     }}>
       { children }
     </SettingsContext.Provider>

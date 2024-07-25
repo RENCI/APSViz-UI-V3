@@ -93,7 +93,9 @@ export const SynopticTabForm = () => {
 
             // return something
             return true;
-        }
+        },
+
+        refetchOnWindowFocus: false
     });
 
     /**

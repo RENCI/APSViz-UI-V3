@@ -139,7 +139,12 @@ export const DefaultLayers = () => {
         }
         return(data);
     };
-    useQuery( {queryKey: ['apsviz-default-data', data_url], queryFn: getDefaultLayers, enable: !!data_url});
+    useQuery({
+        queryKey: ['apsviz-default-data', data_url],
+        queryFn: getDefaultLayers,
+        enable: !!data_url,
+        refetchOnWindowFocus: false,
+    });
 
     // maybe should convert this one to use useQuery - not sure how to do that yet
     useEffect(() => {

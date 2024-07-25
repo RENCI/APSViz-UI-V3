@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
-import { useSettings } from "@context";
 import dayjs from 'dayjs';
 
-// setup to handle dates as UTC
+// install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
+
+// init the date formatter to use UTC only
 dayjs.extend(utc);
 
 /**
@@ -115,12 +116,12 @@ function csvToJSON(csvData) {
 
                 // data that is missing a value will not result in plotting
                 if (e["APS Nowcast"])
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(4);
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
                 else
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"])
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(4);
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
                 else
                     e["APS Forecast"] = null;
 
@@ -130,12 +131,12 @@ function csvToJSON(csvData) {
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"])
-                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
+                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
                 else
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["Difference (APS-OBS)"])
-                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
+                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
                 else
                     e["Difference (APS-OBS)"] = null;
             }
@@ -149,17 +150,28 @@ function csvToJSON(csvData) {
 /**
  * reformats the data label shown on the x-axis
  *
- * @param time
+ * @param value
  * @returns {string}
  */
-function formatX_axis(time) {
+function formatY_axis(value) {
+    // return the formatted value
+    return value.toFixed(2);
+}
+
+/**
+ * reformats the data label shown on the x-axis
+ *
+ * @param value
+ * @returns {string}
+ */
+function formatX_axis(value) {
     // init the return value
     let ret_val = "";
 
     // empty data will be ignored
-    if (time !== "")
+    if (value !== "")
         // do the reformatting
-        ret_val = dayjs.utc(time).format('MM-DD:HH').split('+')[0] + 'Z';
+        ret_val = dayjs.utc(value).format('MM-DD:HH').split('+')[0] + 'Z';
 
     // return the formatted value
     return ret_val;
@@ -173,11 +185,11 @@ function formatX_axis(time) {
  * @constructor
  */
 function CreateObsChart(url) {
-    // get the settings for the Y-axis min/max values
-    const { obsChartY } = useSettings();
-
     // call to get the data. expect back some information too
     const { status, data } = getObsChartData(url.url);
+
+    // get the domain bounds
+    const maxValue = get_yaxis_ticks(data);
 
     // render the chart
     return (
@@ -185,14 +197,18 @@ function CreateObsChart(url) {
             { status === 'pending' ? (
                 <div>Gathering chart data...</div>
             ) : status === 'error' ? (
-                <div>There was a problem getting observation data for this location.</div>
+                <div>There was a problem with observation data for this location.</div>
             ) : (
-                <LineChart data={ data } margin={{ left: -10 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" allowDuplicatedCategory={ false } tickFormatter={ (time) => formatX_axis(time) }/>
-                    <YAxis tickCount="10" domain={ obsChartY } />
+                <LineChart data={ data } margin={{ left: -25 }} >
+                    <CartesianGrid strokeDasharray="1 1" />
+
+                    <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+
+                    <ReferenceLine y={0} stroke="#000000" />
+                    <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+
                     <Tooltip />
-                    <Legend align={ 'center' } />
+                    <Legend align="right" />
                     <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
                     <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -202,4 +218,56 @@ function CreateObsChart(url) {
             )}
         </ResponsiveContainer>
     );
+}
+
+/**
+ * gets the max value in the data to set the y-axis range and ticks
+ *
+ * @param data
+ * @returns {null|*[]}
+ */
+function get_yaxis_ticks(data) {
+    // insure there is something to work with
+    if (data !== undefined) {
+        // init the max value found
+        let maxVal = 0;
+
+        // get the keys of the first
+        const theKeys = Object.keys(data[0]);
+
+        // remove time from the array
+        theKeys.shift();
+
+        // get the max value in the data for each key
+        theKeys.forEach((aKey) => {
+            // identify the max value in the array of values
+            const newVal = Math.max(...data
+                // make sure we dont run into any null or undefined values in the data
+                .filter(function(o) { return !(o[aKey] === undefined || o[aKey] === null); })
+                // create the array of all the values
+                .map(o => o[aKey]));
+
+            // if there was a new max value found
+            if (newVal > maxVal) {
+                // save the new max value
+                maxVal = newVal;
+            }
+        });
+
+        // round up to the next integer
+        maxVal = Math.ceil(maxVal);
+
+        // init the return value
+        const ret_val = [];
+
+        // create an array of tick marks based on the mav data value
+        for (let i=-maxVal; i <= maxVal; i += .5)
+            ret_val.push(i);
+
+        // return the new y-axis array range
+        return ret_val;
+    }
+    // else return nothing
+    else
+        return null;
 }

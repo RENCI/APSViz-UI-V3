@@ -72,7 +72,7 @@ export const BuildLink = () => {
 
     return (
         <Fragment>
-            <IconButton onClick={handleClickOpen}>Share&nbsp;
+            <IconButton width="100" onClick={handleClickOpen}>
                 <ShareRoundedIcon color={'primary'} />
             </IconButton>
             <Dialog
