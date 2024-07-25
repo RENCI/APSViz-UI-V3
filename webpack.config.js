@@ -88,6 +88,22 @@ module.exports = {
         test: /\.geojson$/,
         type: 'json',
       },
+      {
+        test: /\.m?js$/,
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false,
+        }
+      },
+      {
+        test: /\.less$/,
+        use: [
+          // compiles Less to CSS
+          "style-loader",
+          "css-loader",
+          "less-loader",
+        ],
+      },
     ],
   },
 

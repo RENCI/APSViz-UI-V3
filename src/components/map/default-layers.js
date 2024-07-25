@@ -4,6 +4,7 @@ import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+//import { useLocalStorage } from '@hooks';
 import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
@@ -32,6 +33,10 @@ export const DefaultLayers = () => {
         setSelectedObservations,
         setShowShareComment
     } = useLayers();
+
+    //const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage('maxele', '');
+    //const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage('maxwvel', '');
+    //const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage('swan', '');
 
     const obsPointToLayer = ((feature, latlng) => {
         let obs_color = "#FFFFFF";
@@ -165,6 +170,7 @@ export const DefaultLayers = () => {
     const wmsLayerParams = useMemo(() => ({
         format:"image/png",
         transparent: true,
+        //sld_body: storedMaxeleStyle,
     }), []);
 
     return (
