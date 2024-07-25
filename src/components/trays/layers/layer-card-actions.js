@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
-  Divider,
   FormControl,
   FormLabel,
   ListItemDecorator,
@@ -14,16 +13,14 @@ import {
   Stack,
 } from '@mui/joy';
 import {
-  DeleteForever as RemoveIcon,
   FormatPaint as AppearanceIcon,
   DataObject as MetadataIcon,
 } from '@mui/icons-material';
 import { useLayers, useSettings } from '@context';
-import { ActionButton } from '@components/buttons';
 
 export const LayerActions = ({ layer }) => {
   const { darkMode } = useSettings();
-  const { removeLayer, setLayerOpacity } = useLayers();
+  const { setLayerOpacity } = useLayers();
 
   return (
     <Tabs defaultValue={0}>
@@ -45,19 +42,6 @@ export const LayerActions = ({ layer }) => {
             Metadata
           </Tab>
         </TabList>
-
-        <Divider orientation="vertical" />
-
-        <ActionButton
-          color="warning"
-          onClick={ () => removeLayer(layer.id) }
-          sx={{
-            borderRadius: 0,
-            borderBottom: '1px solid var(--joy-palette-divider)',
-          }}
-        >
-          <RemoveIcon />
-        </ActionButton>
       </Stack>
 
       <TabPanel value={ 0 } sx={{
