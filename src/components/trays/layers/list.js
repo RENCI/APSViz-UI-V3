@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {
   AccordionGroup, Box,
   Divider, Accordion, AccordionSummary, AccordionDetails
@@ -148,18 +148,18 @@ export const LayersList = () => {
           // at this point we have the distinct runs
           .map((groups, idx) => {
             return (
-                <Accordion key={idx}>
-                  <Box sx={{ display: "flex" }}>
-                    <DeleteModelRunButton groupId={ groups['group'] } />
-                    <Box>
-                      <AccordionSummary sx={{ fontWeight: 'bold', fontSize: 13 }}>{ getHeaderSummary(groups['properties']) } </AccordionSummary>
-                    </Box>
+              <Accordion key={idx}>
+                <Box sx={{ display: "flex" }}>
+                  <DeleteModelRunButton groupId={ groups['group'] } />
+                  <Box>
+                    <AccordionSummary sx={{ fontWeight: 'bold', fontSize: 13 }}>{ getHeaderSummary(groups['properties']) } </AccordionSummary>
                   </Box>
+                </Box>
 
-                  <AccordionDetails>
-                    { renderLayerCards( layers, groups['group'] ) }
-                  </AccordionDetails>
-                </Accordion>
+                <AccordionDetails>
+                  { renderLayerCards( layers, groups['group'] ) }
+                </AccordionDetails>
+              </Accordion>
             );
           })
       }
