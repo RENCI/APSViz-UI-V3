@@ -134,6 +134,15 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers(newLayers);
   };
 
+  const removeModelRun = groupId => {
+    const index = defaultModelLayers.findIndex(l => l.group === groupId);
+    if (index === -1) {
+      return;
+    }
+    const newLayers = defaultModelLayers.filter(l => l.group !== groupId);
+    setDefaultModelLayers(newLayers);
+  };
+
   const setLayerOpacity = (id, newOpacity) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
@@ -166,6 +175,7 @@ export const LayersProvider = ({ children }) => {
         showShareComment, setShowShareComment,
         swapLayers,
         removeLayer,
+        removeModelRun,
         layerTypes,
         baseMap,
         setBaseMap,
