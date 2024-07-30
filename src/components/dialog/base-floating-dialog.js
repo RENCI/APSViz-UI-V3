@@ -87,7 +87,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         <DialogTitle
                             id="draggable-dialog"
                             sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left',
-                                fontSize: 12, height: 40, p: 1 }}>
+                                fontSize: 14, height: 40, p: 1 }}>
 
                             <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginLeft: -1, marginRight: 1, position: 'left' }}>
                                 <CloseOutlinedIcon color={"primary"}/>
