@@ -193,29 +193,28 @@ function CreateObsChart(url) {
 
     // render the chart
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            { status === 'pending' ? (
-                <div>Gathering chart data...</div>
-            ) : status === 'error' ? (
-                <div>There was a problem with observation data for this location.</div>
-            ) : (
-                <LineChart data={ data } margin={{ left: -25 }} >
-                    <CartesianGrid strokeDasharray="1 1" />
+        <ResponsiveContainer>
+            {
+                status === 'pending' ? ( <div>Gathering chart data...</div> ) :
+                status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
+                    <LineChart data={ data } margin={{ left: -25 }} >
+                        <CartesianGrid strokeDasharray="1 1" />
 
-                    <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+                        <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
 
-                    <ReferenceLine y={0} stroke="#000000" />
-                    <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+                        <ReferenceLine y={0} stroke="#000000" />
+                        <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
 
-                    <Tooltip />
-                    <Legend align="right" />
-                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
-                </LineChart>
-            )}
+                        <Tooltip />
+                        <Legend align="right" />
+
+                        <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
+                        <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
+                        <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
+                        <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
+                        <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
+                    </LineChart>
+            }
         </ResponsiveContainer>
     );
 }
