@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-
+import { Box } from '@mui/joy';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
@@ -42,8 +42,8 @@ BaseFloatingDialog.propTypes = {
  * @param map - a reference to the map state: object
  */
 export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
-    const [height, setHeight] = React.useState(600);
-    const [width, setWidth] = React.useState(800);
+    const [height, setHeight] = React.useState(300);
+    const [width, setWidth] = React.useState(600);
 
     /**
     * the close dialog handler
@@ -59,6 +59,9 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
         }
     };
 
+    /**
+    * configure and render the resizeable floating dialog
+    */
     return (
         <Fragment>
             <CssBaseline />
@@ -69,41 +72,35 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     PaperComponent={ PaperComponent }
                     TransitionComponent={ Transition }
                     disableEnforceFocus
-                    height={ height }
-                    width={ width }
                     style={{ pointerEvents: 'none' }}
                     PaperProps={{ sx: { pointerEvents: 'auto' } }}
-                    sx={{
-                        zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
-                        left: 50 + index * 20, top: 20 + index * 43 }}
+                    sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: 20 + index * 50 }}
             >
                 <Resizable
-                    height={height}
-                    width={width}
-                    onResize={(event) => {
+                    height={ height }
+                    width={ width }
+                    onResize={ (event) => {
                         setHeight(height + event.movementY);
                         setWidth(width + event.movementX);
                     }}>
                     <Fragment>
                         <DialogTitle
-                            id="draggable-dialog-title"
-                            sx={{
-                                cursor: 'move',
-                                backgroundColor: 'lightblue',
-                                textAlign: 'left',
-                                fontSize: 14,
-                                height: 40,
-                                width: width,
-                                p: 1 }}>
+                            id="draggable-dialog"
+                            sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left',
+                                fontSize: 12, height: 40, p: 1 }}>
+
                             <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginLeft: -1, marginRight: 1, position: 'left' }}>
                                 <CloseOutlinedIcon color={"primary"}/>
                             </IconButton>
+
                             { title }
                         </DialogTitle>
 
                         <DialogContent
                             sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
-                            {/*{ dialogObject }*/}
+                            <Box sx={{ height: height, width: width }}>
+                                { dialogObject }
+                            </Box>
                         </DialogContent>
                     </Fragment>
                 </Resizable>
@@ -125,7 +122,7 @@ function PaperComponent(props) {
 
     // render the component
     return (
-        <Draggable nodeRef={nodeRef} handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Draggable nodeRef={nodeRef} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
             <Paper ref={nodeRef} {...props} />
         </Draggable>
     );
