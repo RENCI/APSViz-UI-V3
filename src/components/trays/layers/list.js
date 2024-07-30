@@ -109,8 +109,8 @@ const getGroupList = (layers) => {
     // filter by the group name
     .filter((groups, idx, self) =>
       ( idx === self.findIndex((t)=> ( t['group'] === groups['group']) )))
-    .sort((a, b) =>
-        a['run_date'] < b['run_date'] ? 1 : -1)
+    // .sort((a, b) =>
+    //     a['run_date'] < b['run_date'] ? 1 : -1)
     // at this point we have the distinct runs
     .map((layer) => {
       groupList.push(layer);
@@ -152,7 +152,7 @@ export const LayersList = () => {
                 <Box sx={{ display: "flex" }}>
                   <DeleteModelRunButton groupId={ groups['group'] } />
                   <Box>
-                    <AccordionSummary sx={{ fontWeight: 'bold', fontSize: 13 }}>{ getHeaderSummary(groups['properties']) } </AccordionSummary>
+                    <AccordionSummary sx={{ fontSize: 12 }}>{ getHeaderSummary(groups['properties']) } </AccordionSummary>
                   </Box>
                 </Box>
 
