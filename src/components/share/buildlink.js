@@ -1,5 +1,7 @@
 import React, { Fragment, useState } from 'react';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, TextField, Dialog, DialogActions,
+        DialogContent, DialogContentText, DialogTitle,
+        Typography, Link } from '@mui/material';
 import { IconButton } from '@mui/joy';
 import ShareRoundedIcon from '@mui/icons-material/ShareRounded';
 import { useLayers } from "@context/map-context";
@@ -14,12 +16,16 @@ export const BuildLink = () => {
     // get the layers from state
     const { defaultModelLayers, selectedObservations } = useLayers();
 
+    // store the result message of the share link building
+    const [ buildLinkMessage, setBuildLinkMessage ] = useState('');
+
     // used to set the dialog view state
     const [open, setOpen] = useState(false);
 
-    /**
-     * create the query string that can be used to share the current view
-     */
+    // storage for the share link
+    const [shareLink, setShareLink] = useState('');
+
+    // create the query string that can be used to share the current view
     const createLink = (comment) => {
         // get the list of selected layers from state
         // this forces the group at the top to be the reproduced in the share line
@@ -41,12 +47,22 @@ export const BuildLink = () => {
 
         // check to see if there was one or more groups selected
         if (run_id !== '') {
+            // create the link
+            const theLink = encodeURI(window.location.origin + '/#share=run_id:' + run_id + "~comment=" + comment + '~obs=[' + observations + ']');
+
             // copy the link to the cut/paste buffer
-            copyTextToClipboard(encodeURI(window.location.origin + '/#share=run_id:' + run_id + "~comment=" + comment + '~obs=[' + observations + ']')).then();
+            copyTextToClipboard(theLink).then();
+
+            // set the user feedback
+            setBuildLinkMessage(`The Share link is now in your clipboard.`);
+            setShareLink(theLink);
         }
         // no layers were selected on the map
-        else
-            alert('There were no layers selected.');
+        else {
+            // set the error message
+            setBuildLinkMessage('There are no layers selected. Please try again.');
+            setShareLink('');
+        }
     };
 
     /**
@@ -67,6 +83,8 @@ export const BuildLink = () => {
 
     // handles the dialog close event
     const handleClose = () => {
+        setBuildLinkMessage('');
+        setShareLink('');
         setOpen(false);
     };
 
@@ -86,18 +104,26 @@ export const BuildLink = () => {
                         const formJson = Object.fromEntries(formData.entries());
                         const comment = formJson.comment;
                         createLink(comment);
-                        handleClose();
                     }}}>
                 <DialogTitle>Share this view</DialogTitle>
+
                 <DialogContent>
                     <DialogContentText>
                         Please enter a comment below that describes what you are sharing. When ready, select the &quot;Create&quot; button
                         and you will have the share link copied into your cut/paste buffer.
                     </DialogContentText>
+
+                    {/* output the result of the link building/saving */}
+                    { ( buildLinkMessage.length ) ? <Typography component={'span'}>{ buildLinkMessage }</Typography> : '' }
+
+                    {/* output the link */}
+                    { ( shareLink.length ) ? <Link target="_blank" sx={{ marginLeft: 1 }} href={ shareLink }>Test it!</Link> : '' }
+
                     <TextField autoFocus margin="dense" id="comment" name="comment" fullWidth variant="standard"/>
                 </DialogContent>
+
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={ handleClose }>Cancel</Button>
                     <Button type="submit">Create</Button>
                 </DialogActions>
             </Dialog>
