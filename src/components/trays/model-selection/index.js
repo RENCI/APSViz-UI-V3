@@ -18,6 +18,6 @@ export const title = 'ADCIRC Model selection';
  */
 export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>
-            <ModelSelection />
+          <ModelSelection />
       </Stack>
     );
