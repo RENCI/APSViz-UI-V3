@@ -43,7 +43,7 @@ export const DeleteModelRunButton = ({ groupId }) => {
       sx={{
         alignContent: 'right',
         m: 1,
-        'filter': 'opacity(0.3)',
+        'filter': 'opacity(0.5)',
         transition: 'filter 250ms',
         '&:hover': {
           'filter': 'opacity(1.0)',
