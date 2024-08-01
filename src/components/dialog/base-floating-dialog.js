@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Box } from '@mui/joy';
+import { Box, Stack } from '@mui/joy';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
@@ -73,6 +73,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     setHeight(height + event.movementY);
 
                 }}
+                axis="x"
                 draggableOpts={{ handleSize: [20, 20], minConstraints: [600, 300], maxConstraints: [Infinity, Infinity] }}
             >
                 <Dialog
@@ -91,11 +92,12 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left',
                             fontSize: 14, height: 40, p: 1 }}>
 
-                        <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginLeft: -1, marginRight: 1, position: 'left' }}>
-                            <CloseOutlinedIcon color={"primary"}/>
-                        </IconButton>
-
-                        { title }
+                        <Stack direction="row" justifyContent="space-between">
+                            { title }
+                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginRight: -1 }}>
+                                <CloseOutlinedIcon color={"primary"}/>
+                            </IconButton>
+                        </Stack>
                     </DialogTitle>
 
                     <DialogContent
