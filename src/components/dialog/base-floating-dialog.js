@@ -65,7 +65,16 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     return (
         <Fragment>
             <CssBaseline />
-            <Dialog
+            <Resizable
+                height={ height }
+                width={ width }
+                onResize={ (event) => {
+                    setHeight(height + event.movementY);
+                    setWidth(width + event.movementX);
+                }}
+                draggableOpts={{ handleSize: [20, 20], minConstraints: [10, 10], maxConstraints: [Infinity, Infinity] }}
+            >
+                <Dialog
                     aria-labelledby="draggable-dialog"
                     open={ true }
                     onClose={ handleClose }
@@ -75,36 +84,27 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     style={{ pointerEvents: 'none' }}
                     PaperProps={{ sx: { pointerEvents: 'auto' } }}
                     sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: 20 + index * 50 }}
-            >
-                <Resizable
-                    height={ height }
-                    width={ width }
-                    onResize={ (event) => {
-                        setHeight(height + event.movementY);
-                        setWidth(width + event.movementX);
-                    }}>
-                    <Fragment>
-                        <DialogTitle
-                            id="draggable-dialog"
-                            sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left',
-                                fontSize: 14, height: 40, p: 1 }}>
+                >
+                    <DialogTitle
+                        id="draggable-dialog"
+                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left',
+                            fontSize: 14, height: 40, p: 1 }}>
 
-                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginLeft: -1, marginRight: 1, position: 'left' }}>
-                                <CloseOutlinedIcon color={"primary"}/>
-                            </IconButton>
+                        <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginLeft: -1, marginRight: 1, position: 'left' }}>
+                            <CloseOutlinedIcon color={"primary"}/>
+                        </IconButton>
 
-                            { title }
-                        </DialogTitle>
+                        { title }
+                    </DialogTitle>
 
-                        <DialogContent
-                            sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
-                            <Box sx={{ height: height, width: width }}>
-                                { dialogObject }
-                            </Box>
-                        </DialogContent>
-                    </Fragment>
-                </Resizable>
-            </Dialog>
+                    <DialogContent
+                        sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
+                        <Box sx={{ height: height, width: width }}>
+                            { dialogObject }
+                        </Box>
+                    </DialogContent>
+                </Dialog>
+            </Resizable>
         </Fragment>
     );
 }
