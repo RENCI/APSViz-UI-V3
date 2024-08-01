@@ -93,7 +93,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     >
                         <Stack direction="row" justifyContent="space-between">
                             { title }
-                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.85, marginRight: -1 }}>
+                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.9, marginRight: -1 }}>
                                 <CloseOutlinedIcon color={"primary"}/>
                             </IconButton>
                         </Stack>
