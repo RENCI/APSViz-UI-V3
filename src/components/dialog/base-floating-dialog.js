@@ -85,12 +85,10 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     disableEnforceFocus
                     style={{ pointerEvents: 'none' }}
                     PaperProps={{ sx: { pointerEvents: 'auto' } }}
-                    sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}
-                >
+                    sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}>
                     <DialogTitle
                         id="draggable-dialog"
-                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left', fontSize: 14, height: 40, p: 1.3 }}
-                    >
+                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left', fontSize: 14, height: 40, p: 1.3 }}>
                         <Stack direction="row" justifyContent="space-between">
                             { title }
                             <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.9, marginRight: -1 }}>
