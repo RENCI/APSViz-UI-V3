@@ -42,8 +42,8 @@ BaseFloatingDialog.propTypes = {
  * @param map - a reference to the map state: object
  */
 export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
-    const [height, setHeight] = React.useState(300);
     const [width, setWidth] = React.useState(600);
+    const [height, setHeight] = React.useState(300);
 
     /**
     * the close dialog handler
@@ -69,10 +69,11 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                 height={ height }
                 width={ width }
                 onResize={ (event) => {
-                    setHeight(height + event.movementY);
                     setWidth(width + event.movementX);
+                    setHeight(height + event.movementY);
+
                 }}
-                draggableOpts={{ handleSize: [20, 20], minConstraints: [10, 10], maxConstraints: [Infinity, Infinity] }}
+                draggableOpts={{ handleSize: [20, 20], minConstraints: [600, 300], maxConstraints: [Infinity, Infinity] }}
             >
                 <Dialog
                     aria-labelledby="draggable-dialog"
