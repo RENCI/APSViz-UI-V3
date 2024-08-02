@@ -52,7 +52,6 @@ const getPropertyName = (layerProps, element_name) => {
     return ret_val;
 };
 
-
 /**
  * gets the summary header text for the layer groups.
  * This takes into account the two types of runs (tropical, synoptic)
@@ -107,8 +106,8 @@ const getGroupList = (layers) => {
     // loop through the layers and get the unique groups
     layers
         // filter by the group name
-        .filter((groups, idx, self) =>
-            (idx === self.findIndex((t) => (t['group'] === groups['group']))))
+        .filter((group, idx, self) =>
+            (idx === self.findIndex((t) => (t['group'] === group['group']))))
         // at this point we have the distinct runs
         .map((layer) => {
             groupList.push(layer);
@@ -119,6 +118,49 @@ const getGroupList = (layers) => {
 };
 
 /**
+ * reorder the list of groups
+ *
+ * @param grpList
+ * @param startIndex
+ * @param endIndex
+ * @returns {unknown[]}
+ */
+const reOrderGroups = (grpList, startIndex, endIndex) => {
+    // copy the list
+    const ret_val = Array.from(grpList);
+
+    // get the item that is moving
+    const [removed] = ret_val.splice(startIndex, 1);
+
+    // put it in the new position
+    ret_val.splice(endIndex, 0, removed);
+
+    // return the result
+    return ret_val;
+};
+
+/**
+ * adds or updates the visibility of the layer on the map surface.
+ *
+ * presumably this will have to take the met class into consideration.
+ *
+ * @param layer
+ * @param group
+ * @returns {{ visible: boolean, opacity: 1.0 }}
+ */
+const newLayerDefaultState = (layer, group) => {
+    // if this is an obs layer and is the one just added
+    if (layer.group === group &&
+        (layer.properties['product_type'] === 'obs' || layer.properties['product_type'] === 'maxele63'))
+        // make this layer visible
+        return ({ visible: true, opacity: 1.0 });
+    // remove layer visibility
+    else
+        // make this layer invisible
+        return ({ visible: false, opacity: 1.0 });
+};
+
+/**
  * render the layers for the selected run groups
  *
  * @returns {JSX.Element}
@@ -126,39 +168,80 @@ const getGroupList = (layers) => {
  */
 export const LayersList = () => {
     // get a handle to the layer state
-    const {defaultModelLayers} = useLayers();
+    const {defaultModelLayers, setDefaultModelLayers} = useLayers();
 
     // get the default layers
     const layers = [...defaultModelLayers];
 
-    // get the unique groups in the selected run groups
+    // get the unique groups in the selected model runs
     const groupList = getGroupList(layers);
 
-    // handle the drag event
+    /**
+     * handle the drag event
+     *
+     * @param result
+     */
     const onDragEnd = (result) => {
-        // dropped outside the list
+        // handle case that there is no destination (could have been dragged out of the drop area)
         if (!result.destination) {
           return;
         }
 
-        // reorder the layer list
-        reorder(
-          layers,
-          result.source.index,
-          result.destination.index
-        );
+        // create an array of group ids
+        let grpList = [];
+
+        // get the current layer groups
+        getGroupList(layers).map((item) => (grpList.push(item['group'])));
+
+        // swap the elements
+        grpList = reOrderGroups(grpList, result.source.index, result.destination.index);
+
+        // reorder the layers and put them back in state
+        reOrderLayers(grpList);
     };
 
-    // a little function to help us with reordering the result
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
+    /**
+     * order the layers in state based on the new group list order
+     *
+     * @param grpList
+     * @returns {*[]}
+     */
+    const reOrderLayers = (grpList) => {
+        // init the return
+        const newLayerList = [];
 
-        return result;
+        // reorder the layers into a new array
+        grpList
+            // soin through the groups
+            .map((group) => (
+                // spin through the layers
+                defaultModelLayers
+                    // get the layers for this group
+                    .filter((layer) =>
+                        (layer['group'] === group))
+                    // add the group layers into a new list
+                    .map((layer) =>
+                        (newLayerList.push(layer)))));
+
+        // reset the visible layer states for all model runs in the layer tray.
+        [...newLayerList].forEach((layer) => {
+            // perform the visible state logic
+            layer.state = newLayerDefaultState(layer, layer.group);
+        });
+
+        // now update the visible layer state for the top most model run
+        [...newLayerList].forEach((layer) => {
+            // perform the visible state logic
+            layer.state = newLayerDefaultState(layer, newLayerList[0].group);
+        });
+
+        // update the layer list in state
+        setDefaultModelLayers(newLayerList);
     };
 
-    // loop through the layers and put them away
+    /**
+     * render the layers on the tray
+      */
     return (
         <DragDropContext onDragEnd={ onDragEnd }>
             <Droppable droppableId="model-runs">
@@ -168,25 +251,25 @@ export const LayersList = () => {
                             // loop through the layer groups and put them away
                             groupList
                                 // filter by the group name
-                                .filter((group, idx, self) =>
-                                    (idx === self.findIndex((t) => (t['group'] === group['group']))))
+                                .filter((groups, idx, self) =>
+                                    (idx === self.findIndex((t) => (t['group'] === groups['group']))))
                                 // at this point we have the distinct runs
-                                .map((group, idx) => (
-                                    <Draggable key={ group.id } draggableId={ group.id } index={ idx }>
+                                .map((layer, idx) => (
+                                    <Draggable key={ layer['group'] } draggableId={ layer['group'] } index={ idx }>
                                         {(provided) => (
                                             <Box ref={ provided['innerRef'] } { ...provided['draggableProps'] } { ...provided['dragHandleProps'] }>
                                                 <Accordion>
                                                     <Box sx={{display: "flex"}}>
                                                         <Stack direction="row" justifyContent="space-between">
                                                             <Box>
-                                                                <AccordionSummary sx={{fontSize: 12}}>{ getHeaderSummary(group['properties']) } </AccordionSummary>
+                                                                <AccordionSummary sx={{fontSize: 12}}>{ getHeaderSummary(layer['properties']) } </AccordionSummary>
                                                             </Box>
-                                                            <DeleteModelRunButton groupId={ group['group'] }/>
+                                                            <DeleteModelRunButton groupId={ layer['group'] }/>
                                                             <Handle sx={{ fontSize: 25, marginTop: 1.5 }}/>
                                                         </Stack>
                                                     </Box>
 
-                                                    <AccordionDetails> { renderLayerCards(layers, group['group'] )} </AccordionDetails>
+                                                    <AccordionDetails> { renderLayerCards(layers, layer['group'] )} </AccordionDetails>
                                                 </Accordion>
                                                 <Divider/>
                                             </Box> )}
