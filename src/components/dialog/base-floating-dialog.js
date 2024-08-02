@@ -68,13 +68,14 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
             <Resizable
                 height={ height }
                 width={ width }
+                maxWidth=""
                 onResize={ (event) => {
                     setWidth(width + event.movementX);
                     setHeight(height + event.movementY);
 
                 }}
                 axis="x"
-                draggableOpts={{ handleSize: [20, 20], minConstraints: [600, 300], maxConstraints: [Infinity, Infinity] }}
+                draggableOpts={{ handleSize: [20, 20] }}
             >
                 <Dialog
                     aria-labelledby="draggable-dialog"
