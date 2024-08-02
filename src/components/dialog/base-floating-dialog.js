@@ -1,15 +1,21 @@
-import React, {Fragment} from 'react';
-import Draggable from 'react-draggable';
+import React, { Fragment } from 'react';
+import { Box, Stack } from '@mui/joy';
+import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
-import IconButton from '@mui/material/IconButton';
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
+
+import { markUnclicked } from '@utils/map-utils';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
+
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { markUnclicked } from '@utils/map-utils';
+import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // define the properties of this component's input
@@ -36,6 +42,9 @@ BaseFloatingDialog.propTypes = {
  * @param map - a reference to the map state: object
  */
 export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
+    const [width, setWidth] = React.useState(600);
+    const [height, setHeight] = React.useState(300);
+
     /**
     * the close dialog handler
     */
@@ -51,36 +60,54 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     };
 
     /**
-    * configure and render the floating dialog
+    * configure and render the resizeable floating dialog
     */
     return (
         <Fragment>
             <CssBaseline />
-            <Dialog
-                aria-labelledby="draggable-dialog"
-                open={ true }
-                onClose={ handleClose }
-                PaperComponent={ PaperComponent }
-                TransitionComponent={ Transition }
-                disableEnforceFocus
-                style={{ pointerEvents: 'none' }}
-                PaperProps={{ sx: { width: 800,  height: 505, pointerEvents: 'auto' } }}
-                sx={{ zIndex: 405, width: 800, height: 505, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
-                        left: index * 20, top: 20 + index * 43 }}
+            <Resizable
+                height={ height }
+                width={ width }
+                maxWidth=""
+                onResize={ (event) => {
+                    setWidth(width + event.movementX);
+                    setHeight(height + event.movementY);
+                }}
+                axis="x"
+                draggableOpts={{ handleSize: [20, 20] }}
             >
-                <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
-                                fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog"> { title }
-                </DialogTitle>
+                <Dialog
+                    aria-labelledby="draggable-dialog"
+                    open={ true }
+                    onClose={ handleClose }
+                    PaperComponent={ PaperComponent }
+                    TransitionComponent={ Transition }
+                    disableEnforceFocus
+                    style={{ pointerEvents: 'none' }}
+                    PaperProps={{ sx: { pointerEvents: 'auto' } }}
+                    sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}>
+                    <DialogTitle
+                        id="draggable-dialog"
+                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left', fontSize: 14, height: 40, p: 1.3 }}>
+                        <Stack direction="row" justifyContent="space-between">
+                            { title }
+                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.9, marginRight: -1 }}>
+                                <CloseOutlinedIcon color={"primary"}/>
+                            </IconButton>
+                        </Stack>
+                    </DialogTitle>
 
-                <IconButton size="small" autoFocus onClick={ handleClose } sx={{ position: 'absolute', right: 8, top: 5 }}>
-                    <CloseOutlinedIcon color={"primary"}/>
-                </IconButton>
-
-                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, height: 395 }}>{ dialogObject }</DialogContent>
-            </Dialog>
+                    <DialogContent
+                        sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
+                        <Box sx={{ height: height, width: width }}>
+                            { dialogObject }
+                        </Box>
+                    </DialogContent>
+                </Dialog>
+            </Resizable>
         </Fragment>
     );
-};
+}
 
 /**
 * This creates a 3D dialog.
