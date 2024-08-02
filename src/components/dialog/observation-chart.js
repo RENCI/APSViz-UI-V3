@@ -61,7 +61,7 @@ function getObsChartData(url) {
                     // send the error message to the console
                     console.error(error.message);
 
-                    // make sure we dont render anything
+                    // make sure we do not render anything
                     return "";
                 });
 
@@ -241,7 +241,7 @@ function get_yaxis_ticks(data) {
         theKeys.forEach((aKey) => {
             // identify the max value in the array of values
             const newVal = Math.max(...data
-                // make sure we dont run into any null or undefined values in the data
+                // make sure we do not run into any null or undefined values in the data
                 .filter(function(o) { return !(o[aKey] === undefined || o[aKey] === null); })
                 // create the array of all the values
                 .map(o => o[aKey]));
