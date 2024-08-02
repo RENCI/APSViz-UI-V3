@@ -72,7 +72,6 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                 onResize={ (event) => {
                     setWidth(width + event.movementX);
                     setHeight(height + event.movementY);
-
                 }}
                 axis="x"
                 draggableOpts={{ handleSize: [20, 20] }}
