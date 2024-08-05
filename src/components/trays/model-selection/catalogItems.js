@@ -114,6 +114,9 @@ export default function CatalogItems(data) {
             return ({ visible: false, opacity: 1.0 });
     };
 
+    /**
+     * render the selected model runs
+     */
     // do not render if there is no data
     if (data.data != null) {
         // if there was a warning getting the result
@@ -170,7 +173,7 @@ export default function CatalogItems(data) {
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
                                                 catalog['members']
-                                                    // filter by the group name
+                                                    // filter by the group name, get the top 1
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
                                                     .sort((a, b) => a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)

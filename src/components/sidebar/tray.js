@@ -19,8 +19,8 @@ export const Tray = ({ active, Contents, title, closeHandler }) => {
         width: TRAY_WIDTH,
         zIndex: 410,
         filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))',
-        overflowX: 'hidden',
-        overflowY: 'auto',
+        overflow: 'hidden',
+        // overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',
         ".tray-header": {
