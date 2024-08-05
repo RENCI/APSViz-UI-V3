@@ -9,11 +9,14 @@ export const MapLegend = () => {
     // may want to move this somewhere else later
     // for the implementation of user designed styles
     const layerStyles = {
-        'maxele63': 'maxele_style_v3ui',
+        //'maxele63': 'maxele_style_v3ui',
+        // added this temporarily for Debby
+        'maxele63': 'maxele_v3_short_legend_style',
         'maxwvel63': 'maxwvel_style_v3ui',
         'swan_HS_max63': 'swan_style_v3ui',
         'maxinundepth63': 'maxele_style_v3ui',
-        'maxele_level_downscaled_epsg4326': 'maxele_style_v3ui',
+        // added this temporarily for Debby
+        'maxele_level_downscaled_epsg4326': 'maxele_v3_short_legend_style',
         'hec_ras_water_surface': 'maxele_style_v3ui'
     };
 
