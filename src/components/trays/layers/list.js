@@ -282,7 +282,6 @@ export const LayersList = () => {
                                                 <Accordion>
                                                     <AccordionSummary>
                                                         <IconButton
-                                                            className="drag-handle"
                                                             variant="soft"
                                                             color="neutral"
                                                             { ...provided['dragHandleProps'] }
