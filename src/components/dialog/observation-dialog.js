@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import { useLayers } from "@context";
 import ObservationChart from "@dialog/observation-chart";
@@ -18,12 +18,24 @@ export const ObservationDialog = (obs_data) => {
         setSelectedObservations
     } = useLayers();
 
+    const [isHide, setIsHide] = useState({
+        "Observations": false,
+        "NOAA Tidal Predictions": false,
+        "APS Nowcast": false,
+        "APS Forecast": false,
+        "Difference (APS-OBS)": false });
+
+    const toggle = (item) => {
+        isHide[item] = !isHide[item];
+        setIsHide({ ...isHide });
+    };
+
     // create a graph using data from this url
     const graphObj = (url) => {
         // create the chart
         return (
             <Fragment>
-                <ObservationChart url={ url } />
+                <ObservationChart url={ url } isHide={ isHide } />
             </Fragment>
         );
     };
@@ -32,11 +44,12 @@ export const ObservationDialog = (obs_data) => {
     const floaterArgs = {
         title: obs_data.obs['location_name'],
         index: obs_data.obs['index'],
-        dialogObject: { ...graphObj(obs_data.obs['csvurl']) },
+        dialogObject: { ...graphObj(obs_data.obs['csvurl'], ) },
         dataKey: obs_data.obs['id'],
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
-        map: map
+        map: map,
+        toggle: toggle
     };
 
     // render the dialog

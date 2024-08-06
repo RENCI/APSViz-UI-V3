@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Box, Stack } from '@mui/joy';
+import { ButtonGroup, Button, Box, Stack } from '@mui/joy';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
@@ -26,7 +26,8 @@ BaseFloatingDialog.propTypes = {
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
     setDataList: PropTypes.func,
-    map: PropTypes.any
+    map: PropTypes.any,
+    toggle: PropTypes.any
 };
 
 /**
@@ -40,8 +41,9 @@ BaseFloatingDialog.propTypes = {
  * @param dataList - a data list in state: array
  * @param setDataList - method to update a data list in state: function
  * @param map - a reference to the map state: object
+ * @param toggle - toggles the visibility of a chart line
  */
-export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
+export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, toggle } ) {
     const [width, setWidth] = React.useState(600);
     const [height, setHeight] = React.useState(300);
 
@@ -97,11 +99,20 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         </Stack>
                     </DialogTitle>
 
-                    <DialogContent
-                        sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
-                        <Box sx={{ height: height, width: width }}>
-                            { dialogObject }
-                        </Box>
+                    <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
+                        <Stack direction="column" gap={ 1 } alignItems="center">
+                            <ButtonGroup variant="outlined" size="small" aria-label="Basic button group">
+                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'black' }} onClick={() => toggle("Observations")}>Observations</Button>
+                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'teal' }} onClick={() => toggle("NOAA Tidal Predictions")}>NOAA Tidal Predictions</Button>
+                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'CornflowerBlue' }} onClick={() => toggle("APS Nowcast")}>APS Nowcast</Button>
+                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'LimeGreen' }} onClick={() => toggle("APS Forecast")}>APS Forecast</Button>
+                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'red' }} onClick={() => toggle("Difference (APS-OBS)")}>Difference (APS-OBS)</Button>
+                            </ButtonGroup>
+
+                            <Box sx={{ height: height, width: width }}>
+                                { dialogObject }
+                            </Box>
+                        </Stack>
                     </DialogContent>
                 </Dialog>
             </Resizable>
