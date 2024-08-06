@@ -1,9 +1,18 @@
 import React from 'react';
-import { AccordionGroup, Box,  Divider, Accordion, AccordionSummary, AccordionDetails, Stack } from '@mui/joy';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionGroup,
+    AccordionSummary,
+    Box,
+    Divider,
+    IconButton,
+} from '@mui/joy';
 import { useLayers } from '@context';
 import { LayerCard } from './layer-card';
 import { DeleteModelRunButton } from "@components/trays/layers/delete-layer-button";
-import { DragHandleRounded as Handle } from '@mui/icons-material';
+import { Typography } from '@mui/joy';
+import { DragHandleRounded as HandleIcon } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 /**
@@ -246,7 +255,19 @@ export const LayersList = () => {
         <DragDropContext onDragEnd={ onDragEnd }>
             <Droppable droppableId="model-runs">
                 { (provided) => (
-                    <AccordionGroup variant="soft" { ...provided['droppableProps'] } ref={ provided['innerRef'] }>
+                    <AccordionGroup
+                        variant="soft"
+                        { ...provided['droppableProps'] }
+                        ref={ provided['innerRef'] }
+                        sx={{
+                            '.MuiAccordionDetails-content': {
+                                p: 0,
+                            },
+                            '.MuiAccordionSummary-button': {
+                                alignItems: 'center',
+                            },
+                        }}
+                    >
                         {
                             // loop through the layer groups and put them away
                             groupList
@@ -257,19 +278,25 @@ export const LayersList = () => {
                                 .map((layer, idx) => (
                                     <Draggable key={ layer['group'] } draggableId={ layer['group'] } index={ idx }>
                                         {(provided) => (
-                                            <Box ref={ provided['innerRef'] } { ...provided['draggableProps'] } { ...provided['dragHandleProps'] }>
+                                            <Box ref={ provided['innerRef'] } { ...provided['draggableProps'] }>
                                                 <Accordion>
-                                                    <Box sx={{display: "flex"}}>
-                                                        <Stack direction="row" justifyContent="space-between">
-                                                            <Box>
-                                                                <AccordionSummary sx={{fontSize: 12}}>{ getHeaderSummary(layer['properties']) } </AccordionSummary>
-                                                            </Box>
-                                                            <DeleteModelRunButton groupId={ layer['group'] }/>
-                                                            <Handle sx={{ fontSize: 25, marginTop: 1.5 }}/>
-                                                        </Stack>
-                                                    </Box>
-
-                                                    <AccordionDetails> { renderLayerCards(layers, layer['group'] )} </AccordionDetails>
+                                                    <AccordionSummary>
+                                                        <IconButton
+                                                            className="drag-handle"
+                                                            variant="soft"
+                                                            color="neutral"
+                                                            { ...provided['dragHandleProps'] }
+                                                        >
+                                                            <HandleIcon fontSize="xl" />
+                                                        </IconButton>
+                                                        <Typography level="body-xs">
+                                                            { getHeaderSummary(layer['properties']) }
+                                                        </Typography>
+                                                        <DeleteModelRunButton groupId={ layer['group'] }/>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails>
+                                                        { renderLayerCards(layers, layer['group'] )}
+                                                    </AccordionDetails>
                                                 </Accordion>
                                                 <Divider/>
                                             </Box> )}
