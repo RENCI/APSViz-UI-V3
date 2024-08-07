@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
@@ -17,9 +17,9 @@ dayjs.extend(utc);
  * @returns {JSX.Element}
  * @constructor
  */
-export default function ObservationChart(chartData) {
+export default function ObservationChart(chartProps) {
     // render the chart
-    return (<CreateObsChart chartData={ chartData } />);
+    return (<CreateObsChart chartProps={ chartProps } />);
 }
 
 /**
@@ -236,9 +236,9 @@ function get_yaxis_ticks(data) {
  * @returns {JSX.Element}
  * @constructor
  */
-function CreateObsChart(chartData) {
+function CreateObsChart(c) {
     // call to get the data. expect back some information too
-    const { status, data } = getObsChartData(chartData.chartData.url);
+    const { status, data } = getObsChartData(c.chartProps.url);
 
     // get the domain bounds
     const maxValue = get_yaxis_ticks(data);
@@ -250,7 +250,7 @@ function CreateObsChart(chartData) {
                 status === 'pending' ? ( <div>Gathering chart data...</div> ) :
                 status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
                     <ResponsiveContainer>
-                        <LineChart data={ data } margin={{ left: -25 }} isHide={ chartData.chartData.isHide }>
+                        <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
                             <CartesianGrid strokeDasharray="1 1" />
 
                             <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
@@ -260,11 +260,11 @@ function CreateObsChart(chartData) {
 
                             <Tooltip />
 
-                            <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} hide={ chartData.chartData.isHide['Observations'] }/>
-                            <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} hide={ chartData.chartData.isHide["NOAA Tidal Predictions"] }/>
-                            <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ chartData.chartData.isHide["APS Nowcast"] }/>
-                            <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ chartData.chartData.isHide["APS Forecast"] }/>
-                            <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} hide={ chartData.chartData.isHide["Difference (APS-OBS)"] } />
+                            <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
+                            <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
+                            <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
+                            <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
+                            <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
                         </LineChart>
                     </ResponsiveContainer>
             }
