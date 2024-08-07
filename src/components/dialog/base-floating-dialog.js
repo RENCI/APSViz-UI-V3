@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Box, Stack } from '@mui/joy';
+import { ToggleButtonGroup, Button, Box, Stack } from '@mui/joy'; //, Checkbox
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
@@ -26,7 +26,9 @@ BaseFloatingDialog.propTypes = {
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
     setDataList: PropTypes.func,
-    map: PropTypes.any
+    map: PropTypes.any,
+    showLineButtonView:  PropTypes.any,
+    toggleLineView: PropTypes.any
 };
 
 /**
@@ -40,10 +42,11 @@ BaseFloatingDialog.propTypes = {
  * @param dataList - a data list in state: array
  * @param setDataList - method to update a data list in state: function
  * @param map - a reference to the map state: object
+ * @param toggleLineView - toggles the visibility of a chart line
  */
-export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
-    const [width, setWidth] = React.useState(600);
-    const [height, setHeight] = React.useState(300);
+export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, showLineButtonView, toggleLineView } ) {
+    const [newWidth, setNewWidth] = React.useState(600);
+    const [newHeight, setNewHeight] = React.useState(300);
 
     /**
     * the close dialog handler
@@ -66,12 +69,12 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
         <Fragment>
             <CssBaseline />
             <Resizable
-                height={ height }
-                width={ width }
+                height={ newHeight }
+                width={ newWidth }
                 maxWidth=""
                 onResize={ (event) => {
-                    setWidth(width + event.movementX);
-                    setHeight(height + event.movementY);
+                    setNewWidth(newWidth + event.movementX);
+                    setNewHeight(newHeight + event.movementY);
                 }}
                 axis="x"
                 draggableOpts={{ handleSize: [20, 20] }}
@@ -97,11 +100,47 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         </Stack>
                     </DialogTitle>
 
-                    <DialogContent
-                        sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
-                        <Box sx={{ height: height, width: width }}>
-                            { dialogObject }
-                        </Box>
+                    <DialogContent sx={{ fontSize: 11, m: 0 }}>
+                        <Stack direction="column" gap={ 1 } alignItems="center">
+                            <ToggleButtonGroup size="sm" onChange={(event, newValue) => { toggleLineView(newValue); }} sx={{ backgroundColor: 'White'}}>
+                                {(showLineButtonView("Observations")) ?
+                                <Button
+                                    value="Observations"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, color: 'Black' , fontSize: 12 }}>
+                                    Observations</Button> : ''
+                                }
+
+                                {(showLineButtonView("NOAA Tidal Predictions")) ?
+                                <Button
+                                    value="NOAA Tidal Predictions"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, color: 'Teal', fontSize: 12 }}>
+                                    NOAA Tidal Predictions</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Nowcast")) ?
+                                <Button
+                                    value="APS Nowcast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, color: 'CornflowerBlue', fontSize: 12 }}>
+                                    APS Nowcast</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Forecast")) ?
+                                <Button
+                                    value="APS Forecast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, color: 'LimeGreen', fontSize: 12 }}>
+                                    APS Forecast</Button> : ''
+                                }
+
+                                {(showLineButtonView("Difference (APS-OBS)")) ?
+                                <Button
+                                    value="Difference (APS-OBS)"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, color: 'Red', backgroundColor: 'White', fontSize: 12 }}>
+                                    Difference (APS-OBS)</Button> : ''
+                                }
+                            </ToggleButtonGroup>
+
+                            <Box sx={{ height: newHeight, width: newWidth }}> { dialogObject } </Box>
+                        </Stack>
                     </DialogContent>
                 </Dialog>
             </Resizable>
@@ -122,8 +161,8 @@ function PaperComponent(props) {
 
     // render the component
     return (
-        <Draggable nodeRef={nodeRef} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper ref={nodeRef} {...props} />
+        <Draggable nodeRef={ nodeRef } handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper ref={ nodeRef } {...props} />
         </Draggable>
     );
 }
