@@ -18,16 +18,16 @@ export const ObservationDialog = (obs_data) => {
         setSelectedObservations
     } = useLayers();
 
-    const [isHide, setIsHide] = useState({
+    const [isHideLine, setIsHideLine] = useState({
         "Observations": false,
         "NOAA Tidal Predictions": false,
         "APS Nowcast": false,
         "APS Forecast": false,
         "Difference (APS-OBS)": false });
 
-    const toggle = (item) => {
-        isHide[item] = !isHide[item];
-        setIsHide({ ...isHide });
+    const toggleLineView = (item) => {
+        isHideLine[item] = !isHideLine[item];
+        setIsHideLine({ ...isHideLine });
     };
 
     // create a graph using data from this url
@@ -35,7 +35,7 @@ export const ObservationDialog = (obs_data) => {
         // create the chart
         return (
             <Fragment>
-                <ObservationChart url={ url } isHide={ isHide } />
+                <ObservationChart url={ url } isHideLine={ isHideLine } />
             </Fragment>
         );
     };
@@ -49,7 +49,7 @@ export const ObservationDialog = (obs_data) => {
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
         map: map,
-        toggle: toggle
+        toggleLineView: toggleLineView
     };
 
     // render the dialog
