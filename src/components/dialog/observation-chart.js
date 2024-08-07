@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
+import React from 'react';
 import axios from 'axios';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
