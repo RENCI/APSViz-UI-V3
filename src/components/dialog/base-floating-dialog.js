@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { ButtonGroup, Button, Box, Stack } from '@mui/joy';
+import { ToggleButtonGroup, Button, Box, Stack } from '@mui/joy'; //, Checkbox
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
@@ -27,6 +27,7 @@ BaseFloatingDialog.propTypes = {
     dataList: PropTypes.any,
     setDataList: PropTypes.func,
     map: PropTypes.any,
+    showLineButtonView:  PropTypes.any,
     toggleLineView: PropTypes.any
 };
 
@@ -43,9 +44,9 @@ BaseFloatingDialog.propTypes = {
  * @param map - a reference to the map state: object
  * @param toggleLineView - toggles the visibility of a chart line
  */
-export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, toggleLineView } ) {
-    const [width, setWidth] = React.useState(600);
-    const [height, setHeight] = React.useState(300);
+export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, showLineButtonView, toggleLineView } ) {
+    const [newWidth, setNewWidth] = React.useState(600);
+    const [newHeight, setNewHeight] = React.useState(300);
 
     /**
     * the close dialog handler
@@ -68,12 +69,12 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
         <Fragment>
             <CssBaseline />
             <Resizable
-                height={ height }
-                width={ width }
+                height={ newHeight }
+                width={ newWidth }
                 maxWidth=""
                 onResize={ (event) => {
-                    setWidth(width + event.movementX);
-                    setHeight(height + event.movementY);
+                    setNewWidth(newWidth + event.movementX);
+                    setNewHeight(newHeight + event.movementY);
                 }}
                 axis="x"
                 draggableOpts={{ handleSize: [20, 20] }}
@@ -99,19 +100,46 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         </Stack>
                     </DialogTitle>
 
-                    <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0 }}>
+                    <DialogContent sx={{ fontSize: 11, m: 0 }}>
                         <Stack direction="column" gap={ 1 } alignItems="center">
-                            <ButtonGroup variant="outlined" size="small" aria-label="Basic button group">
-                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'Black' }} onClick={() => toggleLineView("Observations")}>Observations</Button>
-                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'Teal' }} onClick={() => toggleLineView("NOAA Tidal Predictions")}>NOAA Tidal Predictions</Button>
-                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'CornflowerBlue' }} onClick={() => toggleLineView("APS Nowcast")}>APS Nowcast</Button>
-                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'LimeGreen' }} onClick={() => toggleLineView("APS Forecast")}>APS Forecast</Button>
-                                <Button variant="outlined" sx={{ color: 'white', backgroundColor: 'Red' }} onClick={() => toggleLineView("Difference (APS-OBS)")}>Difference (APS-OBS)</Button>
-                            </ButtonGroup>
+                            <ToggleButtonGroup size="sm" onChange={(event, newValue) => { toggleLineView(newValue); }} sx={{ backgroundColor: 'White'}}>
+                                {(showLineButtonView("Observations")) ?
+                                <Button
+                                    value="Observations"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, color: 'Black' , fontSize: 12 }}>
+                                    Observations</Button> : ''
+                                }
 
-                            <Box sx={{ height: height, width: width }}>
-                                { dialogObject }
-                            </Box>
+                                {(showLineButtonView("NOAA Tidal Predictions")) ?
+                                <Button
+                                    value="NOAA Tidal Predictions"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, color: 'Teal', fontSize: 12 }}>
+                                    NOAA Tidal Predictions</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Nowcast")) ?
+                                <Button
+                                    value="APS Nowcast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, color: 'CornflowerBlue', fontSize: 12 }}>
+                                    APS Nowcast</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Forecast")) ?
+                                <Button
+                                    value="APS Forecast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, color: 'LimeGreen', fontSize: 12 }}>
+                                    APS Forecast</Button> : ''
+                                }
+
+                                {(showLineButtonView("Difference (APS-OBS)")) ?
+                                <Button
+                                    value="Difference (APS-OBS)"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, color: 'Red', backgroundColor: 'White', fontSize: 12 }}>
+                                    Difference (APS-OBS)</Button> : ''
+                                }
+                            </ToggleButtonGroup>
+
+                            <Box sx={{ height: newHeight, width: newWidth }}> { dialogObject } </Box>
                         </Stack>
                     </DialogContent>
                 </Dialog>
@@ -133,8 +161,8 @@ function PaperComponent(props) {
 
     // render the component
     return (
-        <Draggable nodeRef={nodeRef} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper ref={nodeRef} {...props} />
+        <Draggable nodeRef={ nodeRef } handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper ref={ nodeRef } {...props} />
         </Draggable>
     );
 }

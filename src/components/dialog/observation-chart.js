@@ -39,7 +39,7 @@ console.error = (...args) => {
  * @param url
  * @returns { json }
  */
-function getObsChartData(url) {
+function getObsChartData(url, setLineButtonView) {
     // return the data to the caller
     return useQuery( {
         // specify the data key and url to use
@@ -66,7 +66,7 @@ function getObsChartData(url) {
                 });
 
             // return the csv data in json format
-            return csvToJSON(ret_val);
+            return csvToJSON(ret_val, setLineButtonView);
         }
     });
 }
@@ -77,7 +77,7 @@ function getObsChartData(url) {
  * @param csvData
  * @returns { json [] }
  */
-function csvToJSON(csvData) {
+function csvToJSON(csvData, setLineButtonView) {
     // ensure that there is csv data to convert
     if (csvData !== "") {
         // split on carriage returns
@@ -115,28 +115,48 @@ function csvToJSON(csvData) {
                 e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
 
                 // data that is missing a value will not result in plotting
-                if (e["APS Nowcast"])
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
-                else
-                    e["APS Nowcast"] = null;
-
-                if (e["APS Forecast"])
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
-                else
-                    e["APS Forecast"] = null;
-
-                if (e["Observations"])
+                if (e["Observations"]) {
                     e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+
+                    // set the line button to be in view
+                    setLineButtonView("Observations");
+                }
                 else
                     e["Observations"] = null;
 
-                if (e["NOAA Tidal Predictions"])
+                if (e["NOAA Tidal Predictions"]) {
                     e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
+
+                    // set the line button to be in view
+                    setLineButtonView("NOAA Tidal Predictions");
+                }
                 else
                     e["NOAA Tidal Predictions"] = null;
 
-                if (e["Difference (APS-OBS)"])
+                if (e["APS Nowcast"]) {
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("APS Nowcast");
+                }
+                else
+                    e["APS Nowcast"] = null;
+
+                if (e["APS Forecast"]) {
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("APS Forecast");
+                }
+                else
+                    e["APS Forecast"] = null;
+
+                if (e["Difference (APS-OBS)"]) {
                     e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("Difference (APS-OBS)");
+                }
                 else
                     e["Difference (APS-OBS)"] = null;
             }
@@ -238,7 +258,7 @@ function get_yaxis_ticks(data) {
  */
 function CreateObsChart(c) {
     // call to get the data. expect back some information too
-    const { status, data } = getObsChartData(c.chartProps.url);
+    const { status, data } = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
 
     // get the domain bounds
     const maxValue = get_yaxis_ticks(data);
