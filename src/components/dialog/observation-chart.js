@@ -116,7 +116,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                 // data that is missing a value will not result in plotting
                 if (e["Observations"]) {
-                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("Observations");
@@ -125,7 +125,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"]) {
-                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
+                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("NOAA Tidal Predictions");
@@ -134,7 +134,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["APS Nowcast"]) {
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("APS Nowcast");
@@ -143,7 +143,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"]) {
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("APS Forecast");
@@ -152,7 +152,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["APS Forecast"] = null;
 
                 if (e["Difference (APS-OBS)"]) {
-                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
+                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("Difference (APS-OBS)");
