@@ -1,12 +1,9 @@
 import React, { Fragment } from 'react';
-import { ToggleButtonGroup, Button, Box, Stack } from '@mui/joy'; //, Checkbox
+import { ToggleButtonGroup, ToggleButton, Box, Stack } from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
-
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
-
-import { markUnclicked } from '@utils/map-utils';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
@@ -17,6 +14,8 @@ import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+
+import { markUnclicked } from '@utils/map-utils';
 
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
@@ -45,8 +44,13 @@ BaseFloatingDialog.propTypes = {
  * @param toggleLineView - toggles the visibility of a chart line
  */
 export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, showLineButtonView, toggleLineView } ) {
-    const [newWidth, setNewWidth] = React.useState(600);
+    // declare state to capture the dialog size
+    const [newWidth, setNewWidth] = React.useState(460);
     const [newHeight, setNewHeight] = React.useState(300);
+
+    // declare the minimums for the dialog content area
+    const minWidth = 200;
+    const minHeight = 150;
 
     /**
     * the close dialog handler
@@ -77,9 +81,9 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     setNewHeight(newHeight + event.movementY);
                 }}
                 axis="x"
-                draggableOpts={{ handleSize: [20, 20] }}
-            >
+                draggableOpts={{ handleSize: [20, 20] }}>
                 <Dialog
+                    width="100%"
                     aria-labelledby="draggable-dialog"
                     open={ true }
                     onClose={ handleClose }
@@ -100,46 +104,48 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                         </Stack>
                     </DialogTitle>
 
-                    <DialogContent sx={{ fontSize: 11, m: 0 }}>
-                        <Stack direction="column" gap={ 1 } alignItems="center">
-                            <ToggleButtonGroup size="sm" onChange={(event, newValue) => { toggleLineView(newValue); }} sx={{ backgroundColor: 'White'}}>
-                                {(showLineButtonView("Observations")) ?
-                                <Button
-                                    value="Observations"
-                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, color: 'Black' , fontSize: 12 }}>
-                                    Observations</Button> : ''
-                                }
+                    <DialogContent sx={{fontSize: 10, p: "5px"}}>
+                        <Stack direction="column" spacing={ '5px' } alignItems="center" >
+                            <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
+                                <Stack display="wrap" sx={{ width: newWidth, minWidth: minWidth, flexWrap: "wrap"}} direction="row" spacing={'px'}  alignItems="center">
+                                    {showLineButtonView("Observations") ?
+                                        <Box><ToggleButton
+                                        value="Observations"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, m: 0, p: "3px", color: 'Black' , fontSize: 9 }}>
+                                        Observations</ToggleButton></Box> : ''
+                                    }
 
-                                {(showLineButtonView("NOAA Tidal Predictions")) ?
-                                <Button
-                                    value="NOAA Tidal Predictions"
-                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, color: 'Teal', fontSize: 12 }}>
-                                    NOAA Tidal Predictions</Button> : ''
-                                }
+                                    {(showLineButtonView("APS Nowcast")) ?
+                                        <Box><ToggleButton
+                                        value="APS Nowcast"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 9 }}>
+                                        APS Nowcast</ToggleButton></Box> : ''
+                                    }
 
-                                {(showLineButtonView("APS Nowcast")) ?
-                                <Button
-                                    value="APS Nowcast"
-                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, color: 'CornflowerBlue', fontSize: 12 }}>
-                                    APS Nowcast</Button> : ''
-                                }
+                                    {(showLineButtonView("APS Forecast")) ?
+                                        <Box><ToggleButton
+                                        value="APS Forecast"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 9 }}>
+                                        APS Forecast</ToggleButton></Box> : ''
+                                    }
 
-                                {(showLineButtonView("APS Forecast")) ?
-                                <Button
-                                    value="APS Forecast"
-                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, color: 'LimeGreen', fontSize: 12 }}>
-                                    APS Forecast</Button> : ''
-                                }
+                                    {(showLineButtonView("NOAA Tidal Predictions")) ?
+                                        <Box><ToggleButton
+                                        value="NOAA Tidal Predictions"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, m: 0, p: "3px", color: 'Teal', fontSize: 9 }}>
+                                        NOAA Tidal Predictions</ToggleButton></Box> : ''
+                                    }
 
-                                {(showLineButtonView("Difference (APS-OBS)")) ?
-                                <Button
-                                    value="Difference (APS-OBS)"
-                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, color: 'Red', backgroundColor: 'White', fontSize: 12 }}>
-                                    Difference (APS-OBS)</Button> : ''
-                                }
+                                    {(showLineButtonView("Difference (APS-OBS)")) ?
+                                        <Box><ToggleButton
+                                        value="Difference (APS-OBS)"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, m: 0, p: "3px", color: 'Red', fontSize: 9 }}>
+                                        Difference (APS-OBS)</ToggleButton></Box> : ''
+                                    }
+                                </Stack>
                             </ToggleButtonGroup>
 
-                            <Box sx={{ height: newHeight, width: newWidth }}> { dialogObject } </Box>
+                            <Box sx={{ width: newWidth, minWidth: minWidth, height: newHeight, minHeight: minHeight }}> { dialogObject } </Box>
                         </Stack>
                     </DialogContent>
                 </Dialog>
@@ -149,7 +155,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
 }
 
 /**
-* This creates a 3D dialog.
+* This creates a draggable area for the dialog content
 *
 * @param props
 * @returns {JSX.Element}

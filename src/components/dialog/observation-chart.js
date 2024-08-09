@@ -116,7 +116,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                 // data that is missing a value will not result in plotting
                 if (e["Observations"]) {
-                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("Observations");
@@ -125,7 +125,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"]) {
-                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
+                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("NOAA Tidal Predictions");
@@ -134,7 +134,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["APS Nowcast"]) {
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("APS Nowcast");
@@ -143,7 +143,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"]) {
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("APS Forecast");
@@ -152,7 +152,7 @@ function csvToJSON(csvData, setLineButtonView) {
                     e["APS Forecast"] = null;
 
                 if (e["Difference (APS-OBS)"]) {
-                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
+                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
 
                     // set the line button to be in view
                     setLineButtonView("Difference (APS-OBS)");
@@ -266,28 +266,28 @@ function CreateObsChart(c) {
     // render the chart
     return (
         <Fragment>
-            {
-                status === 'pending' ? ( <div>Gathering chart data...</div> ) :
-                status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
-                    <ResponsiveContainer>
-                        <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
-                            <CartesianGrid strokeDasharray="1 1" />
+        {
+            status === 'pending' ? ( <div>Gathering chart data...</div> ) :
+            status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
+                <ResponsiveContainer>
+                    <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
+                        <CartesianGrid strokeDasharray="1 1" />
 
-                            <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+                        <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
 
-                            <ReferenceLine y={0} stroke="#000000" />
-                            <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+                        <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3" />
+                        <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
 
-                            <Tooltip />
+                        <Tooltip />
 
-                            <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
-                            <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
-                            <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
-                            <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
-                            <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
-                        </LineChart>
-                    </ResponsiveContainer>
-            }
+                        <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
+                        <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
+                        <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
+                        <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
+                        <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
+                    </LineChart>
+                </ResponsiveContainer>
+        }
         </Fragment>
     );
 }
