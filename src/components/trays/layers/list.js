@@ -3,11 +3,16 @@ import {
     Accordion,
     AccordionDetails,
     AccordionGroup,
-    AccordionSummary,
+    //AccordionSummary,
     Box,
     Divider,
     IconButton,
+    Stack,
+    //ButtonGroup
 } from '@mui/joy';
+import { ActionButton } from '@components/buttons';
+import { useToggleState } from '@hooks';
+import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from '@context';
 import { LayerCard } from './layer-card';
 import { DeleteModelRunButton } from "@components/trays/layers/delete-layer-button";
@@ -248,6 +253,8 @@ export const LayersList = () => {
         setDefaultModelLayers(newLayerList);
     };
 
+    const expanded = useToggleState(false);
+
     /**
      * render the layers on the tray
       */
@@ -279,8 +286,18 @@ export const LayersList = () => {
                                     <Draggable key={ layer['group'] } draggableId={ layer['group'] } index={ idx }>
                                         {(provided) => (
                                             <Box ref={ provided['innerRef'] } { ...provided['draggableProps'] }>
-                                                <Accordion>
-                                                    <AccordionSummary>
+                                                <Accordion
+                                                    expanded={ expanded.enabled }
+                                                    onChange={ expanded.toggle }>
+
+                                                    {/*<AccordionSummary>*/}
+
+                                                    <Stack
+                                                        direction="row"
+                                                        justifyContent="space-between"
+                                                        alignItems="stretch"
+                                                        gap={ 2 }
+                                                        sx={{ flex: 1 }}>
                                                         <IconButton
                                                             variant="soft"
                                                             color="neutral"
@@ -292,7 +309,19 @@ export const LayersList = () => {
                                                             { getHeaderSummary(layer['properties']) }
                                                         </Typography>
                                                         <DeleteModelRunButton groupId={ layer['group'] }/>
-                                                    </AccordionSummary>
+
+                                                        <ActionButton onClick={ expanded.toggle }>
+                                                            <ExpandIcon
+                                                                fontSize="sm"
+                                                                sx={{
+                                                                transform: expanded.enabled ? 'rotate(180deg)' : 'rotate(0)',
+                                                                transition: 'transform 100ms',
+                                                                }} />
+                                                        </ActionButton>
+                                                    </Stack>
+
+                                                    {/*</AccordionSummary>*/}
+
                                                     <AccordionDetails>
                                                         { renderLayerCards(layers, layer['group'] )}
                                                     </AccordionDetails>
