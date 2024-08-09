@@ -37,31 +37,13 @@ export const Styler = () => {
             direction="column"
             justifyContent="flex-start"
             alignItems="flex-start"
-            gap={2}
+            gap={10}
         >
-                {/* <Typography level="title-md">Change range of data in colormap</Typography>
-
-                <Box width={300} >
-                    <Slider
-                        getAriaLabel={() => 'Y-Axis'}
-                        value={ value }
-                        defaultValue={ value }
-                        onChange={ handleChange }
-                        valueLabelDisplay="auto"
-                        step={ 0.5 }
-                        marks={ marks }
-                        min={0}
-                        max={10}
-                        disableSwap
-                        size="md"
-                        variant="solid"
-                    />
-                </Box> */}
-                <DataRangeEdit />
-                <ColorMapEditor
-                  colorMap={theColorMap}
-                  onChange={handleColorMapChange}
-                />
+              <DataRangeEdit />
+              {/* <ColorMapEditor
+                colorMap={theColorMap}
+                onChange={handleColorMapChange}
+              /> */}
         </Stack>
     );
 };

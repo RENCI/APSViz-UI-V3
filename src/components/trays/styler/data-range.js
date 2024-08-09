@@ -7,6 +7,9 @@ import { Stack, Typography, Slider, Box } from '@mui/joy';
 //import { getNamespacedEnvParam } from '@utils/map-utils';
 import { useLocalStorage } from '@hooks';
 
+const MAXELE = 'maxele';
+const MAXWVEL = 'maxwvel';
+const SWAN = 'swan';
 
 export const DataRangeEdit = () => {
 

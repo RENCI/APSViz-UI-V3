@@ -1,5 +1,9 @@
-export const maxeleStyle = '<?xml version="1.0" encoding="UTF-8"?><sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"> \
-  <sld:NamedLayer> \
+//export const maxeleStyle = '<?xml version="1.0" encoding="UTF-8"?> \
+  //<ogc:GetMap xmlns:ogc="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" version="1.1.1" service="WMS"> \
+//'<?xml version="1.0" encoding="UTF-8"?><sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"> \
+export const maxeleStyle = '<?xml version="1.0" encoding="UTF-8"?> \
+  <sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" version="1.0.0"> \
+    <sld:NamedLayer> \
     <sld:Name>maxele_style_v3ui</sld:Name> \
     <sld:UserStyle> \
       <sld:Name>maxele_style_v3ui</sld:Name> \
