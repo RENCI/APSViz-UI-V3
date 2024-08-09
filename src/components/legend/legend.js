@@ -58,17 +58,17 @@ export const MapLegend = () => {
     }
 
     // define the starting size of the card
-    const [newWidth, setNewWidth] = React.useState(75);
-    const [newHeight, setNewHeight] = React.useState(600);
+    const [newWidth, setNewWidth] = React.useState(60);
+    const [newHeight, setNewHeight] = React.useState(400);
 
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = React.useRef(null);
 
     // declare the mins/maxes for the dialog content area
     const minWidth = 40;
-    const minHeight = 450;
-    const maxWidth = 100;
-    const maxHeight = 700;
+    const minHeight = 400;
+    const maxWidth = 110;
+    const maxHeight = 600;
 
     return (
         <Fragment>
@@ -101,22 +101,20 @@ export const MapLegend = () => {
                             zIndex: 410,
                             borderRadius: 'sm',
                             visibility: legendVisibilty,
-                            height: newHeight+60, width: newWidth,
-                            minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+70
-                        }}
-                    >
+                            width: newWidth, height: newHeight+70,
+                            minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+65
+                        }}>
                         <Stack
                             direciton="column"
                             gap={ 1 }
-                            alignItems="center"
-                        >
+                            alignItems="center">
                             <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
                                 <LegendIcon size="lg" color="primary" />
                             </Avatar>
 
                             <Box component="img" alt="Legend" src={ legendUrl }
                                  sx={{ height: newHeight, width: newWidth,
-                                 minWidth: minWidth, minHeight: minHeight, maxWidth: maxWidth, maxHeight: maxHeight }}
+                                 minWidth: minWidth, minHeight: minHeight, maxWidth: maxWidth-10, maxHeight: maxHeight-10 }}
                             />
                         </Stack>
                     </Card>

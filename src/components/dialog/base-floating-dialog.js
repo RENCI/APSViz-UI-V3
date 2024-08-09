@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { ToggleButtonGroup, ToggleButton, Box, Stack } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography } from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 import { Resizable } from "react-resizable";
@@ -83,7 +83,6 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                 axis="x"
                 draggableOpts={{ handleSize: [20, 20] }}>
                 <Dialog
-                    width="100%"
                     aria-labelledby="draggable-dialog"
                     open={ true }
                     onClose={ handleClose }
@@ -93,18 +92,20 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     style={{ pointerEvents: 'none' }}
                     PaperProps={{ sx: { pointerEvents: 'auto' } }}
                     sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}>
+
                     <DialogTitle
                         id="draggable-dialog"
-                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left', fontSize: 14, height: 40, p: 1.3 }}>
-                        <Stack direction="row" justifyContent="space-between">
+                        sx={{ p: 1, display: 'flex', alignItems: 'center', cursor: 'move', backgroundColor: 'lightblue' }}>
+                        <Typography
+                            sx={{ wordWrap: 'break-word', width: newWidth, minWidth: minWidth, flexWrap: "wrap", fontSize: 12}}>
                             { title }
-                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.9, marginRight: -1 }}>
-                                <CloseOutlinedIcon color={"primary"}/>
-                            </IconButton>
-                        </Stack>
+                        </Typography>
                     </DialogTitle>
+                    <IconButton size="small" onClick={ handleClose } sx={{ position: 'absolute', right: 2, top: 1 }}>
+                        <CloseOutlinedIcon color={"primary"}/>
+                    </IconButton>
 
-                    <DialogContent sx={{fontSize: 10, p: "5px"}}>
+                    <DialogContent sx={{ fontSize: 10, p: "5px" }}>
                         <Stack direction="column" spacing={ '5px' } alignItems="center" >
                             <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
                                 <Stack display="wrap" sx={{ width: newWidth, minWidth: minWidth, flexWrap: "wrap"}} direction="row" spacing={'px'}  alignItems="center">
