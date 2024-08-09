@@ -58,11 +58,17 @@ export const MapLegend = () => {
     }
 
     // define the starting size of the card
-    const [newWidth, setNewWidth] = React.useState(50);
-    const [newHeight, setNewHeight] = React.useState(750);
+    const [newWidth, setNewWidth] = React.useState(75);
+    const [newHeight, setNewHeight] = React.useState(600);
 
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = React.useRef(null);
+
+    // declare the mins/maxes for the dialog content area
+    const minWidth = 40;
+    const minHeight = 450;
+    const maxWidth = 100;
+    const maxHeight = 700;
 
     return (
         <Fragment>
@@ -93,25 +99,29 @@ export const MapLegend = () => {
                             transition: 'filter 250ms',
                             filter: 'opacity(0.9)',
                             '&:hover': { filter: 'opacity(1.0)' },
-                            height: newHeight,
-                            width: newWidth,
                             padding: '10px',
                             zIndex: 410,
                             borderRadius: 'sm',
-                            visibility: legendVisibilty
+                            visibility: legendVisibilty,
+                            height: newHeight+60, width: newWidth,
+                            minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+70
                         }}
                     >
                         <Stack
-                            sx={{ height: '100%'}}
+                            //sx={{ height: '100%' }}
                             direciton="column"
                             gap={ 1 }
                             alignItems="center"
                         >
-                            <Avatar variant="outlined" id="draggable-card"  sx={{ cursor: 'move' }}>
+                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
                                 <LegendIcon size="lg" color="primary" />
                             </Avatar>
 
-                            <Box component="img" height={ newHeight } width={ newWidth } alt="Legend" src={ legendUrl } />
+                            <Box component="img" alt="Legend" src={ legendUrl }
+                            //     height={ newHeight } width={ newWidth }
+                                 sx={{ height: newHeight, width: newWidth,
+                                 minWidth: minWidth, minHeight: minHeight, maxWidth: maxWidth, maxHeight: maxHeight }}
+                            />
                         </Stack>
                     </Card>
                 </Resizable>
