@@ -79,7 +79,7 @@ export const MapLegend = () => {
                 <Resizable
                     height={ newHeight }
                     width={ newWidth }
-                    maxWidth=""
+                    //maxWidth=""
                     onResize={ (event) => {
                         console.log('width:' + newWidth + ', height:' + newHeight);
                         setNewWidth(newWidth + event.movementX);
