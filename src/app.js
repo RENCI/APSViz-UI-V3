@@ -6,7 +6,6 @@ import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 import { MapLegend } from '@components/legend';
-import { Share } from '@share/share';
 
 /**
  * renders the main content
@@ -35,7 +34,6 @@ const Content = () => {
             <Sidebar />
             <ControlPanel/>
             <MapLegend />
-            <Share />
         </Fragment>
     );
 };

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import BaseFloatingDialog from "@dialog/base-floating-dialog";
 import { useLayers } from "@context";
 import ObservationChart from "@dialog/observation-chart";
@@ -18,12 +18,47 @@ export const ObservationDialog = (obs_data) => {
         setSelectedObservations
     } = useLayers();
 
+    // create state for the showing of the chart lines
+    const [isHideLine, setIsHideLine] = useState({
+        "Observations": false,
+        "NOAA Tidal Predictions": false,
+        "APS Nowcast": false,
+        "APS Forecast": false,
+        "Difference (APS-OBS)": false });
+
+    // method to toggle the  line view polarity
+    const toggleLineView = (item) => {
+        isHideLine[item] = !isHideLine[item];
+        setIsHideLine({ ...isHideLine });
+    };
+
+    // create state for the showing of the chart line view button
+    const [showLineButton, setShowLineButton] = useState({
+        "Observations": false,
+        "NOAA Tidal Predictions": false,
+        "APS Nowcast": false,
+        "APS Forecast": false,
+        "Difference (APS-OBS)": false });
+
+    const setLineButtonView = (item) => {
+        // if the line view button should be in view
+        if (!showLineButton[item]) {
+            showLineButton[item] = true;
+            setShowLineButton({...showLineButton});
+        }
+    };
+
+    const showLineButtonView = (item) => {
+        // gets the current button line view state
+        return showLineButton[item];
+    };
+
     // create a graph using data from this url
     const graphObj = (url) => {
         // create the chart
         return (
             <Fragment>
-                <ObservationChart url={ url } />
+                <ObservationChart url={ url } isHideLine={ isHideLine } setLineButtonView={ setLineButtonView } />
             </Fragment>
         );
     };
@@ -36,7 +71,9 @@ export const ObservationDialog = (obs_data) => {
         dataKey: obs_data.obs['id'],
         dataList: selectedObservations,
         setDataList: setSelectedObservations,
-        map: map
+        map: map,
+        showLineButtonView: showLineButtonView,
+        toggleLineView: toggleLineView
     };
 
     // render the dialog

@@ -3,6 +3,7 @@ import * as layers from './layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';
 import * as settings from './settings';
+import * as share_view from './share';
 import * as help_about from './help-about';
 import * as styler from './styler';
 //import * as screen_shot from './screenshot';
@@ -13,9 +14,9 @@ export default {
   model_selection,
   remove_items,
   settings,
+  share_view,
   help_about,
   styler
-//  ,screen_shot
 };
 
 /*

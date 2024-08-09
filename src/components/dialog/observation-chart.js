@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
@@ -17,9 +17,9 @@ dayjs.extend(utc);
  * @returns {JSX.Element}
  * @constructor
  */
-export default function ObservationChart(url) {
+export default function ObservationChart(chartProps) {
     // render the chart
-    return (<CreateObsChart url={ url.url } />);
+    return (<CreateObsChart chartProps={ chartProps } />);
 }
 
 /**
@@ -39,7 +39,7 @@ console.error = (...args) => {
  * @param url
  * @returns { json }
  */
-function getObsChartData(url) {
+function getObsChartData(url, setLineButtonView) {
     // return the data to the caller
     return useQuery( {
         // specify the data key and url to use
@@ -61,12 +61,12 @@ function getObsChartData(url) {
                     // send the error message to the console
                     console.error(error.message);
 
-                    // make sure we dont render anything
+                    // make sure we do not render anything
                     return "";
                 });
 
             // return the csv data in json format
-            return csvToJSON(ret_val);
+            return csvToJSON(ret_val, setLineButtonView);
         }
     });
 }
@@ -77,7 +77,7 @@ function getObsChartData(url) {
  * @param csvData
  * @returns { json [] }
  */
-function csvToJSON(csvData) {
+function csvToJSON(csvData, setLineButtonView) {
     // ensure that there is csv data to convert
     if (csvData !== "") {
         // split on carriage returns
@@ -115,28 +115,48 @@ function csvToJSON(csvData) {
                 e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
 
                 // data that is missing a value will not result in plotting
-                if (e["APS Nowcast"])
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
-                else
-                    e["APS Nowcast"] = null;
-
-                if (e["APS Forecast"])
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
-                else
-                    e["APS Forecast"] = null;
-
-                if (e["Observations"])
+                if (e["Observations"]) {
                     e["Observations"] = +parseFloat(e["Observations"]).toFixed(4);
+
+                    // set the line button to be in view
+                    setLineButtonView("Observations");
+                }
                 else
                     e["Observations"] = null;
 
-                if (e["NOAA Tidal Predictions"])
+                if (e["NOAA Tidal Predictions"]) {
                     e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(4);
+
+                    // set the line button to be in view
+                    setLineButtonView("NOAA Tidal Predictions");
+                }
                 else
                     e["NOAA Tidal Predictions"] = null;
 
-                if (e["Difference (APS-OBS)"])
+                if (e["APS Nowcast"]) {
+                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("APS Nowcast");
+                }
+                else
+                    e["APS Nowcast"] = null;
+
+                if (e["APS Forecast"]) {
+                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("APS Forecast");
+                }
+                else
+                    e["APS Forecast"] = null;
+
+                if (e["Difference (APS-OBS)"]) {
                     e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(6);
+
+                    // set the line button to be in view
+                    setLineButtonView("Difference (APS-OBS)");
+                }
                 else
                     e["Difference (APS-OBS)"] = null;
             }
@@ -178,49 +198,6 @@ function formatX_axis(value) {
 }
 
 /**
- * Creates the chart.
- *
- * @param url
- * @returns {JSX.Element}
- * @constructor
- */
-function CreateObsChart(url) {
-    // call to get the data. expect back some information too
-    const { status, data } = getObsChartData(url.url);
-
-    // get the domain bounds
-    const maxValue = get_yaxis_ticks(data);
-
-    // render the chart
-    return (
-        <ResponsiveContainer width="100%" height="100%">
-            { status === 'pending' ? (
-                <div>Gathering chart data...</div>
-            ) : status === 'error' ? (
-                <div>There was a problem with observation data for this location.</div>
-            ) : (
-                <LineChart data={ data } margin={{ left: -25 }} >
-                    <CartesianGrid strokeDasharray="1 1" />
-
-                    <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
-
-                    <ReferenceLine y={0} stroke="#000000" />
-                    <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
-
-                    <Tooltip />
-                    <Legend align="right" />
-                    <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="3 1" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" strokeDasharray="4 1 2" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={2} dot={false} isAnimationActive={false} />
-                </LineChart>
-            )}
-        </ResponsiveContainer>
-    );
-}
-
-/**
  * gets the max value in the data to set the y-axis range and ticks
  *
  * @param data
@@ -242,7 +219,7 @@ function get_yaxis_ticks(data) {
         theKeys.forEach((aKey) => {
             // identify the max value in the array of values
             const newVal = Math.max(...data
-                // make sure we dont run into any null or undefined values in the data
+                // make sure we do not run into any null or undefined values in the data
                 .filter(function(o) { return !(o[aKey] === undefined || o[aKey] === null); })
                 // create the array of all the values
                 .map(o => o[aKey]));
@@ -270,4 +247,47 @@ function get_yaxis_ticks(data) {
     // else return nothing
     else
         return null;
+}
+
+/**
+ * Creates the chart.
+ *
+ * @param url
+ * @returns {JSX.Element}
+ * @constructor
+ */
+function CreateObsChart(c) {
+    // call to get the data. expect back some information too
+    const { status, data } = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
+
+    // get the domain bounds
+    const maxValue = get_yaxis_ticks(data);
+
+    // render the chart
+    return (
+        <Fragment>
+            {
+                status === 'pending' ? ( <div>Gathering chart data...</div> ) :
+                status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
+                    <ResponsiveContainer>
+                        <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
+                            <CartesianGrid strokeDasharray="1 1" />
+
+                            <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+
+                            <ReferenceLine y={0} stroke="#000000" />
+                            <YAxis ticks={ maxValue } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+
+                            <Tooltip />
+
+                            <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
+                            <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
+                            <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
+                            <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
+                            <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
+                        </LineChart>
+                    </ResponsiveContainer>
+            }
+        </Fragment>
+    );
 }

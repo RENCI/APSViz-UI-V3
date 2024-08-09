@@ -21,7 +21,6 @@ export default function CatalogItems(data) {
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
 
     // variables for the display of checkbox labels
-    let stormOrModelName = null;
     let stormOrModelEle = null;
     let numberName = null;
     let numberEle = null;
@@ -115,6 +114,9 @@ export default function CatalogItems(data) {
             return ({ visible: false, opacity: 1.0 });
     };
 
+    /**
+     * render the selected model runs
+     */
     // do not render if there is no data
     if (data.data != null) {
         // if there was a warning getting the result
@@ -137,14 +139,12 @@ export default function CatalogItems(data) {
         else {
             // save the name of the element for tropical storms and advisory numbers
             if (data.isTropical) {
-                stormOrModelName = '';
                 stormOrModelEle = 'storm_name';
                 numberName = ' Adv: ';
                 numberEle = 'advisory_number';
             }
             // save the name of the synoptic ADCIRC models and cycle numbers
             else if (!data.isTropical) {
-                stormOrModelName = '';
                 stormOrModelEle = 'model';
                 numberName = ' Cycle: ';
                 numberEle = 'cycle';
@@ -173,7 +173,7 @@ export default function CatalogItems(data) {
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
                                                 catalog['members']
-                                                    // filter by the group name
+                                                    // filter by the group name, get the top 1
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
                                                     .sort((a, b) => a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)
@@ -185,7 +185,6 @@ export default function CatalogItems(data) {
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={
-                                                                stormOrModelName +
                                                                 ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
                                                                 numberName + mbr['properties'][numberEle] +
                                                                 ', Type: ' + mbr['properties']['event_type'] +

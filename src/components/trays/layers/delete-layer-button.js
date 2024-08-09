@@ -31,3 +31,30 @@ export const DeleteLayerButton = ({ layerId }) => {
 DeleteLayerButton.propTypes = {
   layerId: PropTypes.string.isRequired
 };
+
+export const DeleteModelRunButton = ({ groupId }) => {
+  const { removeModelRun } = useLayers();
+
+  return (
+    <ActionButton
+      color="danger"
+      variant="outlined"
+      onClick={ () => removeModelRun(groupId) }
+      sx={{
+        alignContent: 'right',
+        m: 1,
+        'filter': 'opacity(0.5)',
+        transition: 'filter 250ms',
+        '&:hover': {
+          'filter': 'opacity(1.0)',
+        },
+      }}
+    >
+      <RemoveIcon />
+    </ActionButton>
+  );
+};
+
+DeleteModelRunButton.propTypes = {
+  groupId: PropTypes.string.isRequired
+};

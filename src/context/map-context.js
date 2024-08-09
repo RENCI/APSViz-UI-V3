@@ -134,6 +134,34 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers(newLayers);
   };
 
+  const removeModelRun = groupId => {
+    const index = defaultModelLayers.findIndex(l => l.group === groupId);
+    if (index === -1) {
+      return;
+    }
+    const newLayers = defaultModelLayers.filter(l => l.group !== groupId);
+
+    // now update the visible layer state for the top most model run
+    [...newLayers].forEach((layer) => {
+        // perform the visible state logic
+        layer.state = newLayerDefaultState(layer, newLayers[0].group);
+    });
+
+    setDefaultModelLayers(newLayers);
+  };
+
+  const newLayerDefaultState = (layer, group) => {
+    // if this is an obs layer and is the one just added
+    if (layer.group === group &&
+        (layer.properties['product_type'] === 'obs' || layer.properties['product_type'] === 'maxele63'))
+        // make this layer visible
+        return ({ visible: true, opacity: 1.0 });
+    // remove layer visibility
+    else
+        // make this layer invisible
+        return ({ visible: false, opacity: 1.0 });
+  };
+
   const setLayerOpacity = (id, newOpacity) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
@@ -166,6 +194,7 @@ export const LayersProvider = ({ children }) => {
         showShareComment, setShowShareComment,
         swapLayers,
         removeLayer,
+        removeModelRun,
         layerTypes,
         baseMap,
         setBaseMap,

@@ -1,15 +1,21 @@
-import React, {Fragment} from 'react';
-import Draggable from 'react-draggable';
+import React, { Fragment } from 'react';
+import { ToggleButtonGroup, Button, Box, Stack } from '@mui/joy'; //, Checkbox
+import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 
-import IconButton from '@mui/material/IconButton';
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
+
+import { markUnclicked } from '@utils/map-utils';
+
 import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
+
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { markUnclicked } from '@utils/map-utils';
+import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // define the properties of this component's input
@@ -20,7 +26,9 @@ BaseFloatingDialog.propTypes = {
     dataKey: PropTypes.any,
     dataList: PropTypes.any,
     setDataList: PropTypes.func,
-    map: PropTypes.any
+    map: PropTypes.any,
+    showLineButtonView:  PropTypes.any,
+    toggleLineView: PropTypes.any
 };
 
 /**
@@ -34,8 +42,12 @@ BaseFloatingDialog.propTypes = {
  * @param dataList - a data list in state: array
  * @param setDataList - method to update a data list in state: function
  * @param map - a reference to the map state: object
+ * @param toggleLineView - toggles the visibility of a chart line
  */
-export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map} ) {
+export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, showLineButtonView, toggleLineView } ) {
+    const [newWidth, setNewWidth] = React.useState(600);
+    const [newHeight, setNewHeight] = React.useState(300);
+
     /**
     * the close dialog handler
     */
@@ -51,36 +63,90 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     };
 
     /**
-    * configure and render the floating dialog
+    * configure and render the resizeable floating dialog
     */
     return (
         <Fragment>
             <CssBaseline />
-            <Dialog
-                aria-labelledby="draggable-dialog"
-                open={ true }
-                onClose={ handleClose }
-                PaperComponent={ PaperComponent }
-                TransitionComponent={ Transition }
-                disableEnforceFocus
-                style={{ pointerEvents: 'none' }}
-                PaperProps={{ sx: { width: 800,  height: 505, pointerEvents: 'auto' } }}
-                sx={{ zIndex: 405, width: 800, height: 505, '.MuiBackdrop-root': { backgroundColor: 'transparent' },
-                        left: index * 20, top: 20 + index * 43 }}
+            <Resizable
+                height={ newHeight }
+                width={ newWidth }
+                maxWidth=""
+                onResize={ (event) => {
+                    setNewWidth(newWidth + event.movementX);
+                    setNewHeight(newHeight + event.movementY);
+                }}
+                axis="x"
+                draggableOpts={{ handleSize: [20, 20] }}
             >
-                <DialogTitle sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'center',
-                                fontSize: 14, height: 45, p: 1.5 }} id="draggable-dialog"> { title }
-                </DialogTitle>
+                <Dialog
+                    aria-labelledby="draggable-dialog"
+                    open={ true }
+                    onClose={ handleClose }
+                    PaperComponent={ PaperComponent }
+                    TransitionComponent={ Transition }
+                    disableEnforceFocus
+                    style={{ pointerEvents: 'none' }}
+                    PaperProps={{ sx: { pointerEvents: 'auto' } }}
+                    sx={{ zIndex: 405, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}>
+                    <DialogTitle
+                        id="draggable-dialog"
+                        sx={{ cursor: 'move', backgroundColor: 'lightblue', textAlign: 'left', fontSize: 14, height: 40, p: 1.3 }}>
+                        <Stack direction="row" justifyContent="space-between">
+                            { title }
+                            <IconButton size="small" onClick={ handleClose } sx={{ marginTop: -.9, marginRight: -1 }}>
+                                <CloseOutlinedIcon color={"primary"}/>
+                            </IconButton>
+                        </Stack>
+                    </DialogTitle>
 
-                <IconButton size="small" autoFocus onClick={ handleClose } sx={{ position: 'absolute', right: 8, top: 5 }}>
-                    <CloseOutlinedIcon color={"primary"}/>
-                </IconButton>
+                    <DialogContent sx={{ fontSize: 11, m: 0 }}>
+                        <Stack direction="column" gap={ 1 } alignItems="center">
+                            <ToggleButtonGroup size="sm" onChange={(event, newValue) => { toggleLineView(newValue); }} sx={{ backgroundColor: 'White'}}>
+                                {(showLineButtonView("Observations")) ?
+                                <Button
+                                    value="Observations"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, color: 'Black' , fontSize: 12 }}>
+                                    Observations</Button> : ''
+                                }
 
-                <DialogContent sx={{ backgroundColor: 'white', fontSize: 11, m: 0, height: 395 }}>{ dialogObject }</DialogContent>
-            </Dialog>
+                                {(showLineButtonView("NOAA Tidal Predictions")) ?
+                                <Button
+                                    value="NOAA Tidal Predictions"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, color: 'Teal', fontSize: 12 }}>
+                                    NOAA Tidal Predictions</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Nowcast")) ?
+                                <Button
+                                    value="APS Nowcast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, color: 'CornflowerBlue', fontSize: 12 }}>
+                                    APS Nowcast</Button> : ''
+                                }
+
+                                {(showLineButtonView("APS Forecast")) ?
+                                <Button
+                                    value="APS Forecast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, color: 'LimeGreen', fontSize: 12 }}>
+                                    APS Forecast</Button> : ''
+                                }
+
+                                {(showLineButtonView("Difference (APS-OBS)")) ?
+                                <Button
+                                    value="Difference (APS-OBS)"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, color: 'Red', backgroundColor: 'White', fontSize: 12 }}>
+                                    Difference (APS-OBS)</Button> : ''
+                                }
+                            </ToggleButtonGroup>
+
+                            <Box sx={{ height: newHeight, width: newWidth }}> { dialogObject } </Box>
+                        </Stack>
+                    </DialogContent>
+                </Dialog>
+            </Resizable>
         </Fragment>
     );
-};
+}
 
 /**
 * This creates a 3D dialog.
@@ -95,8 +161,8 @@ function PaperComponent(props) {
 
     // render the component
     return (
-        <Draggable nodeRef={nodeRef} handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper ref={nodeRef} {...props} />
+        <Draggable nodeRef={ nodeRef } handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper ref={ nodeRef } {...props} />
         </Draggable>
     );
 }

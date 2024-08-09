@@ -179,6 +179,13 @@ export const DefaultLayers = () => {
         styles: 'maxele_style_v3ui',
     }), []);
 
+    // added this temporarily for Debby
+    const wmsDebbyLayerParams = useMemo(() => ({
+        format:"image/png",
+        transparent: true,
+        styles: "maxele_v3_short_style"
+    }), []);
+
     return (
         <>
         {defaultModelLayers
@@ -199,13 +206,22 @@ export const DefaultLayers = () => {
                     );
                 } else {
                     return (
-                        <WMSTileLayer
+                       layer.layers.includes("maxele") ?
+                        (<WMSTileLayer
+                            key={`${index}-${layer.id}`}
+                            url={gs_wms_url}
+                            layers={layer.layers}
+                            params={wmsDebbyLayerParams}
+                            opacity={opacity}
+                        />) 
+                        :
+                        (<WMSTileLayer
                             key={`${index}-${layer.id}`}
                             url={gs_wms_url}
                             layers={layer.layers}
                             params={wmsLayerParams}
                             opacity={opacity}
-                        />
+                        />)
                     );
                 }
             })
