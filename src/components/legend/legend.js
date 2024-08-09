@@ -79,9 +79,7 @@ export const MapLegend = () => {
                 <Resizable
                     height={ newHeight }
                     width={ newWidth }
-                    //maxWidth=""
                     onResize={ (event) => {
-                        console.log('width:' + newWidth + ', height:' + newHeight);
                         setNewWidth(newWidth + event.movementX);
                         setNewHeight(newHeight + event.movementY);
                     }}
@@ -108,7 +106,6 @@ export const MapLegend = () => {
                         }}
                     >
                         <Stack
-                            //sx={{ height: '100%' }}
                             direciton="column"
                             gap={ 1 }
                             alignItems="center"
@@ -118,7 +115,6 @@ export const MapLegend = () => {
                             </Avatar>
 
                             <Box component="img" alt="Legend" src={ legendUrl }
-                            //     height={ newHeight } width={ newWidth }
                                  sx={{ height: newHeight, width: newWidth,
                                  minWidth: minWidth, minHeight: minHeight, maxWidth: maxWidth, maxHeight: maxHeight }}
                             />
