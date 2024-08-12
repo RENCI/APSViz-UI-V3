@@ -1,17 +1,7 @@
-import React from 'react';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionGroup,
-    //AccordionSummary,
-    Box,
-    Divider,
-    IconButton,
-    Stack,
-    //ButtonGroup
+import React, { useState } from 'react';
+import { Accordion, AccordionDetails, AccordionGroup, Box, Divider, IconButton, Stack
 } from '@mui/joy';
 import { ActionButton } from '@components/buttons';
-import { useToggleState } from '@hooks';
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from '@context';
 import { LayerCard } from './layer-card';
@@ -190,13 +180,16 @@ export const LayersList = () => {
     // get the unique groups in the selected model runs
     const groupList = getGroupList(layers);
 
+    // set some state for the accordion expansion view
+    const [expandedAccordion, setExpandedAccordion] = useState( []);
+
     /**
      * handle the drag event
      *
      * @param result
      */
     const onDragEnd = (result) => {
-        // handle case that there is no destination (could have been dragged out of the drop area)
+        // handle the case that there is no destination (could have been dragged out of the drop area)
         if (!result.destination) {
           return;
         }
@@ -253,7 +246,63 @@ export const LayersList = () => {
         setDefaultModelLayers(newLayerList);
     };
 
-    const expanded = useToggleState(false);
+    /**
+     * gets the current state of the accordion
+     *
+     * @param id
+     * @returns {boolean}
+     */
+    const getAccordionState = (id) => {
+        // init the return
+        let ret_val = false;
+
+        // find the index of this item in state
+        const index = expandedAccordion.findIndex(l => l.id === id);
+
+        // add a new one to the list if it doesn't exist
+        if (index !== -1) {
+            // get the state
+            ret_val = expandedAccordion[index].enabled;
+        }
+
+        // return the state
+        return ret_val;
+    };
+
+    /**
+     * toggles the accordion view in state
+     *
+     * @param id
+     */
+    const toggleAccordionView = (id) => {
+        // get a copy of the state list
+        let newExpandedAccordion = [ ...expandedAccordion ];
+
+        // find the index of this item in state
+        const index = expandedAccordion.findIndex(l => l.id === id);
+
+        // add a new one to the list if it doesn't exist
+        if (index === -1) {
+            // add a new item to the state list
+            newExpandedAccordion = [...expandedAccordion, { id: id, enabled: true }];
+
+            // update the state list
+            setExpandedAccordion(newExpandedAccordion);
+        } else {
+            // get the target instance in the state array
+            const alteredExpandedAccordion = newExpandedAccordion[index];
+
+            // toggle the view state of the accordion
+            alteredExpandedAccordion.enabled = !alteredExpandedAccordion.enabled;
+
+            // rebuild the list of accordions with the altered view state
+            setExpandedAccordion([
+                ...newExpandedAccordion.slice(0, index),
+                { alteredExpandedAccordion },
+                ...newExpandedAccordion.slice(index + 1)
+            ]);
+        }
+    };
 
     /**
      * render the layers on the tray
@@ -273,8 +322,7 @@ export const LayersList = () => {
                             '.MuiAccordionSummary-button': {
                                 alignItems: 'center',
                             },
-                        }}
-                    >
+                        }}>
                         {
                             // loop through the layer groups and put them away
                             groupList
@@ -287,10 +335,8 @@ export const LayersList = () => {
                                         {(provided) => (
                                             <Box ref={ provided['innerRef'] } { ...provided['draggableProps'] }>
                                                 <Accordion
-                                                    expanded={ expanded.enabled }
-                                                    onChange={ expanded.toggle }>
-
-                                                    {/*<AccordionSummary>*/}
+                                                    expanded={ getAccordionState(layer['group']) }
+                                                    onChange={ () => toggleAccordionView(layer['group']) }>
 
                                                     <Stack
                                                         direction="row"
@@ -301,33 +347,34 @@ export const LayersList = () => {
                                                         <IconButton
                                                             variant="soft"
                                                             color="neutral"
-                                                            { ...provided['dragHandleProps'] }
-                                                        >
+                                                            { ...provided['dragHandleProps'] }>
+
                                                             <HandleIcon fontSize="xl" />
                                                         </IconButton>
-                                                        <Typography level="body-xs">
+
+                                                        <Typography level="body-xs" sx={{ mt: 1 }}>
                                                             { getHeaderSummary(layer['properties']) }
                                                         </Typography>
+
                                                         <DeleteModelRunButton groupId={ layer['group'] }/>
 
-                                                        <ActionButton onClick={ expanded.toggle }>
+                                                        <ActionButton onClick={ () => toggleAccordionView( layer['group']) }>
                                                             <ExpandIcon
                                                                 fontSize="sm"
                                                                 sx={{
-                                                                transform: expanded.enabled ? 'rotate(180deg)' : 'rotate(0)',
+                                                                transform: getAccordionState(layer['group']) ? 'rotate(180deg)' : 'rotate(0)',
                                                                 transition: 'transform 100ms',
                                                                 }} />
                                                         </ActionButton>
                                                     </Stack>
 
-                                                    {/*</AccordionSummary>*/}
-
                                                     <AccordionDetails>
-                                                        { renderLayerCards(layers, layer['group'] )}
+                                                        { renderLayerCards(layers, layer['group']) }
                                                     </AccordionDetails>
                                                 </Accordion>
                                                 <Divider/>
-                                            </Box> )}
+                                            </Box> )
+                                        }
                                     </Draggable> ))
                         } { provided.placeholder }
                     </AccordionGroup> )}
