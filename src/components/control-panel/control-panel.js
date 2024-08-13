@@ -35,7 +35,10 @@ const layerIcons = {
 
 export const ControlPanel = () => {
 
-  const { defaultModelLayers,
+  const { map,
+          selectedObservations,
+          setSelectedObservations,
+          defaultModelLayers,
           hurricaneTrackLayers,
           setDefaultModelLayers,
           getAllLayersInvisible,
@@ -230,6 +233,18 @@ export const ControlPanel = () => {
   // switch on/off the observation layer if it exists
   const toggleObsLayer = () => {
     toggleLayerVisibility(obs_layer.id);
+
+    // remove all the "target" overlays from state
+    map.eachLayer((layer) => {
+        // if this is an observation selection marker
+        if (layer.options && layer.options.pane === "markerPane") {
+            // remove the layer
+            map.removeLayer(layer);
+        }
+    });
+
+    // remove all the observation dialogs from state
+    setSelectedObservations(selectedObservations.filter(item => item === undefined));
   };
 
   // switch on/off the hurricane track layer, if it exists
