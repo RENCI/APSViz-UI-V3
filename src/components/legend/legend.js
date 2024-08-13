@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Avatar, Box, Card, Stack } from '@mui/joy';
 import { useLayers } from '@context';
 import { getNamespacedEnvParam } from "@utils";
 
-export const MapLegend = () => {
+import Draggable from "react-draggable";
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
 
+export const MapLegend = () => {
     // set correct map styles for layer name
     // may want to move this somewhere else later
     // for the implementation of user designed styles
@@ -54,40 +57,69 @@ export const MapLegend = () => {
         legendVisibilty = "hidden";
     }
 
+    // define the starting size of the card
+    const [newWidth, setNewWidth] = React.useState(60);
+    const [newHeight, setNewHeight] = React.useState(400);
+
+    // create a reference to avoid the findDOMNode deprecation issue
+    const nodeRef = React.useRef(null);
+
+    // declare the mins/maxes for the dialog content area
+    const minWidth = 40;
+    const minHeight = 400;
+    const maxWidth = 110;
+    const maxHeight = 600;
+
     return (
-        <Card
-            variant="soft"
-            sx={{
-            p: 0,
-            position: 'absolute',
-            top: 'calc(4 * var(--joy-spacing))',
-            right: 'calc(4 * var(--joy-spacing))',
-            transition: 'filter 250ms',
-            filter: 'opacity(0.9)',
-            '&:hover': { filter: 'opacity(1.0)' },
-            height: 'auto',
-            width: '100px',
-            padding: '10px',
-            zIndex: 410,
-            borderRadius: 'sm',
-            visibility: legendVisibilty,
-        }}         
-        >
-            <Stack 
-                sx={{ height: '100%'}}
-                direciton="column" 
-                gap={ 1 } 
-                alignItems="center">
-                <Avatar variant="outlined">
-                    <LegendIcon size="lg" color="primary" />
-                </Avatar>
-                <Box
-                    component="img"
-                    width="50px"
-                    alt="Legend"
-                    src={legendUrl}
-                />
-            </Stack>
-        </Card>
+        <Fragment>
+            <Draggable
+                nodeRef={ nodeRef }
+                handle="#draggable-card"
+                cancel={'[class*="MuiDialogContent-root"]'}>
+                <Resizable
+                    height={ newHeight }
+                    width={ newWidth }
+                    onResize={ (event) => {
+                        setNewWidth(newWidth + event.movementX);
+                        setNewHeight(newHeight + event.movementY);
+                    }}
+                    axis="x"
+                >
+                    <Card
+                        ref={ nodeRef }
+                        aria-labelledby="draggable-card"
+                        variant="soft"
+                        sx={{
+                            p: 0,
+                            position: 'absolute',
+                            top: 'calc(4 * var(--joy-spacing))',
+                            right: 'calc(4 * var(--joy-spacing))',
+                            transition: 'filter 250ms',
+                            filter: 'opacity(0.9)',
+                            '&:hover': { filter: 'opacity(1.0)' },
+                            padding: '10px',
+                            zIndex: 410,
+                            borderRadius: 'sm',
+                            visibility: legendVisibilty,
+                            width: newWidth, height: newHeight+70,
+                            minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+65
+                        }}>
+                        <Stack
+                            direciton="column"
+                            gap={ 1 }
+                            alignItems="center">
+                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
+                                <LegendIcon size="lg" color="primary" />
+                            </Avatar>
+
+                            <Box component="img" alt="Legend" src={ legendUrl }
+                                 sx={{ height: newHeight, width: newWidth,
+                                 minWidth: minWidth, minHeight: minHeight, maxWidth: maxWidth-10, maxHeight: maxHeight-10 }}
+                            />
+                        </Stack>
+                    </Card>
+                </Resizable>
+            </Draggable>
+        </Fragment>
     );
 };
