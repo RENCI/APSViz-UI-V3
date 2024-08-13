@@ -114,13 +114,14 @@ export const DataRangeEdit = () => {
                     else {
                         style = storedMaxeleStyle;
                     }
-                        sldParser
-                            .readStyle(style)
-                            .then((geostylerStyle) => {
-                                setCurrentStyle(geostylerStyle.output);
-                                setSliderParams(geostylerStyle.output);
-                            })
-                            .catch(error => console.log(error));
+
+                    sldParser
+                        .readStyle(style)
+                        .then((geostylerStyle) => {
+                            setCurrentStyle(geostylerStyle.output);
+                            setSliderParams(geostylerStyle.output);
+                        })
+                        .catch(error => console.log(error));
 
                     //}
                     return(style);
@@ -129,6 +130,7 @@ export const DataRangeEdit = () => {
         };
         getDefaultStyle().then();
     }, [defaultModelLayers]);
+    //}, []);
 
     // return an array of the current style's quantity values
     // from the colormap entries array - in reverse order
@@ -139,7 +141,7 @@ export const DataRangeEdit = () => {
             dataRange.push(colormapEntries[i].quantity);
         }
 
-        return(dataRange);
+        return(dataRange.reverse());
     };
 
     const scaleNumber = (unscaled, to_min, to_max, from_min, from_max) => {
@@ -219,10 +221,9 @@ export const DataRangeEdit = () => {
 
         // scale the list to fit withing the new start and end range values
         const newRange = scaleRange(currentRange, newValue[0], newValue[1]);
-        const reversedRange = newRange.reverse();
 
         // now update the style with the new values
-        updateStyleColorMapQuantities(reversedRange);
+        updateStyleColorMapQuantities(newRange);
 
         // save the new style to local storage
         storeStyle();

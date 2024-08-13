@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
+import React, { useEffect, useMemo, useState } from 'react';
+import { GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useLocalStorage } from '@hooks';
+import { AdcircRasterLayer } from './adcirc-raster-layer';
 import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
@@ -33,10 +33,6 @@ export const DefaultLayers = () => {
         setSelectedObservations,
         setShowShareComment
     } = useLayers();
-
-    const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage('maxele', '');
-    const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage('maxwvel', '');
-    const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage('swan', '');
 
     const obsPointToLayer = ((feature, latlng) => {
         let obs_color = "#FFFFFF";
@@ -172,19 +168,20 @@ export const DefaultLayers = () => {
 
     // memorizing this params object prevents
     // that map flicker on state changes.
-    const wmsLayerParams = useMemo(() => ({
-        format:"image/png",
-        transparent: true,
-        sld_body: storedMaxeleStyle,
-        styles: 'maxele_style_v3ui',
-    }), []);
+    // const wmsLayerParams = useMemo(() => ({
+    //     format:"image/png",
+    //     transparent: true,
+    //     sld_body: storedMaxeleStyle,
+    //     //styles: 'maxele_style_v3ui',
+    // }), []);
 
     // added this temporarily for Debby
-    const wmsDebbyLayerParams = useMemo(() => ({
-        format:"image/png",
-        transparent: true,
-        styles: "maxele_v3_short_style"
-    }), []);
+    // const wmsDebbyLayerParams = useMemo(() => ({
+    //     format:"image/png",
+    //     transparent: true,
+    //     sld_body: storedMaxeleStyle,
+    //     //styles: "maxele_v3_short_style"
+    // }), []);
 
     return (
         <>
@@ -204,8 +201,15 @@ export const DefaultLayers = () => {
                             onEachFeature={onEachObsFeature}
                         />
                     );
-                } else {
+                } else if (type !== "obs") {
                     return (
+                        <AdcircRasterLayer
+                            key={Math.random() + index}
+                            layer={layer}
+                            opacity={opacity}
+                        />
+                    );
+                    /* return (
                        layer.layers.includes("maxele") ?
                         (<WMSTileLayer
                             key={`${index}-${layer.id}`}
@@ -222,7 +226,7 @@ export const DefaultLayers = () => {
                             params={wmsLayerParams}
                             opacity={opacity}
                         />)
-                    );
+                    ); */
                 }
             })
         };

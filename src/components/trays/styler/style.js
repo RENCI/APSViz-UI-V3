@@ -25,9 +25,7 @@ export const Styler = () => {
         sldParser
           .readStyle(maxeleStyle)
           .then((geostylerStyle) => {
-            console.log(geostylerStyle);
             setTheColorMap(geostylerStyle.output.rules[0].symbolizers[0].colorMap);
-            console.log(theColorMap);
           })
           .catch(error => console.log(error));
       }, []);
