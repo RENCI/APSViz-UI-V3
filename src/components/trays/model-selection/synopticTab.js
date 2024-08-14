@@ -40,13 +40,13 @@ export const SynopticTabForm = () => {
     const setChangedSynopticDate = (newValue) => {
         // if there was a valid date
         if (!isNaN(newValue) && newValue !== null) {
-            console.log('setChangedSynopticDate Good date: ' + newValue.$d + ', error: ' + error + ', newValue: ' + newValue);
+            //console.log('setChangedSynopticDate Good date: ' + newValue.$d + ', error: ' + error + ', newValue: ' + newValue);
             // save the date
             setSynopticDate(newValue.$d);
         }
         // else handle a bad date
         else {
-            console.log('setChangedSynopticDate Bad date: ' + newValue);
+            //console.log('setChangedSynopticDate Bad date: ' + newValue);
             // clear the date
             setSynopticDate(null);
         }
@@ -61,7 +61,7 @@ export const SynopticTabForm = () => {
         // avoid doing the usual form submit operations
         event.preventDefault();
 
-        console.log('formSynopticSubmit error: ' + error);
+        //console.log('formSynopticSubmit error: ' + error);
 
         // build the query string from the submitted form data
         let queryString =
@@ -113,8 +113,8 @@ export const SynopticTabForm = () => {
                     return error.response.status;
                 });
 
-             if (finalDataUrl.indexOf('get_pulldown_data') !== -1)
-                console.log('finalDataUrl: ' + finalDataUrl);
+             // if (finalDataUrl.indexOf('get_pulldown_data') !== -1)
+             //    console.log('finalDataUrl: ' + finalDataUrl);
 
             // if there was an error from the web service
             if (ret_val !== 500) {
@@ -210,7 +210,7 @@ export const SynopticTabForm = () => {
      * @type {string}
      */
     const errorMessage = useMemo(() => {
-        console.log('errorMessage error: ' + error);
+        //console.log('errorMessage error: ' + error);
 
         switch (error) {
             case 'maxDate': {
