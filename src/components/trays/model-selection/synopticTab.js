@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useMemo } from 'react';
 import { Button, Divider, Select, Stack } from '@mui/joy';
 import { DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -8,6 +8,7 @@ import axios from 'axios';
 import DropDownOptions from "@model-selection/DropDownOptions";
 import CatalogItems from "@model-selection/catalogItems";
 import { getNamespacedEnvParam, getBrandingHandler } from "@utils/map-utils";
+import dayjs from 'dayjs';
 
 /**
  * Form to filter/select synoptic runs
@@ -18,7 +19,7 @@ import { getNamespacedEnvParam, getBrandingHandler } from "@utils/map-utils";
 export const SynopticTabForm = () => {
 
     // declare all state variables for the synoptic tab dropdown data
-    const [synopticDate, setSynopticDate] = useState(null);
+    const [synopticDate, setSynopticDate] = useState(dayjs(new Date()));
     const [synopticCycle, setSynopticCycle] = useState(null);
     const [synopticGrid, setSynopticGrid] = useState(null);
     const [synopticInstance, setSynopticInstance] = useState(null);
@@ -33,19 +34,21 @@ export const SynopticTabForm = () => {
     const [dropDownData, setDropDownData] = useState(null);
     const [catalogData, setCatalogData] = useState(null);
 
+    // state for the date validation error
+    const [error, setError] = useState(null);
+
     const setChangedSynopticDate = (newValue) => {
         // if there was a valid date
         if (!isNaN(newValue) && newValue !== null) {
-            console.log('Good date: ' + newValue.$d);
+            console.log('setChangedSynopticDate Good date: ' + newValue.$d + ', error: ' + error + ', newValue: ' + newValue);
             // save the date
             setSynopticDate(newValue.$d);
         }
         // else handle a bad date
         else {
-            console.log('Bad date: ' + newValue);
+            console.log('setChangedSynopticDate Bad date: ' + newValue);
             // clear the date
-            // setSynopticDate(null);
-            setError('Invalid Date.');
+            setSynopticDate(null);
         }
     };
 
@@ -57,6 +60,8 @@ export const SynopticTabForm = () => {
     const formSynopticSubmit = (event) => {
         // avoid doing the usual form submit operations
         event.preventDefault();
+
+        console.log('formSynopticSubmit error: ' + error);
 
         // build the query string from the submitted form data
         let queryString =
@@ -108,12 +113,13 @@ export const SynopticTabForm = () => {
                     return error.response.status;
                 });
 
+             if (finalDataUrl.indexOf('get_pulldown_data') !== -1)
+                console.log('finalDataUrl: ' + finalDataUrl);
+
             // if there was an error from the web service
             if (ret_val !== 500) {
                 // check the request type to save it to the correct place
                 if (finalDataUrl.indexOf('get_pulldown_data') !== -1) {
-                    console.log('finalDataUrl: ' + finalDataUrl);
-
                     // save the dropdown data
                     setDropDownData(ret_val);
                 }
@@ -123,6 +129,7 @@ export const SynopticTabForm = () => {
                 }
             }
             else
+                // reset the form data
                 resetForm();
 
             // return something
@@ -191,13 +198,20 @@ export const SynopticTabForm = () => {
      * @returns {boolean}
      */
     const disableDate = (date) => {
-        // return false if the date is not found in the list of available dates
-        return !dropDownData['run_dates'].includes(date.toISOString().split("T")[0]);
+        if (dropDownData) {
+            // return false if the date is not found in the list of available dates
+            return !dropDownData['run_dates'].includes(date.toISOString().split("T")[0]);
+        }
     };
 
-    const [error, setError] = React.useState(null);
+    /**
+     * handles date picker error text
+     *
+     * @type {string}
+     */
+    const errorMessage = useMemo(() => {
+        console.log('errorMessage error: ' + error);
 
-    const errorMessage = React.useMemo(() => {
         switch (error) {
             case 'maxDate': {
                 return 'Please select a date that is not in the future';
@@ -208,13 +222,18 @@ export const SynopticTabForm = () => {
             }
 
             case 'invalidDate': {
-                return 'Your date is not valid';
+                return 'This date is not yet valid';
+            }
+
+            case 'shouldDisableDate': {
+                return 'There is no data available on this date';
             }
 
             default: {
                 return '';
             }
         }
+
     }, [error]);
 
     /**
@@ -226,13 +245,12 @@ export const SynopticTabForm = () => {
                 <Stack spacing={ 1 }>
                     <LocalizationProvider dateAdapter={ AdapterDayjs }>
                         <DatePicker
-                            //value={{ synopticDate }}
-                            defaultValue={ new Date() }
-                            onError={(newError) => setError(newError)}
+                            defaultValue={ dayjs(new Date()) }
+                            onError={ (newError) => setError(newError) }
                             disableFuture
                             name="synoptic-date"
                             shouldDisableDate={ disableDate }
-                            maxDate={ new Date(2020, 0, 1) }
+                            minDate={ dayjs('2023-06-01') }
                             slotProps={{
                                 textField: { size: 'small', helperText: errorMessage},
                                 field: { clearable: true },
@@ -242,6 +260,7 @@ export const SynopticTabForm = () => {
                             onChange={(newValue) => {
                                 setChangedSynopticDate(newValue);
                             }}/>
+
                     </LocalizationProvider>
 
                     <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={ (e, newValue) => {
@@ -262,7 +281,7 @@ export const SynopticTabForm = () => {
                         <DropDownOptions data={ dropDownData } type={'instance_names'}/>
                     </Select>
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={ !!error }>Submit</Button>
                     <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
