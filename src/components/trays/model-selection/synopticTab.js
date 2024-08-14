@@ -199,6 +199,10 @@ export const SynopticTabForm = () => {
 
     const errorMessage = React.useMemo(() => {
         switch (error) {
+            case 'maxDate': {
+                return 'Please select a date that is not in the future';
+            }
+
             case 'minDate': {
                 return 'Please select a date after 01/01/2020';
             }
@@ -223,15 +227,14 @@ export const SynopticTabForm = () => {
                     <LocalizationProvider dateAdapter={ AdapterDayjs }>
                         <DatePicker
                             //value={{ synopticDate }}
-                            //defaultValue={ new Date() }
+                            defaultValue={ new Date() }
                             onError={(newError) => setError(newError)}
-                            //disableFuture
+                            disableFuture
                             name="synoptic-date"
                             shouldDisableDate={ disableDate }
-                            //minDate={ new Date(2020, 0, 1) }
+                            maxDate={ new Date(2020, 0, 1) }
                             slotProps={{
-                                textField: { size: 'small' },
-                                helperText: errorMessage,
+                                textField: { size: 'small', helperText: errorMessage},
                                 field: { clearable: true },
                                 actionBar: { actions: ['clear'] },
                             }}
