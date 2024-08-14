@@ -172,7 +172,7 @@ const newLayerDefaultState = (layer, group) => {
  */
 export const LayersList = () => {
     // get a handle to the layer state
-    const {defaultModelLayers, setDefaultModelLayers} = useLayers();
+    const { removeObservations, defaultModelLayers, setDefaultModelLayers } = useLayers();
 
     // get the default layers
     const layers = [...defaultModelLayers];
@@ -205,6 +205,9 @@ export const LayersList = () => {
 
         // reorder the layers and put them back in state
         reOrderLayers(grpList);
+
+        // clear out all the selected observations
+        removeObservations();
     };
 
     /**
