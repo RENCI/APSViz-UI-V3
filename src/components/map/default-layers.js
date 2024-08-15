@@ -14,12 +14,14 @@ const newLayerDefaultState = (layer) => {
         return ({
             visible: true,
             opacity: 1.0,
+            style: "",
         });
     }
   
     return ({
         visible: false,
         opacity: 1.0,
+        style: "",
     });
   };
   
