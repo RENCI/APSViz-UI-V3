@@ -19,7 +19,7 @@ export const AdcircRasterLayer = (layer, opacity) => {
         if(layer.layer.properties) {
             let style = "";
             switch(layer.layer.properties.product_type) {
-            case ("maxwvel"):
+            case ("maxwvel63"):
                 style = storedMaxwvelStyle;
                 break;
             case ("swan_HS_max63"):
@@ -37,24 +37,17 @@ export const AdcircRasterLayer = (layer, opacity) => {
 
                 sldParser.writeStyle(geostylerStyle.output)
                 .then((sldStyle) => {
-                    //currentStyle = sldStyle.output.slice(0);
                     setCurrentStyle(sldStyle.output);
             });
             }); 
         }
       }, []);
 
-
-    /* const wmsLayerParams = useMemo(() => ({
+    const wmsLayerParams = useMemo(() => ({
         format:"image/png",
         transparent: true,
         sld_body: currentStyle,
-    }), []); */
-    const wmsLayerParams = {
-        format:"image/png",
-        transparent: true,
-        sld_body: currentStyle,
-    };
+    }), [currentStyle]);
 
     return (
         (currentStyle &&

@@ -172,6 +172,16 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers([...newLayers]);
   };
 
+  const setLayerStyleUpdate = (id) => {
+    const newLayers = [...defaultModelLayers];
+    const index = newLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      return;
+    }
+    newLayers[index].state.style = Date.now();
+    setDefaultModelLayers([...newLayers]);
+  };
+
   const [baseMap, setBaseMap] = React.useState();
 
   // used to track the view state of the share comment
@@ -199,6 +209,7 @@ export const LayersProvider = ({ children }) => {
         baseMap,
         setBaseMap,
         setLayerOpacity,
+        setLayerStyleUpdate,
       }}
     >
       {children}

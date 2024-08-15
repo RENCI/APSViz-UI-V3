@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Stack } from '@mui/joy';
 //import { Style } from 'geostyler';
-import { ColorMapEditor } from 'geostyler';
-import SldStyleParser from 'geostyler-sld-parser';
-import { maxeleStyle } from './default-styles';
+//import { ColorMapEditor } from 'geostyler';
+//import SldStyleParser from 'geostyler-sld-parser';
+//import { maxeleStyle } from './default-styles';
 import { DataRangeEdit } from './data-range';
 
 /**
@@ -13,7 +13,12 @@ import { DataRangeEdit } from './data-range';
  * @constructor
  */
 export const Styler = () => {
-      const [theColorMap, setTheColorMap] = React.useState();
+      /* const [theColorMap, setTheColorMap] = React.useState();
+      const layerTypes = [
+        "maxele",
+        "maxwvel",
+        "swan",
+      ];
 
       const sldParser = new SldStyleParser();
 
@@ -28,7 +33,7 @@ export const Styler = () => {
             setTheColorMap(geostylerStyle.output.rules[0].symbolizers[0].colorMap);
           })
           .catch(error => console.log(error));
-      }, []);
+      }, []); */
     
       return (
         <Stack
