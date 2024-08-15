@@ -329,7 +329,7 @@ export const ControlPanel = () => {
         <Branding/>
       </AccordionSummary>
       <AccordionDetails sx={{'marginBottom': '15px'}}>
-      <Stack direciton="column" gap={ 1 } alignItems="center">
+      <Stack direction="column" gap={ 1 } alignItems="center">
         <Divider />
         {
           layers.length && (
