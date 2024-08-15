@@ -62,7 +62,7 @@
     "@turf/dissolve": "^6.5.0",
     "@turf/distance": "^6.5.0",
     "@turf/flatten": "^6.5.0",
-    "axios": "^1.6.8",
+    "axios": "^1.7.4",
     "core-js": "^3.36.0",
     "d3": "^7.8.5",
     "dayjs": "^1.11.11",
