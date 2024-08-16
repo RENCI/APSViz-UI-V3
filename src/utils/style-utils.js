@@ -1,5 +1,3 @@
-import SldStyleParser from 'geostyler-sld-parser';
-
 export const getDataRange = (style) => {
     const dataRange = [];
     const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;

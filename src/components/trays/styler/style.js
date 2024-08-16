@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Stack } from '@mui/joy';
 //import { Style } from 'geostyler';
 //import { ColorMapEditor } from 'geostyler';

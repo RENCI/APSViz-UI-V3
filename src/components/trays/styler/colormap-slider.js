@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useLayers } from '@context';
-import { getDataRange, scaleRange, getUpdatedStyleColorMapQuantities } from '@utils'
+import { getDataRange, scaleRange, getUpdatedStyleColorMapQuantities } from '@utils';
 
 
 export const ColormapSlider = ({style, storeStyle}) => {
@@ -104,20 +104,17 @@ export const ColormapSlider = ({style, storeStyle}) => {
 
         // now update the style with the new values
         const newStyle = getUpdatedStyleColorMapQuantities(currentStyle, newRange);
-        console.log(newStyle);
 
         // save the new style to local storage
         storeStyle(newStyle);
 
         // find any visible layer to apply this to
-        const styleName = currentStyle.name.split('_')[0]
-        console.log(styleName);
+        const styleName = currentStyle.name.split('_')[0];
         const updateLayer = defaultModelLayers.find((layer) => layer.state.visible === true && layer.properties.product_type.includes(styleName));
-        console.log(updateLayer);
         if (updateLayer) {
             setLayerStyleUpdate(updateLayer.id);
         }
-    }
+    };
 
     return (
         <Box width={300} >
@@ -137,7 +134,7 @@ export const ColormapSlider = ({style, storeStyle}) => {
                 variant="solid"
             />
         </Box>
-    )
+    );
 };
 
 ColormapSlider.propTypes = {

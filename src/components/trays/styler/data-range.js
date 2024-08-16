@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLayers } from '@context';
 import SldStyleParser from 'geostyler-sld-parser';
 import { maxeleStyle, maxwvelStyle, swanStyle } from './default-styles';
-import { Stack, Typography, Slider, Box } from '@mui/joy';
+import { Stack, Typography, Box } from '@mui/joy';
 import { useLocalStorage } from '@hooks';
 import { ColormapSlider } from './colormap-slider';
 
@@ -13,7 +13,7 @@ const SWAN = 'swan';
 export const DataRangeEdit = () => {
 
     const {
-        defaultModelLayers,
+        setCurrentLayerStyle,
     } = useLayers();
 
     const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage(MAXELE, '');
@@ -35,11 +35,16 @@ export const DataRangeEdit = () => {
             setStoredSwanStyle(swanStyle);
         }
 
-    }, [defaultModelLayers]);
+    //}, [defaultModelLayers]);
+    }, []);
 
+    // store the updated style to local storage and
+    // store currentStyle to state
     const storeStyle = (style) => {
         sldParser.writeStyle(style)
             .then((sldStyle) => {
+                setCurrentLayerStyle(sldStyle.output);
+
                 if (style.name.includes(MAXELE)) {
                     setStoredMaxeleStyle(sldStyle.output);
                 }

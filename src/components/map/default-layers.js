@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
@@ -95,7 +95,6 @@ export const DefaultLayers = () => {
     // create the URLs to the data endpoints
     const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ getBrandingHandler() }${ shared_params['run_id'] }`;
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
-    const gs_wms_url = gs_wfs_url + 'wms';
 
     // retrieve the catalog member with the provided id
     const getCatalogEntry = (catalog, id)  => {
@@ -170,20 +169,6 @@ export const DefaultLayers = () => {
 
     // memorizing this params object prevents
     // that map flicker on state changes.
-    // const wmsLayerParams = useMemo(() => ({
-    //     format:"image/png",
-    //     transparent: true,
-    //     sld_body: storedMaxeleStyle,
-    //     //styles: 'maxele_style_v3ui',
-    // }), []);
-
-    // added this temporarily for Debby
-    // const wmsDebbyLayerParams = useMemo(() => ({
-    //     format:"image/png",
-    //     transparent: true,
-    //     sld_body: storedMaxeleStyle,
-    //     //styles: "maxele_v3_short_style"
-    // }), []);
 
     return (
         <>
