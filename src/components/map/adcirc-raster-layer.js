@@ -6,13 +6,13 @@ import { getNamespacedEnvParam } from '@utils/map-utils';
 
 export const AdcircRasterLayer = (layer, opacity) => {
 
-    //const sldParser = new SldStyleParser();
+    const sldParser = new SldStyleParser();
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
 
-    const [storedMaxeleStyle] = useLocalStorage('maxele');
-    const [storedMaxwvelStyle] = useLocalStorage('maxwvel');
-    const [storedSwanStyle] = useLocalStorage('swan');
+    const [storedMaxeleStyle] = useLocalStorage('maxele', '');
+    const [storedMaxwvelStyle] = useLocalStorage('maxwvel', '');
+    const [storedSwanStyle] = useLocalStorage('swan', '');
     const [currentStyle, setCurrentStyle] = useState("");
 
    useEffect(() => {
@@ -30,7 +30,6 @@ export const AdcircRasterLayer = (layer, opacity) => {
                 break;
             }
 
-            const sldParser = new SldStyleParser();
             sldParser
             .readStyle(style)
             .then((geostylerStyle) => {
@@ -44,8 +43,6 @@ export const AdcircRasterLayer = (layer, opacity) => {
         }
       }, []);
 
-    // memorizing this params object prevents
-    // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
         format:"image/png",
         transparent: true,

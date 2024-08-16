@@ -169,6 +169,20 @@ export const DefaultLayers = () => {
 
     // memorizing this params object prevents
     // that map flicker on state changes.
+    // const wmsLayerParams = useMemo(() => ({
+    //     format:"image/png",
+    //     transparent: true,
+    //     sld_body: storedMaxeleStyle,
+    //     //styles: 'maxele_style_v3ui',
+    // }), []);
+
+    // added this temporarily for Debby
+    // const wmsDebbyLayerParams = useMemo(() => ({
+    //     format:"image/png",
+    //     transparent: true,
+    //     sld_body: storedMaxeleStyle,
+    //     //styles: "maxele_v3_short_style"
+    // }), []);
 
     return (
         <>

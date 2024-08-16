@@ -13,7 +13,7 @@ const SWAN = 'swan';
 export const DataRangeEdit = () => {
 
     const {
-        setCurrentLayerStyle,
+        defaultModelLayers,
     } = useLayers();
 
     const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage(MAXELE, '');
@@ -35,16 +35,11 @@ export const DataRangeEdit = () => {
             setStoredSwanStyle(swanStyle);
         }
 
-    //}, [defaultModelLayers]);
-    }, []);
+    }, [defaultModelLayers]);
 
-    // store the updated style to local storage and
-    // store currentStyle to state
     const storeStyle = (style) => {
         sldParser.writeStyle(style)
             .then((sldStyle) => {
-                setCurrentLayerStyle(sldStyle.output);
-
                 if (style.name.includes(MAXELE)) {
                     setStoredMaxeleStyle(sldStyle.output);
                 }
