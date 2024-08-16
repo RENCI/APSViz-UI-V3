@@ -138,6 +138,14 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
+        else if(data.data['catalog'] === undefined || data.data['catalog'] === null) {
+            return (
+                <div>
+                    Error: { 'No catalog data retrieved.' }
+                </div>
+            );
+        }
+
         // return all the data cards
         else {
             // save the name of the element for tropical storms and advisory numbers
