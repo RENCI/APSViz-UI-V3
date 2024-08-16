@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from '@mui/joy';
-import {useLayers} from "@context";
+import { useLayers } from "@context";
 
 /**
  * component that handles the removal of observations.
@@ -8,35 +8,14 @@ import {useLayers} from "@context";
  * @returns {JSX.Element}
  * @constructor
  */
-export const RemoveObservations = () => {
-    // get references to the observation data/list
-    const {
-        map,
-        selectedObservations,
-        setSelectedObservations
-    } = useLayers();
-
-    /**
-     * remove the observation selections from state and map
-     */
-    function removeObservations() {
-        // remove all the targets on the map
-        map.eachLayer((layer) => {
-            // if this is an observation selection marker
-            if (layer.options && layer.options.pane === "markerPane") {
-                // remove the layer
-                map.removeLayer(layer);
-            }
-        });
-
-        // remove all the dialog items from the data list
-        setSelectedObservations(selectedObservations.filter(item => item === undefined));
-    }
+export const RemoveAllObservations = () => {
+    // get the method to remove the observation items in state
+    const { removeObservations } = useLayers();
 
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeObservations()}>Remove selected observations</Button>
+            <Button color="primary" onClick={() => removeObservations()}>Remove all selected observations</Button>
         </Fragment>
-  );
+    );
 };
