@@ -3,6 +3,13 @@ import { useLayers } from '@context';
 import SldStyleParser from 'geostyler-sld-parser';
 import { maxeleStyle, maxwvelStyle, swanStyle } from './default-styles';
 import { Stack, Typography, Box } from '@mui/joy';
+import {
+    Air as MaxWindVelocityIcon,
+    //Flood as MaxInundationIcon,
+    Tsunami as SwanIcon,
+    Water as MaxElevationIcon,
+    //Waves as HIResMaxElevationIcon,
+  } from '@mui/icons-material';
 import { useLocalStorage } from '@hooks';
 import { ColormapSlider } from './colormap-slider';
 
@@ -61,27 +68,29 @@ export const DataRangeEdit = () => {
         alignItems="flex-start"
         gap={2}
     >
-        <Typography level="title-md">Change range of data in colormap (Maximum Water Level)</Typography>
         <Box width={300} >
             {storedMaxeleStyle && <ColormapSlider
                 style={storedMaxeleStyle}
                 storeStyle={storeStyle}
             />}
         </Box>
+        <Typography startDecorator={<MaxElevationIcon />} mb={2} level="title-md">Maximum Water Level</Typography>
+       
         <Box width={300} >
-        <Typography level="title-md">Change range of data in colormap (Maximum Wind Speed)</Typography>
             {storedMaxwvelStyle && <ColormapSlider
                 style={storedMaxwvelStyle}
                 storeStyle={storeStyle}
             />}
         </Box>
-        <Typography level="title-md">Change range of data in colormap (Maximum Significant Wave Height)</Typography>
+        <Typography startDecorator={<MaxWindVelocityIcon />}  mb={2} level="title-md">Maximum Wind Speed</Typography>
+        
         <Box width={300} >
             {storedSwanStyle && <ColormapSlider
                 style={storedSwanStyle}
                 storeStyle={storeStyle}
             />}
         </Box>
+        <Typography startDecorator={<SwanIcon />} level="title-md">Maximum Significant Wave Height</Typography>
     </Stack>
     );
 };

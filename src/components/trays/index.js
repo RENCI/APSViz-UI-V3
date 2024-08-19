@@ -5,7 +5,6 @@ import * as remove_items from './remove';
 import * as settings from './settings';
 import * as share_view from './share';
 import * as help_about from './help-about';
-import * as styler from './styler';
 //import * as screen_shot from './screenshot';
 
 export default {
@@ -16,7 +15,6 @@ export default {
   settings,
   share_view,
   help_about,
-  styler
 };
 
 /*
