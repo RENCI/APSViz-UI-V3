@@ -256,26 +256,25 @@ export const SynopticTabForm = () => {
                                 field: { clearable: true },
                                 actionBar: { actions: ['clear'] },
                             }}
-
                             onChange={(newValue) => {
                                 setChangedSynopticDate(newValue);
                             }}/>
 
                     </LocalizationProvider>
 
-                    <Select name="synoptic-cycle" value={ synopticCycle } placeholder="Please select a cycle" onChange={ (e, newValue) => {
+                    <Select name="synoptic-cycle" sx={{ fontSize: 'md'}} value={ synopticCycle } placeholder="Please select a cycle" onChange={ (e, newValue) => {
                         setSynopticCycle(newValue);
                     }}>
                         <DropDownOptions data={ dropDownData } type={ 'cycles' }/>
                     </Select>
 
-                    <Select name="synoptic-grid" value={ synopticGrid } placeholder="Please select a grid" onChange={ (e, newValue) => {
+                    <Select name="synoptic-grid" sx={{ fontSize: 'md'}} value={ synopticGrid } placeholder="Please select a grid" onChange={ (e, newValue) => {
                         setSynopticGrid(newValue);
                     }}>
                         <DropDownOptions data={ dropDownData } type={ 'grid_types' }/>
                     </Select>
 
-                    <Select name="synoptic-instance" value={ synopticInstance } placeholder="Please select an instance" onChange={ (e, newValue) => {
+                    <Select name="synoptic-instance" sx={{ fontSize: 'md'}} value={ synopticInstance } placeholder="Please select an instance" onChange={ (e, newValue) => {
                         setSynopticInstance(newValue);
                     }}>
                         <DropDownOptions data={ dropDownData } type={'instance_names'}/>

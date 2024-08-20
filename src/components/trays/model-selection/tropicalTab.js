@@ -150,19 +150,19 @@ export const TropicalTabForm = () => {
         <Fragment>
             <form name={ "Tropical" } onSubmit={ formTropicalHandler }>
                 <Stack spacing={1}>
-                    <Select name="tropical-storm-name" value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
+                    <Select name="tropical-storm-name" sx={{ fontSize: 'md'}} value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
                         setTropicalStorm(newValue); }}>
                         <DropDownOptions data={dropDownData} type={'storm_names'}/>
                     </Select>
-                    <Select name="tropical-advisory" value={ tropicalAdvisory } placeholder="Please select an advisory" onChange={(e, newValue) => {
+                    <Select name="tropical-advisory" sx={{ fontSize: 'md'}} value={ tropicalAdvisory } placeholder="Please select an advisory" onChange={(e, newValue) => {
                         setTropicalAdvisory(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'advisory_numbers' } />
                     </Select>
-                    <Select name="tropical-grid" value={ tropicalGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
+                    <Select name="tropical-grid" sx={{ fontSize: 'md'}} value={ tropicalGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
                         setTropicalGrid(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'grid_types' } />
                     </Select>
-                    <Select name="tropical-instance" value={ tropicalInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
+                    <Select name="tropical-instance" sx={{ fontSize: 'md'}} value={ tropicalInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
                         setTropicalInstance(newValue); }}>
                         <DropDownOptions data={ dropDownData } type={ 'instance_names' } />
                     </Select>
