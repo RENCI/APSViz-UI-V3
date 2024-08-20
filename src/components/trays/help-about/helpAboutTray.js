@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator }
+import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator, Divider }
         from '@mui/joy';
 import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
         Share as ShareViewIcon, HelpCenter as HelpAboutIcon, Map as MapIcon, LightMode as LightModeIcon,DragHandleRounded as HandleIcon,
@@ -152,8 +152,10 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>What do all the icons mean?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography level="body-sm" sx={{ ml: 1 }}>Each icon represents a functionality of the application available to the
+
+                                <Typography level="body-sm" sx={{ ml: 1, mb: 1}}>Each icon represents a functionality of the application available to the
                                     user.</Typography>
+                                <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Collapsable tray items:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>Model run/layers selected list</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HurricaneIcon color="primary"/></ListItemDecorator>Hurricane track list</ListItem>
@@ -163,7 +165,7 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ShareViewIcon color="primary"/></ListItemDecorator>Share your view with a colleague</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HelpAboutIcon color="primary"/></ListItemDecorator>Application help/about</ListItem>
                                 </List>
-
+                                <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Map model layer types:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaveHeightIcon color="primary"/></ListItemDecorator>Maximum Significant Wave Height</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ObservationIcon color="primary"/></ListItemDecorator>Observations</ListItem>
@@ -172,13 +174,13 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterSurfaceIcon color="primary"/></ListItemDecorator>HECRAS Water Surface</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon color="primary"/></ListItemDecorator>Inundation</ListItem>
                                 </List>
-
+                                <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Map observation points:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#FFFF00', 'NOAA/NDBC') }</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#3D4849', 'NCEM') }</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#BEAEFA', 'NOAA/NOS') }</ListItemDecorator></ListItem>
                                 </List>
-
+                                <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Action buttons:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Toggle light or dark mode.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MapIcon/></ListItemDecorator>Select a different base map.</ListItem>
