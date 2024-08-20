@@ -198,23 +198,23 @@ export const DefaultLayers = () => {
                         />
                     );
                 } else {
-                    return (
-                       layer.layers.includes("maxele") ?
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsDebbyLayerParams}
-                            opacity={opacity}
-                        />) 
-                        :
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsLayerParams}
-                            opacity={opacity}
-                        />)
+                    return (<></>
+                       // layer.layers.includes("maxele") ?
+                       //  (<WMSTileLayer
+                       //      key={`${index}-${layer.id}`}
+                       //      url={gs_wms_url}
+                       //      layers={layer.layers}
+                       //      params={wmsDebbyLayerParams}
+                       //      opacity={opacity}
+                       //  />)
+                       //  :
+                       //  (<WMSTileLayer
+                       //      key={`${index}-${layer.id}`}
+                       //      url={gs_wms_url}
+                       //      layers={layer.layers}
+                       //      params={wmsLayerParams}
+                       //      opacity={opacity}
+                       //  />)
                     );
                 }
             })

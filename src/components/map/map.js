@@ -1,12 +1,10 @@
 import React from 'react';
+import 'leaflet/dist/leaflet.css';
 import { MapContainer } from 'react-leaflet';
+import { BaseMap } from './base-map';
 import { DefaultLayers } from './default-layers';
 import { StormLayers } from './storm-layers';
-import { BaseMap } from './base-map';
-import {
-  useLayers,
-} from '@context';
-import 'leaflet/dist/leaflet.css';
+import { useLayers } from '@context';
 
 const DEFAULT_CENTER = [30.0, -80.0];
 
@@ -33,9 +31,10 @@ const DEFAULT_CENTER = [30.0, -80.0];
 
 import 'leaflet-side-by-side';
 // import "leaflet-swipe-mode";
-import L from 'leaflet';
 
 export const Map = () => {
+    const L = window.L;
+
     //const { darkMode } = useSettings();
     const {
         map,
@@ -48,20 +47,14 @@ export const Map = () => {
         //
         // var myLayer2 = L.tileLayer(defaultModelLayers[1]).addTo(map);
 
-        const myLayer1 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-            name: 'Stamen_TonerLite',
-            subdomains: 'abcd',
-            minZoom: 0,
-            maxZoom: 20,
-            ext: 'png'
+        const myLayer1 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms', {
+            name: '4552-2024082012-gfsforecast-maxele63',
+            layers: 'ADCIRC_2024:4552-2024082012-gfsforecast_maxele63'
         }).addTo(map);
 
-        const myLayer2 = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-            name: 'Stamen_Watercolor',
-            subdomains: 'abcd',
-            minZoom: 1,
-            maxZoom: 16,
-            ext: 'jpg'
+        const myLayer2 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms', {
+            name: '4552-2024082012-gfsforecast_station_properies_view',
+            layers: 'ADCIRC_2024:4552-2024082012-gfsforecast_station_properies_view'
         }).addTo(map);
 
         L.control.sideBySide(myLayer1, myLayer2).addTo(map);
