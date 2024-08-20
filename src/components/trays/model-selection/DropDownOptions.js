@@ -36,7 +36,7 @@ export default function DropDownOptions(data) {
             return (
                 <Fragment>
                     {data.data[data.type].filter(item => item !== "").map(item => (
-                        <Option key={item} value={item}>{item}</Option>
+                        <Option key={item} value={item} sx={{ fontSize: "sm" }}>{item}</Option>
                     ))}
                 </Fragment>
             );

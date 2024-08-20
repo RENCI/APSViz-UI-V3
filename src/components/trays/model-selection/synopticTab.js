@@ -285,7 +285,7 @@ export const SynopticTabForm = () => {
                     <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
-                <Divider sx={{m: 2}}/>
+                <Divider sx={{ m: 2 }}/>
 
                 <Stack>
                     { <CatalogItems data={ catalogData } isTropical={ false }/> }

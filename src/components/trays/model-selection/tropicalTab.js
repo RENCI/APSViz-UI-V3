@@ -152,7 +152,7 @@ export const TropicalTabForm = () => {
                 <Stack spacing={1}>
                     <Select name="tropical-storm-name" value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
                         setTropicalStorm(newValue); }}>
-                        <DropDownOptions data={dropDownData} type={'storm_names'} />
+                        <DropDownOptions data={dropDownData} type={'storm_names'}/>
                     </Select>
                     <Select name="tropical-advisory" value={ tropicalAdvisory } placeholder="Please select an advisory" onChange={(e, newValue) => {
                         setTropicalAdvisory(newValue); }}>
