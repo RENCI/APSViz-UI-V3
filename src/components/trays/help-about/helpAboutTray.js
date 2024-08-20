@@ -1,11 +1,38 @@
 import React, {Fragment} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator }
         from '@mui/joy';
-import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
+import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
         Share as ShareViewIcon, HelpCenter as HelpAboutIcon, Map as MapIcon, LightMode as LightModeIcon,DragHandleRounded as HandleIcon,
         KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow, KeyboardArrowLeft, Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
-        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon }
+        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon, ToggleOn as OnOffIcon }
         from '@mui/icons-material';
+
+import SvgIcon from '@mui/material/SvgIcon';
+
+/**
+ * gets a svg component for the observation point icon.
+ *
+ * @param color
+ * @param name
+ * @returns {JSX.Element}
+ */
+const getObsSVGIcon = ( color, name ) => {
+    return (
+        <Fragment>
+            <SvgIcon>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    stroke="black"
+                >
+                    <circle r="6" cx="12" cy="12" fill={ color } stroke="black" strokeWidth="1"/>
+                </svg>
+            </SvgIcon>
+            <Typography sx={{ ml: 2, fontSize: "sm"}}> {name} </Typography>
+        </Fragment>
+    );
+
+};
 
 /**
  * This component renders the help/about tray
@@ -127,30 +154,37 @@ export const HelpAboutTray = () => {
                             <AccordionDetails>
                                 <Typography level="body-sm" sx={{ ml: 1 }}>Each icon represents a functionality of the application available to the
                                     user.</Typography>
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> Collapsable tray items
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon/></ListItemDecorator>Model run/layers selected list.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><HurricaneIcon/></ListItemDecorator>Hurricane track list.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon/></ListItemDecorator>Model run filtering and selection. </ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon/></ListItemDecorator>Remove various map items.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon/></ListItemDecorator>Application settings.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ShareViewIcon/></ListItemDecorator>Share your view with a colleague.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><HelpAboutIcon/></ListItemDecorator>Application help/about (here).</ListItem>
+                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Collapsable tray items:</Typography>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>Model run/layers selected list</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><HurricaneIcon color="primary"/></ListItemDecorator>Hurricane track list</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>Model run filtering and selection</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon color="primary"/></ListItemDecorator>Remove various map items</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>Application settings</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ShareViewIcon color="primary"/></ListItemDecorator>Share your view with a colleague</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><HelpAboutIcon color="primary"/></ListItemDecorator>Application help/about</ListItem>
                                 </List>
 
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> Map model layer types
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaveHeightIcon/></ListItemDecorator>Maximum Significant Wave Height layer</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ObservationIcon/></ListItemDecorator>Observation layer</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WindVelocityIcon/></ListItemDecorator>Maximum Wind Speed layer</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterLevelIcon/></ListItemDecorator>Maximum Water Level layer</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterSurfaceIcon/></ListItemDecorator>HECRAS Water Surface layer</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon/></ListItemDecorator>Inundation layer</ListItem>
+                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Map model layer types:</Typography>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaveHeightIcon color="primary"/></ListItemDecorator>Maximum Significant Wave Height</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ObservationIcon color="primary"/></ListItemDecorator>Observations</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WindVelocityIcon color="primary"/></ListItemDecorator>Maximum Wind Speed</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterLevelIcon color="primary"/></ListItemDecorator>Maximum Water Level</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterSurfaceIcon color="primary"/></ListItemDecorator>HECRAS Water Surface</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon color="primary"/></ListItemDecorator>Inundation</ListItem>
                                 </List>
 
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> Other action buttons
+                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Map observation points:</Typography>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#FFFF00', 'NOAA/NDBC') }</ListItemDecorator></ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#3D4849', 'NCEM') }</ListItemDecorator></ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#BEAEFA', 'NOAA/NOS') }</ListItemDecorator></ListItem>
+                                </List>
+
+                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Action buttons:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Toggle light or dark mode.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MapIcon/></ListItemDecorator>Select a different base map.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a model run up or down in the list.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon/></ListItemDecorator>Remove a model run or layer.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><OnOffIcon color="primary"/></ListItemDecorator>Turn on/off a layer</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon sx={{ color:'darkred', 'filter': 'opacity(0.5)' }}/></ListItemDecorator>Remove a model run or layer.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ExpandIcon/> or <ExpandIcon sx={{ transform: 'rotate(180deg)' }}/>Expand or collapse an item.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MoveUpArrow/> or <MoveUpArrow sx={{ transform: 'rotate(180deg)'}}/>Reorder a model layer.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><KeyboardArrowLeft/> or <KeyboardArrowLeft sx={{ transform: 'rotate(180deg)'}}/>Move through tropical advisories or synoptic cycles.</ListItemDecorator></ListItem>
