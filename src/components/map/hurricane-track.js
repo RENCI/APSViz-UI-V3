@@ -77,7 +77,8 @@ export const HurricaneTrackGeoJson = ({index}) => {
     });
 
     return new Marker(latlng, {
-      icon:icon
+      icon:icon,
+      autoPanOnFocus: false
     });
   });
 

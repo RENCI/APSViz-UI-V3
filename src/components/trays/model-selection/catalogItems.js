@@ -15,7 +15,7 @@ CatalogItems.propTypes = { data: PropTypes.any };
  */
 export default function CatalogItems(data) {
     // get the layers in state
-    const { defaultModelLayers, setDefaultModelLayers } = useLayers();
+    const { removeObservations, defaultModelLayers, setDefaultModelLayers } = useLayers();
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
@@ -38,6 +38,9 @@ export default function CatalogItems(data) {
 
         // add or remove the layer group
         handleSelectedLayers(layerGroup, layers, checked);
+
+        // remove all selected observations
+        removeObservations();
     };
 
     /**
@@ -135,6 +138,14 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
+        else if(data.data['catalog'] === undefined || data.data['catalog'] === null) {
+            return (
+                <div>
+                    Error: { 'No catalog data retrieved.' }
+                </div>
+            );
+        }
+
         // return all the data cards
         else {
             // save the name of the element for tropical storms and advisory numbers

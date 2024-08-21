@@ -39,7 +39,6 @@ const layerTypes = {
   },
 };
 
-
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
@@ -48,6 +47,48 @@ export const LayersProvider = ({ children }) => {
   const [selectedObservations, setSelectedObservations] = useState([]);
 
   const [map, setMap] = useState(null);
+
+    /**
+    * removes the observation "target" icons and dialogs from the map
+    */
+    const removeObservations = ( id ) => {
+        // init the product name
+        let product_name = '';
+
+        // did we get a layer id
+        if (id !== undefined) {
+            const index = defaultModelLayers.findIndex(l => l.id === id);
+
+            // find this item in the layer list
+            if (index === -1) {
+                console.error('Could not locate layer', id);
+
+                // no need to continue
+                return;
+            }
+            else
+                // get the layers' product name
+                product_name = defaultModelLayers[index]['properties']['product_name'];
+        }
+        else
+            // no incoming id defaults to removing all selected observations
+            product_name = 'Observations';
+
+        // clear all observations if this is an observation layer
+        if (product_name === 'Observations') {
+            // remove all the targets on the map
+            map.eachLayer((layer) => {
+                // if this is an observation selection marker
+                if (layer.options && layer.options.pane === "markerPane") {
+                    // remove the layer
+                    map.removeLayer(layer);
+                }
+            });
+
+            // remove all the dialogs from the data list
+            setSelectedObservations(selectedObservations.filter(item => item === undefined));
+        }
+    };
 
   const toggleHurricaneLayerVisibility = id => {
     const newLayers = [...hurricaneTrackLayers];
@@ -72,6 +113,10 @@ export const LayersProvider = ({ children }) => {
       console.error('Could not locate layer', id);
       return;
     }
+
+    // if this is a observation layer remove all observation layers/dialogs from the map
+    removeObservations(id);
+
     const alteredLayer = newLayers[index];
     alteredLayer.state.visible = !alteredLayer.state.visible;
     setDefaultModelLayers([
@@ -132,6 +177,9 @@ export const LayersProvider = ({ children }) => {
     }
     const newLayers = defaultModelLayers.filter(l => l.id !== id);
     setDefaultModelLayers(newLayers);
+
+    // if this is a observation layer remove all observation layers/dialogs from the map
+    removeObservations(id);
   };
 
   const removeModelRun = groupId => {
@@ -146,6 +194,9 @@ export const LayersProvider = ({ children }) => {
         // perform the visible state logic
         layer.state = newLayerDefaultState(layer, newLayers[0].group);
     });
+
+    // remove all observations when there is a model run removal
+    removeObservations();
 
     setDefaultModelLayers(newLayers);
   };
@@ -205,6 +256,7 @@ export const LayersProvider = ({ children }) => {
         swapLayers,
         removeLayer,
         removeModelRun,
+        removeObservations,
         layerTypes,
         baseMap,
         setBaseMap,

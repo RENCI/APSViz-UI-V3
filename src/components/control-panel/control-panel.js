@@ -35,7 +35,8 @@ const layerIcons = {
 
 export const ControlPanel = () => {
 
-  const { defaultModelLayers,
+  const { removeObservations,
+          defaultModelLayers,
           hurricaneTrackLayers,
           setDefaultModelLayers,
           getAllLayersInvisible,
@@ -305,6 +306,9 @@ export const ControlPanel = () => {
   const changeModelRunCycle = (e) => {
     const direction = e.currentTarget.getAttribute("button-key");
     metClass === "synoptic" ? changeSynopticCycle(direction) : changeTropicalAdvisory(direction);
+
+    // remove all selected observations
+    removeObservations();
   };
 
   return (
@@ -329,7 +333,7 @@ export const ControlPanel = () => {
         <Branding/>
       </AccordionSummary>
       <AccordionDetails sx={{'marginBottom': '15px'}}>
-      <Stack direciton="column" gap={ 1 } alignItems="center">
+      <Stack direction="column" gap={ 1 } alignItems="center">
         <Divider />
         {
           layers.length && (
