@@ -11,6 +11,8 @@ import {
   Flood as FloodIcon,
 } from '@mui/icons-material';
 
+import "leaflet-swipe-mode";
+
 export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
@@ -42,6 +44,9 @@ const layerTypes = {
 export const LayersProvider = ({ children }) => {
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
+
+  // declare some state for the compare layers switch
+  const [showCompareLayers, setShowCompareLayers] = useState(false);
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
@@ -90,6 +95,50 @@ export const LayersProvider = ({ children }) => {
         }
     };
 
+  // switch on/off the compare layer view
+  const toggleCompareLayersView = event => {
+   // if the compare view was enabled
+   if (event.target.checked) {
+       // get a handle to leaflet
+       const L = window.L;
+
+       // set the comparison options
+       const options = {
+           button: document.getElementById("compare-layers"),
+           // position: 'topright',
+           // thumbSize: 5,
+           // padding: 100,
+           // noControl: false,
+           text: {
+               title: 'Enable Swipe Mode',
+               leftLayerSelector: 'Left Layer',
+               rightLayerSelector: 'Right Layer',
+           }
+       };
+
+       // TODO: this needs work
+       // const myLayer1 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+       //     {
+       //         name: '4552-2024082012-gfsforecast-maxele63',
+       //         layers: 'ADCIRC_2024:4552-2024082012-gfsforecast_maxele63',
+       //         zIndex: 300
+       //     }
+       // ).addTo(map);
+       //
+       // const myLayer2 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+       //     {
+       //         name: '4552-2024082012-gfsforecast_station_properies_view',
+       //         layers: 'ADCIRC_2024:4552-2024082012-gfsforecast_station_properies_view',
+       //         zIndex: 300
+       //     }
+       // ).addTo(map);
+       //
+       // L.Control.swipeMode(myLayer1, myLayer2, options);
+   }
+
+   setShowCompareLayers(event.target.checked);
+  };
+
   const toggleHurricaneLayerVisibility = id => {
     const newLayers = [...hurricaneTrackLayers];
     const index = newLayers.findIndex(l => l.id === id);
@@ -114,7 +163,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is a observation layer remove all observation layers/dialogs from the map
+    // if this is an observation layer remove all observation layers/dialogs from the map
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
@@ -251,6 +300,8 @@ export const LayersProvider = ({ children }) => {
         baseMap,
         setBaseMap,
         setLayerOpacity,
+        showCompareLayers,
+        toggleCompareLayersView
       }}
     >
       {children}
