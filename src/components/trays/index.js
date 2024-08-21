@@ -1,5 +1,6 @@
 import * as hurricanes from './hurricane';
 import * as layers from './layers';
+import * as compare_layers from './compare-layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';
 import * as settings from './settings';
@@ -9,6 +10,7 @@ import * as help_about from './help-about';
 
 export default {
   layers,
+  compare_layers,
   hurricanes,
   model_selection,
   remove_items,
