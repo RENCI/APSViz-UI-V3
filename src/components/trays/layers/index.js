@@ -4,6 +4,6 @@ import { TrayContents } from './tray-contents';
 
 export const icon = <LayersIcon />;
 
-export const title = 'Layers';
+export const title = 'Selected Layers';
 
 export const trayContents = TrayContents;
