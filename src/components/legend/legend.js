@@ -2,16 +2,13 @@ import React, { useState, Fragment, useEffect } from 'react';
 import { Avatar, Box, Card, Stack } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils";
-import { useLocalStorage } from '@hooks';
 import SldStyleParser from 'geostyler-sld-parser';
-import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 
 export const MapLegend = () => {
-    console.log('rendering legend')
     // set correct map styles for layer name
     // may want to move this somewhere else later
     // for the implementation of user designed styles
@@ -29,12 +26,6 @@ export const MapLegend = () => {
         mapStyle,
     } = useSettings();
 
-    const {
-        storedMaxeleStyle,
-        storedMaxwvelStyle,
-        storedSwanStyle,
-    } = mapStyle;
-
     let LegendIcon = layerTypes['maxele63'].icon;
 
     useEffect(() => {
@@ -50,23 +41,14 @@ export const MapLegend = () => {
 
             let style = "";
             if (legendLayer.properties.product_type.includes("maxwvel")) {
-                if (storedMaxwvelStyle)
-                    style = storedMaxwvelStyle;
-                else
-                    style = maxwvelStyle;
+                style = mapStyle.maxwvel.current;
             }
             else 
             if (legendLayer.properties.product_type.includes("swan")) {
-                if (storedSwanStyle)
-                    style = storedSwanStyle;
-                else
-                    style = swanStyle;
+                style = mapStyle.swan.current;
             }
             else { // maxele 
-                if (storedMaxeleStyle)
-                    style = storedMaxeleStyle;
-                else
-                    style = maxeleStyle;
+                style = mapStyle.maxele.current;
             }
 
             // add the layer name to the style

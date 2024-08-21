@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { useLayers, useSettings } from '@context';
-import SldStyleParser from 'geostyler-sld-parser';
-import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
+import React from 'react';
+import { useSettings } from '@context';
 import { Stack, Typography, Box } from '@mui/joy';
 import {
     Air as MaxWindVelocityIcon,
@@ -10,27 +8,13 @@ import {
     Water as MaxElevationIcon,
     //Waves as HIResMaxElevationIcon,
   } from '@mui/icons-material';
-import { useLocalStorage } from '@hooks';
 import { ColormapSlider } from './colormap-slider';
-
-const MAXELE = 'maxele';
-const MAXWVEL = 'maxwvel';
-const SWAN = 'swan';
 
 export const DataRangeEdit = () => {
 
     const {
-        defaultModelLayers,
-    } = useLayers();
-
-    const { mapStyle } = useSettings();
-    const {
-        storedMaxeleStyle,
-        storedMaxwvelStyle,
-        storedSwanStyle,
-    } = mapStyle;
-
-    const sldParser = new SldStyleParser();
+        mapStyle,
+    } = useSettings();
 
     return (
     <Stack
@@ -41,23 +25,23 @@ export const DataRangeEdit = () => {
         ml={2}
     >
         <Box width={300} >
-            {storedMaxeleStyle && <ColormapSlider
-                style={storedMaxeleStyle}
-            />}
+            <ColormapSlider
+                style={mapStyle.maxele.current}
+            />
         </Box>
         <Typography startDecorator={<MaxElevationIcon />} mb={2} level="title-md">Maximum Water Level</Typography>
        
         <Box width={300} >
-            {storedMaxwvelStyle && <ColormapSlider
-                style={storedMaxwvelStyle}
-            />}
+            <ColormapSlider
+                style={mapStyle.maxwvel.current}
+            />
         </Box>
         <Typography startDecorator={<MaxWindVelocityIcon />}  mb={2} level="title-md">Maximum Wind Speed</Typography>
         
         <Box width={300} >
-            {storedSwanStyle && <ColormapSlider
-                style={storedSwanStyle}
-            />}
+            <ColormapSlider
+                style={mapStyle.swan.current}
+            />
         </Box>
         <Typography startDecorator={<SwanIcon />} level="title-md">Maximum Significant Wave Height</Typography>
     </Stack>

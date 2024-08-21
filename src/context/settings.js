@@ -42,9 +42,19 @@ export const SettingsProvider = ({ children }) => {
       },
 
       mapStyle: {
-        storedMaxeleStyle,
-        storedMaxwvelStyle,
-        storedSwanStyle,
+        maxele: {
+          current: storedMaxeleStyle,
+          set: setStoredMaxeleStyle,
+        },
+        maxwvel: {
+          current: storedMaxwvelStyle,
+          set: setStoredMaxwvelStyle,
+        },
+        swan: {
+          current: storedSwanStyle,
+          set: setStoredSwanStyle,
+
+        }
       },
     }}>
       { children }

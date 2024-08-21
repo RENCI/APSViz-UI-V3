@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
-import { useLayers } from '@context';
-import { useLocalStorage } from '@hooks';
+import { useLayers, useSettings } from '@context';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -18,14 +17,14 @@ export const ColormapSlider = ({style}) => {
     const [maxSliderValue, setMaxSliderValue] = useState();
     const [currentStyle, setCurrentStyle] = useState();
 
-    const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage(MAXELE);
-    const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage(MAXWVEL);
-    const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage(SWAN);
-
     const {
         defaultModelLayers,
         setLayerStyleUpdate,
     } = useLayers();
+
+    const {
+        mapStyle,
+    } = useSettings();
 
     const sldParser = new SldStyleParser();
 
@@ -90,15 +89,15 @@ export const ColormapSlider = ({style}) => {
         sldParser.writeStyle(style)
             .then((sldStyle) => {
                 if (style.name.includes(MAXELE)) {
-                    setStoredMaxeleStyle(sldStyle.output);
+                    mapStyle.maxele.set(sldStyle.output);
                 }
                 else
                 if (style.name.includes(MAXWVEL)) {
-                    setStoredMaxwvelStyle(sldStyle.output);
+                    mapStyle.maxwvel.set(sldStyle.output);
                 }
                 else
                 if (style.name.includes(SWAN)) {
-                    setStoredSwanStyle(sldStyle.output);
+                    mapStyle.swan.set(sldStyle.output);
                 }
         });
     };
@@ -216,5 +215,4 @@ export const ColormapSlider = ({style}) => {
 
 ColormapSlider.propTypes = {
     style: PropTypes.string.isRequired,
-    storeStyle: PropTypes.func.isRequired,
 };

@@ -1,9 +1,8 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer } from 'react-leaflet';
-import { useLocalStorage } from '@hooks';
 import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam } from '@utils/map-utils';
-import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
+import { useSettings } from '@context';
 import { MapLegend } from '@components/legend';
 
 export const AdcircRasterLayer = (layer, opacity) => {
@@ -12,9 +11,10 @@ export const AdcircRasterLayer = (layer, opacity) => {
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
 
-    const [storedMaxeleStyle] = useLocalStorage('maxele', '');
-    const [storedMaxwvelStyle] = useLocalStorage('maxwvel', '');
-    const [storedSwanStyle] = useLocalStorage('swan', '');
+    const {
+        mapStyle,
+    } = useSettings();
+
     const [currentStyle, setCurrentStyle] = useState("");
 
    useEffect(() => {
@@ -22,22 +22,13 @@ export const AdcircRasterLayer = (layer, opacity) => {
             let style = "";
             switch(layer.layer.properties.product_type) {
             case ("maxwvel63"):
-                if (storedMaxwvelStyle)
-                    style = storedMaxwvelStyle;
-                else
-                    style = maxwvelStyle;
+                style = mapStyle.maxwvel.current;
                 break;
             case ("swan_HS_max63"):
-                if (storedSwanStyle) 
-                    style = storedSwanStyle;
-                else 
-                    style = swanStyle;
+                style = mapStyle.swan.current;
                 break;
             default:
-                if (storedMaxeleStyle)
-                    style = storedMaxeleStyle;
-                else
-                    style = maxeleStyle;
+                style = mapStyle.maxele.current;
                 break;
             }
 
