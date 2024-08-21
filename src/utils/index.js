@@ -1,2 +1,2 @@
 export * from "./map-utils";
-export * from "./style-utils";
+export * from "./default-styles";

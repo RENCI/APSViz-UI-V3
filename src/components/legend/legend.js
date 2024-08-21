@@ -4,6 +4,7 @@ import { useLayers } from '@context';
 import { getNamespacedEnvParam } from "@utils";
 import { useLocalStorage } from '@hooks';
 import SldStyleParser from 'geostyler-sld-parser';
+import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 import Draggable from "react-draggable";
 import { Resizable } from "react-resizable";
@@ -46,14 +47,23 @@ export const MapLegend = () => {
 
             let style = "";
             if (legendLayer.properties.product_type.includes("maxwvel")) {
-                style = storedMaxwvelStyle;
+                if (storedMaxwvelStyle)
+                    style = storedMaxwvelStyle;
+                else
+                    style = maxwvelStyle;
             }
             else 
             if (legendLayer.properties.product_type.includes("swan")) {
-                style = storedSwanStyle;
+                if (storedSwanStyle)
+                    style = storedSwanStyle;
+                else
+                    style = swanStyle;
             }
             else { // maxele 
-                style = storedMaxeleStyle;
+                if (storedMaxeleStyle)
+                    style = storedMaxeleStyle;
+                else
+                    style = maxeleStyle;
             }
 
             // add the layer name to the style

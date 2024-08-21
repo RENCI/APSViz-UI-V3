@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useLayers } from '@context';
-import { getDataRange, scaleRange, getUpdatedStyleColorMapQuantities } from '@utils';
+import { useLocalStorage } from '@hooks';
 
+const MAXELE = 'maxele';
+const MAXWVEL = 'maxwvel';
+const SWAN = 'swan';
 
-export const ColormapSlider = ({style, storeStyle}) => {
+export const ColormapSlider = ({style}) => {
 
     const [value, setValue] = React.useState([]);
     const [sliderStep, setSliderStep] = useState(0);
@@ -14,6 +17,10 @@ export const ColormapSlider = ({style, storeStyle}) => {
     const [minSliderValue, setMinSliderValue] = useState(0);
     const [maxSliderValue, setMaxSliderValue] = useState();
     const [currentStyle, setCurrentStyle] = useState();
+
+    const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage(MAXELE);
+    const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage(MAXWVEL);
+    const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage(SWAN);
 
     const {
         defaultModelLayers,
@@ -78,6 +85,76 @@ export const ColormapSlider = ({style, storeStyle}) => {
         getDefaultStyle().then();
 
     }, []);
+
+    const storeStyle = (style) => {
+        sldParser.writeStyle(style)
+            .then((sldStyle) => {
+                if (style.name.includes(MAXELE)) {
+                    setStoredMaxeleStyle(sldStyle.output);
+                }
+                else
+                if (style.name.includes(MAXWVEL)) {
+                    setStoredMaxwvelStyle(sldStyle.output);
+                }
+                else
+                if (style.name.includes(SWAN)) {
+                    setStoredSwanStyle(sldStyle.output);
+                }
+        });
+    };
+
+    const getDataRange = (style) => {
+        const dataRange = [];
+        const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
+        for(let i = colormapEntries.length-1; i >= 0; i--) {
+            dataRange.push(colormapEntries[i].quantity);
+        }
+    
+        return(dataRange.reverse());
+    };
+    
+    const scaleNumber = (unscaled, to_min, to_max, from_min, from_max) => {
+        const scaled_num =
+          ((to_max - to_min) * (unscaled - from_min)) / (from_max - from_min) +
+          to_min;
+        return scaled_num.toFixed(2);
+      };
+    
+    const scaleRange = (l, minimum, maximum) => {
+        const new_l = [];
+        const to_min = parseFloat(minimum);
+        const to_max = parseFloat(maximum);
+        for (let i = 0; i < l.length; i++) {
+            const num = scaleNumber(
+            l[i],
+            to_min,
+            to_max,
+            Math.min(...l).toFixed(2),
+            Math.max(...l).toFixed(2)
+            );
+            new_l.push(num);
+        }
+        return new_l;
+    };
+    
+    const getUpdatedStyleColorMapQuantities = (style, range) => {
+    
+        const colormapEntries = [...style.rules[0].symbolizers[0].colorMap.colorMapEntries];
+        colormapEntries.forEach((entry, idx) => {
+            if (idx <= range.length) {
+                entry.quantity = range[idx];
+                if (style.name.includes("maxwvel")) {
+                    entry.label = range[idx] + " m/s";
+                }
+                else {
+                    entry.label = range[idx] + " m";
+                }
+            }
+        });
+        style.rules[0].symbolizers[0].colorMap.colorMapEntries=[...colormapEntries];
+    
+        return(style);
+    };
 
     const handleChange = (event, newValue) => {
     // make sure the first thumb value is not >= the second

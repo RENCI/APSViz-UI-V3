@@ -167,23 +167,6 @@ export const DefaultLayers = () => {
         getObsGeoJsonData().then();
     }, [defaultModelLayers]); 
 
-    // memorizing this params object prevents
-    // that map flicker on state changes.
-    // const wmsLayerParams = useMemo(() => ({
-    //     format:"image/png",
-    //     transparent: true,
-    //     sld_body: storedMaxeleStyle,
-    //     //styles: 'maxele_style_v3ui',
-    // }), []);
-
-    // added this temporarily for Debby
-    // const wmsDebbyLayerParams = useMemo(() => ({
-    //     format:"image/png",
-    //     transparent: true,
-    //     sld_body: storedMaxeleStyle,
-    //     //styles: "maxele_v3_short_style"
-    // }), []);
-
     return (
         <>
         {defaultModelLayers
@@ -210,24 +193,6 @@ export const DefaultLayers = () => {
                             opacity={opacity}
                         />
                     );
-                    /* return (
-                       layer.layers.includes("maxele") ?
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsDebbyLayerParams}
-                            opacity={opacity}
-                        />) 
-                        :
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsLayerParams}
-                            opacity={opacity}
-                        />)
-                    ); */
                 }
             })
         };

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLayers } from '@context';
 import SldStyleParser from 'geostyler-sld-parser';
-import { maxeleStyle, maxwvelStyle, swanStyle } from './default-styles';
+import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 import { Stack, Typography, Box } from '@mui/joy';
 import {
     Air as MaxWindVelocityIcon,
@@ -42,24 +42,7 @@ export const DataRangeEdit = () => {
             setStoredSwanStyle(swanStyle);
         }
 
-    }, [defaultModelLayers]);
-
-    const storeStyle = (style) => {
-        sldParser.writeStyle(style)
-            .then((sldStyle) => {
-                if (style.name.includes(MAXELE)) {
-                    setStoredMaxeleStyle(sldStyle.output);
-                }
-                else
-                if (style.name.includes(MAXWVEL)) {
-                    setStoredMaxwvelStyle(sldStyle.output);
-                }
-                else
-                if (style.name.includes(SWAN)) {
-                    setStoredSwanStyle(sldStyle.output);
-                }
-        });
-    };
+    }, []);
 
     return (
     <Stack
@@ -67,11 +50,11 @@ export const DataRangeEdit = () => {
         justifyContent="flex-start"
         alignItems="flex-start"
         gap={2}
+        ml={2}
     >
         <Box width={300} >
             {storedMaxeleStyle && <ColormapSlider
                 style={storedMaxeleStyle}
-                storeStyle={storeStyle}
             />}
         </Box>
         <Typography startDecorator={<MaxElevationIcon />} mb={2} level="title-md">Maximum Water Level</Typography>
@@ -79,7 +62,6 @@ export const DataRangeEdit = () => {
         <Box width={300} >
             {storedMaxwvelStyle && <ColormapSlider
                 style={storedMaxwvelStyle}
-                storeStyle={storeStyle}
             />}
         </Box>
         <Typography startDecorator={<MaxWindVelocityIcon />}  mb={2} level="title-md">Maximum Wind Speed</Typography>
@@ -87,7 +69,6 @@ export const DataRangeEdit = () => {
         <Box width={300} >
             {storedSwanStyle && <ColormapSlider
                 style={storedSwanStyle}
-                storeStyle={storeStyle}
             />}
         </Box>
         <Typography startDecorator={<SwanIcon />} level="title-md">Maximum Significant Wave Height</Typography>

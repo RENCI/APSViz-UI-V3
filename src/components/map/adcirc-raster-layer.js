@@ -3,6 +3,8 @@ import { WMSTileLayer } from 'react-leaflet';
 import { useLocalStorage } from '@hooks';
 import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam } from '@utils/map-utils';
+import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
+import { MapLegend } from '@components/legend';
 
 export const AdcircRasterLayer = (layer, opacity) => {
 
@@ -20,13 +22,22 @@ export const AdcircRasterLayer = (layer, opacity) => {
             let style = "";
             switch(layer.layer.properties.product_type) {
             case ("maxwvel63"):
-                style = storedMaxwvelStyle;
+                if (storedMaxwvelStyle)
+                    style = storedMaxwvelStyle;
+                else
+                    style = maxwvelStyle;
                 break;
             case ("swan_HS_max63"):
-                style = storedSwanStyle;
+                if (storedSwanStyle) 
+                    style = storedSwanStyle;
+                else 
+                    style = swanStyle;
                 break;
             default:
-                style = storedMaxeleStyle;
+                if (storedMaxeleStyle)
+                    style = storedMaxeleStyle;
+                else
+                    style = maxeleStyle;
                 break;
             }
 
@@ -42,7 +53,9 @@ export const AdcircRasterLayer = (layer, opacity) => {
             }); 
         }
       }, []);
-
+      
+    // memorizing this params object prevents
+    // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
         format:"image/png",
         transparent: true,
@@ -58,6 +71,7 @@ export const AdcircRasterLayer = (layer, opacity) => {
                 params={wmsLayerParams}
                 opacity={opacity}
             />)
+            <MapLegend />
          </Fragment>
         )
      );
