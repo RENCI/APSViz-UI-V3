@@ -8,9 +8,11 @@ import React, {
 import PropTypes from "prop-types";
 import { useColorScheme } from '@mui/joy/styles';
 import {
-  // useToggleLocalStorage,
+  useLocalStorage,
   useToggleState,
 } from '@hooks';
+
+import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 export const SettingsContext = createContext({});
 export const useSettings = () => useContext(SettingsContext);
@@ -26,6 +28,10 @@ export const SettingsProvider = ({ children }) => {
     setMode(darkMode ? 'light' : 'dark');
   }, [mode]);
 
+  const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage('maxele', maxeleStyle);
+  const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage('maxwvel', maxwvelStyle);
+  const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage('swan', swanStyle);
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
@@ -33,7 +39,13 @@ export const SettingsProvider = ({ children }) => {
       darkMode: {
         enabled: darkMode,
         toggle: toggleDarkMode,
-      }
+      },
+
+      mapStyle: {
+        storedMaxeleStyle,
+        storedMaxwvelStyle,
+        storedSwanStyle,
+      },
     }}>
       { children }
     </SettingsContext.Provider>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLayers } from '@context';
+import { useLayers, useSettings } from '@context';
 import SldStyleParser from 'geostyler-sld-parser';
 import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 import { Stack, Typography, Box } from '@mui/joy';
@@ -23,26 +23,14 @@ export const DataRangeEdit = () => {
         defaultModelLayers,
     } = useLayers();
 
-    const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorage(MAXELE, '');
-    const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage(MAXWVEL, '');
-    const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage(SWAN, '');
+    const { mapStyle } = useSettings();
+    const {
+        storedMaxeleStyle,
+        storedMaxwvelStyle,
+        storedSwanStyle,
+    } = mapStyle;
 
     const sldParser = new SldStyleParser();
-
-    useEffect(() => {
-        // store the default styles in local storage
-        // if not already there
-        if (!storedMaxeleStyle) {
-            setStoredMaxeleStyle(maxeleStyle);
-        }
-        if (!storedMaxwvelStyle) {
-            setStoredMaxwvelStyle(maxwvelStyle);
-        }
-        if (!storedSwanStyle) {
-            setStoredSwanStyle(swanStyle);
-        }
-
-    }, []);
 
     return (
     <Stack
