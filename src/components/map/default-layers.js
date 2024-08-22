@@ -149,7 +149,7 @@ export const DefaultLayers = () => {
             const obsLayer = defaultModelLayers.find((layer) => layer.properties.product_type === "obs"  && layer.state.visible);
             if (obsLayer) {
                 const obs_url = gs_wfs_url +
-                                "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
+                                "ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
                                 "&typeName=" +
                                 obsLayer.layers;
                 const {data} = await axios.get(obs_url);
