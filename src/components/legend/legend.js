@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { Avatar, Box, Card, Stack } from '@mui/joy';
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, Box, Card, CardContent, Stack } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils";
 import SldStyleParser from 'geostyler-sld-parser';
@@ -21,7 +21,6 @@ export const MapLegend = () => {
     const {
         defaultModelLayers,
         layerTypes,
-        legendLayer,
     } = useLayers();
     const {
         mapStyle,
@@ -127,30 +126,31 @@ export const MapLegend = () => {
                         width: newWidth, height: newHeight+70,
                         minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+65
                     }}>
-                    <Stack
-                        direction="column"
-                        gap={ 1 }
-                        p={ 1 }
-                        alignItems="center"
-                    >
-                        <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
-                            <LegendIcon size="lg" color="primary" />
-                        </Avatar>
+                        <CardContent
+                            component={ Stack }
+                            direction="column"
+                            gap={ 1 }
+                            p={ 1 }
+                            alignItems="center"
+                        >
+                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
+                                <LegendIcon size="lg" color="primary" />
+                            </Avatar>
 
-                        <Box
-                            component="img"
-                            alt=""
-                            src={ legendUrl }
-                            sx={{
-                                height: newHeight,
-                                width: newWidth,
-                                minWidth: minWidth,
-                                minHeight: minHeight,
-                                maxWidth: maxWidth-10,
-                                maxHeight: maxHeight-10,
-                            }}
-                        />
-                    </Stack>
+                            <Box
+                                component="img"
+                                alt=""
+                                src={ legendUrl }
+                                sx={{
+                                    height: newHeight,
+                                    width: newWidth,
+                                    minWidth: minWidth,
+                                    minHeight: minHeight,
+                                    maxWidth: maxWidth-10,
+                                    maxHeight: maxHeight-10,
+                                }}
+                            />
+                        </CardContent>
                 </Card>
             </Resizable>
         </Draggable>

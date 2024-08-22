@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam } from '@utils/map-utils';
