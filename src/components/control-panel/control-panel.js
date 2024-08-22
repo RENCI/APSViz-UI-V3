@@ -344,6 +344,9 @@ export const ControlPanel = () => {
             <Typography level="body-md" alignSelf="center">
               Model run date: {runDate}
             </Typography>
+            <Typography level="body-sm" alignSelf="center">
+              {instanceName}
+            </Typography>
             </Fragment>
           )
         }
