@@ -167,35 +167,30 @@ export const DefaultLayers = () => {
         getObsGeoJsonData().then();
     }, [defaultModelLayers]); 
 
-    return (
-        <>
-        {defaultModelLayers
-            .filter(({state}) => state.visible)
-            .reverse()
-            .map((layer, index) => {
-                const pieces = layer.id.split('-');
-                const type = pieces[pieces.length-1];
-                const opacity = layer.state.opacity;
-                if (type === "obs" && obsData !== "") {
-                    return (
-                        <GeoJSON
-                            key={Math.random() + index}
-                            data={obsData}
-                            pointToLayer={obsPointToLayer}
-                            onEachFeature={onEachObsFeature}
-                        />
-                    );
-                } else if (type !== "obs") {
-                    return (
-                        <AdcircRasterLayer
-                            key={Math.random() + index}
-                            layer={layer}
-                            opacity={opacity}
-                        />
-                    );
-                }
-            })
-        };
-        </>
-    );
+    return defaultModelLayers
+        .filter(({state}) => state.visible)
+        .reverse()
+        .map((layer, index) => {
+            const pieces = layer.id.split('-');
+            const type = pieces[pieces.length-1];
+            const opacity = layer.state.opacity;
+            if (type === "obs" && obsData !== "") {
+                return (
+                    <GeoJSON
+                        key={ `geojson-${ index }` }
+                        data={obsData}
+                        pointToLayer={obsPointToLayer}
+                        onEachFeature={onEachObsFeature}
+                    />
+                );
+            } else if (type !== "obs") {
+                return (
+                    <AdcircRasterLayer
+                        key={ `raster-${ index }` }
+                        layer={layer}
+                        opacity={opacity}
+                    />
+                );
+            }
+        });
 };

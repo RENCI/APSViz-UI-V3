@@ -5,7 +5,6 @@ import { getNamespacedEnvParam } from '@utils/map-utils';
 import { useSettings } from '@context';
 
 export const AdcircRasterLayer = (layer, opacity) => {
-
     const sldParser = new SldStyleParser();
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
@@ -32,17 +31,16 @@ export const AdcircRasterLayer = (layer, opacity) => {
             }
 
             sldParser
-            .readStyle(style)
-            .then((geostylerStyle) => {
-                geostylerStyle.output.name = (' ' + layer.layer.layers).slice(1);
-
-                sldParser.writeStyle(geostylerStyle.output)
-                .then((sldStyle) => {
-                    setCurrentStyle(sldStyle.output);
-            });
-            }); 
+                .readStyle(style)
+                .then((geostylerStyle) => {
+                    geostylerStyle.output.name = (' ' + layer.layer.layers).slice(1);
+                    sldParser.writeStyle(geostylerStyle.output)
+                    .then((sldStyle) => {
+                        setCurrentStyle(sldStyle.output);
+                    });
+                }); 
         }
-      }, []);
+      }, [mapStyle]);
       
     // memorizing this params object prevents
     // that map flicker on state changes.

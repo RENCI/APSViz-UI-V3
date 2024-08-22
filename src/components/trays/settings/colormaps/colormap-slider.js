@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
-import { useLayers, useSettings } from '@context';
+import { useSettings } from '@context';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
 const SWAN = 'swan';
 
 export const ColormapSlider = ({style}) => {
-
     const [value, setValue] = React.useState([]);
     const [sliderStep, setSliderStep] = useState(0);
     const [sliderMarks, setSliderMarks] = useState([]);
     const [minSliderValue, setMinSliderValue] = useState(0);
     const [maxSliderValue, setMaxSliderValue] = useState();
     const [currentStyle, setCurrentStyle] = useState();
-
-    const {
-        defaultModelLayers,
-        setLayerStyleUpdate,
-    } = useLayers();
 
     const {
         mapStyle,
@@ -68,39 +62,32 @@ export const ColormapSlider = ({style}) => {
     };
 
     useEffect(() => {
-
         const getDefaultStyle = async() => {
-
             sldParser
                 .readStyle(style)
                 .then((geostylerStyle) => {
                     setCurrentStyle(geostylerStyle.output);
                     setSliderParams(geostylerStyle.output);
                 })
-                .catch(error => console.log(error));
-
-            return(style);
+                .catch(error => console.error(error.message));
+            return style;
         };
-        getDefaultStyle().then();
+        getDefaultStyle();
 
     }, []);
 
-    const storeStyle = (style) => {
+    const storeStyle = useCallback((style) => {
         sldParser.writeStyle(style)
             .then((sldStyle) => {
                 if (style.name.includes(MAXELE)) {
                     mapStyle.maxele.set(sldStyle.output);
-                }
-                else
-                if (style.name.includes(MAXWVEL)) {
+                } else if (style.name.includes(MAXWVEL)) {
                     mapStyle.maxwvel.set(sldStyle.output);
-                }
-                else
-                if (style.name.includes(SWAN)) {
+                } else if (style.name.includes(SWAN)) {
                     mapStyle.swan.set(sldStyle.output);
                 }
         });
-    };
+    }, []);
 
     const getDataRange = (style) => {
         const dataRange = [];
@@ -183,13 +170,6 @@ export const ColormapSlider = ({style}) => {
 
         // save the new style to local storage
         storeStyle(newStyle);
-
-        // find any visible layer to apply this to
-        const styleName = currentStyle.name.split('_')[0];
-        const updateLayer = defaultModelLayers.find((layer) => layer.state.visible === true && layer.properties.product_type.includes(styleName));
-        if (updateLayer) {
-            setLayerStyleUpdate(updateLayer.id);
-        }
     };
 
     return (
