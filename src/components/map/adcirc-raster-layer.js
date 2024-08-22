@@ -3,7 +3,6 @@ import { WMSTileLayer } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam } from '@utils/map-utils';
 import { useSettings } from '@context';
-import { MapLegend } from '@components/legend';
 
 export const AdcircRasterLayer = (layer, opacity) => {
 
@@ -53,18 +52,13 @@ export const AdcircRasterLayer = (layer, opacity) => {
         sld_body: currentStyle,
     }), [currentStyle]);
 
-    return (
-        (currentStyle &&
-        <Fragment>
-            (<WMSTileLayer
-                url={gs_wms_url}
-                layers={layer.layer.layers}
-                params={wmsLayerParams}
-                opacity={opacity}
-            />)
-            <MapLegend />
-         </Fragment>
-        )
-     );
+    return currentStyle && (
+        <WMSTileLayer
+            url={gs_wms_url}
+            layers={layer.layer.layers}
+            params={wmsLayerParams}
+            opacity={opacity}
+        />
+    );
 
 };
