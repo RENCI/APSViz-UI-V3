@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { WMSTileLayer, GeoJSON, useMap } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { GeoJSON, useMap } from 'react-leaflet';
 import { CircleMarker } from 'leaflet';
 import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { AdcircRasterLayer } from './adcirc-raster-layer';
 import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
@@ -13,12 +14,14 @@ const newLayerDefaultState = (layer) => {
         return ({
             visible: true,
             opacity: 1.0,
+            style: "",
         });
     }
   
     return ({
         visible: false,
         opacity: 1.0,
+        style: "",
     });
   };
   
@@ -92,7 +95,6 @@ export const DefaultLayers = () => {
     // create the URLs to the data endpoints
     const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ getBrandingHandler() }${ shared_params['run_id'] }`;
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
-    const gs_wms_url = gs_wfs_url + 'wms';
 
     // retrieve the catalog member with the provided id
     const getCatalogEntry = (catalog, id)  => {
@@ -147,7 +149,7 @@ export const DefaultLayers = () => {
             const obsLayer = defaultModelLayers.find((layer) => layer.properties.product_type === "obs"  && layer.state.visible);
             if (obsLayer) {
                 const obs_url = gs_wfs_url +
-                                "/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
+                                "ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=application/json" +
                                 "&typeName=" +
                                 obsLayer.layers;
                 const {data} = await axios.get(obs_url);
@@ -165,60 +167,30 @@ export const DefaultLayers = () => {
         getObsGeoJsonData().then();
     }, [defaultModelLayers]); 
 
-    // memorizing this params object prevents
-    // that map flicker on state changes.
-    const wmsLayerParams = useMemo(() => ({
-        format:"image/png",
-        transparent: true,
-    }), []);
-
-    // added this temporarily for Debby
-    const wmsDebbyLayerParams = useMemo(() => ({
-        format:"image/png",
-        transparent: true,
-        styles: "maxele_v3_short_style"
-    }), []);
-
-    return (
-        <>
-        {defaultModelLayers
-            .filter(({state}) => state.visible)
-            .reverse()
-            .map((layer, index) => {
-                const pieces = layer.id.split('-');
-                const type = pieces[pieces.length-1];
-                const opacity = layer.state.opacity;
-                if (type === "obs" && obsData !== "") {
-                    return (
-                        <GeoJSON
-                            key={Math.random() + index}
-                            data={obsData}
-                            pointToLayer={obsPointToLayer}
-                            onEachFeature={onEachObsFeature}
-                        />
-                    );
-                } else {
-                    return (
-                       layer.layers.includes("maxele") ?
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsDebbyLayerParams}
-                            opacity={opacity}
-                        />)
-                        :
-                        (<WMSTileLayer
-                            key={`${index}-${layer.id}`}
-                            url={gs_wms_url}
-                            layers={layer.layers}
-                            params={wmsLayerParams}
-                            opacity={opacity}
-                        />)
-                    );
-                }
-            })
-        };
-        </>
-    );
+    return defaultModelLayers
+        .filter(({state}) => state.visible)
+        .reverse()
+        .map((layer, index) => {
+            const pieces = layer.id.split('-');
+            const type = pieces[pieces.length-1];
+            const opacity = layer.state.opacity;
+            if (type === "obs" && obsData !== "") {
+                return (
+                    <GeoJSON
+                        key={ `geojson-${ index }` }
+                        data={obsData}
+                        pointToLayer={obsPointToLayer}
+                        onEachFeature={onEachObsFeature}
+                    />
+                );
+            } else if (type !== "obs") {
+                return (
+                    <AdcircRasterLayer
+                        key={ `raster-${ index }` }
+                        layer={layer}
+                        opacity={opacity}
+                    />
+                );
+            }
+        });
 };

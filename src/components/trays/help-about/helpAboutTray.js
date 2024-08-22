@@ -1,10 +1,19 @@
 import React, {Fragment} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator }
         from '@mui/joy';
-import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
-        Share as ShareViewIcon, HelpCenter as HelpAboutIcon, Map as MapIcon, LightMode as LightModeIcon,DragHandleRounded as HandleIcon,
-        KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow, KeyboardArrowLeft, Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
-        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon }
+import {
+        // sidebar icons
+        Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
+        Share as ShareViewIcon, HelpCenter as HelpAboutIcon,
+
+        // Map model layer icons
+        Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
+        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon,
+
+        // other action icons
+        LightMode as LightModeIcon, Map as MapIcon, DragHandleRounded as HandleIcon, KeyboardArrowDown as ExpandIcon,
+        ArrowDropUp as MoveUpArrow, KeyboardArrowLeft
+}
         from '@mui/icons-material';
 
 /**

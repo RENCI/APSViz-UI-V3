@@ -1,7 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { Stack, Typography, Switch, Divider, Button, Card } from '@mui/joy';
 import { useLayers } from '@context';
-import { CompareArrows as CompareLayersIcon } from '@mui/icons-material';
+import { CompareArrows as CompareLayersIcon, Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
+        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon }
+    from '@mui/icons-material';
 
 /**
  * This component renders the model selection tray
@@ -53,6 +55,13 @@ export const CompareLayersTray = () => {
         }
     };
 
+    const getLayerIcon = ( layerType )=> {
+        switch ( layerType ) {
+            default:
+                return <WaveHeightIcon/>;
+        }
+    };
+
     // render the controls
     return (
         <Fragment>
@@ -75,6 +84,7 @@ export const CompareLayersTray = () => {
                             .map((layer, idx) => (
                                 <Card key={ idx }>
                                     <Stack direction="row" alignItems="center" gap={ 1 }>
+                                        { getLayerIcon }
                                         <Typography level="body-sm">{ layer.properties['product_name'] }</Typography>
                                     </Stack>
                                     <Stack direction="row" gap={ 4 } alignItems="center">

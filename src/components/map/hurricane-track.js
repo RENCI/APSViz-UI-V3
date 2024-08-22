@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
 import { Marker } from 'leaflet';

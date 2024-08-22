@@ -7,6 +7,7 @@ import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 import { MapLegend } from '@components/legend';
 
+
 /**
  * renders the main content
  *

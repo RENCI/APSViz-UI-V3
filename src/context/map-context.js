@@ -275,7 +275,7 @@ export const LayersProvider = ({ children }) => {
   const [baseMap, setBaseMap] = React.useState();
 
   // used to track the view state of the share comment
-  const [ showShareComment, setShowShareComment ] = useState(true);
+  const [showShareComment, setShowShareComment] = useState(true);
 
   return (
     <LayersContext.Provider
