@@ -1,9 +1,27 @@
 import React from 'react';
 import { Fragment, useCallback, useState } from 'react';
-import { List, Sheet, useTheme } from '@mui/joy';
+import { Box, List, Sheet, useTheme } from '@mui/joy';
 import { Tray } from './tray';
 import { MenuItem } from './menu-item';
 import SidebarTrays from '../trays';
+
+// ordered list of tray keys for lower portion of sidebar
+// tray for unlisted keys will be stuck into upper sidebar list.
+const LOWER_SIDEBAR_MENU_ITEM_IDS = [
+  'help_about',
+  'settings',
+];
+// split sidebar items into upper and lower
+const sidebarMenuItemKeys = Object.keys(SidebarTrays)
+  .reduce((acc, trayKey) => {
+    const upperOrLower = LOWER_SIDEBAR_MENU_ITEM_IDS.includes(trayKey) ? 'lower' : 'upper';
+    acc[upperOrLower].push(trayKey);
+    return acc;
+  }, { upper: [], lower: [] });
+// align order with that of LOWER_SIDEBAR_MENU_ITEM_IDS
+sidebarMenuItemKeys.lower.sort((a, b) => 
+  LOWER_SIDEBAR_MENU_ITEM_IDS.indexOf(a) - LOWER_SIDEBAR_MENU_ITEM_IDS.indexOf(b)
+);
 
 export const Sidebar = () => {
   const theme = useTheme();
@@ -48,23 +66,42 @@ export const Sidebar = () => {
           // otherwise we see it sliding behind the sidebar
           // this is also nice for accidental mouse leaves. we'll also fade slower than we un-fade.
           transition: 'max-width 250ms, filter 250ms, background-color 1000ms 500ms',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <List>
             {
-              Object.keys(SidebarTrays).map((key, index) => {
-                return (
-                  <MenuItem
-                    key={ `menu-item-${ key }` }
-                    active={ index === activeIndex }
-                    title={ SidebarTrays[key].title }
-                    Icon={ SidebarTrays[key].icon }
-                    onClick={ () => handleClickMenuItem(index) }
-                  />
-                );
-              })
+              sidebarMenuItemKeys.upper
+                .map((key, index) => {
+                  return (
+                    <MenuItem
+                      key={ `menu-item-${ key }` }
+                      active={ index === activeIndex }
+                      title={ SidebarTrays[key].title }
+                      Icon={ SidebarTrays[key].icon }
+                      onClick={ () => handleClickMenuItem(index) }
+                    />
+                  );
+                })
+            }
+            <Box sx={{ flex: 1 }} /> {/**/}
+            {
+              sidebarMenuItemKeys.lower
+                .map((key, index) => {
+                  return (
+                    <MenuItem
+                      key={ `menu-item-${ key }` }
+                      active={ index === activeIndex }
+                      title={ SidebarTrays[key].title }
+                      Icon={ SidebarTrays[key].icon }
+                      onClick={ () => handleClickMenuItem(index) }
+                    />
+                  );
+                })
             }
         </List>
+        
       </Sheet>
       {
         Object.keys(SidebarTrays).map((key, index) => {
