@@ -1,9 +1,10 @@
 import React from 'react';
-import { Stack } from '@mui/joy';
+import { Stack, Divider, Typography } from '@mui/joy';
 import { Tune as SettingsIcon } from '@mui/icons-material';
 
 import { DarkModeToggle } from './dark-mode';
 import { BaseMaps } from './basemap';
+import { DataRangeEdit } from './colormaps';
 
 export const icon = <SettingsIcon />;
 
@@ -11,7 +12,13 @@ export const title = 'Settings';
 
 export const trayContents = () => (
   <Stack gap={ 1 } p={ 1 }>
+    <Typography level="title-lg">Set/Unset Dark Mode</Typography>
     <DarkModeToggle />
+    <Divider />
+    <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
+    <Divider />
+    <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormap Range</Typography>
+    <DataRangeEdit />
   </Stack>
 );
