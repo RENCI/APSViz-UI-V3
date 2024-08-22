@@ -5,8 +5,8 @@ import { Tray } from './tray';
 import { MenuItem } from './menu-item';
 import SidebarTrays from '../trays';
 
-// ordered list of tray keys for lower portion of sidebar
-// tray for unlisted keys will be stuck into upper sidebar list.
+// ordered list of tray keys for the lower portion of sidebar
+// tray for unlisted keys will be stuck into the upper sidebar list.
 const LOWER_SIDEBAR_MENU_ITEM_IDS = [
   'help_about',
   'settings',
@@ -34,7 +34,7 @@ export const Sidebar = () => {
       setActiveKey(null);
       return;
     }
-    // otherwise, open desired tray.
+    // otherwise, open the desired tray.
     setActiveKey(newKey);
   }, [activeKey]);
 
@@ -63,7 +63,7 @@ export const Sidebar = () => {
           },
           // we'll add a delay to this exit animation to give ample time
           // for the disappearing tray get out of they view before going translucent.
-          // otherwise we see it sliding behind the sidebar
+          // otherwise, we see it sliding behind the sidebar.
           // this is also nice for accidental mouse leaves. we'll also fade slower than we un-fade.
           transition: 'max-width 250ms, filter 250ms, background-color 1000ms 500ms',
           display: 'flex',

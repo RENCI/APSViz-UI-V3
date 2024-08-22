@@ -67,7 +67,7 @@ export const LayerCard = ({ index, layer }) => {
             <Avatar variant="outlined">
               <LayerIcon size="lg" color="primary" />
             </Avatar>
-            <Typography level="title-md" sx={{ flex: 1 }}>
+            <Typography level="title-sm" sx={{ flex: 1 }}>
               {layer.properties.product_name}
             </Typography>
             <Switch
