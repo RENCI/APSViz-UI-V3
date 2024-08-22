@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, Box, Card, CardContent, Stack } from '@mui/joy';
+import { Avatar, Box, Card, Stack } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils";
 import SldStyleParser from 'geostyler-sld-parser';
@@ -123,14 +123,13 @@ export const MapLegend = () => {
                         zIndex: 410,
                         borderRadius: 'sm',
                         visibility: {legendVisibilty},
-                        width: newWidth, height: newHeight+70,
-                        minWidth: minWidth, minHeight: minHeight+70, maxWidth: maxWidth, maxHeight: maxHeight+65
+                        width: newWidth + 16, height: newHeight + 70 + 16,
+                        minWidth: minWidth, minHeight: minHeight + 70, maxWidth: maxWidth, maxHeight: maxHeight + 65
                     }}>
-                        <CardContent
-                            component={ Stack }
+                        <Stack
                             direction="column"
                             gap={ 1 }
-                            p={ 1 }
+                            p={ 2 }
                             alignItems="center"
                         >
                             <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
@@ -150,7 +149,7 @@ export const MapLegend = () => {
                                     maxHeight: maxHeight-10,
                                 }}
                             />
-                        </CardContent>
+                        </Stack>
                 </Card>
             </Resizable>
         </Draggable>
