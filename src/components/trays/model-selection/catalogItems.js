@@ -175,11 +175,11 @@ export default function CatalogItems(data) {
                                     <Stack key={ itemIndex } spacing={ 1 }>
                                         <Accordion
                                             key={ itemIndex }
-                                            sx={{ p: 0 }}
+                                            sx={{ p: 0, fontSize: "sm" }}
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
 
-                                            <AccordionSummary sx={{ fontSize: 15 }}> {catalog['id']} </AccordionSummary>
+                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } </AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
@@ -192,7 +192,7 @@ export default function CatalogItems(data) {
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
                                                         <Checkbox
-                                                            sx={{ m: .5, fontSize: 12 }}
+                                                            sx={{ m: .5, fontSize: 'sm' }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={

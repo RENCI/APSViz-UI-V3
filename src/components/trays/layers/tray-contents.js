@@ -26,7 +26,7 @@ export const TrayContents = () => {
       return (
         <Stack p={ 2 }>
           <Button
-            size="lg"
+            size="md"
             startDecorator={ <AddLayerIcon /> }
             onClick={ handleClickToggleState }
           >Add a Model Run</Button>
@@ -36,7 +36,7 @@ export const TrayContents = () => {
     return (
       <Stack p={ 2 }>
         <Button
-          size="lg"
+          size="md"
           color="warning"
           startDecorator={ <CloseIcon /> }
           onClick={ handleClickToggleState }
