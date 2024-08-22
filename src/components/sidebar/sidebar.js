@@ -25,18 +25,18 @@ sidebarMenuItemKeys.lower.sort((a, b) =>
 
 export const Sidebar = () => {
   const theme = useTheme();
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeKey, setActiveKey] = useState(null);
 
-  const handleClickMenuItem = useCallback(newIndex => {
+  const handleClickMenuItem = useCallback(newKey => {
     // if the incoming new index equals the old index,
     // then the user wants to close the currently open tray.
-    if (newIndex === activeIndex) {
-      setActiveIndex(-1);
+    if (newKey === activeKey) {
+      setActiveKey(null);
       return;
     }
     // otherwise, open desired tray.
-    setActiveIndex(newIndex);
-  }, [activeIndex]);
+    setActiveKey(newKey);
+  }, [activeKey]);
 
   return (
     <Fragment>
@@ -50,12 +50,12 @@ export const Sidebar = () => {
           maxWidth: '68px',
           overflow: 'hidden',
           p: 0,
-          backgroundColor: activeIndex === -1
+          backgroundColor: activeKey === -1
             ? `rgba(${ theme.palette.mainChannel } / 0.2)`
             : `rgba(${ theme.palette.mainChannel } / 1.0)`,
           // a drop shadow looks nice. we'll remove it if a tray is open,
           // as they should appear on the same plane.
-          filter: activeIndex === -1 ? 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))' : 'drop-shadow(1px 0 0 rgba(0, 0, 0, 0.2))',
+          filter: activeKey === -1 ? 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))' : 'drop-shadow(1px 0 0 rgba(0, 0, 0, 0.2))',
           // similarly, here.
           '&:hover': {
             backgroundColor: `rgba(${ theme.palette.mainChannel } / 1.0)`,
@@ -73,14 +73,14 @@ export const Sidebar = () => {
         <List>
             {
               sidebarMenuItemKeys.upper
-                .map((key, index) => {
+                .map((key) => {
                   return (
                     <MenuItem
                       key={ `menu-item-${ key }` }
-                      active={ index === activeIndex }
+                      active={ key === activeKey }
                       title={ SidebarTrays[key].title }
                       Icon={ SidebarTrays[key].icon }
-                      onClick={ () => handleClickMenuItem(index) }
+                      onClick={ () => handleClickMenuItem(key) }
                     />
                   );
                 })
@@ -88,14 +88,14 @@ export const Sidebar = () => {
             <Box sx={{ flex: 1 }} /> {/**/}
             {
               sidebarMenuItemKeys.lower
-                .map((key, index) => {
+                .map((key) => {
                   return (
                     <MenuItem
                       key={ `menu-item-${ key }` }
-                      active={ index === activeIndex }
+                      active={ key === activeKey }
                       title={ SidebarTrays[key].title }
                       Icon={ SidebarTrays[key].icon }
-                      onClick={ () => handleClickMenuItem(index) }
+                      onClick={ () => handleClickMenuItem(key) }
                     />
                   );
                 })
@@ -104,14 +104,14 @@ export const Sidebar = () => {
         
       </Sheet>
       {
-        Object.keys(SidebarTrays).map((key, index) => {
+        Object.keys(SidebarTrays).map((key) => {
           return (
             <Tray
               key={ `tray-${ key }` }
-              active={ activeIndex === index }
+              active={ activeKey === key }
               title={ SidebarTrays[key].title }
               Contents={ SidebarTrays[key].trayContents }
-              closeHandler={ () => setActiveIndex(-1) }
+              closeHandler={ () => setActiveKey(-1) }
             />
           );
         })
