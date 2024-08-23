@@ -177,7 +177,7 @@ export const DefaultLayers = () => {
             if (type === "obs" && obsData !== "") {
                 return (
                     <GeoJSON
-                        key={ `geojson-${ index }` }
+                        key={Math.random() + index}
                         data={obsData}
                         pointToLayer={obsPointToLayer}
                         onEachFeature={onEachObsFeature}
@@ -186,7 +186,7 @@ export const DefaultLayers = () => {
             } else if (type !== "obs") {
                 return (
                     <AdcircRasterLayer
-                        key={ `raster-${ index }` }
+                        key={Math.random() + index}
                         layer={layer}
                         opacity={opacity}
                     />

@@ -213,19 +213,23 @@ export const ControlPanel = () => {
      // turn off the old just check for top instance
     topLayers.map(layer => {
       if (layer.layers.includes(currentLayerSelection)) {
-          toggleLayerVisibility(layer.id);
+          if (layer.state.visible && layer.properties.product_type !== "obs") {
+            toggleLayerVisibility(layer.id);
+          }
       }
     }); 
   
     // Yikes! need another way to do this - but it works for now
-    await new Promise(r => setTimeout(r, 1));
-    // turn on the new
-    topLayers.map(layer => {
-      if (layer.layers.includes(newValue)) {
-          toggleLayerVisibility(layer.id);
-      }
-    });
-    currentLayerSelection = newValue;
+    if (newValue) { // might be just be turning off layer
+      await new Promise(r => setTimeout(r, 1));
+      // turn on the new
+      topLayers.map(layer => {
+        if (layer.layers.includes(newValue)) {
+            toggleLayerVisibility(layer.id);
+        }
+      });
+      currentLayerSelection = newValue;
+    }
   };
 
   // switch on/off the observation layer if it exists
