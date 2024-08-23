@@ -13,7 +13,7 @@ export const ResetStyles = () => {
         'maxele',
         'maxwvel',
         'swan',
-    ]
+    ];
 
     /**
      * remove the raster layer styles from local storage
