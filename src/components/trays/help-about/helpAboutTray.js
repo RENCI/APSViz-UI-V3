@@ -1,24 +1,20 @@
 import React, {Fragment} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator, Divider }
         from '@mui/joy';
+
 import {
         // sidebar icons
-        Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
+        Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
         Share as ShareViewIcon, HelpCenter as HelpAboutIcon,
 
-        // Map model layer icons
-        Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
-        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon,
+        // map model layer types
+        Tsunami as WaveHeightIcon, QueryStats as ObservationIcon, Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon,
+        Flood as FloodIcon,
 
-        // other action icons
-        LightMode as LightModeIcon, Map as MapIcon, DragHandleRounded as HandleIcon, KeyboardArrowDown as ExpandIcon,
-        ArrowDropUp as MoveUpArrow, KeyboardArrowLeft
-}
-import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
-        Share as ShareViewIcon, HelpCenter as HelpAboutIcon, Map as MapIcon, LightMode as LightModeIcon,DragHandleRounded as HandleIcon,
-        KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow, KeyboardArrowLeft, Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
-        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon, ToggleOn as OnOffIcon }
-        from '@mui/icons-material';
+        // action buttons
+        Map as MapIcon, LightMode as LightModeIcon, DragHandleRounded as HandleIcon, KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow,
+        KeyboardArrowLeft, ToggleOn as OnOffIcon
+    } from '@mui/icons-material';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
