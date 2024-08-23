@@ -5,6 +5,7 @@ import { Delete as RemoveIcon} from '@mui/icons-material';
 // import the components that will remove selected items from state
 import { RemoveAllObservations } from "./remove-observations";
 import { RemoveModels } from "./remove-models";
+import { ResetStyles } from "./reset-styles";
 
 // get an icon for the tray
 export const icon = <RemoveIcon />;
@@ -21,5 +22,6 @@ export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>
             <RemoveAllObservations />
             <RemoveModels />
+            <ResetStyles />
       </Stack>
     );

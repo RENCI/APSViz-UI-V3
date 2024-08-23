@@ -210,8 +210,6 @@ export const ControlPanel = () => {
   // switch to the model run layer selected via icon button
   const layerChange = async (event, newValue) => {
 
-    console.log(newValue);
-
      // turn off the old just check for top instance
     topLayers.map(layer => {
       if (layer.layers.includes(currentLayerSelection)) {

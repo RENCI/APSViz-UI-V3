@@ -32,52 +32,52 @@ export const MapLegend = () => {
         const legendLayer = defaultModelLayers.find(layer => layer.state.visible && layer.properties.product_type !== 'obs');
         if (!legendLayer) {
             setLegendVisibilty("hidden");
-
-            return;
         }
-        LegendIcon = layerTypes[legendLayer.properties.product_type].icon;
+        else {
+            LegendIcon = layerTypes[legendLayer.properties.product_type].icon;
 
-        // now build appropriate url for retrieving the legend graphic
-        const workspace = legendLayer.layers.split(':')[0];
-        const layerName = legendLayer.layers.split(':')[1];
+            // now build appropriate url for retrieving the legend graphic
+            const workspace = legendLayer.layers.split(':')[0];
+            const layerName = legendLayer.layers.split(':')[1];
 
-        let style = "";
-        if (legendLayer.properties.product_type.includes("maxwvel")) {
-            style = mapStyle.maxwvel.current;
-        }
-        else 
-        if (legendLayer.properties.product_type.includes("swan")) {
-            style = mapStyle.swan.current;
-        }
-        else { // maxele 
-            style = mapStyle.maxele.current;
-        }
+            let style = "";
+            if (legendLayer.properties.product_type.includes("maxwvel")) {
+                style = mapStyle.maxwvel.current;
+            }
+            else 
+            if (legendLayer.properties.product_type.includes("swan")) {
+                style = mapStyle.swan.current;
+            }
+            else { // maxele 
+                style = mapStyle.maxele.current;
+            }
 
-        // add the layer name to the style
-        sldParser
-            .readStyle(style)
-            .then((geostylerStyle) => {
-                geostylerStyle.output.name = legendLayer.layers;
-                const colormapEntries = [...geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries];
-                // make the colormap backwards for the legend
-                const newcolormapEntries = colormapEntries.reverse();
-                geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries = newcolormapEntries;
-                // add the layer name to the style
-                geostylerStyle.output.name = (' ' + legendLayer.layers).slice(1);
-                sldParser.writeStyle(geostylerStyle.output)
-                .then((sldStyle) => {
-                    const encodedStyle = encodeURIComponent(sldStyle.output);
-                    const url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }` +
-                        workspace + "/" +
-                        "ows?service=WMS&request=GetLegendGraphic&TRANSPARENT=TRUE&LEGEND_OPTIONS=layout:verticle&format=image%2Fpng&width=20&height=20&layer=" +
-                        layerName + 
-                        "&sld_body=" + encodedStyle;
-                    setLegendUrl(url);
-        
-                    // all set - show the legend
-                    setLegendVisibilty("visible");
-                });
-        }); 
+            // add the layer name to the style
+            sldParser
+                .readStyle(style)
+                .then((geostylerStyle) => {
+                    geostylerStyle.output.name = legendLayer.layers;
+                    const colormapEntries = [...geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries];
+                    // make the colormap backwards for the legend
+                    const newcolormapEntries = colormapEntries.reverse();
+                    geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries = newcolormapEntries;
+                    // add the layer name to the style
+                    geostylerStyle.output.name = (' ' + legendLayer.layers).slice(1);
+                    sldParser.writeStyle(geostylerStyle.output)
+                    .then((sldStyle) => {
+                        const encodedStyle = encodeURIComponent(sldStyle.output);
+                        const url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }` +
+                            workspace + "/" +
+                            "ows?service=WMS&request=GetLegendGraphic&TRANSPARENT=TRUE&LEGEND_OPTIONS=layout:verticle&format=image%2Fpng&width=20&height=20&layer=" +
+                            layerName + 
+                            "&sld_body=" + encodedStyle;
+                        setLegendUrl(url);
+            
+                        // all set - show the legend
+                        setLegendVisibilty("visible");
+                    });
+            });
+        } 
     }, [defaultModelLayers, mapStyle]);
 
     // define the starting size of the card
@@ -122,7 +122,7 @@ export const MapLegend = () => {
                         padding: '10px',
                         zIndex: 410,
                         borderRadius: 'sm',
-                        visibility: {legendVisibilty},
+                        visibility: legendVisibilty,
                         width: newWidth + 16, height: newHeight + 70 + 16,
                         minWidth: minWidth, minHeight: minHeight + 70, maxWidth: maxWidth, maxHeight: maxHeight + 65
                     }}>
