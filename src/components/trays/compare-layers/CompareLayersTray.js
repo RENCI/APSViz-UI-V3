@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Stack, Typography, Box, Button, Card, Divider,
-    Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
+import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers } from '@context';
 
 import 'leaflet-side-by-side';
@@ -39,15 +38,10 @@ const getGroupList = (layers) => {
 export const CompareLayersTray = () => {
     // get the context for the compare layers view
     const {
-        // showCompareLayers,
-        // toggleCompareLayersView,
         map,
         defaultModelLayers,
         layerTypes
     } = useLayers();
-
-    // declare some state for the compare layers switch
-    //const [showCompareLayers, setShowCompareLayers] = useState(false);
 
     // default for the pane compare name
     const defaultSelected = 'Not Selected';
@@ -135,39 +129,25 @@ export const CompareLayersTray = () => {
      * @param event
      */
     const compareLayers = () => {
-        // if we can compare
+        // if we have legit layers to compare
         if (leftPaneName !== defaultSelected && rightPaneName !== defaultSelected) {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // set the swipe mode comparison options
-            // const options = {
-                //button: document.getElementById("compare-layers"),
-                // position: 'topright',
-                // thumbSize: 5,
-                // padding: 100,
-                // noControl: false,
-                // text: {
-                //     title: 'Enable Swipe Mode',
-                //     leftLayerSelector: 'Left Layer',
-                //     rightLayerSelector: 'Right Layer',
-                // }
-            // };
+            // clear the compare layers
+            if (addedCompareLayer) {
+                map.removeLayer(addedCompareLayer._leftLayer);
+                map.removeLayer(addedCompareLayer._rightLayer);
+            }
 
-                // clear the compare layers
-                if (addedCompareLayer) {
-                    map.removeLayer(addedCompareLayer._leftLayer);
-                    map.removeLayer(addedCompareLayer._rightLayer);
-                }
-
-            const myLayer1 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: leftPaneName,
                     layers: 'ADCIRC_2024:' + leftPaneName
                 }
             ).addTo(map);
 
-            const myLayer2 = L.tileLayer.wms('https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: rightPaneName,
                     layers: 'ADCIRC_2024:' + rightPaneName
@@ -220,16 +200,10 @@ export const CompareLayersTray = () => {
         return layerCards;
     };
 
-    const validateSelections = () => {
-        return ((leftPaneID !== defaultSelected || rightPaneID !== defaultSelected) &&
-                    (leftPaneID === rightPaneID) && (leftPaneID && rightPaneID));
-    };
-
     // render the controls
     return (
         <Fragment>
             <AccordionGroup
-                // variant="soft"
                 sx={{
                     '.MuiAccordionDetails-content': {
                         p: 1,
@@ -238,6 +212,9 @@ export const CompareLayersTray = () => {
                         alignItems: 'center',
                     }
                 }}>
+
+            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
+
             {
                 // loop through the layer groups and put them away
                 groupList
@@ -274,11 +251,13 @@ export const CompareLayersTray = () => {
             }
 
             {
+                // display panel selections
                 ( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) ?
                     <Fragment>
                         <Card>
                             <Stack direction={"column"} gap={ 1 }>
                                 {
+                                    // render the left pane selections
                                     ( leftPaneID !== defaultSelected ) ?
                                         <Fragment>
                                             <Typography sx={{ ml: 1 }} level="body-sm">Left pane:</Typography>
@@ -288,6 +267,7 @@ export const CompareLayersTray = () => {
                                 }
 
                                 {
+                                    // render the right pane selections
                                     ( rightPaneID !== defaultSelected ) ?
                                         <Fragment>
                                             <Typography sx={{ ml: 1 }} level="body-sm">Right pane:</Typography>
@@ -298,6 +278,7 @@ export const CompareLayersTray = () => {
 
                             </Stack>
                             {
+                                // show the compare button if it looks good to go
                                 ( leftPaneID !== defaultSelected && rightPaneID !== defaultSelected && leftPaneID !== rightPaneID ) ?
                                     <Fragment>
                                         <Button size="md" onClick={ compareLayers }>Compare</Button>
@@ -306,8 +287,6 @@ export const CompareLayersTray = () => {
                         </Card>
                     </Fragment>: ''
             }
-
-            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
         </Fragment>
         );
 };
