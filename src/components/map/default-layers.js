@@ -173,11 +173,11 @@ export const DefaultLayers = () => {
         .map((layer, index) => {
             const pieces = layer.id.split('-');
             const type = pieces[pieces.length-1];
-            const opacity = layer.state.opacity;
             if (type === "obs" && obsData !== "") {
                 return (
                     <GeoJSON
                         key={Math.random() + index}
+                        //key={layer.id} for some reason this causes the click on an obs point to retrieve the old data
                         data={obsData}
                         pointToLayer={obsPointToLayer}
                         onEachFeature={onEachObsFeature}
@@ -186,9 +186,8 @@ export const DefaultLayers = () => {
             } else if (type !== "obs") {
                 return (
                     <AdcircRasterLayer
-                        key={Math.random() + index}
+                        key={layer.id}
                         layer={layer}
-                        opacity={opacity}
                     />
                 );
             }

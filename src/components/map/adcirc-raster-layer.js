@@ -4,7 +4,7 @@ import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam } from '@utils/map-utils';
 import { useSettings } from '@context';
 
-export const AdcircRasterLayer = (layer, opacity) => {
+export const AdcircRasterLayer = (layer) => {
     const sldParser = new SldStyleParser();
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
@@ -37,6 +37,12 @@ export const AdcircRasterLayer = (layer, opacity) => {
                     sldParser.writeStyle(geostylerStyle.output)
                     .then((sldStyle) => {
                         setCurrentStyle(sldStyle.output);
+                        // to add intervals - use the following
+                        // it does not work when intervals keyword directly to the default style
+                        // because when that style get written out here, sld parser loses the intervals setting
+                        // const styleIntervals = sldStyle.output.replace('<ColorMap>', '<ColorMap type="intervals" extended="true">');
+                        // setCurrentStyle(styleIntervals);
+
                     });
                 }); 
         }
@@ -55,7 +61,7 @@ export const AdcircRasterLayer = (layer, opacity) => {
             url={gs_wms_url}
             layers={layer.layer.layers}
             params={wmsLayerParams}
-            opacity={opacity}
+            opacity={layer.opacity}
         />
     );
 
