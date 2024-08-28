@@ -3,7 +3,7 @@ import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, Acco
 import { useLayers } from '@context';
 
 import 'leaflet-side-by-side';
-import "leaflet-swipe-mode";
+// import "leaflet-swipe-mode";
 
 /**
  * collect the list of unique layer groups
@@ -79,6 +79,8 @@ export const CompareLayersTray = () => {
         setRightPaneName(defaultSelected);
         setRightPaneID(defaultSelected);
 
+        addedCompareLayer.remove();
+
         // rollup the accordions
         setAccordionIndex(null);
     };
@@ -140,23 +142,24 @@ export const CompareLayersTray = () => {
                 map.removeLayer(addedCompareLayer._rightLayer);
             }
 
-            const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
-                {
-                    name: leftPaneName,
-                    layers: 'ADCIRC_2024:' + leftPaneName
-                }
-            ).addTo(map);
+            // const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            //     {
+            //         name: leftPaneName,
+            //         layers: 'ADCIRC_2024:' + leftPaneName
+            //     }
+            // ).addTo(map);
+            //
+            // const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            //     {
+            //         name: rightPaneName,
+            //         layers: 'ADCIRC_2024:' + rightPaneName
+            //     }
+            // ).addTo(map);
 
-            const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
-                {
-                    name: rightPaneName,
-                    layers: 'ADCIRC_2024:' + rightPaneName
-                }
-            ).addTo(map);
+            // add the selected layers to the map
+            const compareLayer = L.control.sideBySide(map._layers[20], map._layers[81]).addTo(map);
 
-            const compareLayer = L.control.sideBySide(myLayer1, myLayer2).addTo(map);
-
-            // add the new layers
+            // add the handle to the new layers to state so we can remove it later
             setAddedCompareLayer(compareLayer);
         }
     };
