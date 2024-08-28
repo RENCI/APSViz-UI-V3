@@ -17,22 +17,16 @@ export const maxeleStyle = '<?xml version="1.0" encoding="UTF-8"?> \
               </sld:GrayChannel> \
             </sld:ChannelSelection> \
             <sld:ColorMap> \
-              <sld:ColorMapEntry color="#0000FF" quantity="0.00" label="0.00 m"/> \
-              <sld:ColorMapEntry color="#0033FF" quantity="0.20" label="0.20 m"/> \
-              <sld:ColorMapEntry color="#0066FF" quantity="0.40" label="0.40 m"/> \
-              <sld:ColorMapEntry color="#0099FF" quantity="0.60" label="0.60 m"/> \
-              <sld:ColorMapEntry color="#00CCFF" quantity="0.80" label="0.80 m"/> \
-              <sld:ColorMapEntry color="#00FFFF" quantity="1.00" label="1.00 m"/> \
-              <sld:ColorMapEntry color="#33FFCC" quantity="1.20" label="1.20 m"/> \
-              <sld:ColorMapEntry color="#66FF99" quantity="1.40" label="1.40 m"/> \
-              <sld:ColorMapEntry color="#99FF66" quantity="1.60" label="1.60 m"/> \
-              <sld:ColorMapEntry color="#CCFF33" quantity="1.80" label="1.80 m"/> \
-              <sld:ColorMapEntry color="#FFFF00" quantity="2.00" label="2.00 m"/> \
-              <sld:ColorMapEntry color="#FFCC00" quantity="2.20" label="2.20 m"/> \
-              <sld:ColorMapEntry color="#FF9900" quantity="2.40" label="2.40 m"/> \
-              <sld:ColorMapEntry color="#FF6600" quantity="2.60" label="2.60 m"/> \
-              <sld:ColorMapEntry color="#FF3300" quantity="2.80" label="2.80 m"/> \
-              <sld:ColorMapEntry color="#FF0000" quantity="3.00" label="3.00 m"/> \
+              <sld:ColorMapEntry color="#0024E3" quantity="0.00" label="0.00 m"/> \
+                <sld:ColorMapEntry color="#0075D9" quantity="0.33" label="0.33 m"/> \
+                <sld:ColorMapEntry color="#14A988" quantity="0.67" label="0.67 m"/> \
+                <sld:ColorMapEntry color="#1DF553" quantity="1.00" label="1.00 m"/> \
+                <sld:ColorMapEntry color="#6EFE1C" quantity="1.33" label="1.33 m"/> \
+                <sld:ColorMapEntry color="#E7FF04" quantity="1.67" label="1.67 m"/> \
+                <sld:ColorMapEntry color="#FFF200" quantity="2.00" label="2.00 m"/> \
+                <sld:ColorMapEntry color="#FFB300" quantity="2.33" label="2.33 m"/> \
+                <sld:ColorMapEntry color="#FF7000" quantity="2.67" label="2.67 m"/> \
+                <sld:ColorMapEntry color="#FF2E00" quantity="3.00" label="3.00 m"/> \
             </sld:ColorMap> \
             <sld:ContrastEnhancement/> \
           </sld:RasterSymbolizer> \
