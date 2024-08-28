@@ -68,7 +68,7 @@
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
     "geostyler": "^15.0.0",
-    "geostyler-sld-parser": "^6.1.1",
+    "geostyler-sld-parser": "^6.1.2",
     "html-to-image": "^1.11.11",
     "leaflet": "^1.9.4",
     "leaflet-side-by-side": "^2.2.0",
