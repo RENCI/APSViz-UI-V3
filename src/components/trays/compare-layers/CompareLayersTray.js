@@ -58,7 +58,7 @@ export const CompareLayersTray = () => {
     const [accordionIndex, setAccordionIndex] = useState(null);
 
     // used to track the layers added
-    const [addedCompareLayer, setAddedCompareLayer] = useState();
+    const [addedCompareLayer, setAddedCompareLayer] = useState(null);
 
     // get the default model run layers
     const layers = [...defaultModelLayers];
@@ -79,9 +79,13 @@ export const CompareLayersTray = () => {
         setRightPaneName(defaultSelected);
         setRightPaneID(defaultSelected);
 
-        // is there a compare already in view
-        if (addedCompareLayer !== undefined) {
-            // remove the layer selected for comparison
+        // remove the current compare layers if they exist
+        if (addedCompareLayer) {
+            // remove the layers on each pane
+            map.removeLayer(addedCompareLayer._leftLayer);
+            map.removeLayer(addedCompareLayer._rightLayer);
+
+            // remove the side by side layer
             addedCompareLayer.remove();
 
             // reset the compared layers
@@ -143,12 +147,7 @@ export const CompareLayersTray = () => {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // clear the compare layers
-            // if (addedCompareLayer !== undefined) {
-            //     map.removeLayer(addedCompareLayer._leftLayer);
-            //     map.removeLayer(addedCompareLayer._rightLayer);
-            // }
-
+            // demo layer 1 for testing
             const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: leftPaneName,
@@ -156,6 +155,7 @@ export const CompareLayersTray = () => {
                 }
             ).addTo(map);
 
+            // demo layer 2 for testing
             const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: rightPaneName,
@@ -163,21 +163,25 @@ export const CompareLayersTray = () => {
                 }
             ).addTo(map);
 
-            // is there a compare already in view
-            if (addedCompareLayer !== undefined) {
-                // remove the layer selected for comparison
+            // remove the current compare layers if they exist
+            if (addedCompareLayer) {
+                // remove the layers on each pane
+                map.removeLayer(addedCompareLayer._leftLayer);
+                map.removeLayer(addedCompareLayer._rightLayer);
+
+                // remove the side by side layer
                 addedCompareLayer.remove();
 
                 // reset the compared layers
                 setAddedCompareLayer(null);
             }
 
-            const baseMap = map._layers[20];
+            // const baseMap = map._layers[20];
             // const myLayer1 = map._layers[81];
             // const myLayer2 = map._layers[142];
 
             // add the selected layers to the map
-            const compareLayer = L.control.sideBySide([baseMap, myLayer1], myLayer2).addTo(map);
+            const compareLayer = L.control.sideBySide(myLayer1, myLayer2).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
             setAddedCompareLayer(compareLayer);
