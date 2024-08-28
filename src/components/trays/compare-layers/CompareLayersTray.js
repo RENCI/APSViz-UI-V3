@@ -60,7 +60,7 @@ export const CompareLayersTray = () => {
     // used to track the layers added
     const [addedCompareLayer, setAddedCompareLayer] = useState();
 
-    // get the default layers
+    // get the default model run layers
     const layers = [...defaultModelLayers];
 
     // get the unique groups in the selected model runs
