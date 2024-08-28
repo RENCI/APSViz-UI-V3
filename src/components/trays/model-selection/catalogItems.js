@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox } from '@mui/joy';
+import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox, Typography } from '@mui/joy';
 import PropTypes from 'prop-types';
 import { useLayers } from "@context/map-context";
 
@@ -192,15 +192,21 @@ export default function CatalogItems(data) {
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
                                                         <Checkbox
-                                                            sx={{ m: .5, fontSize: 'sm' }}
+                                                            size="sm"
+                                                            sx={{ m: .5 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
                                                             label={
-                                                                ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
-                                                                numberName + mbr['properties'][numberEle] +
-                                                                ', Type: ' + mbr['properties']['event_type'] +
-                                                                ', Grid: ' + mbr['properties']['grid_type'] +
-                                                                ((mbr['properties']['meteorological_model'] === 'None') ? '' : ', ' +  mbr['properties']['meteorological_model'])
+                                                                <Typography sx={{ fontSize: "xs" }}>
+                                                                    {
+                                                                        // create the label
+                                                                        ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
+                                                                        numberName + mbr['properties'][numberEle] +
+                                                                        ', Type: ' + mbr['properties']['event_type'] +
+                                                                        ', Grid: ' + mbr['properties']['grid_type'] +
+                                                                        ((mbr['properties']['meteorological_model'] === 'None') ? '' : ', ' +  mbr['properties']['meteorological_model'])
+                                                                    }
+                                                                </Typography>
                                                             }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
