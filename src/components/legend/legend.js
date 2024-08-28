@@ -82,15 +82,17 @@ export const MapLegend = () => {
 
     // define the starting size of the card
     const [newWidth, setNewWidth] = useState(60);
-    const [newHeight, setNewHeight] = useState(230);
+    const [newHeight, setNewHeight] = useState(400);
 
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = useRef(null);
 
-    // declare the mins/maxes for the dialog content area
+    // declare the width min/max for the legend card
     const minWidth = 40;
-    const minHeight = 240;
     const maxWidth = 110;
+
+    // declare the height min/max for the legend card
+    const minHeight = 250;
     const maxHeight = 600;
 
     return (
@@ -123,8 +125,14 @@ export const MapLegend = () => {
                         zIndex: 410,
                         borderRadius: 'sm',
                         visibility: legendVisibilty,
-                        width: newWidth + 16, height: newHeight + 70 + 16,
-                        minWidth: minWidth, minHeight: minHeight + 70, maxWidth: maxWidth, maxHeight: maxHeight + 65
+
+                        width: newWidth + 16,
+                        minWidth: minWidth,
+                        maxWidth: maxWidth,
+
+                        height: newHeight + 50 + 16,
+                        minHeight: minHeight + 60,
+                        maxHeight: maxHeight + 65
                     }}>
                         <Stack
                             direction="column"
