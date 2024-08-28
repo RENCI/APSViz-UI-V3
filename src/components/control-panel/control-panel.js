@@ -174,12 +174,12 @@ export const ControlPanel = () => {
 
   // useQuery function
   const setNewLayers = async() => {
-      // create the authorization header
-        const requestOptions = {
-            method: 'GET',
-            headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }` },
-            params: filters
-        };
+    // create the authorization header
+    const requestOptions = {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }` },
+        params: filters
+    };
 
     // retrieve the set of layers for the new cycle
     const { isError, data, error } = await axios.get(data_url, requestOptions);
@@ -274,7 +274,10 @@ export const ControlPanel = () => {
                         "event_type": eventType,
                         "storm_name": stormName,
                         "cycle": runCycle,
-                        "run_date": runDate
+                        "run_date": runDate,
+                        // force useQuery filters to update
+                        // any duplication will be caught in parseAndAddLayers
+                        "force_update": Date.now(),
     };
 
     setFilters(newFilters);
@@ -298,7 +301,10 @@ export const ControlPanel = () => {
                         "event_type": eventType,
                         "storm_name": stormName,
                         "advisory_number": runAdvisory,
-                        "grid_type": runGrid
+                        "grid_type": runGrid,
+                        // force useQuery filters to update
+                        // any duplication will be caught in parseAndAddLayers
+                        "force_update": Date.now(),
     };
 
     setFilters(newFilters);
