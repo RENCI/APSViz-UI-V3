@@ -79,7 +79,14 @@ export const CompareLayersTray = () => {
         setRightPaneName(defaultSelected);
         setRightPaneID(defaultSelected);
 
-        addedCompareLayer.remove();
+        // is there a compare already in view
+        if (addedCompareLayer !== undefined) {
+            // remove the layer selected for comparison
+            addedCompareLayer.remove();
+
+            // reset the compared layers
+            setAddedCompareLayer(null);
+        }
 
         // rollup the accordions
         setAccordionIndex(null);
@@ -137,27 +144,40 @@ export const CompareLayersTray = () => {
             const L = window.L;
 
             // clear the compare layers
-            if (addedCompareLayer) {
-                map.removeLayer(addedCompareLayer._leftLayer);
-                map.removeLayer(addedCompareLayer._rightLayer);
+            // if (addedCompareLayer !== undefined) {
+            //     map.removeLayer(addedCompareLayer._leftLayer);
+            //     map.removeLayer(addedCompareLayer._rightLayer);
+            // }
+
+            const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+                {
+                    name: leftPaneName,
+                    layers: 'ADCIRC_2024:' + leftPaneName
+                }
+            ).addTo(map);
+
+            const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+                {
+                    name: rightPaneName,
+                    layers: 'ADCIRC_2024:' + rightPaneName
+                }
+            ).addTo(map);
+
+            // is there a compare already in view
+            if (addedCompareLayer !== undefined) {
+                // remove the layer selected for comparison
+                addedCompareLayer.remove();
+
+                // reset the compared layers
+                setAddedCompareLayer(null);
             }
 
-            // const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
-            //     {
-            //         name: leftPaneName,
-            //         layers: 'ADCIRC_2024:' + leftPaneName
-            //     }
-            // ).addTo(map);
-            //
-            // const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
-            //     {
-            //         name: rightPaneName,
-            //         layers: 'ADCIRC_2024:' + rightPaneName
-            //     }
-            // ).addTo(map);
+            const baseMap = map._layers[20];
+            // const myLayer1 = map._layers[81];
+            // const myLayer2 = map._layers[142];
 
             // add the selected layers to the map
-            const compareLayer = L.control.sideBySide(map._layers[20], map._layers[81]).addTo(map);
+            const compareLayer = L.control.sideBySide([baseMap, myLayer1], myLayer2).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
             setAddedCompareLayer(compareLayer);
