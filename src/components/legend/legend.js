@@ -82,14 +82,14 @@ export const MapLegend = () => {
 
     // define the starting size of the card
     const [newWidth, setNewWidth] = useState(60);
-    const [newHeight, setNewHeight] = useState(400);
+    const [newHeight, setNewHeight] = useState(230);
 
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = useRef(null);
 
     // declare the mins/maxes for the dialog content area
     const minWidth = 40;
-    const minHeight = 400;
+    const minHeight = 240;
     const maxWidth = 110;
     const maxHeight = 600;
 
@@ -128,11 +128,11 @@ export const MapLegend = () => {
                     }}>
                         <Stack
                             direction="column"
-                            gap={ 1 }
-                            p={ 2 }
+                            gap={ 2 }
+                            p={ 1 }
                             alignItems="center"
                         >
-                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: 0, p: 0, height: 40, cursor: 'move' }}>
+                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: -1, p: 0, height: 40, cursor: 'move' }}>
                                 <LegendIcon size="lg" color="primary" />
                             </Avatar>
 
