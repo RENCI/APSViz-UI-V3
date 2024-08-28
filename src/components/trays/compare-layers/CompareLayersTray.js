@@ -1,9 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers } from '@context';
-
 import 'leaflet-side-by-side';
-// import "leaflet-swipe-mode";
 
 /**
  * collect the list of unique layer groups
@@ -82,8 +80,8 @@ export const CompareLayersTray = () => {
         // remove the current compare layers if they exist
         if (addedCompareLayer) {
             // remove the layers on each pane
-            map.removeLayer(addedCompareLayer._leftLayer);
-            map.removeLayer(addedCompareLayer._rightLayer);
+            map.removeLayer(addedCompareLayer['_leftLayer']);
+            map.removeLayer(addedCompareLayer['_rightLayer']);
 
             // remove the side by side layer
             addedCompareLayer.remove();
@@ -147,16 +145,16 @@ export const CompareLayersTray = () => {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // demo layer 1 for testing
-            const myLayer1 = L.tileLayer.wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            // demo layer for testing
+            const myLayer1 = L['tileLayer'].wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: leftPaneName,
                     layers: 'ADCIRC_2024:' + leftPaneName
                 }
             ).addTo(map);
 
-            // demo layer 2 for testing
-            const myLayer2 = L.tileLayer.wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            // demo layer for testing
+            const myLayer2 = L['tileLayer'].wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: rightPaneName,
                     layers: 'ADCIRC_2024:' + rightPaneName
@@ -166,8 +164,8 @@ export const CompareLayersTray = () => {
             // remove the current compare layers if they exist
             if (addedCompareLayer) {
                 // remove the layers on each pane
-                map.removeLayer(addedCompareLayer._leftLayer);
-                map.removeLayer(addedCompareLayer._rightLayer);
+                map.removeLayer(addedCompareLayer['_leftLayer']);
+                map.removeLayer(addedCompareLayer['_rightLayer']);
 
                 // remove the side by side layer
                 addedCompareLayer.remove();
@@ -176,15 +174,15 @@ export const CompareLayersTray = () => {
                 setAddedCompareLayer(null);
             }
 
-            // const baseMap = map._layers[20];
+            // const baseMap = map['_layers'][20];
             // const myLayer1 = map._layers[81];
-            // const myLayer2 = map._layers[142];
+            // const myLayer2 = map['_layers'][142];
 
             // add the selected layers to the map
-            const compareLayer = L.control.sideBySide(myLayer1, myLayer2).addTo(map);
+            const compareLayers = L.control.sideBySide(myLayer1, myLayer2).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
-            setAddedCompareLayer(compareLayer);
+            setAddedCompareLayer(compareLayers);
         }
     };
 
