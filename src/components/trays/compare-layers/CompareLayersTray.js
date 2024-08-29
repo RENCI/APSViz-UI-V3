@@ -146,7 +146,7 @@ export const CompareLayersTray = () => {
             const L = window.L;
 
             // layer for testing
-            const myLayer1 = L['tileLayer'].wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            const myLayer1 = L['tileLayer'].wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
                 {
                     name: leftPaneName,
                     layers: 'ADCIRC_2024:' + leftPaneName
@@ -154,7 +154,7 @@ export const CompareLayersTray = () => {
             ).addTo(map);
 
             // layer for testing
-            const myLayer2 = L['tileLayer'].wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
+            const myLayer2 = L['tileLayer'].wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                 {
                     name: rightPaneName,
                     layers: 'ADCIRC_2024:' + rightPaneName
@@ -174,12 +174,8 @@ export const CompareLayersTray = () => {
                 setAddedCompareLayer(null);
             }
 
-            // const baseMap = map['_layers'][20];
-            // const myLayer1 = map._layers[81];
-            // const myLayer2 = map['_layers'][142];
-
             // add the selected layers to the map
-            const compareLayers = L.control.sideBySide(myLayer1, myLayer2).addTo(map);
+            const compareLayers = L.control.sideBySide([map._layers['20'], myLayer1], myLayer2).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
             setAddedCompareLayer(compareLayers);
