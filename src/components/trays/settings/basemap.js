@@ -62,9 +62,14 @@ export function BaseMaps() {
       <IconButton aria-describedby={id} variant="outlined"  size="lg" onClick={handleClick}>
         <Map />
       </IconButton>
-      <Typography level="title-md">
-          Basemaps
+      <Stack direction={'column'}>
+        <Typography level="title-md">
+              Base map
         </Typography>
+        <Typography level="body-md" variant="soft" color="primary">
+              { baseMap ? baseMap.title : '' }
+        </Typography>
+      </Stack>
       <Popover
         id={id}
         open={open}
