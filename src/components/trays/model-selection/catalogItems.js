@@ -204,6 +204,7 @@ export default function CatalogItems(data) {
                                                                         numberName + mbr['properties'][numberEle] +
                                                                         ', Type: ' + mbr['properties']['event_type'] +
                                                                         ', Grid: ' + mbr['properties']['grid_type'] +
+                                                                        ', Instance: ' + mbr['properties']['instance_name'] +
                                                                         ((mbr['properties']['meteorological_model'] === 'None') ? '' : ', ' +  mbr['properties']['meteorological_model'])
                                                                     }
                                                                 </Typography>
