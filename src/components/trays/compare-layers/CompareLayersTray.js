@@ -145,7 +145,7 @@ export const CompareLayersTray = () => {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // demo layer for testing
+            // layer for testing
             const myLayer1 = L['tileLayer'].wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: leftPaneName,
@@ -153,7 +153,7 @@ export const CompareLayersTray = () => {
                 }
             ).addTo(map);
 
-            // demo layer for testing
+            // layer for testing
             const myLayer2 = L['tileLayer'].wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', //https://apsviz-geoserver-dev.apps.renci.org/geoserver/wms',
                 {
                     name: rightPaneName,
