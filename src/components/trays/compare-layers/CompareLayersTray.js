@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers } from '@context';
 import 'leaflet-side-by-side';
+import { getNamespacedEnvParam } from "@utils/map-utils";
 
 /**
  * collect the list of unique layer groups
@@ -56,13 +57,32 @@ export const CompareLayersTray = () => {
     const [accordionIndex, setAccordionIndex] = useState(null);
 
     // used to track the layers added
-    const [addedCompareLayer, setAddedCompareLayer] = useState(null);
+    const [sideBySideLayer, setSideBySideLayer] = useState(null);
 
     // get the default model run layers
     const layers = [...defaultModelLayers];
 
     // get the unique groups in the selected model runs
     const groupList = getGroupList(layers);
+
+    /**
+     * removes the side by side layers
+     *
+     */
+    const removeSideBySideLayers = () => {
+        // remove the current compare layers if they exist
+        if (sideBySideLayer) {
+            // remove the layers on each pane
+            map.removeLayer(sideBySideLayer['_leftLayer']);
+            map.removeLayer(sideBySideLayer['_rightLayer']);
+
+            // remove the side by side layer
+            sideBySideLayer.remove();
+
+            // reset the compared layers
+            setSideBySideLayer(null);
+        }
+    };
 
     /**
      * clears any captured compare selection data
@@ -77,18 +97,8 @@ export const CompareLayersTray = () => {
         setRightPaneName(defaultSelected);
         setRightPaneID(defaultSelected);
 
-        // remove the current compare layers if they exist
-        if (addedCompareLayer) {
-            // remove the layers on each pane
-            map.removeLayer(addedCompareLayer['_leftLayer']);
-            map.removeLayer(addedCompareLayer['_rightLayer']);
-
-            // remove the side by side layer
-            addedCompareLayer.remove();
-
-            // reset the compared layers
-            setAddedCompareLayer(null);
-        }
+        // remove the side by side layers
+        removeSideBySideLayers();
 
         // rollup the accordions
         setAccordionIndex(null);
@@ -101,7 +111,7 @@ export const CompareLayersTray = () => {
      * @param paneID
      * @param paneName
      */
-    const setPaneInfo = (paneType, paneID, paneName) => {
+    const setPaneInfo = (paneType, paneName, paneID) => {
         // save the ID and name of the left pane layer selection
         if (paneType === 'left') {
             // set the layer name
@@ -145,40 +155,46 @@ export const CompareLayersTray = () => {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // layer for testing
-            const myLayer1 = L['tileLayer'].wms('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+            // remove the side by side layers
+            removeSideBySideLayers();
+
+            // get the URL to the geoserver
+            const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
+            const gs_wms_url = gs_wfs_url + 'wms';
+
+            // get the left layer properties
+            const leftLayerProps = layers.filter(item => item.id === leftPaneID);
+
+            // create a left pane layer
+            const selectedLeftLayer = L.tileLayer.wms(gs_wms_url,
                 {
+                    format: 'image/png',
+                    transparent: true,
                     name: leftPaneName,
-                    layers: 'ADCIRC_2024:' + leftPaneName
+                    layers: leftLayerProps[0].layers,
+                    sld_body: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:se="http://www.opengis.net/se"><NamedLayer><Name>' + leftLayerProps[0].layers + '</Name><UserStyle><Name>' + leftLayerProps[0].layers + '</Name><Title>' + leftLayerProps[0].layers + '</Title><FeatureTypeStyle><Rule><RasterSymbolizer><ColorMap><ColorMapEntry color="#30123B" quantity="0" label="0.0 m"/><ColorMapEntry color="#3D3790" quantity="1" label="1.0 m"/><ColorMapEntry color="#455ACD" quantity="2" label="2.0 m"/><ColorMapEntry color="#467BF3" quantity="3" label="3.0 m"/><ColorMapEntry color="#3E9BFF" quantity="4" label="4.0 m"/><ColorMapEntry color="#28BBEC" quantity="5" label="5.0 m"/><ColorMapEntry color="#18D7CC" quantity="6" label="6.0 m"/><ColorMapEntry color="#21EBAC" quantity="7" label="7.0 m"/><ColorMapEntry color="#46F884" quantity="8" label="8.0 m"/><ColorMapEntry color="#78FF5A" quantity="9" label="9.0 m"/><ColorMapEntry color="#A3FD3C" quantity="10" label="10.0 m"/><ColorMapEntry color="#C4F133" quantity="11" label="11.0 m"/><ColorMapEntry color="#E2DD37" quantity="12" label="12.0 m"/><ColorMapEntry color="#F6C33A" quantity="13" label="13.0 m"/><ColorMapEntry color="#FEA531" quantity="14" label="14.0 m"/><ColorMapEntry color="#FC8021" quantity="15" label="15.0 m"/><ColorMapEntry color="#F05B11" quantity="16" label="16.0 m"/><ColorMapEntry color="#DE3D08" quantity="17" label="17.0 m"/><ColorMapEntry color="#C42502" quantity="18" label="18.0 m"/><ColorMapEntry color="#A31201" quantity="19" label="19.0 m"/><ColorMapEntry color="#7A0402" quantity="20" label="20.0 m"/></ColorMap><ChannelSelection><GrayChannel><SourceChannelName>1</SourceChannelName><ContrastEnhancement><GammaValue>1</GammaValue></ContrastEnhancement></GrayChannel></ChannelSelection></RasterSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>'
                 }
             ).addTo(map);
 
-            // layer for testing
-            const myLayer2 = L['tileLayer'].wms('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            // get the right layer properties
+            const rightLayerProps = layers.filter(item => item.id === rightPaneID);
+
+            // create the right pane layer
+            const selectedRightLayer = L.tileLayer.wms(gs_wms_url,
                 {
+                    format: 'image/png',
+                    transparent: true,
                     name: rightPaneName,
-                    layers: 'ADCIRC_2024:' + rightPaneName
+                    layers: rightLayerProps[0].layers,
+                    sld_body: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:se="http://www.opengis.net/se"><NamedLayer><Name>' + rightLayerProps[0].layers + '</Name><UserStyle><Name>' + leftLayerProps[0].layers + '</Name><Title>' + leftLayerProps[0].layers + '</Title><FeatureTypeStyle><Rule><RasterSymbolizer><ColorMap><ColorMapEntry color="#30123B" quantity="0" label="0.0 m"/><ColorMapEntry color="#3D3790" quantity="1" label="1.0 m"/><ColorMapEntry color="#455ACD" quantity="2" label="2.0 m"/><ColorMapEntry color="#467BF3" quantity="3" label="3.0 m"/><ColorMapEntry color="#3E9BFF" quantity="4" label="4.0 m"/><ColorMapEntry color="#28BBEC" quantity="5" label="5.0 m"/><ColorMapEntry color="#18D7CC" quantity="6" label="6.0 m"/><ColorMapEntry color="#21EBAC" quantity="7" label="7.0 m"/><ColorMapEntry color="#46F884" quantity="8" label="8.0 m"/><ColorMapEntry color="#78FF5A" quantity="9" label="9.0 m"/><ColorMapEntry color="#A3FD3C" quantity="10" label="10.0 m"/><ColorMapEntry color="#C4F133" quantity="11" label="11.0 m"/><ColorMapEntry color="#E2DD37" quantity="12" label="12.0 m"/><ColorMapEntry color="#F6C33A" quantity="13" label="13.0 m"/><ColorMapEntry color="#FEA531" quantity="14" label="14.0 m"/><ColorMapEntry color="#FC8021" quantity="15" label="15.0 m"/><ColorMapEntry color="#F05B11" quantity="16" label="16.0 m"/><ColorMapEntry color="#DE3D08" quantity="17" label="17.0 m"/><ColorMapEntry color="#C42502" quantity="18" label="18.0 m"/><ColorMapEntry color="#A31201" quantity="19" label="19.0 m"/><ColorMapEntry color="#7A0402" quantity="20" label="20.0 m"/></ColorMap><ChannelSelection><GrayChannel><SourceChannelName>1</SourceChannelName><ContrastEnhancement><GammaValue>1</GammaValue></ContrastEnhancement></GrayChannel></ChannelSelection></RasterSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>'
                 }
             ).addTo(map);
-
-            // remove the current compare layers if they exist
-            if (addedCompareLayer) {
-                // remove the layers on each pane
-                map.removeLayer(addedCompareLayer['_leftLayer']);
-                map.removeLayer(addedCompareLayer['_rightLayer']);
-
-                // remove the side by side layer
-                addedCompareLayer.remove();
-
-                // reset the compared layers
-                setAddedCompareLayer(null);
-            }
 
             // add the selected layers to the map
-            const compareLayers = L.control.sideBySide([map._layers['20'], myLayer1], myLayer2).addTo(map);
+            const sideBySideLayer = L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
-            setAddedCompareLayer(compareLayers);
+            setSideBySideLayer(sideBySideLayer);
         }
     };
 
@@ -197,6 +213,8 @@ export const CompareLayersTray = () => {
         layers
             // capture the layers for this group, do not return the observation layer
             .filter(layer => (layer['group'] === group && layer.properties['product_type'] !== 'obs'))
+            // sort by the product name
+            .sort((a, b) => a['properties']['product_name'] < b['properties']['product_name'] ? -1 : 1)
             // at this point we have the distinct runs
             .map((layer, idx) => {
                 layerCards.push(
@@ -208,10 +226,10 @@ export const CompareLayersTray = () => {
                          <Stack direction="row" gap={ 4 } alignItems="center">
                              <Button size="md" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0, color: (layer.id === leftPaneID) ? 'success' : '' }}
-                                     onClick={ () => setPaneInfo('left', layer.id, layer.properties['product_name']) }>Left pane</Button>
+                                     onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
                              <Button size="md" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
-                                     onClick={ () => setPaneInfo('right', layer.id, layer.properties['product_name']) }>Right pane</Button>
+                                     onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
                          </Stack>
                      </Card>
                 );
