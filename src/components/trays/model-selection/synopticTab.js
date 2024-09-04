@@ -27,7 +27,7 @@ export const SynopticTabForm = () => {
     // init the data urls
     const rootUrl = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
     const basePulldownUrl = `get_pulldown_data?met_class=synoptic${ getBrandingHandler() }`;
-    const baseDataUrl = `get_ui_data_secure?limit=14&met_class=synoptic&use_v3_sp=true${ getBrandingHandler() }`;
+    const baseDataUrl = `get_ui_data_secure?met_class=synoptic&use_v3_sp=true${ getBrandingHandler() }`;
     const [finalDataUrl, setFinalDataUrl] = useState(rootUrl + basePulldownUrl);
 
     // storage for received data to render pulldowns
@@ -68,7 +68,7 @@ export const SynopticTabForm = () => {
             ((synopticDate) ? '&run_date=' + synopticDate.toISOString() : '') +
             ((synopticCycle) ? '&cycle=' + synopticCycle : '') +
             ((synopticGrid) ? '&grid_type=' + synopticGrid : '') +
-            ((synopticInstance) ? '&instance=' + synopticInstance : '');
+            ((synopticInstance) ? '&instance_name=' + synopticInstance : '');
 
         // set different limits on the data returned if no filter params were passed
         if (queryString === '') {

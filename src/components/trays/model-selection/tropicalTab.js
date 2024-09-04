@@ -43,7 +43,7 @@ export const TropicalTabForm = () => {
             ((tropicalStorm) ? '&storm_name=' + tropicalStorm : '') +
             ((tropicalAdvisory) ? '&advisory_number=' + tropicalAdvisory : '') +
             ((tropicalGrid) ? '&grid_type=' + tropicalGrid : '') +
-            ((tropicalInstance) ? '&instance=' + tropicalInstance : '');
+            ((tropicalInstance) ? '&instance_name=' + tropicalInstance : '');
 
         // set different limits on the data returned if no filter params were passed (in days)
         if (queryString === '') {
