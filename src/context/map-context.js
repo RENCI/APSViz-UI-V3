@@ -195,10 +195,22 @@ export const LayersProvider = ({ children }) => {
         layer.state = newLayerDefaultState(layer, newLayers[0].group);
     });
 
-    // remove all observations when there is a model run removal
+    // remove all observation dialogs when there is a model run removal
     removeObservations();
 
     setDefaultModelLayers(newLayers);
+  };
+
+  /**
+   * removes all selected model runs
+   */
+  const removeAllModelRuns = () => {
+
+    // remove all observation dialogs when removing all model runs
+    removeObservations();
+
+    // reset the default layers array
+    setDefaultModelLayers([]);
   };
 
   const newLayerDefaultState = (layer, group) => {
@@ -246,6 +258,7 @@ export const LayersProvider = ({ children }) => {
         swapLayers,
         removeLayer,
         removeModelRun,
+        removeAllModelRuns,
         removeObservations,
         layerTypes,
         baseMap,
