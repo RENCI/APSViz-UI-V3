@@ -107,8 +107,6 @@ export default function CatalogItems(data) {
     /**
      * adds or updates the visibility of the layer on the map surface.
      *
-     * presumably this will have to take the met class into consideration.
-     *
      * @param layer
      * @param group
      * @returns {{ visible: boolean, opacity: 1.0 }}
