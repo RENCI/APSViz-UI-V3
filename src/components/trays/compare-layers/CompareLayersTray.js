@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup, Checkbox } from '@mui/joy';
+import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils/map-utils";
 import { SwapVerticalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
