@@ -39,9 +39,11 @@ export const CompareLayersTray = () => {
     const {
         map,
         defaultModelLayers,
+        setDefaultModelLayers,
         layerTypes,
         setSideBySideLayers,
-        removeSideBySideLayers
+        removeSideBySideLayers,
+        getAllLayersInvisible
     } = useLayers();
 
     const {
@@ -135,7 +137,7 @@ export const CompareLayersTray = () => {
      */
     const getSLDStyleInfo = ( product_type ) => {
         // init a return value
-        let ret_val = '';
+        let ret_val;
 
         // get the SLD style by the type of product
         switch( product_type ) {
@@ -170,6 +172,9 @@ export const CompareLayersTray = () => {
 
             // remove the side by side layers if any already exist
             removeSideBySideLayers();
+
+            // hide all layers
+            setDefaultModelLayers(getAllLayersInvisible());
 
             // get the URL to the geoserver
             const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
@@ -338,11 +343,12 @@ export const CompareLayersTray = () => {
                                         <Button size="md" onClick={ compareLayers }>Compare</Button>
                                     </Fragment> : ''
                             }
+
+                            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
                         </Card>
                     </Fragment>: ''
             }
 
-            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
         </Fragment>
         );
 };
