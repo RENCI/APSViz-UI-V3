@@ -164,16 +164,26 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const getAllLayersInvisible = () => {
+  const getAllLayersInvisible = ( omitObservations ) => {
     const currentLayers = [...defaultModelLayers];
 
     return currentLayers
       .map((layer) => {
-        const opacity = layer.state.opacity;
-        return {
-          ...layer,
-          state: {visible: false, opacity: opacity}
-        };
+          // take the appropriate action if we arent altering observations
+          if (omitObservations === true && layer.properties['product_name'] === 'Observations') {
+              return {
+                  ...layer
+              };
+          }
+          // else hide the layer
+          else {
+            const opacity = layer.state.opacity;
+
+            return {
+                ...layer,
+                state: {visible: false, opacity: opacity}
+            };
+          }
       });
   };
 
