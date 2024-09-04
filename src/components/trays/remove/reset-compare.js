@@ -18,7 +18,7 @@ export const ResetCompare = () => {
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeSideBySideLayers()}>Reset Compare mode</Button>
+            <Button color="primary" onClick={() => removeSideBySideLayers()}>Remove compare mode</Button>
         </Fragment>
   );
 };
