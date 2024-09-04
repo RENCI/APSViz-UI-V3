@@ -15,7 +15,11 @@ CatalogItems.propTypes = { data: PropTypes.any };
  */
 export default function CatalogItems(data) {
     // get the layers in state
-    const { removeObservations, defaultModelLayers, setDefaultModelLayers } = useLayers();
+    const {
+        removeObservations,
+        defaultModelLayers,
+        setDefaultModelLayers,
+        removeSideBySideLayers } = useLayers();
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
@@ -41,6 +45,9 @@ export default function CatalogItems(data) {
 
         // remove all selected observations
         removeObservations();
+
+        // stop compare mode if this happens
+        removeSideBySideLayers();
     };
 
     /**
