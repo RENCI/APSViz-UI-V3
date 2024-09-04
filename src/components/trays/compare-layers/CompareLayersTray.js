@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
+import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup, Checkbox } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils/map-utils";
+import { SwapVerticalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
 import 'leaflet-side-by-side';
 
 /**
@@ -10,7 +11,7 @@ import 'leaflet-side-by-side';
  * @param layers
  * @returns {*[]}
  */
-const getGroupList = (layers) => {
+const getModelRunGroupList = (layers) => {
     // init the group list
     const groupList = [];
 
@@ -68,7 +69,7 @@ export const CompareLayersTray = () => {
     const layers = [...defaultModelLayers];
 
     // get the unique groups in the selected model runs
-    const groupList = getGroupList(layers);
+    const groupList = getModelRunGroupList(layers);
 
     /**
      * clears any captured compare selection data and layers
@@ -114,6 +115,24 @@ export const CompareLayersTray = () => {
             // set the layer id
             setRightPaneID(paneID);
         }
+    };
+
+    /**
+     * swaps the selected layer position in the compare panes
+     *
+     */
+    const swapPanes = () => {
+        // get the original left pane data
+        const origLeftPaneType = leftPaneType;
+        const origLeftPaneID = leftPaneID;
+
+        // clear the left layer type/ID
+        setLeftPaneType(rightPaneType);
+        setLeftPaneID(rightPaneID);
+
+        // clear the right pane ID/Name
+        setRightPaneType(origLeftPaneType);
+        setRightPaneID(origLeftPaneID);
     };
 
     /**
@@ -173,7 +192,7 @@ export const CompareLayersTray = () => {
             // remove the side by side layers if any already exist
             removeSideBySideLayers();
 
-            // hide all layers
+            // hide all layers except the observations
             setDefaultModelLayers(getAllLayersInvisible());
 
             // get the URL to the geoserver
@@ -247,14 +266,15 @@ export const CompareLayersTray = () => {
                              { getLayerIcon(layer.properties['product_type']) }
                              <Typography level="body-sm">{ layer.properties['product_name'] }</Typography>
                          </Stack>
-                         <Stack direction="row" gap={ 4 } alignItems="center">
+
+                         <Box textAlign="center">
                              <Button size="md" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
-                                     sx={{ m: 0 }}
+                                     sx={{ mr: 4 }}
                                      onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
                              <Button size="md" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
                                      onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
-                         </Stack>
+                         </Box>
                      </Card>
                 );
             });
@@ -317,34 +337,35 @@ export const CompareLayersTray = () => {
                             <Stack direction={"column"} gap={ 1 }>
                                 {
                                     // render the left pane selections
-                                    ( leftPaneID !== defaultSelected ) ?
-                                        <Fragment>
-                                            <Typography sx={{ ml: 1 }} level="body-sm">Left pane:</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">Type: { leftPaneType } </Typography>
-                                            <Typography sx={{ ml: 2, mb: 2 }} level="body-sm">ID: { leftPaneID } </Typography>
-                                        </Fragment> : ''
+                                    <Fragment>
+                                        <Typography sx={{ ml: 1 }} level="body-sm">Left pane:</Typography>
+                                        <Typography sx={{ ml: 2 }} level="body-sm">Type: { leftPaneType } </Typography>
+                                        <Typography sx={{ ml: 2, mb: 2 }} level="body-sm">ID: { leftPaneID } </Typography>
+                                    </Fragment>
                                 }
+
+                                <Box textAlign='center'>
+                                    <Button size="md" color="success" sx={{ mt: 0, mb: 1 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
+                                </Box>
 
                                 {
-                                    // render the right pane selections
-                                    ( rightPaneID !== defaultSelected ) ?
-                                        <Fragment>
-                                            <Typography sx={{ ml: 1 }} level="body-sm">Right pane:</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">Type: { rightPaneType }</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">ID: { rightPaneID }</Typography>
-                                        </Fragment> : ''
-                                }
-
-                            </Stack>
-                            {
-                                // show the compare button if it looks good to go
-                                ( leftPaneID !== defaultSelected && rightPaneID !== defaultSelected && leftPaneID !== rightPaneID ) ?
                                     <Fragment>
-                                        <Button size="md" onClick={ compareLayers }>Compare</Button>
-                                    </Fragment> : ''
-                            }
+                                        <Typography sx={{ ml: 1 }} level="body-sm">Right pane:</Typography>
+                                        <Typography sx={{ ml: 2 }} level="body-sm">Type: { rightPaneType }</Typography>
+                                        <Typography sx={{ ml: 2 }} level="body-sm">ID: { rightPaneID }</Typography>
+                                    </Fragment>
+                                }
+                            </Stack>
 
-                            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
+                            <Box textAlign="center">
+                                <Button size="md" sx={{ mr: 3 }} onClick={ clearPaneInfo }>Reset</Button>
+
+                                {
+                                    // show the compare button if it looks good to go
+                                    ( leftPaneID !== defaultSelected && rightPaneID !== defaultSelected && leftPaneID !== rightPaneID ) ?
+                                        <Button size="md" onClick={ compareLayers }>Compare</Button> : ''
+                                }
+                            </Box>
                         </Card>
                     </Fragment>: ''
             }
