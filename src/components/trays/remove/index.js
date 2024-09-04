@@ -6,6 +6,7 @@ import { Delete as RemoveIcon} from '@mui/icons-material';
 import { RemoveAllObservations } from "./remove-observations";
 import { RemoveModels } from "./remove-models";
 import { ResetStyles } from "./reset-styles";
+import {ResetCompare} from "@components/trays/remove/reset-compare";
 
 // get an icon for the tray
 export const icon = <RemoveIcon />;
@@ -23,5 +24,6 @@ export const trayContents = () => (
             <RemoveAllObservations />
             <RemoveModels />
             <ResetStyles />
+            <ResetCompare />
       </Stack>
     );
