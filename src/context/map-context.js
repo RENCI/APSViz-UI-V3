@@ -68,6 +68,18 @@ export const LayersProvider = ({ children }) => {
 
           // reset the compared layers
           setSideBySideLayers(null);
+
+          // get the topmost layer group
+          const layerGroup = defaultModelLayers[0].group;
+
+          // reset the visible layer states for all layers in the layer tray.
+          [...defaultModelLayers].forEach((layer) => {
+            // perform the visible state logic
+            layer.state = newLayerDefaultState(layer, layerGroup);
+          });
+
+          // save the items to state so they can be rendered
+          setDefaultModelLayers([...defaultModelLayers]);
       }
   };
 
