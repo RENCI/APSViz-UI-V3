@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
-import { useLayers } from '@context';
+import {useLayers, useSettings} from '@context';
 import 'leaflet-side-by-side';
 import { getNamespacedEnvParam } from "@utils/map-utils";
 
@@ -39,15 +39,21 @@ export const CompareLayersTray = () => {
     const {
         map,
         defaultModelLayers,
-        layerTypes
+        layerTypes,
+        setSideBySideLayers,
+        removeSideBySideLayers
     } = useLayers();
+
+    const {
+        mapStyle,
+    } = useSettings();
 
     // default for the pane compare name
     const defaultSelected = 'Not Selected';
 
     // create some state for the left/right name selections
-    const [leftPaneName, setLeftPaneName] = useState(defaultSelected);
-    const [rightPaneName, setRightPaneName] = useState(defaultSelected);
+    const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
+    const [rightPaneType, setRightPaneType] = useState(defaultSelected);
 
     // create some state for the left/right ID selections
     const [leftPaneID, setLeftPaneID] = useState(defaultSelected);
@@ -56,9 +62,6 @@ export const CompareLayersTray = () => {
     // used to collapse other open accordions
     const [accordionIndex, setAccordionIndex] = useState(null);
 
-    // used to track the layers added
-    const [sideBySideLayer, setSideBySideLayer] = useState(null);
-
     // get the default model run layers
     const layers = [...defaultModelLayers];
 
@@ -66,35 +69,16 @@ export const CompareLayersTray = () => {
     const groupList = getGroupList(layers);
 
     /**
-     * removes the side by side layers
-     *
-     */
-    const removeSideBySideLayers = () => {
-        // remove the current compare layers if they exist
-        if (sideBySideLayer) {
-            // remove the layers on each pane
-            map.removeLayer(sideBySideLayer['_leftLayer']);
-            map.removeLayer(sideBySideLayer['_rightLayer']);
-
-            // remove the side by side layer
-            sideBySideLayer.remove();
-
-            // reset the compared layers
-            setSideBySideLayer(null);
-        }
-    };
-
-    /**
-     * clears any captured compare selection data
+     * clears any captured compare selection data and layers
      *
      */
     const clearPaneInfo = () => {
-        // clear the left ID/Name
-        setLeftPaneName(defaultSelected);
+        // clear the left layer type/ID
+        setLeftPaneType(defaultSelected);
         setLeftPaneID(defaultSelected);
 
         // clear the right pane ID/Name
-        setRightPaneName(defaultSelected);
+        setRightPaneType(defaultSelected);
         setRightPaneID(defaultSelected);
 
         // remove the side by side layers
@@ -107,15 +91,15 @@ export const CompareLayersTray = () => {
     /**
      * Save the layer info to state
      *
-     * @param paneType
+     * @param paneSide
      * @param paneID
-     * @param paneName
+     * @param paneType
      */
-    const setPaneInfo = (paneType, paneName, paneID) => {
+    const setPaneInfo = (paneSide, paneType, paneID) => {
         // save the ID and name of the left pane layer selection
-        if (paneType === 'left') {
+        if (paneSide === 'left') {
             // set the layer name
-            setLeftPaneName(paneName);
+            setLeftPaneType(paneType);
 
             // set the layer id
             setLeftPaneID(paneID);
@@ -123,7 +107,7 @@ export const CompareLayersTray = () => {
         // save the ID and name of the right pane layer selection
         else {
             // set the layer name
-            setRightPaneName(paneName);
+            setRightPaneType(paneType);
 
             // set the layer id
             setRightPaneID(paneID);
@@ -145,17 +129,46 @@ export const CompareLayersTray = () => {
     };
 
     /**
+     * gets the default SLD style for this product type
+     *
+     * @param product_type
+     */
+    const getSLDStyleInfo = ( product_type ) => {
+        // init a return value
+        let ret_val = '';
+
+        // get the SLD style by the type of product
+        switch( product_type ) {
+            // max wind speed
+            case ("maxwvel63"):
+                ret_val = mapStyle.maxwvel.current;
+                break;
+            // max significant wave height
+            case ("swan_HS_max63"):
+                ret_val = mapStyle.swan.current;
+                break;
+            // max water levels
+            default:
+                ret_val = mapStyle.maxele.current;
+                break;
+        }
+
+        // return the style or not
+        return ret_val;
+    };
+
+    /**
      *  switch on/off the compare layer view
      *
      * @param event
      */
     const compareLayers = () => {
         // if we have legit layers to compare
-        if (leftPaneName !== defaultSelected && rightPaneName !== defaultSelected) {
+        if (leftPaneType !== defaultSelected && rightPaneType !== defaultSelected) {
             // get a handle to the leaflet component
             const L = window.L;
 
-            // remove the side by side layers
+            // remove the side by side layers if any already exist
             removeSideBySideLayers();
 
             // get the URL to the geoserver
@@ -165,28 +178,34 @@ export const CompareLayersTray = () => {
             // get the left layer properties
             const leftLayerProps = layers.filter(item => item.id === leftPaneID);
 
+            // get the SLD style info for the left pane
+            const leftSldStyle = getSLDStyleInfo(leftLayerProps[0].properties['product_type']);
+
             // create a left pane layer
             const selectedLeftLayer = L.tileLayer.wms(gs_wms_url,
                 {
                     format: 'image/png',
                     transparent: true,
-                    name: leftPaneName,
+                    name: leftPaneType,
                     layers: leftLayerProps[0].layers,
-                    sld_body: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:se="http://www.opengis.net/se"><NamedLayer><Name>' + leftLayerProps[0].layers + '</Name><UserStyle><Name>' + leftLayerProps[0].layers + '</Name><Title>' + leftLayerProps[0].layers + '</Title><FeatureTypeStyle><Rule><RasterSymbolizer><ColorMap><ColorMapEntry color="#30123B" quantity="0" label="0.0 m"/><ColorMapEntry color="#3D3790" quantity="1" label="1.0 m"/><ColorMapEntry color="#455ACD" quantity="2" label="2.0 m"/><ColorMapEntry color="#467BF3" quantity="3" label="3.0 m"/><ColorMapEntry color="#3E9BFF" quantity="4" label="4.0 m"/><ColorMapEntry color="#28BBEC" quantity="5" label="5.0 m"/><ColorMapEntry color="#18D7CC" quantity="6" label="6.0 m"/><ColorMapEntry color="#21EBAC" quantity="7" label="7.0 m"/><ColorMapEntry color="#46F884" quantity="8" label="8.0 m"/><ColorMapEntry color="#78FF5A" quantity="9" label="9.0 m"/><ColorMapEntry color="#A3FD3C" quantity="10" label="10.0 m"/><ColorMapEntry color="#C4F133" quantity="11" label="11.0 m"/><ColorMapEntry color="#E2DD37" quantity="12" label="12.0 m"/><ColorMapEntry color="#F6C33A" quantity="13" label="13.0 m"/><ColorMapEntry color="#FEA531" quantity="14" label="14.0 m"/><ColorMapEntry color="#FC8021" quantity="15" label="15.0 m"/><ColorMapEntry color="#F05B11" quantity="16" label="16.0 m"/><ColorMapEntry color="#DE3D08" quantity="17" label="17.0 m"/><ColorMapEntry color="#C42502" quantity="18" label="18.0 m"/><ColorMapEntry color="#A31201" quantity="19" label="19.0 m"/><ColorMapEntry color="#7A0402" quantity="20" label="20.0 m"/></ColorMap><ChannelSelection><GrayChannel><SourceChannelName>1</SourceChannelName><ContrastEnhancement><GammaValue>1</GammaValue></ContrastEnhancement></GrayChannel></ChannelSelection></RasterSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>'
+                    sld_body: leftSldStyle
                 }
             ).addTo(map);
 
             // get the right layer properties
             const rightLayerProps = layers.filter(item => item.id === rightPaneID);
 
+            // get the SLD style info for the right pane
+            const rightSldStyle = getSLDStyleInfo(rightLayerProps[0].properties['product_type']);
+
             // create the right pane layer
             const selectedRightLayer = L.tileLayer.wms(gs_wms_url,
                 {
                     format: 'image/png',
                     transparent: true,
-                    name: rightPaneName,
+                    name: rightPaneType,
                     layers: rightLayerProps[0].layers,
-                    sld_body: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:se="http://www.opengis.net/se"><NamedLayer><Name>' + rightLayerProps[0].layers + '</Name><UserStyle><Name>' + leftLayerProps[0].layers + '</Name><Title>' + leftLayerProps[0].layers + '</Title><FeatureTypeStyle><Rule><RasterSymbolizer><ColorMap><ColorMapEntry color="#30123B" quantity="0" label="0.0 m"/><ColorMapEntry color="#3D3790" quantity="1" label="1.0 m"/><ColorMapEntry color="#455ACD" quantity="2" label="2.0 m"/><ColorMapEntry color="#467BF3" quantity="3" label="3.0 m"/><ColorMapEntry color="#3E9BFF" quantity="4" label="4.0 m"/><ColorMapEntry color="#28BBEC" quantity="5" label="5.0 m"/><ColorMapEntry color="#18D7CC" quantity="6" label="6.0 m"/><ColorMapEntry color="#21EBAC" quantity="7" label="7.0 m"/><ColorMapEntry color="#46F884" quantity="8" label="8.0 m"/><ColorMapEntry color="#78FF5A" quantity="9" label="9.0 m"/><ColorMapEntry color="#A3FD3C" quantity="10" label="10.0 m"/><ColorMapEntry color="#C4F133" quantity="11" label="11.0 m"/><ColorMapEntry color="#E2DD37" quantity="12" label="12.0 m"/><ColorMapEntry color="#F6C33A" quantity="13" label="13.0 m"/><ColorMapEntry color="#FEA531" quantity="14" label="14.0 m"/><ColorMapEntry color="#FC8021" quantity="15" label="15.0 m"/><ColorMapEntry color="#F05B11" quantity="16" label="16.0 m"/><ColorMapEntry color="#DE3D08" quantity="17" label="17.0 m"/><ColorMapEntry color="#C42502" quantity="18" label="18.0 m"/><ColorMapEntry color="#A31201" quantity="19" label="19.0 m"/><ColorMapEntry color="#7A0402" quantity="20" label="20.0 m"/></ColorMap><ChannelSelection><GrayChannel><SourceChannelName>1</SourceChannelName><ContrastEnhancement><GammaValue>1</GammaValue></ContrastEnhancement></GrayChannel></ChannelSelection></RasterSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>'
+                    sld_body: rightSldStyle
                 }
             ).addTo(map);
 
@@ -194,7 +213,7 @@ export const CompareLayersTray = () => {
             const sideBySideLayer = L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map);
 
             // add the handle to the new layers to state so we can remove it later
-            setSideBySideLayer(sideBySideLayer);
+            setSideBySideLayers(sideBySideLayer);
         }
     };
 
@@ -214,8 +233,8 @@ export const CompareLayersTray = () => {
             // capture the layers for this group, do not return the observation layer
             .filter(layer => (layer['group'] === group && layer.properties['product_type'] !== 'obs'))
             // sort by the product name
-            .sort((a, b) => a['properties']['product_name'] < b['properties']['product_name'] ? -1 : 1)
-            // at this point we have the distinct runs
+            .sort((a, b) => a.properties['product_name'] < b.properties['product_name'] ? -1 : 1)
+            // display the model run layer icons and select buttons
             .map((layer, idx) => {
                 layerCards.push(
                      <Card key={ idx }>
@@ -225,7 +244,7 @@ export const CompareLayersTray = () => {
                          </Stack>
                          <Stack direction="row" gap={ 4 } alignItems="center">
                              <Button size="md" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
-                                     sx={{ m: 0, color: (layer.id === leftPaneID) ? 'success' : '' }}
+                                     sx={{ m: 0 }}
                                      onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
                              <Button size="md" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
@@ -251,11 +270,8 @@ export const CompareLayersTray = () => {
                         alignItems: 'center',
                     }
                 }}>
-
-            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
-
             {
-                // loop through the layer groups and put them away
+                // display the model runs to choose from
                 groupList
                 // filter by the group name
                 .filter((groups, idx, self) =>
@@ -278,19 +294,18 @@ export const CompareLayersTray = () => {
                     </Box>
                 ))
             }
-
             </AccordionGroup>
 
             {
-                // verify that the user has not selected the same item for each pane
+                // validate the user selections, no same layer comparisons
                 (( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) && (leftPaneID === rightPaneID )) ?
                     <Fragment>
-                        <Typography sx={{ ml: 2, color: 'red' }} level="body-sm" >You can not have the same layer in both comparison panes.</Typography>
+                        <Typography sx={{ ml: 2, color: 'red' }} level="body-sm" >You can not compare a layer against itself.</Typography>
                     </Fragment> : ''
             }
 
             {
-                // display panel selections
+                // display the selected product details for each pane
                 ( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) ?
                     <Fragment>
                         <Card>
@@ -300,8 +315,8 @@ export const CompareLayersTray = () => {
                                     ( leftPaneID !== defaultSelected ) ?
                                         <Fragment>
                                             <Typography sx={{ ml: 1 }} level="body-sm">Left pane:</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">Name: { leftPaneName } </Typography>
-                                            <Typography sx={{ ml: 2, mb: 2 }} level="body-sm">Layer: { leftPaneID } </Typography>
+                                            <Typography sx={{ ml: 2 }} level="body-sm">Type: { leftPaneType } </Typography>
+                                            <Typography sx={{ ml: 2, mb: 2 }} level="body-sm">ID: { leftPaneID } </Typography>
                                         </Fragment> : ''
                                 }
 
@@ -310,8 +325,8 @@ export const CompareLayersTray = () => {
                                     ( rightPaneID !== defaultSelected ) ?
                                         <Fragment>
                                             <Typography sx={{ ml: 1 }} level="body-sm">Right pane:</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">Name: { rightPaneName }</Typography>
-                                            <Typography sx={{ ml: 2 }} level="body-sm">Layer: { rightPaneID }</Typography>
+                                            <Typography sx={{ ml: 2 }} level="body-sm">Type: { rightPaneType }</Typography>
+                                            <Typography sx={{ ml: 2 }} level="body-sm">ID: { rightPaneID }</Typography>
                                         </Fragment> : ''
                                 }
 
@@ -326,6 +341,8 @@ export const CompareLayersTray = () => {
                         </Card>
                     </Fragment>: ''
             }
+
+            <Button size="md" onClick={ clearPaneInfo }>Reset</Button>
         </Fragment>
         );
 };
