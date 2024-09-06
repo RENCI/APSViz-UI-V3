@@ -377,9 +377,7 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the left pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the right pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select the Reset button to clear your selections.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}>Select the Compare button to view the comparison panes.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select the Swap button to reposition your selections.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}>Note: You can not compare a Model run layer product with itself.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Note: Adding, removing or altering model runs or layers will automatically restore the default view.</ListItem>
                                 </List>
                             </AccordionDetails>
