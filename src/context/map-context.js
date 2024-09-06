@@ -11,7 +11,6 @@ import {
   Flood as FloodIcon,
 } from '@mui/icons-material';
 
-
 export const LayersContext = createContext({});
 export const useLayers = () => useContext(LayersContext);
 
@@ -53,7 +52,7 @@ export const LayersProvider = ({ children }) => {
   const [sideBySideLayers, setSideBySideLayers] = useState(null);
 
   /**
-   * removes the side by side layers
+   * removes the side by side compare layers
    *
    */
   const removeSideBySideLayers = () => {
@@ -164,26 +163,16 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const getAllLayersInvisible = ( omitObservations ) => {
+  const getAllLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
 
     return currentLayers
       .map((layer) => {
-          // take the appropriate action if we arent altering observations
-          if (omitObservations === true && layer.properties['product_name'] === 'Observations') {
-              return {
-                  ...layer
-              };
-          }
-          // else hide the layer
-          else {
-            const opacity = layer.state.opacity;
-
-            return {
-                ...layer,
-                state: {visible: false, opacity: opacity}
-            };
-          }
+        const opacity = layer.state.opacity;
+        return {
+          ...layer,
+          state: {visible: false, opacity: opacity}
+        };
       });
   };
 
