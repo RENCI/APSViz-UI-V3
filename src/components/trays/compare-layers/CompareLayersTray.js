@@ -212,6 +212,7 @@ export const CompareLayersTray = () => {
 
     /**
      * this use effect waits for the layer properties (left and right) to get populated
+     * and applies the color map style to the layers
      *
      */
     useEffect (() => {
@@ -265,7 +266,7 @@ export const CompareLayersTray = () => {
                     });
                 });
         }
-    }, [leftLayerProps, rightLayerProps]);
+    }, [leftLayerProps, rightLayerProps, mapStyle]);
 
     /**
      * this use effect creates the side-by-side compare control and layers
