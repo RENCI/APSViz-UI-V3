@@ -378,8 +378,11 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the right pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select the Reset button to clear your selections.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select the Swap button to reposition your selections.</ListItem>
-                                    <ListItem sx={{ ml: 1 }}>Note: Adding, removing or altering model runs or layers will automatically restore the default view.</ListItem>
                                 </List>
+
+                                 <Typography sx={{ fontSize: "sm", ml: 1 }}>Note: When in compare mode, adding, removing or altering model runs or layers will automatically
+                                     restore the default view.</Typography>
+
                             </AccordionDetails>
                         </Accordion>
                     </Stack>
