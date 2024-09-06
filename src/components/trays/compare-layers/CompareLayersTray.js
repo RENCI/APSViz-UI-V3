@@ -202,6 +202,15 @@ export const CompareLayersTray = () => {
     }
 
     /**
+     * reset compare mode if anything happens to the default layers
+     *
+     */
+    useEffect(() => {
+        // reset this view
+        resetCompare();
+    }, [defaultModelLayers]);
+
+    /**
      * this use effect waits for the layer properties (left and right) to get populated
      *
      */
