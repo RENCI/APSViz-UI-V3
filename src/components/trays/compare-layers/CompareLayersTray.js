@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils/map-utils";
 import { SwapVerticalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
+import SldStyleParser from 'geostyler-sld-parser';
 import 'leaflet-side-by-side';
 
 /**
@@ -40,11 +41,9 @@ export const CompareLayersTray = () => {
     const {
         map,
         defaultModelLayers,
-        setDefaultModelLayers,
         layerTypes,
         setSideBySideLayers,
-        removeSideBySideLayers,
-        getAllLayersInvisible
+        removeSideBySideLayers
     } = useLayers();
 
     const {
@@ -68,21 +67,41 @@ export const CompareLayersTray = () => {
     // get the default model run layers
     const layers = [...defaultModelLayers];
 
+    const [leftLayerProps, setLeftLayerProps] = useState(null);
+    const [rightLayerProps, setRightLayerProps] = useState(null);
+
+    const [selectedLeftLayer, setSelectedLeftLayer] = useState(null);
+    const [selectedRightLayer, setSelectedRightLayer] = useState(null);
+
+    // get a handle to the leaflet component
+    const L = window.L;
+
+    // get a new geoserver sld parser
+    const sldParser = new SldStyleParser();
+
     // get the unique groups in the selected model runs
     const groupList = getModelRunGroupList(layers);
+
+    // get the URL to the geoserver
+    const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
+    const gs_wms_url = gs_wfs_url + 'wms';
 
     /**
      * clears any captured compare selection data and layers
      *
      */
-    const clearPaneInfo = () => {
-        // clear the left layer type/ID
+    const resetCompare = () => {
+        // clear the left layer type/ID/properties/layer
         setLeftPaneType(defaultSelected);
         setLeftPaneID(defaultSelected);
+        setLeftLayerProps(null);
+        setSelectedLeftLayer(null);
 
-        // clear the right pane ID/Name
+        // clear the right pane ID/Name/properties/layer
         setRightPaneType(defaultSelected);
         setRightPaneID(defaultSelected);
+        setRightLayerProps(null);
+        setSelectedRightLayer(null);
 
         // remove the side by side layers
         removeSideBySideLayers();
@@ -108,7 +127,7 @@ export const CompareLayersTray = () => {
             setLeftPaneID(paneID);
         }
         // save the ID and name of the right pane layer selection
-        else {
+        else if (paneSide === 'right') {
             // set the layer name
             setRightPaneType(paneType);
 
@@ -125,14 +144,17 @@ export const CompareLayersTray = () => {
         // get the original left pane data
         const origLeftPaneType = leftPaneType;
         const origLeftPaneID = leftPaneID;
+        const origLeftLayerProps = leftLayerProps;
 
         // clear the left layer type/ID
         setLeftPaneType(rightPaneType);
         setLeftPaneID(rightPaneID);
+        setLeftLayerProps(rightLayerProps);
 
         // clear the right pane ID/Name
         setRightPaneType(origLeftPaneType);
         setRightPaneID(origLeftPaneID);
+        setRightLayerProps(origLeftLayerProps);
     };
 
     /**
@@ -150,99 +172,125 @@ export const CompareLayersTray = () => {
     };
 
     /**
-     * gets the default SLD style for this product type
+     * gets the default SLD style template using the layer properties
      *
-     * @param product_type
+     * @param layerProps
+     * @returns {*}
      */
-    const getSLDStyleInfo = ( product_type ) => {
-        // init a return value
-        let ret_val;
+    function getSLDStyleTemplate ( layerProps ) {
+        // init some style storage
+        let style;
 
         // get the SLD style by the type of product
-        switch( product_type ) {
+        switch (layerProps.properties['product_type']) {
             // max wind speed
             case ("maxwvel63"):
-                ret_val = mapStyle.maxwvel.current;
+                style = mapStyle.maxwvel.current;
                 break;
             // max significant wave height
             case ("swan_HS_max63"):
-                ret_val = mapStyle.swan.current;
+                style = mapStyle.swan.current;
                 break;
             // max water levels
             default:
-                ret_val = mapStyle.maxele.current;
+                style = mapStyle.maxele.current;
                 break;
         }
 
-        // return the style or not
-        return ret_val;
-    };
+        // return the style template
+        return style;
+    }
 
     /**
-     *  switch on/off the compare layer view
+     * this use effect waits for the layer properties (left and right) to get populated
      *
-     * @param event
      */
-    const compareLayers = () => {
-        // if we have legit layers to compare
-        if (leftPaneType !== defaultSelected && rightPaneType !== defaultSelected) {
-            // get a handle to the leaflet component
-            const L = window.L;
-
-            // remove the side by side layers if any already exist
+    useEffect (() => {
+        // if we have left and right layer properties
+        if(leftLayerProps && rightLayerProps) {
+            // remove the side-by-side compare control and layers
             removeSideBySideLayers();
 
-            // hide all layers except the observations
-            setDefaultModelLayers(getAllLayersInvisible());
+            // get the left pane style template
+            let style = getSLDStyleTemplate(leftLayerProps);
 
-            // get the URL to the geoserver
-            const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
-            const gs_wms_url = gs_wfs_url + 'wms';
+            // get the left pane style and then the map layer
+            sldParser
+                .readStyle(style)
+                .then((geoStylerStyle) => {
+                    geoStylerStyle.output.name = (' ' + leftLayerProps.layers).slice(1);
 
-            // get the left layer properties
-            const leftLayerProps = layers.filter(item => item.id === leftPaneID);
+                    // get the SLD style and add the layer to the map
+                    sldParser.writeStyle(geoStylerStyle.output).then((sldStyle) => {
+                        // create a left pane layer
+                        setSelectedLeftLayer(L.tileLayer.wms(gs_wms_url, {
+                            format: 'image/png',
+                            transparent: true,
+                            name: leftPaneType,
+                            layers: leftLayerProps.layers,
+                            sld_body: sldStyle.output
+                        }).addTo(map));
 
-            // get the SLD style info for the left pane
-            const leftSldStyle = getSLDStyleInfo(leftLayerProps[0].properties['product_type']);
+                    });
+                });
 
-            // create a left pane layer
-            const selectedLeftLayer = L.tileLayer.wms(gs_wms_url,
-                {
-                    format: 'image/png',
-                    transparent: true,
-                    name: leftPaneType,
-                    layers: leftLayerProps[0].layers,
-                    sld_body: leftSldStyle
-                }
-            ).addTo(map);
+            // get the right pane style template
+            style = getSLDStyleTemplate(rightLayerProps);
 
-            // get the right layer properties
-            const rightLayerProps = layers.filter(item => item.id === rightPaneID);
+            // get the right pane style and then the map layer
+            sldParser
+                .readStyle(style)
+                .then((geoStylerStyle) => {
+                    geoStylerStyle.output.name = (' ' + rightLayerProps.layers).slice(1);
 
-            // get the SLD style info for the right pane
-            const rightSldStyle = getSLDStyleInfo(rightLayerProps[0].properties['product_type']);
-
-            // create the right pane layer
-            const selectedRightLayer = L.tileLayer.wms(gs_wms_url,
-                {
-                    format: 'image/png',
-                    transparent: true,
-                    name: rightPaneType,
-                    layers: rightLayerProps[0].layers,
-                    sld_body: rightSldStyle
-                }
-            ).addTo(map);
-
-            // add the selected layers to the map
-            const sideBySideLayer = L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map);
-
-            // add the handle to the new layers to state so we can remove it later
-            setSideBySideLayers(sideBySideLayer);
+                    // get the SLD style and add the layer to the map
+                    sldParser.writeStyle(geoStylerStyle.output).then((sldStyle) => {
+                        // create the right pane layer
+                        setSelectedRightLayer(L.tileLayer.wms(gs_wms_url, {
+                            format: 'image/png',
+                            transparent: true,
+                            name: rightPaneType,
+                            layers: rightLayerProps.layers,
+                            sld_body: sldStyle.output
+                        }).addTo(map));
+                    });
+                });
         }
-    };
+    }, [leftLayerProps, rightLayerProps]);
 
     /**
-     * renders the layer cards for a model run
+     * this use effect creates the side-by-side compare control and layers
+     *
+     */
+    useEffect(() => {
+        // if we have both panes ready for rendering
+        if(selectedLeftLayer && selectedRightLayer) {
+            // add the selected layers to the map and state so it can be removed later
+            setSideBySideLayers(L.control.sideBySide(selectedLeftLayer, selectedRightLayer, {padding: 0}).addTo(map));
+        }
+
+    }, [selectedLeftLayer, selectedRightLayer]);
+
+    /**
+     * this effect updates the layer properties when the pane layers are selected
+     *
+     */
+    useEffect(() => {
+        // if there is a legit left pane layer selected
+        if(leftPaneID !== defaultSelected) {
+            // get the left layer properties
+            setLeftLayerProps(layers.filter(item => item.id === leftPaneID)[0]);
+        }
+
+        // if there is a legit right pane layer selected
+        if(rightPaneID !== defaultSelected) {
+            // get the right layer properties
+            setRightLayerProps(layers.filter(item => item.id === rightPaneID)[0]);
+        }
+    }, [leftPaneID, rightPaneID]);
+
+    /**
+     * renders the layer cards for a model run for pane selection
      *
      * @param layers
      * @param group
@@ -322,14 +370,6 @@ export const CompareLayersTray = () => {
             </AccordionGroup>
 
             {
-                // validate the user selections, no same layer comparisons
-                (( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) && (leftPaneID === rightPaneID )) ?
-                    <Fragment>
-                        <Typography sx={{ ml: 2, color: 'red' }} level="body-sm" >You can not compare a layer against itself.</Typography>
-                    </Fragment> : ''
-            }
-
-            {
                 // display the selected product details for each pane
                 ( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) ?
                     <Fragment>
@@ -355,17 +395,10 @@ export const CompareLayersTray = () => {
                                         <Typography sx={{ ml: 2 }} level="body-sm">ID: { rightPaneID }</Typography>
                                     </Fragment>
                                 }
-                            </Stack>
 
-                            <Box textAlign="center">
-                                <Button size="md" sx={{ mr: 3 }} onClick={ clearPaneInfo }>Reset</Button>
+                                <Button size="md" sx={{ mt: 1}} onClick={ resetCompare }>Reset</Button>
 
-                                {
-                                    // show the compare button if it looks good to go
-                                    ( leftPaneID !== defaultSelected && rightPaneID !== defaultSelected && leftPaneID !== rightPaneID ) ?
-                                        <Button size="md" onClick={ compareLayers }>Compare</Button> : ''
-                                }
-                            </Box>
+                             </Stack>
                         </Card>
                     </Fragment>: ''
             }
