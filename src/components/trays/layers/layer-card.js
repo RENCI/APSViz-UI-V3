@@ -23,13 +23,12 @@ import { DeleteLayerButton } from './delete-layer-button';
 
 export const LayerCard = ({ index, layer }) => {
   const {
-    layerTypes,
+    getLayerIcon,
     swapLayers,
     toggleLayerVisibility,
   } = useLayers();
   const expanded = useToggleState(false);
   const isVisible = layer.state.visible;
-  const LayerIcon = layerTypes[layer.properties.product_type].icon;
 
   return (
     <Accordion
@@ -65,7 +64,7 @@ export const LayerCard = ({ index, layer }) => {
             transition: 'filter 250ms',
           }}>
             <Avatar variant="outlined">
-              <LayerIcon size="lg" color="primary" />
+              { getLayerIcon(layer.properties.product_type) }
             </Avatar>
             <Typography level="title-sm" sx={{ flex: 1 }}>
               {layer.properties.product_name}

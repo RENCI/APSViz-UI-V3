@@ -15,18 +15,17 @@ export const MapLegend = () => {
 
     const [legendUrl, setLegendUrl] = useState("");
     const [legendVisibilty, setLegendVisibilty] = useState("hidden");
+    const [layerIcon, setLayerIcon] = useState("");
 
     const sldParser = new SldStyleParser();
 
     const {
         defaultModelLayers,
-        layerTypes,
+        getLayerIcon
     } = useLayers();
     const {
         mapStyle,
     } = useSettings();
-
-    let LegendIcon = layerTypes['maxele63'].icon;
 
     useEffect(() => {
         const legendLayer = defaultModelLayers.find(layer => layer.state.visible && layer.properties.product_type !== 'obs');
@@ -34,7 +33,7 @@ export const MapLegend = () => {
             setLegendVisibilty("hidden");
         }
         else {
-            LegendIcon = layerTypes[legendLayer.properties.product_type].icon;
+            setLayerIcon(getLayerIcon(legendLayer.properties.product_type));
 
             // now build appropriate url for retrieving the legend graphic
             const workspace = legendLayer.layers.split(':')[0];
@@ -141,7 +140,7 @@ export const MapLegend = () => {
                             alignItems="center"
                         >
                             <Avatar variant="outlined" id="draggable-card"  sx={{ m: -1, p: 0, height: 40, cursor: 'move' }}>
-                                <LegendIcon size="lg" color="primary" />
+                                { layerIcon }
                             </Avatar>
 
                             <Box
