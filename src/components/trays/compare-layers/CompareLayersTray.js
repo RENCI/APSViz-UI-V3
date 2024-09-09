@@ -276,7 +276,7 @@ export const CompareLayersTray = () => {
         // if we have both panes ready for rendering
         if(selectedLeftLayer && selectedRightLayer) {
             // add the selected layers to the map and state so it can be removed later
-            setSideBySideLayers(L.control.sideBySide(selectedLeftLayer, selectedRightLayer, {padding: 0}).addTo(map));
+            setSideBySideLayers(L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map));
         }
 
     }, [selectedLeftLayer, selectedRightLayer]);
