@@ -52,6 +52,20 @@ export const LayersProvider = ({ children }) => {
   const [sideBySideLayers, setSideBySideLayers] = useState(null);
 
   /**
+   * get the layer icon
+   *
+   * @param productType
+   * @returns {JSX.Element}
+   */
+  const getLayerIcon = ( productType )=> {
+      // grab the icon
+      const Icon = layerTypes[productType].icon;
+
+      // return the icon
+      return <Icon/>;
+  };
+
+  /**
    * removes the side by side compare layers
    *
    */
@@ -283,6 +297,7 @@ export const LayersProvider = ({ children }) => {
         removeAllModelRuns,
         removeObservations,
         layerTypes,
+        getLayerIcon,
         baseMap,
         setBaseMap,
         setLayerOpacity,

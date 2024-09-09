@@ -41,7 +41,7 @@ export const CompareLayersTray = () => {
     const {
         map,
         defaultModelLayers,
-        layerTypes,
+        getLayerIcon,
         setSideBySideLayers,
         removeSideBySideLayers
     } = useLayers();
@@ -155,20 +155,6 @@ export const CompareLayersTray = () => {
         setRightPaneType(origLeftPaneType);
         setRightPaneID(origLeftPaneID);
         setRightLayerProps(origLeftLayerProps);
-    };
-
-    /**
-     * get the layer icon
-     *
-     * @param productType
-     * @returns {JSX.Element}
-     */
-    const getLayerIcon = ( productType )=> {
-        // grab the icon
-        const Icon = layerTypes[productType].icon;
-
-        // return the icon
-        return <Icon/>;
     };
 
     /**
