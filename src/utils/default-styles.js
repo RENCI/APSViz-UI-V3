@@ -17,16 +17,17 @@ export const maxeleStyle = '<?xml version="1.0" encoding="UTF-8"?> \
               </sld:GrayChannel> \
             </sld:ChannelSelection> \
             <sld:ColorMap> \
-              <sld:ColorMapEntry color="#0024E3" quantity="0.00" label="0.00 m"/> \
-                <sld:ColorMapEntry color="#0075D9" quantity="0.33" label="0.33 m"/> \
-                <sld:ColorMapEntry color="#14A988" quantity="0.67" label="0.67 m"/> \
-                <sld:ColorMapEntry color="#1DF553" quantity="1.00" label="1.00 m"/> \
-                <sld:ColorMapEntry color="#6EFE1C" quantity="1.33" label="1.33 m"/> \
-                <sld:ColorMapEntry color="#E7FF04" quantity="1.67" label="1.67 m"/> \
-                <sld:ColorMapEntry color="#FFF200" quantity="2.00" label="2.00 m"/> \
-                <sld:ColorMapEntry color="#FFB300" quantity="2.33" label="2.33 m"/> \
-                <sld:ColorMapEntry color="#FF7000" quantity="2.67" label="2.67 m"/> \
-                <sld:ColorMapEntry color="#FF2E00" quantity="3.00" label="3.00 m"/> \
+              <sld:ColorMapEntry color="#313695" quantity="0.00" label="0.00 m"/> \
+              <sld:ColorMapEntry color="#323C98" quantity="0.20" label="0.20 m"/> \
+              <sld:ColorMapEntry color="#4E80B9" quantity="0.40" label="0.40 m"/> \
+              <sld:ColorMapEntry color="#84BAD8" quantity="0.60" label="0.60 m"/> \
+              <sld:ColorMapEntry color="#C0E3EF" quantity="0.80" label="0.80 m"/> \
+              <sld:ColorMapEntry color="#EFF9DB" quantity="1.00" label="1.00 m"/> \
+              <sld:ColorMapEntry color="#FEECA2" quantity="1.20" label="1.20 m"/> \
+              <sld:ColorMapEntry color="#FDBD6F" quantity="1.40" label="1.40 m"/> \
+              <sld:ColorMapEntry color="#F57A49" quantity="1.60" label="1.60 m"/> \
+              <sld:ColorMapEntry color="#D93629" quantity="1.80" label="1.80 m"/> \
+              <sld:ColorMapEntry color="#A50026" quantity="2.00" label="2.00 m"/> \
             </sld:ColorMap> \
             <sld:ContrastEnhancement/> \
           </sld:RasterSymbolizer> \
