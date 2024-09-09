@@ -88,6 +88,8 @@ const renderLayerCards = (layers, group) => {
     layers
         // capture the layers for this group
         .filter(layer => (layer['group'] === group))
+        // sort by the product name
+        .sort((a, b) => a['properties']['product_name'] < b['properties']['product_name'] ? -1 : 1)
         // at this point we have the distinct runs
         .map((layer, idx) => {
             layerCards.push(<LayerCard key={`layer-${idx}`} layer={layer} index={idx}> </LayerCard>);

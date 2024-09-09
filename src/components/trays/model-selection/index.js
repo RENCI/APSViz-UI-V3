@@ -12,7 +12,7 @@ export const icon = <ModelSelectionIcon />;
 export const title = 'ADCIRC Model selection';
 
 /**
- * render the removal component
+ * render the model selection component
  *
  * @returns {JSX.Element}
  */

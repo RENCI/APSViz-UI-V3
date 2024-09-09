@@ -1,11 +1,20 @@
 import React, {Fragment} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator, Divider }
         from '@mui/joy';
-import { Layers as LayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
-        Share as ShareViewIcon, HelpCenter as HelpAboutIcon, Map as MapIcon, LightMode as LightModeIcon,DragHandleRounded as HandleIcon,
-        KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow, KeyboardArrowLeft, Tsunami as WaveHeightIcon, QueryStats as ObservationIcon,
-        Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon, Flood as FloodIcon, ToggleOn as OnOffIcon }
-        from '@mui/icons-material';
+
+import {
+        // sidebar icons
+        Layers as LayersIcon, CompareArrows as CompareLayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, DeleteForever as RemoveIcon, Tune as SettingsIcon,
+        Share as ShareViewIcon, HelpCenter as HelpAboutIcon,
+
+        // map model layer types
+        Tsunami as WaveHeightIcon, QueryStats as ObservationIcon, Air as WindVelocityIcon, Water as WaterLevelIcon, BlurOn as WaterSurfaceIcon,
+        Flood as FloodIcon,
+
+        // action buttons
+        Map as MapIcon, LightMode as LightModeIcon, DragHandleRounded as HandleIcon, KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow,
+        KeyboardArrowLeft, ToggleOn as OnOffIcon, SwapVerticalCircleSharp as SwapLayersIcon
+    } from '@mui/icons-material';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
@@ -143,6 +152,7 @@ export const HelpAboutTray = () => {
                                     <ListItem>Cycle through tropical advisories or synoptic model runs.</ListItem>
                                     <ListItem>Display (or hide) various model layer products such as wind speed, wave height, water levels, etc.</ListItem>
                                     <ListItem>Select observation points to display current and forecast timeseries data at a location.</ListItem>
+                                    <ListItem>Compare model run product layer types.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -158,12 +168,13 @@ export const HelpAboutTray = () => {
                                 <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Collapsable tray items:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>Model run/layers selected list</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>Compare model run product layers</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HurricaneIcon color="primary"/></ListItemDecorator>Hurricane track list</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>Model run filtering and selection</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon color="primary"/></ListItemDecorator>Remove various map items</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>Application settings</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ShareViewIcon color="primary"/></ListItemDecorator>Share your view with a colleague</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HelpAboutIcon color="primary"/></ListItemDecorator>Application help/about</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>Application settings</ListItem>
                                 </List>
                                 <Divider/>
                                 <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Map model layer types:</Typography>
@@ -187,6 +198,7 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a model run up or down in the list.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><OnOffIcon color="primary"/></ListItemDecorator>Turn on/off a layer</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><RemoveIcon sx={{ color:'darkred', 'filter': 'opacity(0.5)' }}/></ListItemDecorator>Remove a model run or layer.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SwapLayersIcon color="success"/></ListItemDecorator>Swap model run layer compare panes.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ExpandIcon/> or <ExpandIcon sx={{ transform: 'rotate(180deg)' }}/>Expand or collapse an item.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MoveUpArrow/> or <MoveUpArrow sx={{ transform: 'rotate(180deg)'}}/>Reorder a model layer.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><KeyboardArrowLeft/> or <KeyboardArrowLeft sx={{ transform: 'rotate(180deg)'}}/>Move through tropical advisories or synoptic cycles.</ListItemDecorator></ListItem>
@@ -264,7 +276,7 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List sx={{ fontSize: "sm" }}>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon/></ListItemDecorator>The Model selection button.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>The Model selection button.</ListItem>
                                 </List>
                                 <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the ADCIRC Model selection icon.</ListItem>
@@ -284,7 +296,7 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List sx={{ fontSize: "sm" }}>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon/></ListItemDecorator>The Model layers button.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>The Model layers button.</ListItem>
                                 </List>
                                 <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the Model Layers icon button.</ListItem>
@@ -315,7 +327,7 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List sx={{ fontSize: "sm" }}>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon/></ListItemDecorator>The Application Settings button.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings button.</ListItem>
                                 </List>
                                 <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Is for selecting light or dark
@@ -332,7 +344,7 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List sx={{ fontSize: "sm" }}>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon/></ListItemDecorator>The Application Settings button.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings button.</ListItem>
                                 </List>
                                 <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the Application Settings icon</ListItem>
@@ -349,6 +361,28 @@ export const HelpAboutTray = () => {
                             <AccordionDetails>
                                 <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select the colored/round icons on the map. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that observation point.</Typography>
+                            </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion expanded={index === 14} onChange={ (event, expanded) => { setIndex(expanded ? 14 : null); }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I compare model run layers?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <List sx={{ fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>The Compare Layers button.</ListItem>
+                                </List>
+                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the left pane.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the right pane.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Select the Reset button to clear your selections.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Select the Swap button to reposition your selections.</ListItem>
+                                </List>
+
+                                 <Typography sx={{ fontSize: "sm", ml: 1 }}>Note: When in compare mode, adding, removing or altering model runs or layers will automatically
+                                     restore the default view.</Typography>
+
                             </AccordionDetails>
                         </Accordion>
                     </Stack>

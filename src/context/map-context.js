@@ -48,6 +48,28 @@ export const LayersProvider = ({ children }) => {
 
   const [map, setMap] = useState(null);
 
+  // this object is used to track the side-by-side compare layers
+  const [sideBySideLayers, setSideBySideLayers] = useState(null);
+
+  /**
+   * removes the side by side compare layers
+   *
+   */
+  const removeSideBySideLayers = () => {
+      // remove the current compare layers if they exist
+      if (sideBySideLayers) {
+          // remove the layers on each pane
+          map.removeLayer(sideBySideLayers['_leftLayer']);
+          map.removeLayer(sideBySideLayers['_rightLayer']);
+
+          // remove the side by side layer
+          sideBySideLayers.remove();
+
+          // reset the compared layers
+          setSideBySideLayers(null);
+      }
+  };
+
     /**
     * removes the observation "target" icons and dialogs from the map
     */
@@ -114,7 +136,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is a observation layer remove all observation layers/dialogs from the map
+    // if this is an observation layer remove all observation layers/dialogs from the map
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
@@ -264,6 +286,9 @@ export const LayersProvider = ({ children }) => {
         baseMap,
         setBaseMap,
         setLayerOpacity,
+        sideBySideLayers,
+        setSideBySideLayers,
+        removeSideBySideLayers
       }}
     >
       {children}

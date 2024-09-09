@@ -15,7 +15,11 @@ CatalogItems.propTypes = { data: PropTypes.any };
  */
 export default function CatalogItems(data) {
     // get the layers in state
-    const { removeObservations, defaultModelLayers, setDefaultModelLayers } = useLayers();
+    const {
+        removeObservations,
+        defaultModelLayers,
+        setDefaultModelLayers,
+        } = useLayers();
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
@@ -99,8 +103,6 @@ export default function CatalogItems(data) {
 
     /**
      * adds or updates the visibility of the layer on the map surface.
-     *
-     * presumably this will have to take the met class into consideration.
      *
      * @param layer
      * @param group

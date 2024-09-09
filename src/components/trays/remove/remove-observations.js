@@ -15,7 +15,7 @@ export const RemoveAllObservations = () => {
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeObservations()}>Remove all selected observations</Button>
+            <Button color="primary" onClick={() => removeObservations()}>Remove all observation dialogs</Button>
         </Fragment>
     );
 };

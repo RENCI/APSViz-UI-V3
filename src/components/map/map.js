@@ -17,7 +17,7 @@ export const Map = () => {
     } = useLayers();
 
     return (
-      <MapContainer 
+      <MapContainer
         center={ DEFAULT_CENTER }
         zoom={5}
         zoomControl={false}
