@@ -1,30 +1,21 @@
 import React, { Fragment } from 'react';
 import { Button } from '@mui/joy';
-import {useLayers} from "@context";
+import { useLayers } from "@context";
 
 /**
- * component that handles the removal of models.
+ * component that handles the removal of all model runs.
  *
  * @returns {JSX.Element}
  * @constructor
  */
 export const RemoveModels = () => {
-    // get references to the model data/list
-    const {
-
-    } = useLayers();
-
-    /**
-     * remove the observation selections from state and map
-     */
-    function removeModels() {
-        alert("Not ready yet.");
-    }
+    // get the method to remove the observation items in state
+    const { removeAllModelRuns } = useLayers();
 
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeModels()}>Remove selected models</Button>
+            <Button color="primary" onClick={ () => removeAllModelRuns() }>Remove all selected model runs</Button>
         </Fragment>
-  );
+    );
 };
