@@ -239,8 +239,11 @@ export const ControlPanel = () => {
 
   // switch on/off the hurricane track layer, if it exists
   const toggleHurricaneLayer = () => {
-    const layerID = obs_layer.id.substr(0, obs_layer.id.lastIndexOf("-")) + '-hurr';
-    toggleHurricaneLayerVisibility(layerID);
+    // if there is a hurricane layer
+    if (hurrLayers) {
+      // toggle the view of it
+      toggleHurricaneLayerVisibility(hurrLayers[0].id);
+    }
   };
 
   const changeSynopticCycle = (direction) => {
