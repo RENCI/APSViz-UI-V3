@@ -1,6 +1,6 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import PropTypes from 'prop-types';
-import {Option} from '@mui/joy';
+import { Option } from '@mui/joy';
 
 /**
  * returns a list of drop down options for that data/type.
@@ -36,7 +36,7 @@ export default function DropDownOptions(data) {
             return (
                 <Fragment>
                     {data.data[data.type].filter(item => item !== "").map(item => (
-                        <Option key={item} value={item} sx={{ fontSize: "sm" }}>{item}</Option>
+                        <Option key={ item } value={ item } sx={{ fontSize: "sm" }}>{ item }</Option>
                     ))}
                 </Fragment>
             );
