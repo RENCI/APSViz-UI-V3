@@ -40,6 +40,17 @@ export const StormLayers = () => {
     }
   };
 
+  // set visibily to false for all hurricane layers
+  const setHurricaneLayersVisiblityOff = () => {
+    const allHurrLayers = hurrLayers.map((x) => x);
+    if (allHurrLayers && allHurrLayers.length > 0) {
+      allHurrLayers.forEach(layer => {
+        layer.state = { visible: false, opacity: 1, };
+      });
+      setHurricaneTrackLayers([...allHurrLayers]);
+    }
+  };
+
 
   useEffect(() => {
 
@@ -95,6 +106,11 @@ export const StormLayers = () => {
           setHurricaneTrackLayers([...trackLayer, ...currentLayers]);
         }
       }
+      else {
+        // this is not a hurricane layer - turn off all hurricane layers, if any
+        setHurricaneLayersVisiblityOff();
+      }
+      // remove any hurricane layers that do not have an assocatiated model run
       removeAnyOrphanHurricaneLayers();
     }
 

@@ -172,10 +172,13 @@ const newLayerDefaultState = (layer, group) => {
  */
 export const LayersList = () => {
     // get a handle to the layer state
-    const { removeObservations, defaultModelLayers, setDefaultModelLayers } = useLayers();
+    const { removeObservations, defaultModelLayers, setDefaultModelLayers, hurricaneTrackLayers, setHurricaneTrackLayers } = useLayers();
 
     // get the default layers
     const layers = [...defaultModelLayers];
+
+    // get hurricane layers
+    const hurrLayers = [...hurricaneTrackLayers];
 
     // get the unique groups in the selected model runs
     const groupList = getGroupList(layers);
@@ -244,6 +247,15 @@ export const LayersList = () => {
             // perform the visible state logic
             layer.state = newLayerDefaultState(layer, newLayerList[0].group);
         });
+
+        // turn on/off any hurricane layers
+        if (hurrLayers) {
+            newLayerList[0].properties.met_class === "tropical" ?
+                    hurrLayers[0].state.visible = true
+                    :
+                    hurrLayers[0].state.visible = false;
+            setHurricaneTrackLayers([...hurrLayers]);
+        }
 
         // update the layer list in state
         setDefaultModelLayers(newLayerList);
