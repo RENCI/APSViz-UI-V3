@@ -46,7 +46,7 @@ export const Sidebar = () => {
           position: 'absolute',
           top: 0, left: 0,
           height: '100vh',
-          zIndex: 1000,
+          zIndex: 1001,
           maxWidth: '68px',
           overflow: 'hidden',
           p: 0,
