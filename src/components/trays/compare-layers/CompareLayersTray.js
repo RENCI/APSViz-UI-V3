@@ -4,7 +4,9 @@ import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils/map-utils";
 import { SwapVerticalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
 import SldStyleParser from 'geostyler-sld-parser';
-import 'leaflet-side-by-side';
+
+// install the side by side compare control
+require('@side-by-side');
 
 /**
  * collect the list of unique layer groups
