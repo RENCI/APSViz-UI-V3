@@ -122,7 +122,8 @@ module.exports = {
       '@model-selection': path.resolve(__dirname, 'src/components/trays/model-selection/'),
       '@compare-layers': path.resolve(__dirname, 'src/components/trays/compare-layers/'),
       '@share': path.resolve(__dirname, 'src/components/trays/share/'),
-      '@utils': path.resolve(__dirname, 'src/utils/')
+      '@utils': path.resolve(__dirname, 'src/utils/'),
+      '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side')
     }
   },
 
