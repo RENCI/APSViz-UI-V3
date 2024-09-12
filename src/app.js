@@ -5,7 +5,9 @@ import { ObservationDialog } from "@components/dialog/observation-dialog";
 import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
+import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
+
 
 
 /**
@@ -34,6 +36,7 @@ const Content = () => {
             <Map />
             <Sidebar />
             <ControlPanel/>
+            <ComparePanel/>
             <MapLegend />
         </Fragment>
     );
