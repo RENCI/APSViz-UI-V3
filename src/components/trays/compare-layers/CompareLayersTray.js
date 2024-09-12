@@ -334,10 +334,10 @@ export const CompareLayersTray = () => {
                          </Stack>
 
                          <Box textAlign="center">
-                             <Button size="md" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
+                             <Button size="sm" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
                                      sx={{ mr: 4 }}
                                      onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
-                             <Button size="md" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
+                             <Button size="sm" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
                                      onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
                          </Box>
