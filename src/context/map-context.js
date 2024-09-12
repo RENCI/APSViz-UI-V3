@@ -48,8 +48,31 @@ export const LayersProvider = ({ children }) => {
 
   const [map, setMap] = useState(null);
 
-  // this object is used to track the side-by-side compare layers
+  /**
+   * this section is for the side-by-side compare mode items
+   * @type {string}
+   */
+  // default for the pane compare name
+  const defaultSelected = 'Not Selected';
+
+  // create some state for the left/right name/type selections
+  const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
+  const [rightPaneType, setRightPaneType] = useState(defaultSelected);
+
+  // create some state for the left/right ID selections
+  const [leftPaneID, setLeftPaneID] = useState(defaultSelected);
+  const [rightPaneID, setRightPaneID] = useState(defaultSelected);
+
+  // create some state for the side/side layers
   const [sideBySideLayers, setSideBySideLayers] = useState(null);
+
+  // create some state for the layer properties
+  const [leftLayerProps, setLeftLayerProps] = useState(null);
+  const [rightLayerProps, setRightLayerProps] = useState(null);
+
+  // create some state for the selected layers
+  const [selectedLeftLayer, setSelectedLeftLayer] = useState(null);
+  const [selectedRightLayer, setSelectedRightLayer] = useState(null);
 
   /**
    * get the layer icon
@@ -83,6 +106,27 @@ export const LayersProvider = ({ children }) => {
           setSideBySideLayers(null);
       }
   };
+
+  /**
+   * clears any captured compare selection data and layers
+   *
+   */
+  const resetCompare = () => {
+      // clear the left layer type/ID/properties/layer
+      setLeftPaneType(defaultSelected);
+      setLeftPaneID(defaultSelected);
+      setLeftLayerProps(null);
+      setSelectedLeftLayer(null);
+
+      // clear the right pane ID/Name/properties/layer
+      setRightPaneType(defaultSelected);
+      setRightPaneID(defaultSelected);
+      setRightLayerProps(null);
+      setSelectedRightLayer(null);
+
+      // remove the side by side layers
+      removeSideBySideLayers();
+    };
 
     /**
     * removes the observation "target" icons and dialogs from the map
@@ -351,9 +395,19 @@ export const LayersProvider = ({ children }) => {
         baseMap,
         setBaseMap,
         setLayerOpacity,
-        sideBySideLayers,
-        setSideBySideLayers,
-        removeSideBySideLayers
+
+        // declare access to the compare mode items
+        defaultSelected,
+        leftPaneID, setLeftPaneID,
+        rightPaneID, setRightPaneID,
+        leftPaneType, setLeftPaneType,
+        rightPaneType, setRightPaneType,
+        leftLayerProps, setLeftLayerProps,
+        selectedLeftLayer, setSelectedLeftLayer,
+        rightLayerProps, setRightLayerProps,
+        selectedRightLayer, setSelectedRightLayer,
+        sideBySideLayers, setSideBySideLayers,
+        resetCompare, removeSideBySideLayers
       }}
     >
       {children}
