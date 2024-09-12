@@ -7,7 +7,7 @@ import {
   Air as WindVelocityIcon,
   Water as WaterLevelIcon,
   BlurOn as WaterSurfaceIcon,
-  //SettingsTwoTone,
+  Waves as HIResMaxElevationIcon,
   Flood as FloodIcon,
 } from '@mui/icons-material';
 
@@ -29,7 +29,7 @@ const layerTypes = {
     icon: WaveHeightIcon,
   },
   maxele_level_downscaled_epsg4326: {
-    icon: WaterLevelIcon,
+    icon: HIResMaxElevationIcon,
   },
   hec_ras_water_surface: {
     icon: WaterSurfaceIcon,

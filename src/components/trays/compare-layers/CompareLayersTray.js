@@ -32,6 +32,69 @@ const getModelRunGroupList = (layers) => {
 };
 
 /**
+ * gets the summary header text for the layer groups.
+ * This takes into account the two types of runs (tropical, synoptic)
+ *
+ * @param layerProps
+ * @returns {string}
+ */
+const getHeaderSummary = (layerProps) => {
+    // get the full accordian summary text
+    return layerProps['run_date'] + ': ' +
+        ((getPropertyName(layerProps, 'stormOrModelEle') === undefined) ? 'Data error' : getPropertyName(layerProps, 'stormOrModelEle').toUpperCase()) +
+        ', ' + getPropertyName(layerProps, 'numberName') + getPropertyName(layerProps, 'numberEle') +
+        ', Type: ' + layerProps['event_type'] +
+        ', Grid: ' + layerProps['grid_type'] +
+        ((layerProps['meteorological_model'] === 'None') ? '' : ', ' + layerProps['meteorological_model']);
+};
+
+/**
+ * gets the header data property name index
+ * This takes into account the two types of runs (tropical, synoptic)
+ *
+ * @param layerProps
+ * @param type
+ * @returns {string}
+ */
+const getPropertyName = (layerProps, element_name) => {
+    // init the return
+    let ret_val = undefined;
+
+    // capture the name of the element for tropical storms and advisory numbers
+    if (layerProps['met_class'] === 'tropical') {
+        // by the element name
+        switch (element_name) {
+            case 'stormOrModelEle':
+                ret_val = layerProps['storm_name'];
+                break;
+            case 'numberName':
+                ret_val = ' Adv: ';
+                break;
+            case 'numberEle':
+                ret_val = layerProps['advisory_number'];
+                break;
+        }
+    }
+    // capture the name of the synoptic ADCIRC models and cycle numbers
+    else {
+        switch (element_name) {
+            case 'stormOrModelEle':
+                ret_val = layerProps['model'];
+                break;
+            case 'numberName':
+                ret_val = ' Cycle: ';
+                break;
+            case 'numberEle':
+                ret_val = layerProps['cycle'];
+                break;
+        }
+    }
+
+    // return to the caller
+    return ret_val;
+};
+
+/**
  * This component renders the model selection tray
  *
  * @returns {JSX.Element}
@@ -304,6 +367,8 @@ export const CompareLayersTray = () => {
                 // filter by the group name
                 .filter((groups, idx, self) =>
                     (idx === self.findIndex((t) => (t['group'] === groups['group']))))
+                // sort by the group name
+                .sort((a, b) => a['group'] < b['group'] ? -1 : 1)
                 // at this point we have the distinct runs
                 .map((layer, idx) => (
                     <Box key={ idx }>
@@ -312,7 +377,7 @@ export const CompareLayersTray = () => {
                             onChange={ (event, expanded) => { setAccordionIndex(expanded ? idx : null); }}
                         >
                             <AccordionSummary>
-                                <Typography level="body-sm">{ layer['group'] }</Typography>
+                                <Typography level="body-xs">{ getHeaderSummary(layer['properties']) }</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails>

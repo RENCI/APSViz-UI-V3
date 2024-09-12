@@ -115,8 +115,8 @@ export const MapLegend = () => {
                     sx={{
                         p: 0,
                         position: 'absolute',
-                        top: 'calc(4 * var(--joy-spacing))',
-                        right: 'calc(4 * var(--joy-spacing))',
+                        top: '10px',
+                        right: '10px',
                         transition: 'filter 250ms',
                         filter: 'opacity(0.9)',
                         '&:hover': { filter: 'opacity(1.0)' },
