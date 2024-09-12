@@ -25,7 +25,7 @@ export const LayerCard = ({ index, layer }) => {
   const {
     getLayerIcon,
     swapLayers,
-    toggleLayerVisibility,
+    toggleLayerVisibility2,
   } = useLayers();
   const expanded = useToggleState(false);
   const isVisible = layer.state.visible;
@@ -72,7 +72,7 @@ export const LayerCard = ({ index, layer }) => {
             <Switch
               size="sm"
               checked={ isVisible }
-              onChange={ () => toggleLayerVisibility(layer.id) }
+              onChange={ () => toggleLayerVisibility2(layer.id) }
               className="action-button"
             />
             <DeleteLayerButton layerId={ layer.id }/>

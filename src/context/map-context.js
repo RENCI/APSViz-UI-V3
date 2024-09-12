@@ -162,6 +162,33 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
+  const toggleLayerVisibility2 = id => {
+    const newLayers = [...defaultModelLayers];
+    const index = newLayers.findIndex(l => l.id === id);
+    if (index === -1) {
+      console.error('Could not locate layer', id);
+      return;
+    }
+
+    // if this is an observation layer remove all observation layers/dialogs from the map
+    removeObservations(id);
+
+    const alteredLayer = newLayers[index];
+    alteredLayer.state.visible = !alteredLayer.state.visible;
+
+    // if we are toggle a raster layer, turn off the other raster layers
+    // if this is a observation layer, just leave the raster layers alone
+    let invisibleLayers = getAllRasterLayersInvisible();
+    if (alteredLayer.properties.product_type === "obs") {
+      invisibleLayers = [...newLayers];
+    }
+    setDefaultModelLayers([
+      ...invisibleLayers.slice(0, index),
+      { ...alteredLayer },
+      ...invisibleLayers.slice(index + 1),
+    ]);
+  };
+
   const getAllLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
 
@@ -186,6 +213,28 @@ export const LayersProvider = ({ children }) => {
         };
       });
   
+    return alteredLayers;
+  };
+
+  // get ADCIRC raster layers as invisible
+  const getAllRasterLayersInvisible = () => {
+    const currentLayers = [...defaultModelLayers];
+    const alteredLayers = currentLayers
+      .map((layer) => {
+        const opacity = layer.state.opacity;
+        if (layer.properties.product_type !== "obs") {
+              return {
+                ...layer,
+                state: {visible: false, opacity: opacity}
+              };
+        }
+        else {
+          return {
+            ...layer
+          };
+        }
+      });
+
     return alteredLayers;
   };
 
@@ -287,6 +336,7 @@ export const LayersProvider = ({ children }) => {
         setHurricaneTrackLayers,
         toggleHurricaneLayerVisibility,
         toggleLayerVisibility,
+        toggleLayerVisibility2,
         getAllLayersInvisible,
         getAllHurricaneLayersInvisible,
         selectedObservations, setSelectedObservations,
