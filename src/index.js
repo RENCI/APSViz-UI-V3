@@ -7,8 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import {
-    experimental_extendTheme as materialExtendTheme,
-    Experimental_CssVarsProvider as MaterialCssVarsProvider,
+    extendTheme as materialExtendTheme,
+    CssVarsProvider as MaterialCssVarsProvider,
     THEME_ID as MATERIAL_THEME_ID
 } from '@mui/material/styles';
 
