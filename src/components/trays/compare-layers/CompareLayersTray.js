@@ -420,7 +420,7 @@ export const CompareLayersTray = () => {
                             onChange={ (event, expanded) => { setAccordionIndex(expanded ? idx : null); }}
                         >
                             <AccordionSummary>
-                                <Typography level="body-sm">{ getHeaderSummary(layer['properties']) }</Typography>
+                                <Typography level="body-xs">{ getHeaderSummary(layer['properties']) }</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails>
