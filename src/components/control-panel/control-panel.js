@@ -338,7 +338,7 @@ export const ControlPanel = () => {
         '&:hover': { filter: 'opacity(1.0)' },
         height: 'auto',
         width: '300px',
-        zIndex: 1001,
+        zIndex: 999,
         borderRadius: 'sm',
       }}
     >
