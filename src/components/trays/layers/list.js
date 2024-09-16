@@ -186,7 +186,7 @@ export const LayersList = () => {
         });
 
         // turn on/off any hurricane layers
-        if (hurrLayers) {
+        if (hurrLayers && (hurrLayers.length > 0)) {
             newLayerList[0].properties.met_class === "tropical" ?
                     hurrLayers[0].state.visible = true
                     :
