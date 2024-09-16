@@ -2,52 +2,7 @@ import React, { Fragment, useRef } from 'react';
 import { Stack, Typography, Box, Button, Card } from '@mui/joy';
 import { useLayers } from '@context';
 import { SwapHorizontalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
-
-/**
- * gets the header data property name index
- * This takes into account the two types of runs (tropical, synoptic)
- *
- * @param layerProps
- * @param type
- * @returns {string}
- */
-const getPropertyName = (layerProps, element_name) => {
-    // init the return
-    let ret_val = undefined;
-
-    // capture the name of the element for tropical storms and advisory numbers
-    if (layerProps['met_class'] === 'tropical') {
-        // by the element name
-        switch (element_name) {
-            case 'stormOrModelEle':
-                ret_val = layerProps['storm_name'];
-                break;
-            case 'numberName':
-                ret_val = ' Adv: ';
-                break;
-            case 'numberEle':
-                ret_val = layerProps['advisory_number'];
-                break;
-        }
-    }
-    // capture the name of the synoptic ADCIRC models and cycle numbers
-    else {
-        switch (element_name) {
-            case 'stormOrModelEle':
-                ret_val = layerProps['model'];
-                break;
-            case 'numberName':
-                ret_val = ' Cycle: ';
-                break;
-            case 'numberEle':
-                ret_val = layerProps['cycle'];
-                break;
-        }
-    }
-
-    // return to the caller
-    return ret_val;
-};
+import { getHeaderSummary } from "@utils/map-utils";
 
 export const ComparePanel = () => {
     const {
@@ -74,7 +29,7 @@ export const ComparePanel = () => {
      * @param layerProps
      * @returns {string}
      */
-    const getHeaderSummary = (paneID) => {
+    const getHeaderSummaryByID = (paneID) => {
         // get the summary if a layer has been selected
         if (paneID !== defaultSelected) {
             // get the layer props
@@ -83,12 +38,7 @@ export const ComparePanel = () => {
             // if layer properties were captured
             if (layerProps !== undefined) {
                 // get the full accordian summary text
-                return '' +
-                    ((getPropertyName(layerProps, 'stormOrModelEle') === undefined) ? 'Data error' : getPropertyName(layerProps, 'stormOrModelEle').toUpperCase()) +
-                    ', ' + getPropertyName(layerProps, 'numberName') + getPropertyName(layerProps, 'numberEle') +
-                    ', Type: ' + layerProps['event_type'] +
-                    ', Grid: ' + layerProps['grid_type'] +
-                    ((layerProps['meteorological_model'] === 'None') ? '' : ', ' + layerProps['meteorological_model']);
+                return getHeaderSummary(layerProps);
             }
         }
         else {
@@ -138,16 +88,14 @@ export const ComparePanel = () => {
                         right: '1px',
                         filter: 'opacity(0.9)',
                         '&:hover': {filter: 'opacity(1.0)'},
-                        // padding: '10px',
                         ml: 1, mr: 1,
-                        zIndex: 999,
-                        height: 43
+                        zIndex: 999
                     }}>
                     <Stack direction={"row"} gap={ 1 } ref={ nodeRef } sx={{ mt: .5 , mb: .5 }}>
                         {
                             // render the left pane selections
                             <Stack direction={"column"} gap={ .5 } sx={{ ml: .5 }}>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummary(leftPaneID) } </Typography>
+                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ leftPaneType } </Typography>
                             </Stack>
                         }
@@ -158,7 +106,7 @@ export const ComparePanel = () => {
 
                         {
                             <Stack direction={"column"} gap={ .5 }>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummary(rightPaneID) } </Typography>
+                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ rightPaneType }</Typography>
                             </Stack>
                         }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionGroup, Box, Divider, IconButton, Stack
-} from '@mui/joy';
+import { Accordion, AccordionDetails, AccordionGroup, Box, Divider, IconButton, Stack } from '@mui/joy';
 import { ActionButton } from '@components/buttons';
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from '@context';
@@ -9,69 +8,7 @@ import { DeleteModelRunButton } from "@components/trays/layers/delete-layer-butt
 import { Typography } from '@mui/joy';
 import { DragHandleRounded as HandleIcon } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
-/**
- * gets the header data property name index
- * This takes into account the two types of runs (tropical, synoptic)
- *
- * @param layerProps
- * @param type
- * @returns {string}
- */
-const getPropertyName = (layerProps, element_name) => {
-    // init the return
-    let ret_val = undefined;
-
-    // capture the name of the element for tropical storms and advisory numbers
-    if (layerProps['met_class'] === 'tropical') {
-        // by the element name
-        switch (element_name) {
-            case 'stormOrModelEle':
-                ret_val = layerProps['storm_name'];
-                break;
-            case 'numberName':
-                ret_val = ' Adv: ';
-                break;
-            case 'numberEle':
-                ret_val = layerProps['advisory_number'];
-                break;
-        }
-    }
-    // capture the name of the synoptic ADCIRC models and cycle numbers
-    else {
-        switch (element_name) {
-            case 'stormOrModelEle':
-                ret_val = layerProps['model'];
-                break;
-            case 'numberName':
-                ret_val = ' Cycle: ';
-                break;
-            case 'numberEle':
-                ret_val = layerProps['cycle'];
-                break;
-        }
-    }
-
-    // return to the caller
-    return ret_val;
-};
-
-/**
- * gets the summary header text for the layer groups.
- * This takes into account the two types of runs (tropical, synoptic)
- *
- * @param layerProps
- * @returns {string}
- */
-const getHeaderSummary = (layerProps) => {
-    // get the full accordian summary text
-    return layerProps['run_date'] + ': ' +
-        ((getPropertyName(layerProps, 'stormOrModelEle') === undefined) ? 'Data error' : getPropertyName(layerProps, 'stormOrModelEle').toUpperCase()) +
-        ', ' + getPropertyName(layerProps, 'numberName') + getPropertyName(layerProps, 'numberEle') +
-        ', Type: ' + layerProps['event_type'] +
-        ', Grid: ' + layerProps['grid_type'] +
-        ((layerProps['meteorological_model'] === 'None') ? '' : ', ' + layerProps['meteorological_model']);
-};
+import { getHeaderSummary } from "@utils/map-utils";
 
 /**
  * renders the layer cards for a model run
