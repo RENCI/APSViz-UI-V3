@@ -79,13 +79,12 @@ export const ComparePanel = () => {
             (leftPaneID !== defaultSelected || rightPaneID !== defaultSelected) ?
                 <Card
                     ref={nodeRef}
-                    aria-labelledby="draggable-compare"
                     variant="soft"
                     sx={{
                         p: 0,
                         position: 'absolute',
-                        top: '3px',
-                        right: '1px',
+                        top: '10px',
+                        right: '90px',
                         filter: 'opacity(0.9)',
                         '&:hover': {filter: 'opacity(1.0)'},
                         ml: 1, mr: 1,
@@ -95,7 +94,7 @@ export const ComparePanel = () => {
                         {
                             // render the left pane selections
                             <Stack direction={"column"} gap={ .5 } sx={{ ml: .5 }}>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
+                                <Typography sx={{ m: 0, width: '300px'}} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ leftPaneType } </Typography>
                             </Stack>
                         }
@@ -106,7 +105,7 @@ export const ComparePanel = () => {
 
                         {
                             <Stack direction={"column"} gap={ .5 }>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
+                                <Typography sx={{ m: 0, width: '300px' }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ rightPaneType }</Typography>
                             </Stack>
                         }

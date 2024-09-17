@@ -115,7 +115,7 @@ export const MapLegend = () => {
                     sx={{
                         p: 0,
                         position: 'absolute',
-                        top: '60px',
+                        top: '10px',
                         right: '10px',
                         transition: 'filter 250ms',
                         filter: 'opacity(0.9)',
