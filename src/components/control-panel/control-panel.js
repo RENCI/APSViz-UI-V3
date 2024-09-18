@@ -12,6 +12,7 @@ import {
   Switch,
   ToggleButtonGroup,
   Typography,
+  Tooltip
 } from '@mui/joy';
 import {
   Air as MaxWindVelocityIcon,
@@ -416,24 +417,28 @@ export const ControlPanel = () => {
         >
           { // have to do wierd stuff to get maxele first and default button
             maxele_layer && (
-              <IconButton
-                value={maxele_layer.properties.product_type}
-                key={Math.random()}
-              >
-                { layerIcons[maxele_layer.properties.product_type] }
-              </IconButton>
+              <Tooltip key={Math.random()} title={maxele_layer.properties['product_name']}>
+                  <IconButton
+                    value={maxele_layer.properties.product_type}
+                  >
+                    { layerIcons[maxele_layer.properties.product_type] }
+                  </IconButton>
+              </Tooltip>
             )
           }
           {
             topLayers
               .filter(layer => layer.properties.product_type !== "obs" && layer.properties.product_type !== "maxele63")
+              // sort by the product name
+              .sort((a, b) => a.properties['product_name'] < b.properties['product_name'] ? -1 : 1)
               .map((layer, index) => (
-                <IconButton
-                  key={Math.random() + index}
-                  value={layer.properties.product_type}
-                >
-                  { layerIcons[layer.properties.product_type] }
-                </IconButton>
+                <Tooltip key={Math.random() + index} title={layer.properties['product_name']}>
+                  <IconButton
+                    value={ layer.properties.product_type }
+                  >
+                    { layerIcons[layer.properties.product_type] }
+                  </IconButton>
+                </Tooltip>
               ))
           }
         </ToggleButtonGroup>
