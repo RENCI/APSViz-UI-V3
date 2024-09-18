@@ -194,7 +194,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is an observation layer remove all observation layers/dialogs from the map
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
@@ -214,7 +214,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is an observation layer remove all observation layers/dialogs from the map
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
@@ -307,7 +307,7 @@ export const LayersProvider = ({ children }) => {
     const newLayers = defaultModelLayers.filter(l => l.id !== id);
     setDefaultModelLayers(newLayers);
 
-    // if this is a observation layer remove all observation layers/dialogs from the map
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
   };
 
@@ -324,7 +324,7 @@ export const LayersProvider = ({ children }) => {
         layer.state = newLayerDefaultState(layer, newLayers[0].group);
     });
 
-    // remove all observation dialogs when there is a model run removal
+    // remove all observation dialogs from the map on a change
     removeObservations();
 
     setDefaultModelLayers(newLayers);
@@ -335,7 +335,7 @@ export const LayersProvider = ({ children }) => {
    */
   const removeAllModelRuns = () => {
 
-    // remove all observation dialogs when removing all model runs
+    // remove all observation dialogs from the map on a change
     removeObservations();
 
     // reset the default layers array
