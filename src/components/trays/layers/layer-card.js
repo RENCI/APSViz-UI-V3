@@ -4,15 +4,12 @@ import {
   Accordion,
   AccordionDetails,
   Avatar,
-  ButtonGroup,
   Stack,
   Switch,
   Typography,
 } from '@mui/joy';
 import {
   KeyboardArrowDown as ExpandIcon,
-  ArrowDropUp as MoveUpArrow,
-  ArrowDropDown as MoveDownArrow,
   Schedule as ClockIcon,
 } from '@mui/icons-material';
 import { useLayers } from '@context';
@@ -21,10 +18,9 @@ import { LayerActions } from './layer-card-actions';
 import { ActionButton } from '@components/buttons';
 import { DeleteLayerButton } from './delete-layer-button';
 
-export const LayerCard = ({ index, layer }) => {
+export const LayerCard = ({ layer }) => {
   const {
     getLayerIcon,
-    swapLayers,
     toggleLayerVisibility2,
   } = useLayers();
   const expanded = useToggleState(false);
@@ -94,23 +90,7 @@ export const LayerCard = ({ index, layer }) => {
           </Stack>
         </Stack>
 
-        <ButtonGroup
-          size="sm"
-          orientation="vertical"
-          sx={{
-            transform: 'scaleX(0.75)',
-            '.MuiActionButton-root': { flex: 1 }
-          }}
-        >
-          <ActionButton
-            variant="outlined"
-            onClick={ () => swapLayers(index, index - 1) }
-          ><MoveUpArrow /></ActionButton> 
-          <ActionButton
-            variant="outlined"
-            onClick={ () => swapLayers(index, index + 1) }
-          ><MoveDownArrow /></ActionButton> 
-        </ButtonGroup>
+
 
         <ActionButton
           onClick={ expanded.toggle }
