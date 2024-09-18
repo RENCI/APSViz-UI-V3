@@ -110,7 +110,7 @@ export const StormLayers = () => {
         // this is not a hurricane layer - turn off all hurricane layers, if any
         setHurricaneLayersVisiblityOff();
       }
-      // remove any hurricane layers that do not have an assocatiated model run
+      // remove any hurricane layers that do not have an associated model run
       removeAnyOrphanHurricaneLayers();
     }
 
