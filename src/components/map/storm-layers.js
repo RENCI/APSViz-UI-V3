@@ -22,7 +22,7 @@ export const StormLayers = () => {
   const topLayer = layer_list[0];
   const hurrLayers = [...hurricaneTrackLayers];
 
-  // compare the hurricane layers list to the layers list and 
+  // compare the hurricane layers list to the default layers list and
   // remove any hurricane layers that are related to model run layers
   // that have been removed
   const removeAnyOrphanHurricaneLayers = () => {
@@ -40,8 +40,8 @@ export const StormLayers = () => {
     }
   };
 
-  // set visibily to false for all hurricane layers
-  const setHurricaneLayersVisiblityOff = () => {
+  // set visibility to false for all hurricane layers
+  const setHurricaneLayersVisibilityOff = () => {
     const allHurrLayers = hurrLayers.map((x) => x);
     if (allHurrLayers && allHurrLayers.length > 0) {
       allHurrLayers.forEach(layer => {
@@ -108,7 +108,7 @@ export const StormLayers = () => {
       }
       else {
         // this is not a hurricane layer - turn off all hurricane layers, if any
-        setHurricaneLayersVisiblityOff();
+        setHurricaneLayersVisibilityOff();
       }
       // remove any hurricane layers that do not have an associated model run
       removeAnyOrphanHurricaneLayers();
