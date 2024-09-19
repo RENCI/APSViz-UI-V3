@@ -2,8 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Stack, Typography, Box, Button, Card, Accordion, AccordionSummary, AccordionDetails, AccordionGroup } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils/map-utils";
-import { SwapVerticalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
 import SldStyleParser from 'geostyler-sld-parser';
+import { getHeaderSummary } from "@utils/map-utils";
 
 // install the side by side compare control
 require('@side-by-side');
@@ -44,36 +44,30 @@ export const CompareLayersTray = () => {
         map,
         defaultModelLayers,
         getLayerIcon,
+
+        // declare access to the compare mode items
+        defaultSelected,
+        leftPaneID, setLeftPaneID,
+        rightPaneID, setRightPaneID,
+        leftPaneType, setLeftPaneType,
+        rightPaneType, setRightPaneType,
+        leftLayerProps, setLeftLayerProps,
+        selectedLeftLayer, setSelectedLeftLayer,
+        rightLayerProps, setRightLayerProps,
+        selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        removeSideBySideLayers
+        resetCompare, removeSideBySideLayers
     } = useLayers();
 
     const {
         mapStyle,
     } = useSettings();
 
-    // default for the pane compare name
-    const defaultSelected = 'Not Selected';
-
-    // create some state for the left/right name selections
-    const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
-    const [rightPaneType, setRightPaneType] = useState(defaultSelected);
-
-    // create some state for the left/right ID selections
-    const [leftPaneID, setLeftPaneID] = useState(defaultSelected);
-    const [rightPaneID, setRightPaneID] = useState(defaultSelected);
-
     // used to collapse other open accordions
     const [accordionIndex, setAccordionIndex] = useState(null);
 
     // get the default model run layers
     const layers = [...defaultModelLayers];
-
-    const [leftLayerProps, setLeftLayerProps] = useState(null);
-    const [rightLayerProps, setRightLayerProps] = useState(null);
-
-    const [selectedLeftLayer, setSelectedLeftLayer] = useState(null);
-    const [selectedRightLayer, setSelectedRightLayer] = useState(null);
 
     // get a handle to the leaflet component
     const L = window.L;
@@ -87,30 +81,6 @@ export const CompareLayersTray = () => {
     // get the URL to the geoserver
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
     const gs_wms_url = gs_wfs_url + 'wms';
-
-    /**
-     * clears any captured compare selection data and layers
-     *
-     */
-    const resetCompare = () => {
-        // clear the left layer type/ID/properties/layer
-        setLeftPaneType(defaultSelected);
-        setLeftPaneID(defaultSelected);
-        setLeftLayerProps(null);
-        setSelectedLeftLayer(null);
-
-        // clear the right pane ID/Name/properties/layer
-        setRightPaneType(defaultSelected);
-        setRightPaneID(defaultSelected);
-        setRightLayerProps(null);
-        setSelectedRightLayer(null);
-
-        // remove the side by side layers
-        removeSideBySideLayers();
-
-        // rollup the accordions
-        setAccordionIndex(null);
-    };
 
     /**
      * Save the layer info to state
@@ -139,24 +109,11 @@ export const CompareLayersTray = () => {
     };
 
     /**
-     * swaps the selected layer position in the compare panes
-     *
+     * resets the accordion
      */
-    const swapPanes = () => {
-        // get the original left pane data
-        const origLeftPaneType = leftPaneType;
-        const origLeftPaneID = leftPaneID;
-        const origLeftLayerProps = leftLayerProps;
-
-        // clear the left layer type/ID
-        setLeftPaneType(rightPaneType);
-        setLeftPaneID(rightPaneID);
-        setLeftLayerProps(rightLayerProps);
-
-        // clear the right pane ID/Name
-        setRightPaneType(origLeftPaneType);
-        setRightPaneID(origLeftPaneID);
-        setRightLayerProps(origLeftLayerProps);
+    const resetAccordion = () => {
+        // rollup the accordions
+        setAccordionIndex(null);
     };
 
     /**
@@ -196,6 +153,7 @@ export const CompareLayersTray = () => {
     useEffect(() => {
         // reset this view
         resetCompare();
+        resetAccordion();
     }, [defaultModelLayers]);
 
     /**
@@ -314,10 +272,10 @@ export const CompareLayersTray = () => {
                          </Stack>
 
                          <Box textAlign="center">
-                             <Button size="md" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
+                             <Button size="sm" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
                                      sx={{ mr: 4 }}
                                      onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
-                             <Button size="md" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
+                             <Button size="sm" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
                                      onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
                          </Box>
@@ -347,6 +305,8 @@ export const CompareLayersTray = () => {
                 // filter by the group name
                 .filter((groups, idx, self) =>
                     (idx === self.findIndex((t) => (t['group'] === groups['group']))))
+                // sort by the group name
+                .sort((a, b) => a['group'] < b['group'] ? -1 : 1)
                 // at this point we have the distinct runs
                 .map((layer, idx) => (
                     <Box key={ idx }>
@@ -355,7 +315,7 @@ export const CompareLayersTray = () => {
                             onChange={ (event, expanded) => { setAccordionIndex(expanded ? idx : null); }}
                         >
                             <AccordionSummary>
-                                <Typography level="body-sm">{ layer['group'] }</Typography>
+                                <Typography level="body-xs">{ getHeaderSummary(layer['properties']) }</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails>
@@ -366,41 +326,6 @@ export const CompareLayersTray = () => {
                 ))
             }
             </AccordionGroup>
-
-            {
-                // display the selected product details for each pane
-                ( leftPaneID !== defaultSelected || rightPaneID !== defaultSelected ) ?
-                    <Fragment>
-                        <Card>
-                            <Stack direction={"column"} gap={ 1 }>
-                                {
-                                    // render the left pane selections
-                                    <Fragment>
-                                        <Typography sx={{ ml: 1 }} level="body-sm">Left pane:</Typography>
-                                        <Typography sx={{ ml: 2 }} level="body-sm">Type: { leftPaneType } </Typography>
-                                        <Typography sx={{ ml: 2, mb: 2 }} level="body-sm">ID: { leftPaneID } </Typography>
-                                    </Fragment>
-                                }
-
-                                <Box textAlign='center'>
-                                    <Button size="md" color="success" sx={{ mt: 0, mb: 1 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
-                                </Box>
-
-                                {
-                                    <Fragment>
-                                        <Typography sx={{ ml: 1 }} level="body-sm">Right pane:</Typography>
-                                        <Typography sx={{ ml: 2 }} level="body-sm">Type: { rightPaneType }</Typography>
-                                        <Typography sx={{ ml: 2 }} level="body-sm">ID: { rightPaneID }</Typography>
-                                    </Fragment>
-                                }
-
-                                <Button size="md" sx={{ mt: 1}} onClick={ resetCompare }>Reset</Button>
-
-                             </Stack>
-                        </Card>
-                    </Fragment>: ''
-            }
-
         </Fragment>
         );
 };

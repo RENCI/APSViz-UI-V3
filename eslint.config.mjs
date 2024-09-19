@@ -27,7 +27,8 @@ export default [
       "prefer-const": "warn",
       "no-dupe-args": "warn",
       "no-dupe-keys": "warn",
-      "react/display-name": "off"
+      "react/display-name": "off",
+      "react/no-is-mounted": "off"
       // ,"no-console": ["error", { allow: ["warn", "error"] }]
     },
     linterOptions: { reportUnusedDisableDirectives: "error" }
