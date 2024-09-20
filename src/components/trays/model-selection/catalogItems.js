@@ -25,9 +25,7 @@ export default function CatalogItems(data) {
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
 
-    // variables for the display of checkbox labels
-    let stormOrModelEle = null;
-    let numberName = null;
+    // variable for the layer advisory or cycle number
     let numberEle = null;
 
     /**
@@ -153,14 +151,10 @@ export default function CatalogItems(data) {
         else {
             // save the name of the element for tropical storms and advisory numbers
             if (data.isTropical) {
-                stormOrModelEle = 'storm_name';
-                numberName = ' Adv: ';
                 numberEle = 'advisory_number';
             }
             // save the name of the synoptic ADCIRC models and cycle numbers
             else if (!data.isTropical) {
-                stormOrModelEle = 'model';
-                numberName = ' Cycle: ';
                 numberEle = 'cycle';
             }
 
@@ -190,7 +184,8 @@ export default function CatalogItems(data) {
                                                     // filter by the group name, get the top 1
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
-                                                    .sort((a, b) => a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)
+                                                    .sort((a, b) =>
+                                                        a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
@@ -203,7 +198,7 @@ export default function CatalogItems(data) {
                                                                 <Typography sx={{ fontSize: "xs" }}>
                                                                     {
                                                                         // create the label
-                                                                        ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : getHeaderSummary(mbr['properties']))
+                                                                        ((mbr['properties'][numberEle] === undefined) ? 'Data error' : getHeaderSummary(mbr['properties']))
                                                                     }
                                                                 </Typography>
                                                             }
