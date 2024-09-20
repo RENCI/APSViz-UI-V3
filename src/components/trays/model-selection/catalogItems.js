@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox, Typography } from '@mui/joy';
 import PropTypes from 'prop-types';
 import { useLayers } from "@context/map-context";
+import { getHeaderSummary } from "@utils/map-utils";
 
 // set component prop types
 CatalogItems.propTypes = { data: PropTypes.any };
@@ -202,12 +203,7 @@ export default function CatalogItems(data) {
                                                                 <Typography sx={{ fontSize: "xs" }}>
                                                                     {
                                                                         // create the label
-                                                                        ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
-                                                                        numberName + mbr['properties'][numberEle] +
-                                                                        ', Type: ' + mbr['properties']['event_type'] +
-                                                                        ', Grid: ' + mbr['properties']['grid_type'] +
-                                                                        ', Instance: ' + mbr['properties']['instance_name'] +
-                                                                        ((mbr['properties']['meteorological_model'] === 'None') ? '' : ', ' +  mbr['properties']['meteorological_model'])
+                                                                        ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : getHeaderSummary(mbr['properties']))
                                                                     }
                                                                 </Typography>
                                                             }
