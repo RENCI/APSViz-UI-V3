@@ -33,12 +33,16 @@ export const ComparePanel = () => {
         // get the summary if a layer has been selected
         if (paneID !== defaultSelected) {
             // get the layer props
-            const layerProps = layers.filter(item => item.id === paneID)[0]['properties'];
+            const layerProps = layers.filter(item => item.id === paneID);
 
-            // if layer properties were captured
-            if (layerProps !== undefined) {
-                // get the full accordian summary text
-                return getHeaderSummary(layerProps);
+            // if the layers were captured
+            if (layerProps !== undefined && layerProps.length !== 0) {
+                // get the full header summary text
+                return getHeaderSummary(layerProps[0]['properties']);
+            }
+            else {
+                // return the default text
+                return defaultSelected;
             }
         }
         else {
