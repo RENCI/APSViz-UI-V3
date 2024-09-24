@@ -61,7 +61,7 @@ export const AdcircRasterLayer = (layer) => {
             url={gs_wms_url}
             layers={layer.layer.layers}
             params={wmsLayerParams}
-            opacity={layer.opacity}
+            opacity={layer.layer.state.opacity}
         />
     );
 
