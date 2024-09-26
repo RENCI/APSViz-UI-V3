@@ -54,6 +54,7 @@ export const LayersProvider = ({ children }) => {
    */
   // default for the pane compare name
   const defaultSelected = 'Not Selected';
+  const [needsLayerDefaultView, setNeedsLayerDefaultView] = useState(false);
 
   // create some state for the left/right name/type selections
   const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
@@ -78,7 +79,7 @@ export const LayersProvider = ({ children }) => {
    * get the layer icon
    *
    * @param productType
-   * @returns {JSX.Element}
+   * @returns JSX.Element
    */
   const getLayerIcon = ( productType )=> {
       // grab the icon
@@ -112,6 +113,21 @@ export const LayersProvider = ({ children }) => {
    *
    */
   const resetCompare = () => {
+      // if there is something to reset
+      if (needsLayerDefaultView) {
+          // get the group id for the topmost (default) layer
+          const groupID = defaultModelLayers[0]['group'];
+
+          // turn on visibility for the default layer
+          const layer = defaultModelLayers.filter((l => l.group === groupID && l.properties['product_type'] === 'maxele63'));
+
+          // set the visibility of the default layer
+          toggleLayerVisibility(layer[0].id, true);
+
+          // no default layers need to be reset
+          setNeedsLayerDefaultView(false);
+      }
+
       // clear the left layer type/ID/properties/layer
       setLeftPaneType(defaultSelected);
       setLeftPaneID(defaultSelected);
@@ -170,7 +186,7 @@ export const LayersProvider = ({ children }) => {
         }
     };
 
-  const toggleHurricaneLayerVisibility = id => {
+  const toggleHurricaneLayerVisibility = (id, visibility=undefined) => {
     const newLayers = [...hurricaneTrackLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -178,7 +194,10 @@ export const LayersProvider = ({ children }) => {
       return;
     }
     const alteredLayer = newLayers[index];
-    alteredLayer.state.visible = !alteredLayer.state.visible;
+
+    // set the layer visibility
+    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
+
     setHurricaneTrackLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -186,7 +205,7 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const toggleLayerVisibility = id => {
+  const toggleLayerVisibility = (id, visibility=undefined) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -198,7 +217,10 @@ export const LayersProvider = ({ children }) => {
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
-    alteredLayer.state.visible = !alteredLayer.state.visible;
+
+    // set the layer visibility
+    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
+
     setDefaultModelLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -221,7 +243,7 @@ export const LayersProvider = ({ children }) => {
     alteredLayer.state.visible = !alteredLayer.state.visible;
 
     // if we are toggle a raster layer, turn off the other raster layers
-    // if this is a observation layer, just leave the raster layers alone
+    // if this is an observation layer, just leave the raster layers alone
     let invisibleLayers = getAllRasterLayersInvisible();
     if (alteredLayer.properties.product_type === "obs") {
       invisibleLayers = [...newLayers];
@@ -248,7 +270,7 @@ export const LayersProvider = ({ children }) => {
 
   const getAllHurricaneLayersInvisible = () => {
     const currentLayers = [...hurricaneTrackLayers];
-    const alteredLayers = currentLayers
+    return currentLayers
       .map((layer) => {
         const opacity = layer.state.opacity;
         return {
@@ -256,14 +278,13 @@ export const LayersProvider = ({ children }) => {
           state: {visible: false, opacity: opacity}
         };
       });
-  
-    return alteredLayers;
+
   };
 
   // get ADCIRC raster layers as invisible
   const getAllRasterLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
-    const alteredLayers = currentLayers
+    return currentLayers
       .map((layer) => {
         const opacity = layer.state.opacity;
         if (layer.properties.product_type !== "obs") {
@@ -278,8 +299,6 @@ export const LayersProvider = ({ children }) => {
           };
         }
       });
-
-    return alteredLayers;
   };
 
   const swapLayers = (i, j) => {
@@ -331,7 +350,7 @@ export const LayersProvider = ({ children }) => {
   };
 
   /**
-   * removes all selected model runs
+   * removes all selected model run
    */
   const removeAllModelRuns = () => {
 
@@ -372,32 +391,23 @@ export const LayersProvider = ({ children }) => {
   return (
     <LayersContext.Provider
       value={{
-        map,
-        setMap,
-        defaultModelLayers,
-        setDefaultModelLayers,
-        hurricaneTrackLayers,
-        setHurricaneTrackLayers,
-        toggleHurricaneLayerVisibility,
-        toggleLayerVisibility,
-        toggleLayerVisibility2,
-        getAllLayersInvisible,
-        getAllHurricaneLayersInvisible,
+        map, setMap,
+        baseMap, setBaseMap,
+
+        defaultModelLayers, setDefaultModelLayers,
+        hurricaneTrackLayers, setHurricaneTrackLayers,
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
-        swapLayers,
-        removeLayer,
-        removeModelRun,
-        removeAllModelRuns,
-        removeObservations,
         layerTypes,
-        getLayerIcon,
-        baseMap,
-        setBaseMap,
-        setLayerOpacity,
+
+        toggleHurricaneLayerVisibility, toggleLayerVisibility, toggleLayerVisibility2,
+        getAllLayersInvisible, getAllHurricaneLayersInvisible, getAllRasterLayersInvisible,
+        swapLayers, removeLayer, removeModelRun, removeAllModelRuns, removeObservations,
+        getLayerIcon, setLayerOpacity,
 
         // declare access to the compare mode items
         defaultSelected,
+        setNeedsLayerDefaultView,
         leftPaneID, setLeftPaneID,
         rightPaneID, setRightPaneID,
         leftPaneType, setLeftPaneType,
