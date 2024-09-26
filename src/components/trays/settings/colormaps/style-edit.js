@@ -7,7 +7,7 @@ import {
   Select,
 } from '@mui/joy';
 import SldStyleParser from 'geostyler-sld-parser';
-import { ColorMapEditor } from 'geostyler';
+import { ColorMapEditor } from '@renci/apsviz-geostyler';
 
 export const StyleEditor = () => {
 
