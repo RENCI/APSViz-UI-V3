@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useRef, forwardRef } from 'react';
 import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography } from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
@@ -20,10 +20,10 @@ import { markUnclicked } from '@utils/map-utils';
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
     title: PropTypes.string,
-    index: PropTypes.any,
-    dialogObject: PropTypes.any,
-    dataKey: PropTypes.any,
-    dataList: PropTypes.any,
+    index: PropTypes.number,
+    dialogObject: PropTypes.object,
+    dataKey: PropTypes.string,
+    dataList: PropTypes.array,
     setDataList: PropTypes.func,
     map: PropTypes.any,
     showLineButtonView:  PropTypes.any,
@@ -45,12 +45,16 @@ BaseFloatingDialog.propTypes = {
  */
 export default function BaseFloatingDialog({ title, index, dialogObject, dataKey, dataList, setDataList, map, showLineButtonView, toggleLineView } ) {
     // declare state to capture the dialog size
-    const [newWidth, setNewWidth] = React.useState(460);
-    const [newHeight, setNewHeight] = React.useState(300);
+    const [newWidth, setNewWidth] = useState(460);
+    const [newHeight, setNewHeight] = useState(250);
 
-    // declare the minimums for the dialog content area
-    const minWidth = 200;
-    const minHeight = 150;
+    // declare the width/meight min/max
+    const minWidth = 350;
+    const maxWidth = 800;
+
+    const minHeight = 175;
+    const maxHeight = 500;
+
 
     /**
     * the close dialog handler
@@ -90,50 +94,51 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     TransitionComponent={ Transition }
                     disableEnforceFocus
                     style={{ pointerEvents: 'none' }}
-                    PaperProps={{ sx: { pointerEvents: 'auto' } }}
-                    sx={{ zIndex: 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' }, left: index * 50, top: index * 75 }}>
+                    PaperProps={{left: index * 20, top: index * 35, sx: { pointerEvents: 'auto' } }}
+                    sx={{ ml: 6, zIndex: 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}>
 
                     <DialogTitle
                         id="draggable-dialog"
                         sx={{ p: 1, display: 'flex', alignItems: 'center', cursor: 'move', backgroundColor: 'lightblue' }}>
                         <Typography
-                            sx={{ wordWrap: 'break-word', width: newWidth, minWidth: minWidth, flexWrap: "wrap", fontSize: 12}}>
+                            sx={{ mt: .25, wordWrap: 'break-word', width: newWidth, minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight, flexWrap: "wrap", fontSize: 12}}>
                             { title }
                         </Typography>
                     </DialogTitle>
-                    <IconButton size="small" onClick={ handleClose } sx={{ position: 'absolute', right: 2, top: 1 }}>
-                        <CloseOutlinedIcon color={"primary"}/>
+
+                    <IconButton onClick={ handleClose } sx={{ position: 'absolute', right: 2, top: 0 }}>
+                        <CloseOutlinedIcon fontSize="small" color={"primary"}/>
                     </IconButton>
 
                     <DialogContent sx={{ fontSize: 10, p: "5px" }}>
                         <Stack direction="column" spacing={ '5px' } alignItems="center" >
                             <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
-                                <Stack display="wrap" sx={{ width: newWidth, minWidth: minWidth, flexWrap: "wrap"}} direction="row" spacing={'px'}  alignItems="center">
+                                <Stack display="wrap" sx={{ width: newWidth, minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight, flexWrap: "wrap"}} direction="row" spacing={'px'}  alignItems="center">
                                     {showLineButtonView("Observations") ?
                                         <Box><ToggleButton
                                         value="Observations"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, m: 0, p: "3px", color: 'Black' , fontSize: 9 }}>
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, m: 0, p: "3px", color: 'Black' , fontSize: 8 }}>
                                         Observations</ToggleButton></Box> : ''
                                     }
 
                                     {(showLineButtonView("APS Nowcast")) ?
                                         <Box><ToggleButton
                                         value="APS Nowcast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 9 }}>
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
                                         APS Nowcast</ToggleButton></Box> : ''
                                     }
 
                                     {(showLineButtonView("APS Forecast")) ?
                                         <Box><ToggleButton
                                         value="APS Forecast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 9 }}>
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
                                         APS Forecast</ToggleButton></Box> : ''
                                     }
 
                                     {(showLineButtonView("NOAA Tidal Predictions")) ?
                                         <Box><ToggleButton
                                         value="NOAA Tidal Predictions"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, m: 0, p: "3px", color: 'Teal', fontSize: 9 }}>
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, m: 0, p: "3px", color: 'Teal', fontSize: 8 }}>
                                         NOAA Tidal Predictions</ToggleButton></Box> : ''
                                     }
 
@@ -146,7 +151,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                                 </Stack>
                             </ToggleButtonGroup>
 
-                            <Box sx={{ width: newWidth, minWidth: minWidth, height: newHeight, minHeight: minHeight }}> { dialogObject } </Box>
+                            <Box sx={{ width: newWidth, minWidth: minWidth, maxWidth: maxWidth, height: newHeight, minHeight: minHeight, maxHeight: maxHeight }}> { dialogObject } </Box>
                         </Stack>
                     </DialogContent>
                 </Dialog>
@@ -155,21 +160,30 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     );
 }
 
+// define the additional props for dialog positioning
+PaperComponent.propTypes = {
+    left: PropTypes.number,
+    top: PropTypes.number
+};
+
 /**
 * This creates a draggable area for the dialog content
 *
 * @param props
-* @returns {JSX.Element}
 * @constructor
 */
 function PaperComponent(props) {
     // create a reference to avoid the findDOMNode deprecation issue
-    const nodeRef = React.useRef(null);
+    const nodeRef = useRef(null);
 
     // render the component
     return (
-        <Draggable nodeRef={ nodeRef } handle="#draggable-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper ref={ nodeRef } {...props} />
+        <Draggable
+            bounds="parent"
+            nodeRef={ nodeRef }
+            handle="#draggable-dialog"
+            cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper ref={ nodeRef } { ...props } sx={{ left: props.left, top: props.top }}/>
         </Draggable>
     );
 }
@@ -177,8 +191,7 @@ function PaperComponent(props) {
 /**
  * This creates an animated transition for the dialog that pops up
 *
-* @type {React.ForwardRefExoticComponent<React.PropsWithoutRef<{}> & React.RefAttributes<any>>}
 */
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ ref } { ...props } />;
 });
