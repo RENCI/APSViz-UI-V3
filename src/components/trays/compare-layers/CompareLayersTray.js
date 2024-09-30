@@ -35,18 +35,19 @@ const getModelRunGroupList = (layers) => {
 /**
  * This component renders the model selection tray
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 export const CompareLayersTray = () => {
     // get the context for the compare layers view
     const {
         map,
-        defaultModelLayers,
+        defaultModelLayers, setDefaultModelLayers,
+        getAllRasterLayersInvisible,
         getLayerIcon,
 
         // declare access to the compare mode items
-        defaultSelected,
+        defaultSelected, setNeedsLayerDefaultView,
         leftPaneID, setLeftPaneID,
         rightPaneID, setRightPaneID,
         leftPaneType, setLeftPaneType,
@@ -56,7 +57,7 @@ export const CompareLayersTray = () => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        resetCompare, removeSideBySideLayers
+        removeSideBySideLayers
     } = useLayers();
 
     const {
@@ -106,14 +107,9 @@ export const CompareLayersTray = () => {
             // set the layer id
             setRightPaneID(paneID);
         }
-    };
 
-    /**
-     * resets the accordion
-     */
-    const resetAccordion = () => {
-        // rollup the accordions
-        setAccordionIndex(null);
+        // make sure the raster and hurricane layers are invisible
+        setLayersInvisible();
     };
 
     /**
@@ -147,14 +143,16 @@ export const CompareLayersTray = () => {
     }
 
     /**
-     * reset compare mode if anything happens to the default layers
+     * sets the visibility to false for raster layers
      *
      */
-    useEffect(() => {
-        // reset this view
-        resetCompare();
-        resetAccordion();
-    }, [defaultModelLayers]);
+    const setLayersInvisible = () => {
+        // make all raster layers invisible
+        setDefaultModelLayers(getAllRasterLayersInvisible());
+
+        // set flag to indicate that default layers should be done on reset
+        setNeedsLayerDefaultView(true);
+    };
 
     /**
      * this use effect waits for the layer properties (left and right) to get populated
@@ -266,19 +264,21 @@ export const CompareLayersTray = () => {
             .map((layer, idx) => {
                 layerCards.push(
                      <Card key={ idx }>
-                         <Stack direction="row" alignItems="center" gap={ 1 }>
-                             { getLayerIcon(layer.properties['product_type']) }
-                             <Typography level="body-sm">{ layer.properties['product_name'] }</Typography>
-                         </Stack>
+                         <Stack direction="column" sx={{ flex: 1 }}>
+                             <Stack direction="row" alignItems="center" gap={ .5 }>
 
-                         <Box textAlign="center">
-                             <Button size="sm" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
-                                     sx={{ mr: 4 }}
+                             { getLayerIcon(layer.properties['product_type']) }
+
+                             <Typography level="body-xs" sx={{ flex: 1 }}> { layer.properties['product_name'] }</Typography>
+
+                             <Button size="xs" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
+                                     sx={{ ml: 2, mr: 2 }}
                                      onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
-                             <Button size="sm" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
+                            <Button size="xs" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
                                      sx={{ m: 0 }}
                                      onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
-                         </Box>
+                            </Stack>
+                         </Stack>
                      </Card>
                 );
             });
@@ -287,7 +287,7 @@ export const CompareLayersTray = () => {
         return layerCards;
     };
 
-    // render the controls
+    // render the layer selection controls for each model run
     return (
         <Fragment>
             <AccordionGroup
@@ -306,7 +306,7 @@ export const CompareLayersTray = () => {
                 .filter((groups, idx, self) =>
                     (idx === self.findIndex((t) => (t['group'] === groups['group']))))
                 // sort by the group name
-                .sort((a, b) => a['group'] < b['group'] ? -1 : 1)
+                .sort((a, b) => a['properties']['run_date'] + a['group'] > b['properties']['run_date'] + b['group'] ? 1 : -1)
                 // at this point we have the distinct runs
                 .map((layer, idx) => (
                     <Box key={ idx }>
@@ -327,5 +327,5 @@ export const CompareLayersTray = () => {
             }
             </AccordionGroup>
         </Fragment>
-        );
+    );
 };
