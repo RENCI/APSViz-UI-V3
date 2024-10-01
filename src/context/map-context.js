@@ -54,7 +54,6 @@ export const LayersProvider = ({ children }) => {
    */
   // default for the pane compare name
   const defaultSelected = 'Not Selected';
-  const [needsLayerDefaultView, setNeedsLayerDefaultView] = useState(false);
 
   // create some state for the left/right name/type selections
   const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
@@ -113,21 +112,6 @@ export const LayersProvider = ({ children }) => {
    *
    */
   const resetCompare = () => {
-      // if there is something to reset
-      if (needsLayerDefaultView) {
-          // get the group id for the topmost (default) layer
-          const groupID = defaultModelLayers[0]['group'];
-
-          // turn on visibility for the default layer
-          const layer = defaultModelLayers.filter((l => l.group === groupID && l.properties['product_type'] === 'maxele63'));
-
-          // set the visibility of the default layer
-          toggleLayerVisibility(layer[0].id, true);
-
-          // no default layers need to be reset
-          setNeedsLayerDefaultView(false);
-      }
-
       // clear the left layer type/ID/properties/layer
       setLeftPaneType(defaultSelected);
       setLeftPaneID(defaultSelected);
@@ -186,7 +170,7 @@ export const LayersProvider = ({ children }) => {
         }
     };
 
-  const toggleHurricaneLayerVisibility = (id, visibility=undefined) => {
+  const toggleHurricaneLayerVisibility = id => {
     const newLayers = [...hurricaneTrackLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -194,10 +178,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
     const alteredLayer = newLayers[index];
-
-    // set the layer visibility
-    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
-
+    alteredLayer.state.visible = !alteredLayer.state.visible;
     setHurricaneTrackLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -205,7 +186,7 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const toggleLayerVisibility = (id, visibility=undefined) => {
+  const toggleLayerVisibility = id => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -213,14 +194,11 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // remove all observation dialogs from the map on a change
+    // remove all observation layers/dialogs from the map if this is an observation layer
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
-
-    // set the layer visibility
-    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
-
+    alteredLayer.state.visible = !alteredLayer.state.visible;
     setDefaultModelLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -407,7 +385,6 @@ export const LayersProvider = ({ children }) => {
 
         // declare access to the compare mode items
         defaultSelected,
-        setNeedsLayerDefaultView,
         leftPaneID, setLeftPaneID,
         rightPaneID, setRightPaneID,
         leftPaneType, setLeftPaneType,

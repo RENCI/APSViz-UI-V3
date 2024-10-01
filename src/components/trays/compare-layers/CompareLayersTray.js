@@ -42,12 +42,11 @@ export const CompareLayersTray = () => {
     // get the context for the compare layers view
     const {
         map,
-        defaultModelLayers, setDefaultModelLayers,
-        getAllRasterLayersInvisible,
+        defaultModelLayers,
         getLayerIcon,
 
         // declare access to the compare mode items
-        defaultSelected, setNeedsLayerDefaultView,
+        defaultSelected,
         leftPaneID, setLeftPaneID,
         rightPaneID, setRightPaneID,
         leftPaneType, setLeftPaneType,
@@ -57,7 +56,7 @@ export const CompareLayersTray = () => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        removeSideBySideLayers
+        resetCompare, removeSideBySideLayers
     } = useLayers();
 
     const {
@@ -107,9 +106,14 @@ export const CompareLayersTray = () => {
             // set the layer id
             setRightPaneID(paneID);
         }
+    };
 
-        // make sure the raster and hurricane layers are invisible
-        setLayersInvisible();
+    /**
+     * resets the accordion
+     */
+    const resetAccordion = () => {
+        // rollup the accordions
+        setAccordionIndex(null);
     };
 
     /**
@@ -143,16 +147,14 @@ export const CompareLayersTray = () => {
     }
 
     /**
-     * sets the visibility to false for raster layers
+     * reset compare mode if anything happens to the default layers
      *
      */
-    const setLayersInvisible = () => {
-        // make all raster layers invisible
-        setDefaultModelLayers(getAllRasterLayersInvisible());
-
-        // set flag to indicate that default layers should be done on reset
-        setNeedsLayerDefaultView(true);
-    };
+    useEffect(() => {
+        // reset this view
+        resetCompare();
+        resetAccordion();
+    }, [defaultModelLayers]);
 
     /**
      * this use effect waits for the layer properties (left and right) to get populated
