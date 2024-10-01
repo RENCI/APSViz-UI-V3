@@ -25,6 +25,14 @@ ENV PATH /src/node_modules/.bin:$PATH
 # copy in the project package requirements spec
 COPY package*.json /src/
 
+# get the renci package registry secrets
+ARG APP_PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY)
+ARG APP_PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
+
+# create the package registry access
+RUN printf "$APP_PACKAGE_RENCI_REGISTRY\n" >> .npmrc
+RUN printf "$APP_PACKAGE_REGISTRY_TOKEN\n" >> .npmrc
+
 # install package components
 RUN npm install
 
@@ -86,14 +94,6 @@ RUN printf "REACT_APP_GS_DATA_URL_DEV=$APP_GS_DATA_DEV_URL\n" >> .env
 RUN printf "REACT_APP_UI_DATA_URL_DEV=$APP_UI_DATA_DEV_URL\n"  >> .env
 RUN printf "REACT_APP_UI_DATA_TOKEN_DEV=$APP_UI_DATA_DEV_TOKEN\n" >> .env
 RUN printf "REACT_APP_HURRICANE_ICON_URL_DEV=$APP_UI_HURRICANE_ICON_DEV_URL\n" >> .env
-
-# get the renci package registry secrets
-ARG APP_PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY)
-ARG APP_PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
-
-# create the package registry access
-RUN printf "$APP_PACKAGE_RENCI_REGISTRY\n" >> .npmrc
-RUN printf "$APP_PACKAGE_REGISTRY_TOKEN\n" >> .npmrc
 
 # Copy in source files
 COPY . /src
