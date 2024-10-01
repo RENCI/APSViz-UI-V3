@@ -78,7 +78,7 @@ export const LayersProvider = ({ children }) => {
    * get the layer icon
    *
    * @param productType
-   * @returns {JSX.Element}
+   * @returns JSX.Element
    */
   const getLayerIcon = ( productType )=> {
       // grab the icon
@@ -194,7 +194,7 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is an observation layer remove all observation layers/dialogs from the map
+    // remove all observation layers/dialogs from the map if this is an observation layer
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
@@ -214,14 +214,14 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // if this is an observation layer remove all observation layers/dialogs from the map
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
     alteredLayer.state.visible = !alteredLayer.state.visible;
 
     // if we are toggle a raster layer, turn off the other raster layers
-    // if this is a observation layer, just leave the raster layers alone
+    // if this is an observation layer, just leave the raster layers alone
     let invisibleLayers = getAllRasterLayersInvisible();
     if (alteredLayer.properties.product_type === "obs") {
       invisibleLayers = [...newLayers];
@@ -248,7 +248,7 @@ export const LayersProvider = ({ children }) => {
 
   const getAllHurricaneLayersInvisible = () => {
     const currentLayers = [...hurricaneTrackLayers];
-    const alteredLayers = currentLayers
+    return currentLayers
       .map((layer) => {
         const opacity = layer.state.opacity;
         return {
@@ -256,14 +256,13 @@ export const LayersProvider = ({ children }) => {
           state: {visible: false, opacity: opacity}
         };
       });
-  
-    return alteredLayers;
+
   };
 
   // get ADCIRC raster layers as invisible
   const getAllRasterLayersInvisible = () => {
     const currentLayers = [...defaultModelLayers];
-    const alteredLayers = currentLayers
+    return currentLayers
       .map((layer) => {
         const opacity = layer.state.opacity;
         if (layer.properties.product_type !== "obs") {
@@ -278,8 +277,6 @@ export const LayersProvider = ({ children }) => {
           };
         }
       });
-
-    return alteredLayers;
   };
 
   const swapLayers = (i, j) => {
@@ -307,7 +304,7 @@ export const LayersProvider = ({ children }) => {
     const newLayers = defaultModelLayers.filter(l => l.id !== id);
     setDefaultModelLayers(newLayers);
 
-    // if this is a observation layer remove all observation layers/dialogs from the map
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
   };
 
@@ -324,18 +321,18 @@ export const LayersProvider = ({ children }) => {
         layer.state = newLayerDefaultState(layer, newLayers[0].group);
     });
 
-    // remove all observation dialogs when there is a model run removal
+    // remove all observation dialogs from the map on a change
     removeObservations();
 
     setDefaultModelLayers(newLayers);
   };
 
   /**
-   * removes all selected model runs
+   * removes all selected model run
    */
   const removeAllModelRuns = () => {
 
-    // remove all observation dialogs when removing all model runs
+    // remove all observation dialogs from the map on a change
     removeObservations();
 
     // reset the default layers array
@@ -372,29 +369,19 @@ export const LayersProvider = ({ children }) => {
   return (
     <LayersContext.Provider
       value={{
-        map,
-        setMap,
-        defaultModelLayers,
-        setDefaultModelLayers,
-        hurricaneTrackLayers,
-        setHurricaneTrackLayers,
-        toggleHurricaneLayerVisibility,
-        toggleLayerVisibility,
-        toggleLayerVisibility2,
-        getAllLayersInvisible,
-        getAllHurricaneLayersInvisible,
+        map, setMap,
+        baseMap, setBaseMap,
+
+        defaultModelLayers, setDefaultModelLayers,
+        hurricaneTrackLayers, setHurricaneTrackLayers,
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
-        swapLayers,
-        removeLayer,
-        removeModelRun,
-        removeAllModelRuns,
-        removeObservations,
         layerTypes,
-        getLayerIcon,
-        baseMap,
-        setBaseMap,
-        setLayerOpacity,
+
+        toggleHurricaneLayerVisibility, toggleLayerVisibility, toggleLayerVisibility2,
+        getAllLayersInvisible, getAllHurricaneLayersInvisible, getAllRasterLayersInvisible,
+        swapLayers, removeLayer, removeModelRun, removeAllModelRuns, removeObservations,
+        getLayerIcon, setLayerOpacity,
 
         // declare access to the compare mode items
         defaultSelected,
