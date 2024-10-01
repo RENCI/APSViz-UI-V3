@@ -136,6 +136,7 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
+        // if there were no catalog data returned
         else if(data.data['catalog'] === undefined || data.data['catalog'] === null) {
             return (
                 <div>
@@ -143,7 +144,6 @@ export default function CatalogItems(data) {
                 </div>
             );
         }
-
         // return all the data cards
         else {
             // render the results of the data query
