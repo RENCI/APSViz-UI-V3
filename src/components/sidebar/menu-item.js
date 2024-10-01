@@ -7,6 +7,21 @@ import {
 } from '@mui/joy';
 
 export const MenuItem = ({ Icon, title, onClick, active }) => {
+  if (active) {
+    return (
+      <ListItem>
+        <IconButton
+          size="lg"
+          color="primary"
+          variant={ active ? 'solid' : 'soft' }
+          onClick={ onClick }
+        >
+          { Icon }
+        </IconButton>
+      </ListItem>
+    );
+  }
+
   return (
     <ListItem>
       <Tooltip

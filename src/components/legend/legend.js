@@ -83,22 +83,23 @@ export const MapLegend = () => {
     }, [defaultModelLayers, mapStyle]);
 
     // define the starting size of the card
-    const [newWidth, setNewWidth] = useState(60);
-    const [newHeight, setNewHeight] = useState(400);
+    const [newWidth, setNewWidth] = useState(45);
+    const [newHeight, setNewHeight] = useState(200);
 
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = useRef(null);
 
     // declare the width min/max for the legend card
-    const minWidth = 40;
-    const maxWidth = 110;
+    const minWidth = 45;
+    const maxWidth = 75;
 
     // declare the height min/max for the legend card
     const minHeight = 250;
-    const maxHeight = 600;
+    const maxHeight = 350;
 
     return (
         <Draggable
+            bounds="parent"
             nodeRef={ nodeRef }
             handle="#draggable-card"
             cancel={'[class*="MuiDialogContent-root"]'}>
@@ -116,7 +117,7 @@ export const MapLegend = () => {
                     aria-labelledby="draggable-card"
                     variant="soft"
                     sx={{
-                        p: 0,
+                        ml: 10,
                         position: 'absolute',
                         top: '60px',
                         right: '10px',
@@ -132,7 +133,7 @@ export const MapLegend = () => {
                         minWidth: minWidth,
                         maxWidth: maxWidth,
 
-                        height: newHeight + 50 + 16,
+                        height: newHeight + 75,
                         minHeight: minHeight + 60,
                         maxHeight: maxHeight + 65
                     }}>
@@ -142,7 +143,7 @@ export const MapLegend = () => {
                             p={ 1 }
                             alignItems="center"
                         >
-                            <Avatar variant="outlined" id="draggable-card"  sx={{ m: -1, p: 0, height: 40, cursor: 'move' }}>
+                            <Avatar variant="outlined" id="draggable-card" sx={{ m: -1, p: 0, height: 40, cursor: 'move' }}>
                                 { layerIcon }
                             </Avatar>
 
@@ -151,12 +152,15 @@ export const MapLegend = () => {
                                 alt=""
                                 src={ legendUrl }
                                 sx={{
+                                    //border: 1,
+                                    // borderColor: 'primary.main',
+                                    // mb: 1,
                                     height: newHeight,
                                     width: newWidth,
-                                    minWidth: minWidth,
-                                    minHeight: minHeight,
+                                    minWidth: minWidth-5,
+                                    minHeight: minHeight-10,
                                     maxWidth: maxWidth-10,
-                                    maxHeight: maxHeight-10,
+                                    maxHeight: maxHeight,
                                 }}
                             />
                         </Stack>

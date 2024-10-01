@@ -33,12 +33,16 @@ export const ComparePanel = () => {
         // get the summary if a layer has been selected
         if (paneID !== defaultSelected) {
             // get the layer props
-            const layerProps = layers.filter(item => item.id === paneID)[0]['properties'];
+            const layerProps = layers.filter(item => item.id === paneID);
 
-            // if layer properties were captured
-            if (layerProps !== undefined) {
-                // get the full accordian summary text
-                return getHeaderSummary(layerProps);
+            // if the layers were captured
+            if (layerProps !== undefined && layerProps.length !== 0) {
+                // get the full header summary text
+                return getHeaderSummary(layerProps[0]['properties']);
+            }
+            else {
+                // return the default text
+                return defaultSelected;
             }
         }
         else {
@@ -79,13 +83,12 @@ export const ComparePanel = () => {
             (leftPaneID !== defaultSelected || rightPaneID !== defaultSelected) ?
                 <Card
                     ref={nodeRef}
-                    aria-labelledby="draggable-compare"
                     variant="soft"
                     sx={{
                         p: 0,
                         position: 'absolute',
-                        top: '3px',
-                        right: '1px',
+                        top: '10px',
+                        right: '90px',
                         filter: 'opacity(0.9)',
                         '&:hover': {filter: 'opacity(1.0)'},
                         ml: 1, mr: 1,
@@ -95,7 +98,7 @@ export const ComparePanel = () => {
                         {
                             // render the left pane selections
                             <Stack direction={"column"} gap={ .5 } sx={{ ml: .5 }}>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
+                                <Typography sx={{ m: 0, width: '350px'}} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ leftPaneType } </Typography>
                             </Stack>
                         }
@@ -106,7 +109,7 @@ export const ComparePanel = () => {
 
                         {
                             <Stack direction={"column"} gap={ .5 }>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
+                                <Typography sx={{ m: 0, width: '350px' }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
                                 <Typography sx={{ m: 0 }} level="body-xs">{ rightPaneType }</Typography>
                             </Stack>
                         }

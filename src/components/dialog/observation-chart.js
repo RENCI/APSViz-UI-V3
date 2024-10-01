@@ -191,7 +191,7 @@ function formatX_axis(value) {
     // empty data will be ignored
     if (value !== "")
         // do the reformatting
-        ret_val = dayjs.utc(value).format('MM-DD:HH').split('+')[0] + 'Z';
+        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0] + 'Z';
 
     // return the formatted value
     return ret_val;
