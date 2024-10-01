@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Checkbox, Typography } from '@mui/joy';
 import PropTypes from 'prop-types';
+import { getHeaderSummary } from "@utils/map-utils";
 import { useLayers } from "@context/map-context";
 
 // set component prop types
@@ -23,11 +24,6 @@ export default function CatalogItems(data) {
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
-
-    // variables for the display of checkbox labels
-    let stormOrModelEle = null;
-    let numberName = null;
-    let numberEle = null;
 
     /**
      * handles the model checkbox click
@@ -150,19 +146,6 @@ export default function CatalogItems(data) {
 
         // return all the data cards
         else {
-            // save the name of the element for tropical storms and advisory numbers
-            if (data.isTropical) {
-                stormOrModelEle = 'storm_name';
-                numberName = ' Adv: ';
-                numberEle = 'advisory_number';
-            }
-            // save the name of the synoptic ADCIRC models and cycle numbers
-            else if (!data.isTropical) {
-                stormOrModelEle = 'model';
-                numberName = ' Cycle: ';
-                numberEle = 'cycle';
-            }
-
             // render the results of the data query
             return (
                 <Fragment>
@@ -189,7 +172,7 @@ export default function CatalogItems(data) {
                                                     // filter by the group name, get the top 1
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
-                                                    .sort((a, b) => a['properties'][numberEle] < b['properties'][numberEle] ? 1 : -1)
+                                                    .sort((a, b) => a.properties['product_name'] < b.properties['product_name'] ? -1 : 1)
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox
@@ -198,19 +181,7 @@ export default function CatalogItems(data) {
                                                             sx={{ m: .5 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
-                                                            label={
-                                                                <Typography sx={{ fontSize: "xs" }}>
-                                                                    {
-                                                                        // create the label
-                                                                        ((mbr['properties'][stormOrModelEle] === undefined) ? 'Data error' : mbr['properties'][stormOrModelEle].toUpperCase()) + ', ' +
-                                                                        numberName + mbr['properties'][numberEle] +
-                                                                        ', Type: ' + mbr['properties']['event_type'] +
-                                                                        ', Grid: ' + mbr['properties']['grid_type'] +
-                                                                        ', Instance: ' + mbr['properties']['instance_name'] +
-                                                                        ((mbr['properties']['meteorological_model'] === 'None') ? '' : ', ' +  mbr['properties']['meteorological_model'])
-                                                                    }
-                                                                </Typography>
-                                                            }
+                                                            label={ <Typography sx={{ fontSize: "xs" }}>{ getHeaderSummary(mbr['properties']) } </Typography> }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
                                                         />
