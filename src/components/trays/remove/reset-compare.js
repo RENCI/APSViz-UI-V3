@@ -12,13 +12,13 @@ import { useLayers } from "@context";
 export const ResetCompare = () => {
     // get the context for the compare layers view
     const {
-        removeSideBySideLayers
+        resetCompare
     } = useLayers();
 
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeSideBySideLayers()}>Remove compare mode</Button>
+            <Button color="primary" onClick={ () => resetCompare() }>Remove compare mode</Button>
         </Fragment>
   );
 };
