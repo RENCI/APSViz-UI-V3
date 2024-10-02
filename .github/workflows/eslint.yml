@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 20
       - name: Use .npmrc
-        uses: bduff9/use-npmrc@v1.2
+        uses: bduff9/use-npmrc@v2.0.0
         with:
           dot-npmrc: ${{ secrets.DOT_NPMRC }}
       - run: npm ci
