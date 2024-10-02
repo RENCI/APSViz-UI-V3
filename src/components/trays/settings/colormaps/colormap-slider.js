@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useSettings } from '@context';
+import { restoreColorMapType } from '@utils/map-utils';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -77,14 +78,18 @@ export const ColormapSlider = ({style}) => {
     }, []);
 
     const storeStyle = useCallback((style) => {
+        // save colormap type for later restoration when it is lost
+        // by the sldParser.writeStyle(
+        const colorMapType = style.rules[0].symbolizers[0].colorMap.type;
         sldParser.writeStyle(style)
             .then((sldStyle) => {
+                const updatedStyle = restoreColorMapType(colorMapType, sldStyle.output);
                 if (style.name.includes(MAXELE)) {
-                    mapStyle.maxele.set(sldStyle.output);
+                    mapStyle.maxele.set(updatedStyle);
                 } else if (style.name.includes(MAXWVEL)) {
-                    mapStyle.maxwvel.set(sldStyle.output);
+                    mapStyle.maxwvel.set(updatedStyle);
                 } else if (style.name.includes(SWAN)) {
-                    mapStyle.swan.set(sldStyle.output);
+                    mapStyle.swan.set(updatedStyle);
                 }
         });
     }, []);
