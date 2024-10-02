@@ -25,5 +25,8 @@ jobs:
         uses: bduff9/use-npmrc@v2.0.0
         with:
           dot-npmrc: ${{ secrets.DOT_NPMRC }}
+      - run: pwd
+      - run: ls -al
+      - run: cat .npmrc
       - run: npm ci
       - run: npm run lint
