@@ -16,7 +16,7 @@ export const ComparePanel = () => {
         rightPaneType, setRightPaneType,
         leftLayerProps, setLeftLayerProps,
         rightLayerProps, setRightLayerProps,
-        resetCompare
+        resetCompare, setInCompareMode
     } = useLayers();
 
     // get the default model run layers
@@ -75,6 +75,15 @@ export const ComparePanel = () => {
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = useRef(null);
 
+    /**
+     * method to use the state enabled way to reset compare mode
+     *
+     */
+    const reset = () => {
+        resetCompare();
+        setInCompareMode(false);
+    };
+
     // render the panel
     return (
         <Fragment>
@@ -115,7 +124,7 @@ export const ComparePanel = () => {
                         }
 
                         <Box textAlign='center'>
-                            <Button size="md" sx={{ mr: .5 }} onClick={ resetCompare }>Reset</Button>
+                            <Button size="md" sx={{ mr: .5 }} onClick={ reset }>Reset</Button>
                         </Box>
                      </Stack>
                 </Card> : ''
