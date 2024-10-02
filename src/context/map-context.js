@@ -54,6 +54,7 @@ export const LayersProvider = ({ children }) => {
    */
   // default for the pane compare name
   const defaultSelected = 'Not Selected';
+  const [inCompareMode, setInCompareMode] = useState(false);
 
   // create some state for the left/right name/type selections
   const [leftPaneType, setLeftPaneType] = useState(defaultSelected);
@@ -108,10 +109,48 @@ export const LayersProvider = ({ children }) => {
   };
 
   /**
+   * checks to see if the default model has a layer selected
+   *
+   * @returns {*|boolean}
+   */
+  const hasDefaultModelLayerSelected = () => {
+      // get the group id for the topmost (default) layer
+      const groupID = defaultModelLayers[0]['group'];
+
+      // turn on visibility for the default layer
+      const layer = defaultModelLayers.filter((l => l.group === groupID && l.properties['product_type'] === 'maxele63'));
+
+      // if we found a layer
+      if (layer.length > 0)
+          // return the visibility state
+          return layer[0].state.visible;
+      else
+          // presume that there is not a default layer selected
+          return false;
+  };
+
+  /**
    * clears any captured compare selection data and layers
    *
    */
   const resetCompare = () => {
+      // set the visible layer if there are default layers, and we are in compare mode, or there is no default layer selected
+      if (defaultModelLayers.length > 0 && (inCompareMode || !hasDefaultModelLayerSelected() )) {
+          // get the group id for the topmost (default) layer
+          const groupID = defaultModelLayers[0]['group'];
+
+          // turn on visibility for the default layer
+          const layer = defaultModelLayers.filter((l => l.group === groupID && l.properties['product_type'] === 'maxele63'));
+
+          // if there was a default layer found
+          if (layer.length > 0)
+              // set the visibility of the default layer
+              toggleLayerVisibility(layer[0].id, true);
+      }
+
+      // no default layers need to be reset
+      setInCompareMode(false);
+
       // clear the left layer type/ID/properties/layer
       setLeftPaneType(defaultSelected);
       setLeftPaneID(defaultSelected);
@@ -170,7 +209,7 @@ export const LayersProvider = ({ children }) => {
         }
     };
 
-  const toggleHurricaneLayerVisibility = id => {
+  const toggleHurricaneLayerVisibility = (id, visibility=undefined) => {
     const newLayers = [...hurricaneTrackLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -178,7 +217,10 @@ export const LayersProvider = ({ children }) => {
       return;
     }
     const alteredLayer = newLayers[index];
-    alteredLayer.state.visible = !alteredLayer.state.visible;
+
+    // set the layer visibility
+    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
+
     setHurricaneTrackLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -186,7 +228,7 @@ export const LayersProvider = ({ children }) => {
     ]);
   };
 
-  const toggleLayerVisibility = id => {
+  const toggleLayerVisibility = (id, visibility=undefined) => {
     const newLayers = [...defaultModelLayers];
     const index = newLayers.findIndex(l => l.id === id);
     if (index === -1) {
@@ -194,11 +236,14 @@ export const LayersProvider = ({ children }) => {
       return;
     }
 
-    // remove all observation layers/dialogs from the map if this is an observation layer
+    // remove all observation dialogs from the map on a change
     removeObservations(id);
 
     const alteredLayer = newLayers[index];
-    alteredLayer.state.visible = !alteredLayer.state.visible;
+
+    // set the layer visibility
+    alteredLayer.state.visible = (visibility === undefined) ? !alteredLayer.state.visible : visibility;
+
     setDefaultModelLayers([
       ...newLayers.slice(0, index),
       { ...alteredLayer },
@@ -394,7 +439,8 @@ export const LayersProvider = ({ children }) => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
-        resetCompare, removeSideBySideLayers
+
+        inCompareMode, setInCompareMode, resetCompare, removeSideBySideLayers
       }}
     >
       {children}

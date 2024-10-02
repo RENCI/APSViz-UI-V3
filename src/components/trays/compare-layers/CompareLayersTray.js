@@ -42,8 +42,9 @@ export const CompareLayersTray = () => {
     // get the context for the compare layers view
     const {
         map,
-        defaultModelLayers,
         getLayerIcon,
+
+        defaultModelLayers, setDefaultModelLayers, getAllRasterLayersInvisible,
 
         // declare access to the compare mode items
         defaultSelected,
@@ -56,7 +57,7 @@ export const CompareLayersTray = () => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        resetCompare, removeSideBySideLayers
+        resetCompare, removeSideBySideLayers, inCompareMode, setInCompareMode
     } = useLayers();
 
     const {
@@ -106,6 +107,9 @@ export const CompareLayersTray = () => {
             // set the layer id
             setRightPaneID(paneID);
         }
+
+        // make sure the default raster layers are invisible
+        setDefaultLayersInvisible();
     };
 
     /**
@@ -147,13 +151,29 @@ export const CompareLayersTray = () => {
     }
 
     /**
+     * sets the visibility to false for raster layers
+     *
+     */
+    const setDefaultLayersInvisible = () => {
+        // if we are not in compare mode
+        if (!inCompareMode) {
+            // make all default raster layers invisible
+            setDefaultModelLayers(getAllRasterLayersInvisible());
+        }
+    };
+
+    /**
      * reset compare mode if anything happens to the default layers
      *
      */
     useEffect(() => {
-        // reset this view
-        resetCompare();
-        resetAccordion();
+        // only reset the compare view if we are in compare mode
+        if (inCompareMode) {
+            // reset this view
+            resetCompare();
+            resetAccordion();
+            setInCompareMode(false);
+        }
     }, [defaultModelLayers]);
 
     /**
@@ -211,6 +231,9 @@ export const CompareLayersTray = () => {
                         }).addTo(map));
                     });
                 });
+
+            // set that we are in now fully in compare mode
+            setInCompareMode(true);
         }
     }, [leftLayerProps, rightLayerProps, mapStyle]);
 
@@ -224,7 +247,6 @@ export const CompareLayersTray = () => {
             // add the selected layers to the map and state so it can be removed later
             setSideBySideLayers(L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map));
         }
-
     }, [selectedLeftLayer, selectedRightLayer]);
 
     /**
