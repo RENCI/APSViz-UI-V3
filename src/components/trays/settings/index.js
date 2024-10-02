@@ -18,7 +18,7 @@ export const trayContents = () => (
     <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
     <Divider />
-    <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormap Range</Typography>
+    <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
   </Stack>
 );

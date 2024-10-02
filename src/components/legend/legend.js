@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, Box, Card, Stack } from '@mui/joy';
 import { useLayers, useSettings } from '@context';
-import { getNamespacedEnvParam } from "@utils";
+import { getNamespacedEnvParam, restoreColorMapType  } from "@utils";
 import SldStyleParser from 'geostyler-sld-parser';
 
 import Draggable from "react-draggable";
@@ -62,9 +62,12 @@ export const MapLegend = () => {
                     geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries = newcolormapEntries;
                     // add the layer name to the style
                     geostylerStyle.output.name = (' ' + legendLayer.layers).slice(1);
+                    // save the colormap type
+                    const colorMapType = geostylerStyle.output.rules[0].symbolizers[0].colorMap.type;
                     sldParser.writeStyle(geostylerStyle.output)
                     .then((sldStyle) => {
-                        const encodedStyle = encodeURIComponent(sldStyle.output);
+                        const updatedStyle = restoreColorMapType(colorMapType, sldStyle.output);
+                        const encodedStyle = encodeURIComponent(updatedStyle);
                         const url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }` +
                             workspace + "/" +
                             "ows?service=WMS&request=GetLegendGraphic&TRANSPARENT=TRUE&LEGEND_OPTIONS=layout:verticle&format=image%2Fpng&width=20&height=20&layer=" +

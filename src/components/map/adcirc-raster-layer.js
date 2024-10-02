@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { WMSTileLayer } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
-import { getNamespacedEnvParam } from '@utils/map-utils';
+import { getNamespacedEnvParam, restoreColorMapType } from '@utils/map-utils';
 import { useSettings } from '@context';
 
 export const AdcircRasterLayer = (layer) => {
@@ -34,15 +34,11 @@ export const AdcircRasterLayer = (layer) => {
                 .readStyle(style)
                 .then((geostylerStyle) => {
                     geostylerStyle.output.name = (' ' + layer.layer.layers).slice(1);
+                    const colorMapType = geostylerStyle.output.rules[0].symbolizers[0].colorMap.type;
                     sldParser.writeStyle(geostylerStyle.output)
                     .then((sldStyle) => {
-                        setCurrentStyle(sldStyle.output);
-                        // to add intervals - use the following
-                        // it does not work when intervals keyword directly to the default style
-                        // because when that style get written out here, sld parser loses the intervals setting
-                        // const styleIntervals = sldStyle.output.replace('<ColorMap>', '<ColorMap type="intervals" extended="true">');
-                        // setCurrentStyle(styleIntervals);
-
+                        const updatedStyle = restoreColorMapType(colorMapType, sldStyle.output);
+                        setCurrentStyle(updatedStyle);
                     });
                 }); 
         }
