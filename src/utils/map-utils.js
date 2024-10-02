@@ -275,3 +275,25 @@ export const BasemapList = [
     thumbnail: CartoDBPositron
   }
 ];
+
+// this is needed because of a bug in the SLDParser
+// when the SLDParser write out a style object into text,
+// it loses the colormap type setting
+export const restoreColorMapType = (typeName, style) => {
+
+    let updatedStyle = style;
+
+    switch (typeName) {
+        case "ramp":
+            // this is the default, so don't need to restore
+            break;
+        case "intervals":
+            updatedStyle = style.replace('<ColorMap>', '<ColorMap type="' + typeName + '" extended="true">');
+            break;
+        case "values":
+            updatedStyle = style.replace('<ColorMap>', '<ColorMap type="' + typeName + '">');
+            break;
+    }
+
+        return updatedStyle;
+};
