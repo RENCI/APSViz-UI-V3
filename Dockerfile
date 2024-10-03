@@ -33,6 +33,10 @@ ARG APP_PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
 RUN printf "$APP_PACKAGE_RENCI_REGISTRY\n" >> .npmrc
 RUN printf "$APP_PACKAGE_REGISTRY_TOKEN\n" >> .npmrc
 
+RUN pwd
+RUN ls -al
+RUN cat .npmrc
+
 # install package components
 RUN npm install
 
@@ -98,22 +102,26 @@ RUN printf "REACT_APP_HURRICANE_ICON_URL_DEV=$APP_UI_HURRICANE_ICON_DEV_URL\n" >
 # Copy in source files
 COPY . /src
 
+RUN pwd
+RUN ls -al
+RUN cat .npmrc
+
 # Build the app
 RUN npm run build
 
 ####################
 ## startup the nginx server
 ####################
-FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine3.19
-
-# get the source files for the site in the right place
-COPY --from=build /src/dist /usr/share/nginx/html
-
-# disable nginx user because now this is running as non-root
-RUN sed -i 's/user nginx;/#user nginx;/g' /etc/nginx/nginx.conf
-
-# copy in the configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# start the web server
-CMD ["nginx", "-g", "daemon off;"]
+#FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine3.19
+#
+## get the source files for the site in the right place
+#COPY --from=build /src/dist /usr/share/nginx/html
+#
+## disable nginx user because now this is running as non-root
+#RUN sed -i 's/user nginx;/#user nginx;/g' /etc/nginx/nginx.conf
+#
+## copy in the configuration file
+#COPY nginx.conf /etc/nginx/conf.d/default.conf
+#
+## start the web server
+#CMD ["nginx", "-g", "daemon off;"]
