@@ -26,17 +26,13 @@ ENV PATH /src/node_modules/.bin:$PATH
 COPY package*.json /src/
 
 # get the renci package registry secrets
-ARG PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY)
-ARG PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
+ARG APP_PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY)
+ARG APP_PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
 
 # create the package registry access
-RUN printf $PACKAGE_RENCI_REGISTRY >> .npmrc
-RUN printf "\n" >> .npmrc
-RUN printf $PACKAGE_REGISTRY_TOKEN >> .npmrc
-RUN printf "\n" >> .npmrc
+RUN printf "$APP_PACKAGE_RENCI_REGISTRY\n" >> .npmrc
+RUN printf "$APP_PACKAGE_REGISTRY_TOKEN\n" >> .npmrc
 
-RUN pwd
-RUN ls -al
 RUN cat .npmrc
 
 # install package components
