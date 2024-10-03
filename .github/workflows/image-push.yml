@@ -64,7 +64,7 @@ jobs:
             APP_UI_DATA_DEV_TOKEN=${{ secrets.UI_DATA_DEV_TOKEN }}
             APP_UI_HURRICANE_ICON_DEV_URL=${{ secrets.UI_HURRICANE_ICON_DEV_URL }}
             
-            APP_PACKAGE_RENCI_REGISTRY = ${{ secrets.RENCI_REGISTRY }}
+            APP_PACKAGE_RENCI_REGISTRY = ${{ secrets.DOT_NPMRC }}
             APP_PACKAGE_REGISTRY_TOKEN = ${{ secrets.REGISTRY_TOKEN }}            
 
           tags: |
