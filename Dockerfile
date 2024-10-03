@@ -30,8 +30,10 @@ ARG APP_PACKAGE_RENCI_REGISTRY
 ARG APP_PACKAGE_REGISTRY_TOKEN
 
 # create the package registry access
-RUN printf "${APP_PACKAGE_RENCI_REGISTRY}\n" >> .npmrc
-RUN printf "${APP_PACKAGE_REGISTRY_TOKEN}\n" >> .npmrc
+RUN printf ${APP_PACKAGE_RENCI_REGISTRY} >> .npmrc
+RUN printf "\n"  >> .npmrc
+RUN printf ${APP_PACKAGE_REGISTRY_TOKEN} >> .npmrc
+RUN printf "\n"  >> .npmrc
 
 RUN cat .npmrc
 
