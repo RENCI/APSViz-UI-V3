@@ -26,7 +26,7 @@ ENV PATH /src/node_modules/.bin:$PATH
 COPY package*.json /src/
 
 # get the renci package registry secrets
-ARG APP_PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY)
+ARG APP_PACKAGE_RENCI_REGISTRY=$(APP_PACKAGE_RENCI_REGISTRY_test)
 ARG APP_PACKAGE_REGISTRY_TOKEN=$(APP_PACKAGE_REGISTRY_TOKEN)
 
 # create the package registry access
