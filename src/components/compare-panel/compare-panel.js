@@ -105,26 +105,27 @@ export const ComparePanel = () => {
                         width: '750px',
                         zIndex: 999
                     }}>
+
                     {
-                    // display the selected product details for each pane
-                    (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected) ?
-                    <Stack direction={'column'} alignItems="center" sx={{ cursor: 'move' }} id="draggable-compare-card">
-                        <Typography sx={{ mt: .5, mb: .5 }} level="body-sm"><strong>Comparing { leftPaneType } products</strong> </Typography>
+                        // display the selected product details for each pane
+                        (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected) ?
+                        <Stack direction={'column'} alignItems="center" sx={{ cursor: 'move' }} id="draggable-compare-card">
+                            <Typography sx={{ mt: .5, mb: .5 }} level="body-sm"><strong>Comparing { leftPaneType } products</strong> </Typography>
 
-                        <Stack direction={"row"} gap={ .5 } sx={{ mb: .5, mr: .5}}>
-                            <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
+                            <Stack direction={"row"} gap={ .5 } sx={{ mb: .5, mr: .5}}>
+                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
 
-                            <Tooltip title={"Swap pane products"}>
-                               <Button size="xs" color="success" sx={{ mt: .5 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
-                            </Tooltip>
+                                <Tooltip title={"Swap pane products"}>
+                                   <Button size="xs" color="success" sx={{ mt: .5 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
+                                </Tooltip>
 
-                            <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
+                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
 
-                            <Tooltip title={"Close compare mode"}>
-                                <Button size="xs" color="danger" sx={{ mt: .5 }} onClick={ resetCompare }><ResetIcon/></Button>
-                            </Tooltip>
-                        </Stack>
-                    </Stack> : ''
+                                <Tooltip title={"Close compare mode"}>
+                                    <Button size="xs" color="danger" sx={{ mt: .5 }} onClick={ resetCompare }><ResetIcon/></Button>
+                                </Tooltip>
+                            </Stack>
+                        </Stack> : ''
                     }
                 </Card>
             </Draggable>
