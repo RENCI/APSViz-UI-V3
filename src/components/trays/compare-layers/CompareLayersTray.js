@@ -109,9 +109,12 @@ export const CompareLayersTray = () => {
     };
 
     /**
-     * resets the accordion
+     * resets the compare view
      */
-    const resetAccordion = () => {
+    const resetCompareView = () => {
+        // reset the compare view and controls
+        resetCompare();
+
         // rollup the accordions
         setAccordionIndex(null);
     };
@@ -152,9 +155,33 @@ export const CompareLayersTray = () => {
      */
     useEffect(() => {
         // reset this view
-        resetCompare();
-        resetAccordion();
+        resetCompareView();
     }, [defaultModelLayers]);
+
+    /**
+     * gets the enabled state of the layer select button based on other selections
+     *
+     * @param paneSide
+     * @param paneType
+     * @returns {boolean}
+     */
+    const isSelectButtonDisabled = ( paneSide, paneType ) => {
+        // init the return
+        let isDisabled = false;
+
+        // make the right  panel selection buttons disabled for all other product types
+        if (paneSide === 'left' && rightPaneType !== paneType && rightPaneID !== defaultSelected) {
+            isDisabled = true;
+        }
+
+        // make the left panel selection buttons disabled for all other product types
+        if (paneSide === 'right' && leftPaneType !== paneType && leftPaneID !== defaultSelected) {
+            isDisabled = true;
+        }
+
+        // return to the caller
+        return isDisabled;
+    };
 
     /**
      * this use effect waits for the layer properties (left and right) to get populated
@@ -271,14 +298,17 @@ export const CompareLayersTray = () => {
 
                              { getLayerIcon(layer.properties['product_type']) }
 
-                             <Typography level="body-xs" sx={{ flex: 1 }}> { layer.properties['product_name'] }</Typography>
+                            <Button size="xs" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
+                                 sx={{ ml: 2, mr: 1 }}
+                                 onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }
+                                 disabled={ isSelectButtonDisabled('left', layer.properties['product_name']) }>Left pane</Button>
 
-                             <Button size="xs" color={ (layer.id === leftPaneID) ? 'success' : 'primary' }
-                                     sx={{ ml: 2, mr: 2 }}
-                                     onClick={ () => setPaneInfo('left', layer.properties['product_name'], layer.id) }>Left pane</Button>
+                            <Typography level="body-xs" sx={{ flex: 1 }}> { layer.properties['product_name'] }</Typography>
+
                             <Button size="xs" color={ (layer.id === rightPaneID) ? 'success' : 'primary' }
-                                     sx={{ m: 0 }}
-                                     onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }>Right pane</Button>
+                                sx={{ ml: 1 }}
+                                onClick={ () => setPaneInfo('right', layer.properties['product_name'], layer.id) }
+                                disabled={ isSelectButtonDisabled('right', layer.properties['product_name']) }>Right pane</Button>
                             </Stack>
                          </Stack>
                      </Card>
@@ -293,14 +323,7 @@ export const CompareLayersTray = () => {
     return (
         <Fragment>
             <AccordionGroup
-                sx={{
-                    '.MuiAccordionDetails-content': {
-                        p: 1,
-                    },
-                    '.MuiAccordionSummary-button': {
-                        alignItems: 'center',
-                    }
-                }}>
+                sx={{ '.MuiAccordionDetails-content': { p: 1, }, '.MuiAccordionSummary-button': { alignItems: 'center' } }}>
             {
                 // display the model runs to choose from
                 groupList
@@ -328,6 +351,8 @@ export const CompareLayersTray = () => {
                 ))
             }
             </AccordionGroup>
+
+            <Button size="md" sx={{ mr: .5 }} onClick={ resetCompareView }>Reset</Button>
         </Fragment>
     );
 };
