@@ -213,7 +213,6 @@ export const CompareLayersTray = () => {
                             layers: leftLayerProps.layers,
                             sld_body: sldStyle.output
                         }).addTo(map));
-
                     });
                 });
 
