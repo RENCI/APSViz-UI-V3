@@ -1,9 +1,17 @@
-import React, { Fragment, useRef } from 'react';
-import { Stack, Typography, Box, Button, Card } from '@mui/joy';
+import React, { useRef } from 'react';
+import { Stack, Typography, Box, Button, Card, Tooltip } from '@mui/joy';
 import { useLayers } from '@context';
-import { SwapHorizontalCircleSharp as SwapLayersIcon } from '@mui/icons-material';
+import { SwapHorizontalCircleSharp as SwapLayersIcon,
+         CloseSharp as ResetIcon } from '@mui/icons-material';
 import { getHeaderSummary } from "@utils/map-utils";
+import Draggable from "react-draggable";
 
+/**
+ * renders the compare mode selections.
+ *
+ * @returns JSX.Element
+ * @constructor
+ */
 export const ComparePanel = () => {
     const {
         defaultModelLayers,
@@ -77,12 +85,14 @@ export const ComparePanel = () => {
 
     // render the panel
     return (
-        <Fragment>
-        {
-            // display the selected product details for each pane
-            (leftPaneID !== defaultSelected || rightPaneID !== defaultSelected) ?
+            <Draggable
+                bounds="parent"
+                nodeRef={ nodeRef }
+                handle="#draggable-compare-card"
+                cancel={'[class*="MuiDialogContent-root"]'}
+            >
                 <Card
-                    ref={nodeRef}
+                    ref={ nodeRef }
                     variant="soft"
                     sx={{
                         p: 0,
@@ -92,34 +102,41 @@ export const ComparePanel = () => {
                         filter: 'opacity(0.9)',
                         '&:hover': {filter: 'opacity(1.0)'},
                         ml: 1, mr: 1,
+                        width: '750px',
                         zIndex: 999
                     }}>
-                    <Stack direction={"row"} gap={ 1 } ref={ nodeRef } sx={{ mt: .5 , mb: .5 }}>
-                        {
-                            // render the left pane selections
-                            <Stack direction={"column"} gap={ .5 } sx={{ ml: .5 }}>
-                                <Typography sx={{ m: 0, width: '350px'}} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ leftPaneType } </Typography>
-                            </Stack>
-                        }
+                    {
+                    // display the selected product details for each pane
+                    (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected) ?
+                    <Stack direction={'column'}  alignItems="center" sx={{ cursor: 'move' }} id="draggable-compare-card">
+                        <Stack direction={"row"} alignItems="center" gap={ 1 } sx={{ mt: .5 , mb: .5 }}>
+                            <Typography sx={{ ml: .5 }} level="body-sm"><strong>Comparing { leftPaneType } products</strong> </Typography>
+                        </Stack>
 
-                        <Box textAlign='center'>
-                            <Button size="md" color="success" sx={{ m: 0 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
-                        </Box>
+                        <Stack direction={"row"} gap={ .5 } sx={{ mb: .5 }}>
+                            {
+                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
+                            }
 
-                        {
-                            <Stack direction={"column"} gap={ .5 }>
-                                <Typography sx={{ m: 0, width: '350px' }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
-                                <Typography sx={{ m: 0 }} level="body-xs">{ rightPaneType }</Typography>
-                            </Stack>
-                        }
+                            <Box textAlign='center'>
+                                 <Tooltip title={"Swap pane products"}>
+                                    <Button size="xs" color="success" sx={{ mt: .5 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
+                                 </Tooltip>
+                            </Box>
 
-                        <Box textAlign='center'>
-                            <Button size="md" sx={{ mr: .5 }} onClick={ resetCompare }>Reset</Button>
-                        </Box>
-                     </Stack>
-                </Card> : ''
-        }
-        </Fragment>
+                            {
+                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
+                            }
+
+                            <Box textAlign='center'>
+                                <Tooltip title={"Close compare mode"}>
+                                    <Button size="xs" color="danger" sx={{ mt: .5, mr: .5 }} onClick={ resetCompare }><ResetIcon/></Button>
+                                </Tooltip>
+                            </Box>
+                        </Stack>
+                    </Stack> : ''
+                    }
+                </Card>
+            </Draggable>
     );
 };
