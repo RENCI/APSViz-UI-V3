@@ -21,14 +21,25 @@ export const MapLegend = () => {
 
     const {
         defaultModelLayers,
-        getLayerIcon
+        getLayerIcon,
+        leftLayerProps, rightLayerProps
     } = useLayers();
     const {
         mapStyle,
     } = useSettings();
 
     useEffect(() => {
-        const legendLayer = defaultModelLayers.find(layer => layer.state.visible && layer.properties.product_type !== 'obs');
+        // init the selected legend layer properties storage
+        let legendLayer = null;
+
+        // if we are in compare mode
+        if(leftLayerProps && rightLayerProps)
+            // use either set of layer properties
+            legendLayer = leftLayerProps;
+        else
+            // else use the default selected layer
+            legendLayer = defaultModelLayers.find(layer => layer.state.visible && layer.properties.product_type !== 'obs');
+
         if (!legendLayer) {
             setLegendVisibilty("hidden");
         }
@@ -80,7 +91,7 @@ export const MapLegend = () => {
                     });
             });
         } 
-    }, [defaultModelLayers, mapStyle]);
+    }, [defaultModelLayers, mapStyle, leftLayerProps, rightLayerProps]);
 
     // define the starting size of the card
     const [newWidth, setNewWidth] = useState(45);
