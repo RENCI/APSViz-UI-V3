@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Stack, Typography, Box, Button, Card, Tooltip } from '@mui/joy';
+import { Stack, Typography, Button, Card, Tooltip } from '@mui/joy';
 import { useLayers } from '@context';
 import { SwapHorizontalCircleSharp as SwapLayersIcon,
          CloseSharp as ResetIcon } from '@mui/icons-material';
@@ -108,31 +108,21 @@ export const ComparePanel = () => {
                     {
                     // display the selected product details for each pane
                     (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected) ?
-                    <Stack direction={'column'}  alignItems="center" sx={{ cursor: 'move' }} id="draggable-compare-card">
-                        <Stack direction={"row"} alignItems="center" gap={ 1 } sx={{ mt: .5 , mb: .5 }}>
-                            <Typography sx={{ ml: .5 }} level="body-sm"><strong>Comparing { leftPaneType } products</strong> </Typography>
-                        </Stack>
+                    <Stack direction={'column'} alignItems="center" sx={{ cursor: 'move' }} id="draggable-compare-card">
+                        <Typography sx={{ mt: .5, mb: .5 }} level="body-sm"><strong>Comparing { leftPaneType } products</strong> </Typography>
 
-                        <Stack direction={"row"} gap={ .5 } sx={{ mb: .5 }}>
-                            {
-                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
-                            }
+                        <Stack direction={"row"} gap={ .5 } sx={{ mb: .5, mr: .5}}>
+                            <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(leftPaneID) } </Typography>
 
-                            <Box textAlign='center'>
-                                 <Tooltip title={"Swap pane products"}>
-                                    <Button size="xs" color="success" sx={{ mt: .5 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
-                                 </Tooltip>
-                            </Box>
+                            <Tooltip title={"Swap pane products"}>
+                               <Button size="xs" color="success" sx={{ mt: .5 }} onClick={ swapPanes }><SwapLayersIcon/></Button>
+                            </Tooltip>
 
-                            {
-                                <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
-                            }
+                            <Typography sx={{ ml: .5 }} level="body-xs">{ getHeaderSummaryByID(rightPaneID) } </Typography>
 
-                            <Box textAlign='center'>
-                                <Tooltip title={"Close compare mode"}>
-                                    <Button size="xs" color="danger" sx={{ mt: .5, mr: .5 }} onClick={ resetCompare }><ResetIcon/></Button>
-                                </Tooltip>
-                            </Box>
+                            <Tooltip title={"Close compare mode"}>
+                                <Button size="xs" color="danger" sx={{ mt: .5 }} onClick={ resetCompare }><ResetIcon/></Button>
+                            </Tooltip>
                         </Stack>
                     </Stack> : ''
                     }
