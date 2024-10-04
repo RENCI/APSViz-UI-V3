@@ -110,7 +110,6 @@ export const MapLegend = () => {
                     setNewWidth(newWidth + event.movementX);
                     setNewHeight(newHeight + event.movementY);
                 }}
-                axis="x"
             >
                 <Card
                     ref={ nodeRef }
@@ -119,7 +118,7 @@ export const MapLegend = () => {
                     sx={{
                         ml: 10,
                         position: 'absolute',
-                        top: '60px',
+                        top: '10px',
                         right: '10px',
                         transition: 'filter 250ms',
                         filter: 'opacity(0.9)',
