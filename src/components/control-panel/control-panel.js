@@ -352,15 +352,18 @@ export const ControlPanel = () => {
         {
           layers.length && (
             <Fragment>
-            <Typography level="body-md" alignSelf="center">
-              {metClass === 'tropical'? `Storm Name ${stormName}` : ''}
-            </Typography>
-            <Typography level="body-md" alignSelf="center">
-              Model run date: {runDate}
-            </Typography>
-            <Typography level="body-sm" alignSelf="center">
-              {instanceName}
-            </Typography>
+                <Typography level="body-md" alignSelf="center">
+                  {metClass === 'tropical'? `Storm Name: ${stormName}` : ''}
+                </Typography>
+                <Typography level="body-md" alignSelf="center">
+                  Model run date: {runDate}
+                </Typography>
+                <Typography level="body-sm" alignSelf="center">
+                  Instance: {instanceName}
+                </Typography>
+                <Typography level="body-sm" alignSelf="center">
+                  Meteorology: { eventType }
+                </Typography>
             </Fragment>
           )
         }
