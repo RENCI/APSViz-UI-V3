@@ -104,7 +104,7 @@ RUN npm run build
 ####################
 ## startup the nginx server
 ####################
-FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine3.19
+FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine3.20
 
 # get the source files for the site in the right place
 COPY --from=build /src/dist /usr/share/nginx/html
