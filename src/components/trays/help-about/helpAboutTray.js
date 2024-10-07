@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
-import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, Typography, List,  ListItem, ListItemDecorator, Divider }
-        from '@mui/joy';
-
+import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails,
+    Stack, Typography, List,  ListItem, ListItemDecorator, Divider } from '@mui/joy';
 import {
         // sidebar icons
         Layers as LayersIcon, CompareArrows as CompareLayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
@@ -23,7 +22,7 @@ import SvgIcon from '@mui/material/SvgIcon';
  *
  * @param color
  * @param name
- * @returns {JSX.Element}
+ * @returns JSX.Element
  */
 const getObsSVGIcon = ( color, name ) => {
     return (
@@ -40,13 +39,12 @@ const getObsSVGIcon = ( color, name ) => {
             <Typography sx={{ ml: 2, fontSize: "sm"}}>&nbsp;{name}</Typography>
         </Fragment>
     );
-
 };
 
 /**
  * This component renders the help/about tray
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 export const HelpAboutTray = () => {
@@ -153,6 +151,7 @@ export const HelpAboutTray = () => {
                                     <ListItem>Display (or hide) various model layer products such as wind speed, wave height, water levels, etc.</ListItem>
                                     <ListItem>Select observation points to display current and forecast timeseries data at a location.</ListItem>
                                     <ListItem>Compare ADCIRC model layer types.</ListItem>
+                                    <ListItem>View and adjust ADCIRC Layer colormap properties.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -386,6 +385,66 @@ export const HelpAboutTray = () => {
 
                             </AccordionDetails>
                         </Accordion>
+
+                        <Accordion expanded={index === 15} onChange={ (event, expanded) => { setIndex(expanded ? 15 : null); }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view or adjust ADCIRC layer colormap ranges?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <List sx={{ fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
+                                </List>
+
+                                <Typography sx={{ fontSize: "sm", ml: 1 }}>
+                                    Users have the ability to change the colormap ranges for ADCIRC layer product types within the &quot;Edit
+                                    ADCIRC Layer Colormaps&quot; section in the Application Settings sidebar.
+                                </Typography>
+
+                                <Typography sx={{ fontSize: "sm", mt: 1, ml: 1 }}>
+                                    The colormap ranges for each layer product are found on the &quot;Basic tab&quot;. These settings allow a
+                                    user to specify the minimum and maximum values attributed to the colormap range for that layer product.
+                                </Typography>
+
+                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}>Select the Edit ADCIRC Layer Colormaps &quot;Basic&quot; tab.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Find the layer product range you would like to adjust.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Use the slider buttons to specify the minimum and maximum color ranges for a layer product.</ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion expanded={index === 15} onChange={ (event, expanded) => { setIndex(expanded ? 15 : null); }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view or adjust ADCIRC layer colormap styles?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <List sx={{ fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
+                                </List>
+
+                                <Typography sx={{ fontSize: "sm", ml: 1 }}>
+                                    Users have the ability to view or alter colormap styles for ADCIRC layer product types within the &quot;Edit
+                                    ADCIRC Layer Colormaps&quot; section of the Application Settings sidebar.
+                                </Typography>
+
+                                <Typography sx={{ fontSize: "sm", mt: 1, ml: 1 }}>
+                                    The colormap styles for each layer product are found on the &quot;Advanced&quot; tab. These setting allows a user to specify the
+                                    values attributed to the colormap for that layer product.
+                                </Typography>
+
+                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                    <ListItem sx={{ ml: 1 }}>Select the Edit ADCIRC Layer Colormaps &quot;Advanced&quot; tab.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Choose the layer product type you would like to modify.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Optionally select the colormap style type. &quot;Ramp&quot; is a continuous color gradient, while &quot;Interval&quot; represent color steps.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Optionally select the colormap number of classes. This value divides the colormap steps into the number of classes.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Optionally select a colormap Color ramp. A Color ramp is a graded palette of colors.</ListItem>
+                                    <ListItem sx={{ ml: 1 }}>Select the &quot;Save New Colormap&quot; button to save your selection(s).</ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+
                     </Stack>
                 </AccordionGroup>
             </Stack>
