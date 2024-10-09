@@ -70,7 +70,6 @@ export const HelpAboutTray = () => {
 
                                 <Divider/>
                                 <Typography level="body-sm" sx={{ ml: 1, mt: 1 }}>Funding:</Typography>
-
                                 <List marker="circle" size="sm" sx={{ ml: 3, '--ListItem-minHeight': '25px' }}>
                                     <ListItem>DHS Coastal Resilience Center</ListItem>
                                     <ListItem>National Ocean Partnership Program (NOPP)</ListItem>
@@ -80,6 +79,7 @@ export const HelpAboutTray = () => {
                                 <Divider/>
                                 <Typography level="body-sm" sx={{ ml: 1, mt: 1 }}>Collaborators:</Typography>
                                 <List marker="circle" size="sm"  sx={{ ml: 3, '--ListItem-minHeight': '25px' }}>
+                                    <ListItem>RENCI/UNC, NCSU, UGA</ListItem>
                                     <ListItem>DHS CRC</ListItem>
                                     <ListItem>The Water Institute for the Gulf</ListItem>
                                     <ListItem>NC Dept of Transportation</ListItem>
