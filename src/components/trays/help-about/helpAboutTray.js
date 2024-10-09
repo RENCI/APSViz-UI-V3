@@ -63,10 +63,27 @@ export const HelpAboutTray = () => {
                     <Stack spacing={1}>
                         <Accordion expanded={index === 0} onChange={ (event, expanded) => { setIndex(expanded ? 0 : null); }}>
                             <AccordionSummary>
-                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}> Application version </Typography>
+                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}> Application details </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography level="body-sm" sx={{ ml: 1 }}> Version: { process.env.REACT_APP_VERSION } </Typography>
+                                <Typography level="body-sm" sx={{ ml: 1, mb: 1 }}> Version: { process.env.REACT_APP_VERSION } </Typography>
+
+                                <Divider/>
+                                <Typography level="body-sm" sx={{ ml: 1, mt: 1 }}>Funding:</Typography>
+
+                                <List marker="circle" size="sm" sx={{ ml: 3, '--ListItem-minHeight': '25px' }}>
+                                    <ListItem>DHS Coastal Resilience Center</ListItem>
+                                    <ListItem>National Ocean Partnership Program (NOPP)</ListItem>
+                                    <ListItem>RENCI</ListItem>
+                                </List>
+
+                                <Divider/>
+                                <Typography level="body-sm" sx={{ ml: 1, mt: 1 }}>Collaborators:</Typography>
+                                <List marker="circle" size="sm"  sx={{ ml: 3, '--ListItem-minHeight': '25px' }}>
+                                    <ListItem>DHS CRC</ListItem>
+                                    <ListItem>The Water Institute for the Gulf</ListItem>
+                                    <ListItem>NC Dept of Transportation</ListItem>
+                                </List>
                             </AccordionDetails>
                         </Accordion>
 
@@ -144,7 +161,7 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>What are some features of this application?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                <List marker="decimal" size="sm" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                     <ListItem>Search for and select tropical or synoptic model runs.</ListItem>
                                     <ListItem>Display tropical hurricane tracks and cones of uncertainty.</ListItem>
                                     <ListItem>Cycle through tropical advisories or synoptic model runs.</ListItem>
@@ -165,7 +182,7 @@ export const HelpAboutTray = () => {
                                 <Typography level="body-sm" sx={{ ml: 1, mb: 1}}>Each icon represents a functionality of the application available to the
                                     user.</Typography>
                                 <Divider/>
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Collapsable sidebar items:</Typography>
+                                <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Collapsable sidebar items:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>Selected models and layers list</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>Compare model run product layers</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HurricaneIcon color="primary"/></ListItemDecorator>Hurricane track list</ListItem>
@@ -176,7 +193,7 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>Application settings</ListItem>
                                 </List>
                                 <Divider/>
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>ADCIRC model layer types:</Typography>
+                                <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>ADCIRC model layer types:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterSurfaceIcon color="primary"/></ListItemDecorator>HECRAS water surface</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HIResMaxElevationIcon color="primary"/></ListItemDecorator>High resolution maximum water level</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon color="primary"/></ListItemDecorator>Inundation area</ListItem>
@@ -186,13 +203,13 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WindVelocityIcon color="primary"/></ListItemDecorator>Maximum wind speed</ListItem>
                                 </List>
                                 <Divider/>
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Observation point sources:</Typography>
+                                <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Observation point sources:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#FFFF00', 'NOAA National Buoy Center (NOAA/NDBC)') }</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#BEAEFA', 'NOAA National Ocean Service (NOAA/NOS)') }</ListItemDecorator></ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator>{ getObsSVGIcon('#3D4849', 'North Carolina Emergency Management (NCEM)') }</ListItemDecorator></ListItem>
                                 </List>
                                 <Divider/>
-                                <List sx={{ ml: 2, mt: 1, fontSize: "sm" }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Action buttons:</Typography>
+                                <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Action buttons:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Toggle light or dark mode.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MapIcon/></ListItemDecorator>Select a different base map.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a model run up or down in the list.</ListItem>
@@ -214,7 +231,7 @@ export const HelpAboutTray = () => {
                                     <Accordion expanded={ screenCapIndex === 0 } onChange={ (event, expanded) => { setScreenCapIndex(expanded ? 0 : null); }}>
                                         <AccordionSummary sx={{ fontSize: "sm", fontStyle: 'italic' }}>Chrome</AccordionSummary>
                                         <AccordionDetails>
-                                            <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                            <List size='sm' marker="decimal" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                                 <ListItem>Install and activate the Chrome Full Page Screen Capture browser extension.</ListItem>
                                                 <ListItem>A small camera icon will appear in the top right corner of the browser.</ListItem>
                                                 <ListItem>Click the camera icon.</ListItem>
@@ -226,7 +243,7 @@ export const HelpAboutTray = () => {
                                     <Accordion expanded={ screenCapIndex === 5 } onChange={ (event, expanded) => { setScreenCapIndex(expanded ? 5 : null); }}>
                                         <AccordionSummary sx={{ fontSize: "sm", fontStyle: 'italic' }}>Edge</AccordionSummary>
                                         <AccordionDetails>
-                                            <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                            <List size='sm' marker="decimal" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                                 <ListItem>Right click the browser surface.</ListItem>
                                                 <ListItem>Select `Screenshot` from the context menu that appears.</ListItem>
                                                 <ListItem>At the top of the browser you can select to capture a portion of the browser or the entire
@@ -240,7 +257,7 @@ export const HelpAboutTray = () => {
                                     <Accordion expanded={ screenCapIndex === 6 } onChange={ (event, expanded) => { setScreenCapIndex(expanded ? 6 : null); }}>
                                         <AccordionSummary sx={{ fontSize: "sm", fontStyle: 'italic' }}>Firefox</AccordionSummary>
                                         <AccordionDetails>
-                                            <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                            <List size='sm' marker="decimal" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                                 <ListItem>Right click the browser surface</ListItem>
                                                 <ListItem>Select `Take screenshot` from the context menu that appears</ListItem>
                                                 <ListItem>At the top of the browser you can select to capture the visible portion of the browser or
@@ -254,7 +271,7 @@ export const HelpAboutTray = () => {
                                     <Accordion expanded={ screenCapIndex === 7 } onChange={ (event, expanded) => { setScreenCapIndex(expanded ? 7 : null); }}>
                                         <AccordionSummary sx={{ fontSize: "sm", fontStyle: 'italic' }}>Safari</AccordionSummary>
                                         <AccordionDetails>
-                                            <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                            <List size='sm' marker="decimal" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                                 <ListItem>Install and activate Awesome Screenshot</ListItem>
                                                 <ListItem>Navigate to the target page in Safari</ListItem>
                                                 <ListItem>Click the Awesome Screenshot icon (looks like a tiny camera lens) to the left of the Safari
@@ -275,10 +292,10 @@ export const HelpAboutTray = () => {
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>The Model selection sidebar button.</ListItem>
                                 </List>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the ADCIRC Model selection icon.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select either tropical or synoptic model runs.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select one or more appropriate data filter parameters.</ListItem>
@@ -295,10 +312,10 @@ export const HelpAboutTray = () => {
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>The Model layers sidebar button.</ListItem>
                                 </List>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the Model Layers icon button.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Expand a model run.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>You can show/hide (slider), remove or reorder
@@ -312,7 +329,7 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I step through tropical hurricane advisories or synoptic cycles?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List marker="decimal" sx={{ ml: 1, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 1, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Note the control panel in the lower left corner of the application.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Click the left or right buttons to increment/decrement though tropical hurricane advisories or synoptic cycles.</ListItem>
                                 </List>
@@ -324,10 +341,10 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>What are some user settings?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
                                 </List>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Is for selecting light or dark mode.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MapIcon/></ListItemDecorator>Is for selecting a different base map.</ListItem>
                                 </List>
@@ -339,10 +356,10 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I change the base map?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
                                 </List>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Click on the Application Settings icon</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Click on the base map icon</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select your preferred base map.</ListItem>
@@ -357,7 +374,7 @@ export const HelpAboutTray = () => {
                             <AccordionDetails>
                                 <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select the colored/round icons on the map. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that observation point.</Typography>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
                                     <ListItem><Typography level="body-sm">You can also turn on/off plot lines on the chart.</Typography></ListItem>
                                 </List>
@@ -370,10 +387,10 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
 
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>The Compare Layers button.</ListItem>
                                 </List>
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the left pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the right pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select the Reset button to clear your selections.</ListItem>
@@ -392,7 +409,7 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
 
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
                                 </List>
 
@@ -406,7 +423,7 @@ export const HelpAboutTray = () => {
                                     user to specify the minimum and maximum values attributed to the colormap range for that layer product.
                                 </Typography>
 
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Select the Edit ADCIRC Layer Colormaps &quot;Basic&quot; tab.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Find the layer product range you would like to adjust.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Use the slider buttons to specify the minimum and maximum color ranges for a layer product.</ListItem>
@@ -414,13 +431,13 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 15} onChange={ (event, expanded) => { setIndex(expanded ? 15 : null); }}>
+                        <Accordion expanded={index === 16} onChange={ (event, expanded) => { setIndex(expanded ? 16 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view or adjust ADCIRC layer colormap styles?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
 
-                                <List sx={{ fontSize: "sm" }}>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application Settings sidebar button.</ListItem>
                                 </List>
 
@@ -434,7 +451,7 @@ export const HelpAboutTray = () => {
                                     values attributed to the colormap for that layer product.
                                 </Typography>
 
-                                <List marker="decimal" sx={{ ml: 2, fontSize: "sm" }}>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Select the Edit ADCIRC Layer Colormaps &quot;Advanced&quot; tab.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Choose the layer product type you would like to modify.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Optionally select the colormap style type. &quot;Ramp&quot; is a continuous color gradient, while &quot;Interval&quot; represent color steps.</ListItem>
