@@ -12,9 +12,10 @@ export const Branding = () => {
 
     // get the branded website if any
     let product_code = getBrandingHandler();
-    // for testing: let product_code = '&project_code=nopp';
+    // for testing: let product_code = '&ensemble_name=coampsforecast&project_code=nopp';
     if (product_code) {
-        product_code = product_code.split('=')[1];
+        // get the pieces of the query string
+        product_code = product_code.split('&project_code=')[1];
     }
 
     return (

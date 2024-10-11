@@ -41,7 +41,7 @@ export const StyleEditor = () => {
     const getLoadedProductNames = () => {
         //let productList = [];
         defaultModelLayers.forEach(element => {
-            if (element.properties.product_type !== "obs")
+            if ((element.properties.product_type !== "obs") && (!productList.includes(element.properties.product_name)))
                 productList.push(element.properties.product_name);
         });
     };
