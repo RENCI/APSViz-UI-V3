@@ -129,7 +129,7 @@ export const StyleEditor = () => {
         // and now has been changed to ramp
         // in that case we have modify the last colormap entry
         else {
-            if ((value.type === "ramp") && (value.colorMapEntries[value.colorMapEntries.length-1].label.includes(">="))) {
+            if (value.colorMapEntries[value.colorMapEntries.length-1].label.includes(">=")) {
                 const last = value.colorMapEntries.length-1;
                 value.colorMapEntries[last].quantity = parseFloat(value.colorMapEntries[last].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
                 const labelParts = value.colorMapEntries[last].label.split(" ");
