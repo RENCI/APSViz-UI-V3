@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 /**
  * Form to filter/select synoptic runs
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 export const SynopticTabForm = () => {
@@ -82,7 +82,7 @@ export const SynopticTabForm = () => {
     };
 
     /**
-     * Retrieves and returns the model data in json format
+     * Retrieves and returns the model data in JSON format
      *
      * @param url
      * @returns { json }
@@ -150,7 +150,6 @@ export const SynopticTabForm = () => {
      */
     function resetForm() {
         // reset the form controls
-        setSynopticDate(null);
         setSynopticCycle(null);
         setSynopticGrid(null);
         setSynopticInstance(null);
