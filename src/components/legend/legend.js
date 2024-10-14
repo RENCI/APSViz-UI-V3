@@ -101,16 +101,12 @@ export const MapLegend = () => {
     const nodeRef = useRef(null);
 
     // declare the width min/max for the legend card
-    //const minWidth = 45;
-    //const maxWidth = 75;
-    const minWidth = 65;
-    const maxWidth = 95;
+    const minWidth = 45;
+    const maxWidth = 75;
 
     // declare the height min/max for the legend card
-    //const minHeight = 250;
-    //const maxHeight = 350;
-    const minHeight = 300;
-    const maxHeight = 400;
+    const minHeight = 250;
+    const maxHeight = 350;
 
     return (
         <Draggable

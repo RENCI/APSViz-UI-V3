@@ -182,7 +182,8 @@ export const ColormapSlider = ({style}) => {
 
     const handleChange = (event, newValue) => {
     // make sure the first thumb value is not >= the second
-        if (newValue[0] < newValue[1]) {
+    // and that second is >= sliderStep
+        if ((newValue[0] < newValue[1]) && (newValue[1] >= sliderStep)) {
             setValue(newValue);
         }
     };
@@ -193,6 +194,11 @@ export const ColormapSlider = ({style}) => {
         if (newValue[0] === newValue[1]) {
             newValue[0] = newValue[0]-sliderStep;
         }
+        // since min slider value doesn't appear to work, make
+        // sure lower slider value is never less tha 0
+        newValue[0] = (newValue[0] < 0) ? 0 : newValue[0];
+        // also check for 0 upper value - set sliderStep as lowest value
+        newValue[1] = (newValue[1] < sliderStep) ? sliderStep : newValue[1];
         setValue([newValue[0], newValue[1]]);
 
         // now create new style with altered data range
