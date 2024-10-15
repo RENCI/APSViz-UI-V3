@@ -29,12 +29,12 @@ export const LayerActions = ({ layer }) => {
         justifyContent="space-between"
       >
         <TabList size="sm" sx={{ flex: 1 }}>
-          <Tab variant="plain" color="primary">
+{/*           <Tab variant="plain" color="primary">
             <ListItemDecorator>
               <AppearanceIcon fontSize="sm" />
             </ListItemDecorator>
             Appearance
-          </Tab>
+          </Tab> */}
           <Tab variant="plain" color="primary">
             <ListItemDecorator>
               <MetadataIcon fontSize="sm" />
@@ -44,7 +44,7 @@ export const LayerActions = ({ layer }) => {
         </TabList>
       </Stack>
 
-      <TabPanel value={ 0 } sx={{
+{/*       <TabPanel value={ 0 } sx={{
         '.MuiFormLabel-root': {
           width: '120px',
           justifyContent: 'flex-end',
@@ -77,9 +77,9 @@ export const LayerActions = ({ layer }) => {
             alignItems: 'center',
           }}>Coming soon...</Box>
         </FormControl>
-      </TabPanel>
+      </TabPanel> */}
       
-      <TabPanel value={ 1 }>
+      <TabPanel value={ 0 }>
         <Box component="pre" sx={{
           fontSize: '75%',
           color: 'text.primary',
