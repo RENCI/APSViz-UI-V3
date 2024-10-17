@@ -29,50 +29,10 @@ export const DefaultLayers = () => {
     const [obsData, setObsData] = useState("");
     const map = useMap();
 
-    const L = window.L;
-
-    map.on('click', function(e) {
-        L.DomEvent.stopPropagation;
-
-        // create a id for the point
-        const id = e.latlng.lat + ", " + e.latlng.lng;
-
-        // does this point already exist
-        if(Object.values(selectedObservations).indexOf(id) === -1) {
-            // create a marker target icon around the observation clicked
-            markClicked(map, e, id);
-
-            // get the FQDN of the UI data server
-            const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
-
-            // create a set of properties for this object
-            const pointProps =
-                {
-                    "station_name": "Ocean: " + id,
-                    "lat": e.latlng.lat,
-                    "lon": e.latlng.lng,
-                    "location_name": "Ocean: " + id,
-                    "model_run_id": "4489-2024101606-gfsforecast",
-                    "data_source": "GFSFORECAST_NCSC_SAB_V1.23",
-                    "source_name": "adcirc",
-                    "source_instance": "ncsc123_gfs_da",
-                    "source_archive": "RENCI",
-                    "forcing_metclass": "synoptic",
-                    "location_type": "ocean",
-                    "grid_name": "NCSC_SAB_V1.23",
-                    "csvurl": data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&url=https%3A%2F%2Ftds.renci.org%2Fthredds%2FdodsC%2F2024%2Fgfs%2F2024041712%2FNCSC_SAB_v1.23%2Fht-ncfs.renci.org%2Fncsc123_gfs_sb55.01%2Fgfsforecast%2Ffort.63.nc&ensemble=nowcast",
-                    "id": id
-                };
-
-            // populate selectedObservations list with the newly selected observation point
-            setSelectedObservations(previous => [...previous, pointProps]);
-        }
-    });
-
     const {
         defaultModelLayers,
         setDefaultModelLayers,
-        selectedObservations, setSelectedObservations,
+        setSelectedObservations,
         setShowShareComment
     } = useLayers();
 
