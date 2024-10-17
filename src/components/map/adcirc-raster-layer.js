@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { WMSTileLayer } from 'react-leaflet';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { WMSTileLayer, useMap, useMapEvent } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
-import { getNamespacedEnvParam, restoreColorMapType } from '@utils/map-utils';
-import { useSettings } from '@context';
+import {getNamespacedEnvParam, markClicked, restoreColorMapType} from '@utils/map-utils';
+import {useLayers, useSettings} from '@context';
 
 export const AdcircRasterLayer = (layer) => {
     const sldParser = new SldStyleParser();
@@ -15,7 +15,7 @@ export const AdcircRasterLayer = (layer) => {
 
     const [currentStyle, setCurrentStyle] = useState("");
 
-   useEffect(() => {
+    useEffect(() => {
         if(layer.layer.properties) {
             let style = "";
             switch(layer.layer.properties.product_type) {
@@ -42,12 +42,75 @@ export const AdcircRasterLayer = (layer) => {
                     });
                 }); 
         }
-      }, [mapStyle]);
-      
+    }, [mapStyle]);
+
+    // get the observation points selected and default layers from state
+    const {
+        setSelectedObservations,
+        defaultModelLayers
+    } = useLayers();
+
+    // capture the default layers
+    const layers = defaultModelLayers;
+
+    // get a handle to the map
+    const map = useMap();
+
+    // create a callback to handle a map click event
+    const onClick = useCallback((e) => {
+        // create an id for the point
+        const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
+
+        // create a marker target icon around the observation clicked
+        markClicked(map, e, id);
+
+        // get the FQDN of the UI data server
+        const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
+
+        // get the visible layer on the map
+        const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
+
+        // create the correct TDS URL without the hostname
+        const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ?
+            'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
+
+        // get the hostname
+        const tds_svr = layer.properties['tds_download_url'].split('https://')[1].split('/thredds')[0].split('.')[0];
+
+        // generate the full url
+        const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" +
+            tds_url + '&tds_svr=' + tds_svr;
+
+        // create a set of properties for this object
+        const pointProps =
+            {
+                "station_name": layer.properties['product_name'] + " at (lon, lat): " + id,
+                "lat": Number(e.latlng.lat).toFixed(6),
+                "lon": Number(e.latlng.lng).toFixed(6),
+                "location_name": layer.properties['product_name'] + " at (lon, lat): " + id,
+                "model_run_id": layer.group,
+                "data_source": (layer.properties['event_type'] + '_' + layer.properties['grid_type']).toUpperCase(),
+                "source_name": layer.properties['model'],
+                "source_instance": layer.properties['instance_name'],
+                "source_archive": layer.properties['location'],
+                "forcing_metclass": layer.properties['met_class'],
+                "location_type": "ocean",
+                "grid_name": "NCSC_SAB_V1.23",
+                "csvurl": fullTDSURL,
+                "id": id
+            };
+
+        // populate selectedObservations list with the newly selected observation point
+        setSelectedObservations(previous => [...previous, pointProps]);
+    });
+
+    // assign the map click event for geo-point selections
+    useMapEvent('click', onClick);
+
     // memorizing this params object prevents
     // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
-        format:"image/png",
+        format: "image/png",
         transparent: true,
         sld_body: currentStyle,
     }), [currentStyle]);
@@ -58,7 +121,7 @@ export const AdcircRasterLayer = (layer) => {
             layers={layer.layer.layers}
             params={wmsLayerParams}
             opacity={layer.layer.state.opacity}
+            onClick={console.log}
         />
     );
-
 };

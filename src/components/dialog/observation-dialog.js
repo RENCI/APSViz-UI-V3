@@ -24,6 +24,8 @@ export const ObservationDialog = (obs_data) => {
         "NOAA Tidal Predictions": false,
         "APS Nowcast": false,
         "APS Forecast": false,
+        "SWAN Nowcast": false,
+        "SWAN Forecast": false,
         "Difference (APS-OBS)": false });
 
     // method to toggle the  line view polarity
@@ -38,6 +40,8 @@ export const ObservationDialog = (obs_data) => {
         "NOAA Tidal Predictions": false,
         "APS Nowcast": false,
         "APS Forecast": false,
+        "SWAN Nowcast": false,
+        "SWAN Forecast": false,
         "Difference (APS-OBS)": false });
 
     const setLineButtonView = (item) => {
