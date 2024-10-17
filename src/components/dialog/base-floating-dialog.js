@@ -55,7 +55,6 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     const minHeight = 175;
     const maxHeight = 500;
 
-
     /**
     * the close dialog handler
     */
