@@ -15,52 +15,7 @@ export const AdcircRasterLayer = (layer) => {
 
     const [currentStyle, setCurrentStyle] = useState("");
 
-    // get a handle to the map
-    const map = useMap();
-
-    // create a callback to handle a map click event
-    const onClick = useCallback ( (e) => {
-        // create an id for the point
-        const id = e.latlng.lng + ", " + e.latlng.lat;
-
-        // create a marker target icon around the observation clicked
-        markClicked(map, e, id);
-
-        // get the FQDN of the UI data server
-        const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
-
-        // create a set of properties for this object
-        const pointProps =
-            {
-                "station_name": "Point (lon, lat): " + id,
-                "lat": e.latlng.lat,
-                "lon": e.latlng.lng,
-                "location_name": "Point (lon, lat): " + id,
-                "model_run_id": "4489-2024101606-gfsforecast",
-                "data_source": "GFSFORECAST_NCSC_SAB_V1.23",
-                "source_name": "adcirc",
-                "source_instance": "ncsc123_gfs_da",
-                "source_archive": "RENCI",
-                "forcing_metclass": "synoptic",
-                "location_type": "ocean",
-                "grid_name": "NCSC_SAB_V1.23",
-                "csvurl": data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&url=https%3A%2F%2Ftds.renci.org%2Fthredds%2FdodsC%2F2024%2Fgfs%2F2024041712%2FNCSC_SAB_v1.23%2Fht-ncfs.renci.org%2Fncsc123_gfs_sb55.01%2Fgfsforecast%2Ffort.63.nc&ensemble=nowcast",
-                "id": id
-            };
-
-        // populate selectedObservations list with the newly selected observation point
-        setSelectedObservations(previous => [...previous, pointProps]);
-    });
-
-    // assign the map click event
-    useMapEvent('click', onClick);
-
-    // get the observation point selected state
-    const {
-        setSelectedObservations
-    } = useLayers();
-
-   useEffect(() => {
+    useEffect(() => {
         if(layer.layer.properties) {
             let style = "";
             switch(layer.layer.properties.product_type) {
@@ -87,8 +42,63 @@ export const AdcircRasterLayer = (layer) => {
                     });
                 }); 
         }
-      }, [mapStyle]);
-      
+    }, [mapStyle]);
+
+    // get the observation points selected and default layers from state
+    const {
+        setSelectedObservations,
+        defaultModelLayers
+    } = useLayers();
+
+    // capture the default layers
+    const layers = defaultModelLayers;
+
+    // get a handle to the map
+    const map = useMap();
+
+    // create a callback to handle a map click event
+    const onClick = useCallback ( (e) => {
+        // create an id for the point
+        const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
+
+        // create a marker target icon around the observation clicked
+        markClicked(map, e, id);
+
+        // get the FQDN of the UI data server
+        const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
+
+        // get the visible layer on the map
+        const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
+
+        // create the correct TDS URL
+        const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ? 'fort' : 'swan_HS') + '.63.nc');
+
+        // create a set of properties for this object
+        const pointProps =
+            {
+                "station_name": layer.properties['product_name'] + " at (lon, lat): " + id,
+                "lat": Number(e.latlng.lat).toFixed(6),
+                "lon": Number(e.latlng.lng).toFixed(6),
+                "location_name": layer.properties['product_name'] + " at (lon, lat): " + id,
+                "model_run_id": layer.group,
+                "data_source": (layer.properties['event_type'] + '_' + layer.properties['grid_type']).toUpperCase(),
+                "source_name": layer.properties['model'],
+                "source_instance": layer.properties['instance_name'],
+                "source_archive": layer.properties['location'],
+                "forcing_metclass": layer.properties['met_class'],
+                "location_type": "ocean",
+                "grid_name": "NCSC_SAB_V1.23",
+                "csvurl": data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" + tds_url,
+                "id": id
+            };
+
+        // populate selectedObservations list with the newly selected observation point
+        setSelectedObservations(previous => [...previous, pointProps]);
+    });
+
+    // assign the map click event for geo-point selections
+    useMapEvent('click', onClick);
+
     // memorizing this params object prevents
     // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
@@ -106,5 +116,4 @@ export const AdcircRasterLayer = (layer) => {
             onClick={console.log}
         />
     );
-
 };
