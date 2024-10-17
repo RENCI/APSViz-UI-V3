@@ -79,7 +79,7 @@ function getObsChartData(url, setLineButtonView) {
  */
 function csvToJSON(csvData, setLineButtonView) {
     // ensure that there is csv data to convert
-    if (csvData !== "" && csvData.indexOf('fail') < 0) {
+    if (csvData !== "" && csvData.indexOf('Error') < 0 && csvData.indexOf('fail') < 0) {
         // split on carriage returns
         const lines = csvData.split("\n");
 
