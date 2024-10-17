@@ -205,7 +205,7 @@ function formatX_axis(value) {
  */
 function get_yaxis_ticks(data) {
     // insure there is something to work with
-    if (data !== undefined) {
+    if (data !== undefined && data.length > 0) {
         // init the max value found
         let maxVal = 0;
 
