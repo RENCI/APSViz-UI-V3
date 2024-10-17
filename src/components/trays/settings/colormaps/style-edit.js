@@ -196,7 +196,7 @@ export const StyleEditor = () => {
         }
 
         return type;
-    }
+    };
 
     const productType = getProductType();
 

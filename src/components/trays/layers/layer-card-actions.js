@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
-  FormControl,
-  FormLabel,
   ListItemDecorator,
-  Slider,
   Tab,
   TabList,
   Tabs,
@@ -13,14 +10,10 @@ import {
   Stack,
 } from '@mui/joy';
 import {
-  FormatPaint as AppearanceIcon,
   DataObject as MetadataIcon,
 } from '@mui/icons-material';
-import { useLayers, useSettings } from '@context';
 
 export const LayerActions = ({ layer }) => {
-  const { darkMode } = useSettings();
-  const { setLayerOpacity } = useLayers();
 
   return (
     <Tabs defaultValue={0}>
