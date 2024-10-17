@@ -57,7 +57,7 @@ export const AdcircRasterLayer = (layer) => {
     const map = useMap();
 
     // create a callback to handle a map click event
-    const onClick = useCallback ( (e) => {
+    const onClick = useCallback((e) => {
         // create an id for the point
         const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
 
@@ -65,13 +65,21 @@ export const AdcircRasterLayer = (layer) => {
         markClicked(map, e, id);
 
         // get the FQDN of the UI data server
-        const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
+        const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
 
         // get the visible layer on the map
         const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
 
-        // create the correct TDS URL
-        const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ? 'fort' : 'swan_HS') + '.63.nc');
+        // create the correct TDS URL without the hostname
+        const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ?
+            'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
+
+        // get the hostname
+        const tds_svr = layer.properties['tds_download_url'].split('https://')[1].split('/thredds')[0].split('.')[0];
+
+        // generate the full url
+        const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" +
+            tds_url + '&tds_svr=' + tds_svr;
 
         // create a set of properties for this object
         const pointProps =
@@ -88,7 +96,7 @@ export const AdcircRasterLayer = (layer) => {
                 "forcing_metclass": layer.properties['met_class'],
                 "location_type": "ocean",
                 "grid_name": "NCSC_SAB_V1.23",
-                "csvurl": data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" + tds_url,
+                "csvurl": fullTDSURL,
                 "id": id
             };
 
@@ -102,7 +110,7 @@ export const AdcircRasterLayer = (layer) => {
     // memorizing this params object prevents
     // that map flicker on state changes.
     const wmsLayerParams = useMemo(() => ({
-        format:"image/png",
+        format: "image/png",
         transparent: true,
         sld_body: currentStyle,
     }), [currentStyle]);
