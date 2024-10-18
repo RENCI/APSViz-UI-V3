@@ -9,6 +9,7 @@ import {
   Typography,
   Slider,
   Box,
+  Divider,
 } from '@mui/joy';
 import SldStyleParser from 'geostyler-sld-parser';
 import { ColorMapEditor } from '@renci/apsviz-geostyler';
@@ -212,8 +213,9 @@ export const StyleEditor = () => {
             </Select>
             {colormap &&
             <Stack direction="column" gap={ 1 } alignItems="left">
+                 <Divider />
                 <Box width={300} >
-                    <Typography level="title-md">Opacity</Typography>
+                    <Typography level="title-md">LayerOpacity</Typography>
                     <Slider
                         aria-label="opacity slider"
                         value={ layerOpacity[productType].current }
@@ -225,10 +227,13 @@ export const StyleEditor = () => {
                         onChange={ (event, newValue) => layerOpacity[productType].set(newValue) }
                     />
                 </Box>
+                <Divider />
+                <Typography level="title-md">ColorMap</Typography>
                 <ColorMapEditor colorMap={colormap} extendedField={extendedField} onChange={onColorMapChange}/>
                 <Button variant="soft" onClick={saveStyle} sx={{width: "200px"}}>
                     <Typography level="title-md">Save New Colormap</Typography>
                 </Button>
+                <Divider />
             </Stack>}
         </Stack>
     );
