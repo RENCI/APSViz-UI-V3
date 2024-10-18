@@ -1,18 +1,11 @@
 import React, { Fragment, useState, useRef, forwardRef } from 'react';
-import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography,
+    CssBaseline, Dialog, DialogContent, DialogTitle, Paper, Slide, IconButton} from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 
-import CssBaseline from '@mui/material/CssBaseline';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
-
-import Paper from '@mui/material/Paper';
-import Slide from '@mui/material/Slide';
-import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 import { markUnclicked } from '@utils/map-utils';
