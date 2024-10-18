@@ -215,7 +215,7 @@ export const StyleEditor = () => {
             <Stack direction="column" gap={ 1 } alignItems="left">
                  <Divider />
                 <Box width={300} >
-                    <Typography level="title-md">LayerOpacity</Typography>
+                    <Typography level="title-md">Layer Opacity</Typography>
                     <Slider
                         aria-label="opacity slider"
                         value={ layerOpacity[productType].current }
