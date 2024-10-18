@@ -366,6 +366,9 @@ export const LayersProvider = ({ children }) => {
   // used to track the view state of the share comment
   const [showShareComment, setShowShareComment] = useState(true);
 
+  // used to show alerts
+  const  [alertMsg, setAlertMsg] = useState(null);
+
   return (
     <LayersContext.Provider
       value={{
@@ -377,6 +380,7 @@ export const LayersProvider = ({ children }) => {
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
         layerTypes,
+        alertMsg, setAlertMsg,
 
         toggleHurricaneLayerVisibility, toggleLayerVisibility, toggleLayerVisibility2,
         getAllLayersInvisible, getAllHurricaneLayersInvisible, getAllRasterLayersInvisible,
