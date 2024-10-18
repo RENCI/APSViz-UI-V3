@@ -57,13 +57,24 @@ export const AdcircRasterLayer = (layer) => {
     // get a handle to the map
     const map = useMap();
 
+    /**
+     * method to determine if this is a layer that we can geo-point on
+     *
+     */
+    const validLayerForGeoPointing = (product_type) => {
+        // if this layer is not worthy of geo-pointing
+        return (
+            product_type.indexOf('Hi-Res Maximum Water Level') !== 0 &&
+            product_type.indexOf('Maximum Wind Speed') !== 0);
+    };
+
     // create a callback to handle a map click event
     const onClick = useCallback((e) => {
         // get the visible layer on the map
         const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
 
         // check to see if this is a layer we can operate on
-        if (layer.properties['product_name'].indexOf('Level') > 0 || layer.properties['product_name'].indexOf('Height') > 0) {
+        if (validLayerForGeoPointing(layer.properties['product_name'])) {
             // create an id for the point
             const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
 
@@ -99,7 +110,7 @@ export const AdcircRasterLayer = (layer) => {
                     "source_instance": l_props['instance_name'],
                     "source_archive": l_props['location'],
                     "forcing_metclass": l_props['met_class'],
-                    "location_type": "ocean",
+                    "location_type": "GeoPoint",
                     "grid_name": l_props['grid_type'].toUpperCase(),
                     "csvurl": fullTDSURL,
                     "id": id
@@ -109,7 +120,7 @@ export const AdcircRasterLayer = (layer) => {
             setSelectedObservations(previous => [...previous, pointProps]);
         }
         else
-            setAlertMsg({'severity': 'warning', 'msg': 'Geo-point selection is only available for water level or water height products.'});
+            setAlertMsg({'severity': 'warning', 'msg': 'Geo-point selection is not available for this layer type.'});
     });
 
     // assign the map click event for geo-point selections
