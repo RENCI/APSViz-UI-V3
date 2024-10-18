@@ -57,26 +57,22 @@ export const AdcircRasterLayer = (layer) => {
     // get a handle to the map
     const map = useMap();
 
-    /**
-     * method to determine if this is a layer that we can geo-point on
-     *
-     */
-    const validLayerForGeoPointing = (product_type) => {
-        // if this layer is not worthy of geo-pointing
-        return (
-            product_type.indexOf('Hi-Res Maximum Water Level') !== 0 &&
-            product_type.indexOf('Maximum Wind Speed') !== 0);
-    };
+    // create a list of worthy geo-point layer types
+    const validLayerTypes = new Set(['Maximum Water Level', 'Maximum Significant Wave Height']);
 
     // create a callback to handle a map click event
     const onClick = useCallback((e) => {
         // get the visible layer on the map
         const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
 
-        // check to see if this is a layer we can operate on
-        if (validLayerForGeoPointing(layer.properties['product_name'])) {
+        // if this is a layer we can geo-point on
+        if (validLayerTypes.has(layer.properties['product_name'])) {
+            // round the coordinates
+            const lon = Number(e.latlng.lng).toFixed(5);
+            const lat = Number(e.latlng.lat).toFixed(5);
+
             // create an id for the point
-            const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
+            const id = lon + ', ' + lat;
 
             // create a marker target icon around the observation clicked
             markClicked(map, e, id);
@@ -100,10 +96,10 @@ export const AdcircRasterLayer = (layer) => {
             // create a set of properties for this object
             const pointProps =
                 {
-                    "station_name": l_props['product_name'] + " at (lon, lat): " + id,
-                    "lat": Number(e.latlng.lat).toFixed(6),
-                    "lon": Number(e.latlng.lng).toFixed(6),
-                    "location_name": l_props['product_name'] + " at (lon, lat): " + id,
+                    "station_name": l_props['product_name'] + " " + id,
+                    "lat": lat,
+                    "lon": lon,
+                    "location_name": l_props['product_name'] + "s over time (lon, lat): " + id,
                     "model_run_id": layer.group,
                     "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
                     "source_name": l_props['model'],
@@ -120,7 +116,7 @@ export const AdcircRasterLayer = (layer) => {
             setSelectedObservations(previous => [...previous, pointProps]);
         }
         else
-            setAlertMsg({'severity': 'warning', 'msg': 'Geo-point selection is not available for this layer type.'});
+            setAlertMsg({'severity': 'warning', 'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'});
     });
 
     // assign the map click event for geo-point selections
