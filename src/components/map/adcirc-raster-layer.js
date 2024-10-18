@@ -136,7 +136,6 @@ export const AdcircRasterLayer = (layer) => {
             layers={layer.layer.layers}
             params={wmsLayerParams}
             opacity={layer.layer.state.opacity}
-            onClick={console.log}
         />
     );
 };
