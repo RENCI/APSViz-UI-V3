@@ -183,6 +183,9 @@ function csvToJSON(csvData, setLineButtonView) {
         // return the json data representation
         return ret_val;
     }
+
+    // return something
+    return '';
 }
 
 /**
