@@ -62,7 +62,7 @@ function getObsChartData(url, setLineButtonView) {
                     console.error(error.message);
 
                     // make sure we do not render anything
-                    return "";
+                    return error.message;
                 });
 
             // return the csv data in json format
@@ -79,7 +79,7 @@ function getObsChartData(url, setLineButtonView) {
  */
 function csvToJSON(csvData, setLineButtonView) {
     // ensure that there is csv data to convert
-    if (csvData !== "") {
+    if (csvData !== "" && csvData.indexOf('Error') < 0 && csvData.indexOf('fail') < 0) {
         // split on carriage returns
         const lines = csvData.split("\n");
 
@@ -151,6 +151,24 @@ function csvToJSON(csvData, setLineButtonView) {
                 else
                     e["APS Forecast"] = null;
 
+                if (e["SWAN Nowcast"]) {
+                    e["SWAN Nowcast"] = +parseFloat(e["SWAN Nowcast"]).toFixed(3);
+
+                    // set the line button to be in view
+                    setLineButtonView("SWAN Nowcast");
+                }
+                else
+                    e["SWAN Nowcast"] = null;
+
+                if (e["SWAN Forecast"]) {
+                    e["SWAN Forecast"] = +parseFloat(e["SWAN Forecast"]).toFixed(3);
+
+                    // set the line button to be in view
+                    setLineButtonView("SWAN Forecast");
+                }
+                else
+                    e["SWAN Forecast"] = null;
+
                 if (e["Difference (APS-OBS)"]) {
                     e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
 
@@ -205,7 +223,7 @@ function formatX_axis(value) {
  */
 function get_yaxis_ticks(data) {
     // insure there is something to work with
-    if (data !== undefined) {
+    if (data !== undefined && data.length > 0) {
         // init the max value found
         let maxVal = 0;
 
@@ -268,7 +286,7 @@ function CreateObsChart(c) {
         <Fragment>
         {
             status === 'pending' ? ( <div>Gathering chart data...</div> ) :
-            status === 'error' ? ( <div>There was a problem with observation data for this location.</div> ) :
+            status === 'error' ? ( <div>There was a problem with collecting data for this location.</div> ) :
                 <ResponsiveContainer>
                     <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
                         <CartesianGrid strokeDasharray="1 1" />
@@ -284,6 +302,8 @@ function CreateObsChart(c) {
                         <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
                         <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
                         <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
+                        <Line type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Nowcast"] }/>
+                        <Line type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Forecast"] }/>
                         <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
                     </LineChart>
                 </ResponsiveContainer>
