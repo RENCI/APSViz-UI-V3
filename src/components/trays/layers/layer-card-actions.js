@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
-  FormControl,
-  FormLabel,
   ListItemDecorator,
-  Slider,
   Tab,
   TabList,
   Tabs,
@@ -13,14 +10,10 @@ import {
   Stack,
 } from '@mui/joy';
 import {
-  FormatPaint as AppearanceIcon,
   DataObject as MetadataIcon,
 } from '@mui/icons-material';
-import { useLayers, useSettings } from '@context';
 
 export const LayerActions = ({ layer }) => {
-  const { darkMode } = useSettings();
-  const { setLayerOpacity } = useLayers();
 
   return (
     <Tabs defaultValue={0}>
@@ -29,12 +22,12 @@ export const LayerActions = ({ layer }) => {
         justifyContent="space-between"
       >
         <TabList size="sm" sx={{ flex: 1 }}>
-          <Tab variant="plain" color="primary">
+{/*           <Tab variant="plain" color="primary">
             <ListItemDecorator>
               <AppearanceIcon fontSize="sm" />
             </ListItemDecorator>
             Appearance
-          </Tab>
+          </Tab> */}
           <Tab variant="plain" color="primary">
             <ListItemDecorator>
               <MetadataIcon fontSize="sm" />
@@ -44,7 +37,7 @@ export const LayerActions = ({ layer }) => {
         </TabList>
       </Stack>
 
-      <TabPanel value={ 0 } sx={{
+{/*       <TabPanel value={ 0 } sx={{
         '.MuiFormLabel-root': {
           width: '120px',
           justifyContent: 'flex-end',
@@ -77,9 +70,9 @@ export const LayerActions = ({ layer }) => {
             alignItems: 'center',
           }}>Coming soon...</Box>
         </FormControl>
-      </TabPanel>
+      </TabPanel> */}
       
-      <TabPanel value={ 1 }>
+      <TabPanel value={ 0 }>
         <Box component="pre" sx={{
           fontSize: '75%',
           color: 'text.primary',

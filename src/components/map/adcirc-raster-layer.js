@@ -4,6 +4,10 @@ import SldStyleParser from 'geostyler-sld-parser';
 import { getNamespacedEnvParam, markClicked, restoreColorMapType } from '@utils/map-utils';
 import { useLayers, useSettings } from '@context';
 
+const MAXELE = 'maxele';
+const MAXWVEL = 'maxwvel';
+const SWAN = 'swan';
+
 export const AdcircRasterLayer = (layer) => {
     const sldParser = new SldStyleParser();
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
@@ -11,9 +15,11 @@ export const AdcircRasterLayer = (layer) => {
 
     const {
         mapStyle,
+        layerOpacity,
     } = useSettings();
 
     const [currentStyle, setCurrentStyle] = useState("");
+    const [productType, setProductType] = useState("");
 
     useEffect(() => {
         if(layer.layer.properties) {
@@ -44,6 +50,18 @@ export const AdcircRasterLayer = (layer) => {
         }
     }, [mapStyle]);
 
+    useEffect(() => {
+        // get current product layer in order to set opacity
+        if (layer.layer.properties.product_type.includes(MAXWVEL)) 
+            setProductType(MAXWVEL);
+        else
+        if (layer.layer.properties.product_type.includes(SWAN)) 
+            setProductType(SWAN);
+        else
+        setProductType(MAXELE);
+    }, [layerOpacity]);
+
+      
     // get the observation points selected, default layers and alert message from state
     const {
         setSelectedObservations,
@@ -135,7 +153,7 @@ export const AdcircRasterLayer = (layer) => {
             url={gs_wms_url}
             layers={layer.layer.layers}
             params={wmsLayerParams}
-            opacity={layer.layer.state.opacity}
+            opacity={layerOpacity[productType].current}
         />
     );
 };

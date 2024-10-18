@@ -13,14 +13,14 @@ const newLayerDefaultState = (layer) => {
     if (['obs', 'maxele63'].includes(product_type)) {
         return ({
             visible: true,
-            opacity: 1.0,
+            //opacity: 1.0,
             style: "",
         });
     }
   
     return ({
         visible: false,
-        opacity: 1.0,
+        //opacity: 1.0,
         style: "",
     });
   };
