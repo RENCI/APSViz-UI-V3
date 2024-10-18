@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { WMSTileLayer, useMap, useMapEvent } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
-import {getNamespacedEnvParam, markClicked, restoreColorMapType} from '@utils/map-utils';
-import {useLayers, useSettings} from '@context';
+import { getNamespacedEnvParam, markClicked, restoreColorMapType } from '@utils/map-utils';
+import { useLayers, useSettings } from '@context';
 
 export const AdcircRasterLayer = (layer) => {
     const sldParser = new SldStyleParser();
@@ -44,10 +44,11 @@ export const AdcircRasterLayer = (layer) => {
         }
     }, [mapStyle]);
 
-    // get the observation points selected and default layers from state
+    // get the observation points selected, default layers and alert message from state
     const {
         setSelectedObservations,
-        defaultModelLayers
+        defaultModelLayers,
+        setAlertMsg,
     } = useLayers();
 
     // capture the default layers
@@ -58,50 +59,57 @@ export const AdcircRasterLayer = (layer) => {
 
     // create a callback to handle a map click event
     const onClick = useCallback((e) => {
-        // create an id for the point
-        const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
-
-        // create a marker target icon around the observation clicked
-        markClicked(map, e, id);
-
-        // get the FQDN of the UI data server
-        const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
-
         // get the visible layer on the map
         const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
 
-        // create the correct TDS URL without the hostname
-        const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ?
-            'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
+        // check to see if this is a layer we can operate on
+        if (layer.properties['product_name'].indexOf('Level') > 0 || layer.properties['product_name'].indexOf('Height') > 0) {
+            // create an id for the point
+            const id = Number(e.latlng.lng).toFixed(6) + ', ' + Number(e.latlng.lat).toFixed(6);
 
-        // get the hostname
-        const tds_svr = layer.properties['tds_download_url'].split('https://')[1].split('/thredds')[0].split('.')[0];
+            // create a marker target icon around the observation clicked
+            markClicked(map, e, id);
 
-        // generate the full url
-        const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" +
-            tds_url + '&tds_svr=' + tds_svr;
+            // get the FQDN of the UI data server
+            const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
 
-        // create a set of properties for this object
-        const pointProps =
-            {
-                "station_name": layer.properties['product_name'] + " at (lon, lat): " + id,
-                "lat": Number(e.latlng.lat).toFixed(6),
-                "lon": Number(e.latlng.lng).toFixed(6),
-                "location_name": layer.properties['product_name'] + " at (lon, lat): " + id,
-                "model_run_id": layer.group,
-                "data_source": (layer.properties['event_type'] + '_' + layer.properties['grid_type']).toUpperCase(),
-                "source_name": layer.properties['model'],
-                "source_instance": layer.properties['instance_name'],
-                "source_archive": layer.properties['location'],
-                "forcing_metclass": layer.properties['met_class'],
-                "location_type": "ocean",
-                "grid_name": "NCSC_SAB_V1.23",
-                "csvurl": fullTDSURL,
-                "id": id
-            };
+            // create the correct TDS URL without the hostname
+            const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html', (layer.id.indexOf('swan') < 0 ?
+                'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
 
-        // populate selectedObservations list with the newly selected observation point
-        setSelectedObservations(previous => [...previous, pointProps]);
+            // get the hostname
+            const tds_svr = layer.properties['tds_download_url'].split('https://')[1].split('/thredds')[0].split('.')[0];
+
+            // generate the full url
+            const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" +
+                tds_url + '&tds_svr=' + tds_svr;
+
+            const l_props = layer.properties;
+
+            // create a set of properties for this object
+            const pointProps =
+                {
+                    "station_name": l_props['product_name'] + " at (lon, lat): " + id,
+                    "lat": Number(e.latlng.lat).toFixed(6),
+                    "lon": Number(e.latlng.lng).toFixed(6),
+                    "location_name": l_props['product_name'] + " at (lon, lat): " + id,
+                    "model_run_id": layer.group,
+                    "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
+                    "source_name": l_props['model'],
+                    "source_instance": l_props['instance_name'],
+                    "source_archive": l_props['location'],
+                    "forcing_metclass": l_props['met_class'],
+                    "location_type": "ocean",
+                    "grid_name": l_props['grid_type'].toUpperCase(),
+                    "csvurl": fullTDSURL,
+                    "id": id
+                };
+
+            // populate selectedObservations list with the newly selected observation point
+            setSelectedObservations(previous => [...previous, pointProps]);
+        }
+        else
+            setAlertMsg({'severity': 'warning', 'msg': 'Geo-point selection is only available for water level or water height products.'});
     });
 
     // assign the map click event for geo-point selections
