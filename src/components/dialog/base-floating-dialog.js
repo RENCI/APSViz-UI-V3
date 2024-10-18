@@ -1,18 +1,11 @@
 import React, { Fragment, useState, useRef, forwardRef } from 'react';
-import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography,
+    CssBaseline, Dialog, DialogContent, DialogTitle, Paper, Slide, IconButton} from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 
-import CssBaseline from '@mui/material/CssBaseline';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
-
-import Paper from '@mui/material/Paper';
-import Slide from '@mui/material/Slide';
-import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 import { markUnclicked } from '@utils/map-utils';
@@ -54,7 +47,6 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
 
     const minHeight = 175;
     const maxHeight = 500;
-
 
     /**
     * the close dialog handler
@@ -133,6 +125,20 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                                         value="APS Forecast"
                                         sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
                                         APS Forecast</ToggleButton></Box> : ''
+                                    }
+
+                                    {(showLineButtonView("SWAN Nowcast")) ?
+                                        <Box><ToggleButton
+                                        value="SWAN Nowcast"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
+                                        SWAN Nowcast</ToggleButton></Box> : ''
+                                    }
+
+                                    {(showLineButtonView("SWAN Forecast")) ?
+                                        <Box><ToggleButton
+                                        value="SWAN Forecast"
+                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
+                                        SWAN Forecast</ToggleButton></Box> : ''
                                     }
 
                                     {(showLineButtonView("NOAA Tidal Predictions")) ?
