@@ -58,11 +58,8 @@ function getObsChartData(url, setLineButtonView) {
                 })
                 // otherwise post the issue to the console log
                 .catch (( error ) => {
-                    // send the error message to the console
-                    console.error(error.message);
-
                     // make sure we do not render anything
-                    return error.message;
+                    return error;
                 });
 
             // return the csv data in json format
@@ -183,9 +180,6 @@ function csvToJSON(csvData, setLineButtonView) {
         // return the json data representation
         return ret_val;
     }
-
-    // return something
-    return '';
 }
 
 /**
@@ -274,7 +268,7 @@ function get_yaxis_ticks(data) {
  * Creates the chart.
  *
  * @param url
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 function CreateObsChart(c) {
@@ -289,7 +283,7 @@ function CreateObsChart(c) {
         <Fragment>
         {
             status === 'pending' ? ( <div>Gathering chart data...</div> ) :
-            status === 'error' ? ( <div>There was a problem with collecting data for this location.</div> ) :
+            status === 'error' ? ( <div>There was a problem collecting data for this location.</div> ) :
                 <ResponsiveContainer>
                     <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
                         <CartesianGrid strokeDasharray="1 1" />
