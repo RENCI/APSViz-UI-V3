@@ -7,13 +7,12 @@ import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
-
-
+import { AlertUser } from '@components/alert-user';
 
 /**
  * renders the main content
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 const Content = () => {
@@ -33,6 +32,7 @@ const Content = () => {
                     return <ObservationDialog key={obs["station_name"]} obs={obs} />;
                 })
             }
+            <AlertUser />
             <Map />
             <Sidebar />
             <ControlPanel/>
@@ -45,7 +45,7 @@ const Content = () => {
 /**
  * renders the application
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 export const App = () => {

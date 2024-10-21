@@ -7,6 +7,9 @@ import {
   Select,
   Button,
   Typography,
+  Slider,
+  Box,
+  Divider,
 } from '@mui/joy';
 import SldStyleParser from 'geostyler-sld-parser';
 import { ColorMapEditor } from '@renci/apsviz-geostyler';
@@ -26,6 +29,7 @@ export const StyleEditor = () => {
 
     const {
         mapStyle,
+        layerOpacity,
     } = useSettings();
 
     const [colormap, setColormap] = useState();
@@ -183,6 +187,20 @@ export const StyleEditor = () => {
         });
     };
 
+    const getProductType = () => {
+        let type = MAXELE;
+
+        if (style) {
+            if (style.includes(MAXWVEL)) type = MAXWVEL;
+            else
+            if (style.includes(SWAN)) type = SWAN;
+        }
+
+        return type;
+    };
+
+    const productType = getProductType();
+
     return (
         <Stack direction="column" gap={ 2 } alignItems="left">
             <Select placeholder="Choose Product Type To Style ..." onChange={handleProductChange}>
@@ -195,10 +213,27 @@ export const StyleEditor = () => {
             </Select>
             {colormap &&
             <Stack direction="column" gap={ 1 } alignItems="left">
+                 <Divider />
+                <Box width={300} >
+                    <Typography level="title-md">Layer Opacity</Typography>
+                    <Slider
+                        aria-label="opacity slider"
+                        value={ layerOpacity[productType].current }
+                        step={ 0.01 }
+                        min={ 0.01 }
+                        max={ 1.0 }
+                        valueLabelDisplay="auto"
+                        sx={{ mr: '10px'}}
+                        onChange={ (event, newValue) => layerOpacity[productType].set(newValue) }
+                    />
+                </Box>
+                <Divider />
+                <Typography level="title-md">ColorMap</Typography>
                 <ColorMapEditor colorMap={colormap} extendedField={extendedField} onChange={onColorMapChange}/>
                 <Button variant="soft" onClick={saveStyle} sx={{width: "200px"}}>
                     <Typography level="title-md">Save New Colormap</Typography>
                 </Button>
+                <Divider />
             </Stack>}
         </Stack>
     );

@@ -14,10 +14,10 @@ export const trayContents = () => (
   <Stack gap={ 1 } p={ 1 }>
     <Typography level="title-lg">Set/Unset Dark Mode</Typography>
     <DarkModeToggle />
-    <Divider />
+    <Divider sx={{marginTop: 3}}/>
     <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
-    <Divider />
+    <Divider sx={{marginTop: 3}}/>
     <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
   </Stack>

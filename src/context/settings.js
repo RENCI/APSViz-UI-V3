@@ -32,6 +32,11 @@ export const SettingsProvider = ({ children }) => {
   const [storedMaxwvelStyle, setStoredMaxwvelStyle] = useLocalStorage('maxwvel', maxwvelStyle);
   const [storedSwanStyle, setStoredSwanStyle] = useLocalStorage('swan', swanStyle);
 
+  // opacity now handled at layer type level
+  const [storedMaxeleOpacity, setStoredMaxeleOpacity] = useLocalStorage('maxele_opacity', 1.0);
+  const [storedMaxwvelOpacity, setStoredMaxwvelOpacity] = useLocalStorage('maxwvel_opacity',1.0);
+  const [storedSwanOpacity, setStoredSwanOpacity] = useLocalStorage('swan_opacity',1.0);
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
@@ -54,6 +59,21 @@ export const SettingsProvider = ({ children }) => {
           current: storedSwanStyle,
           set: setStoredSwanStyle,
 
+        }
+      },
+
+      layerOpacity: {
+        maxele: {
+          current: storedMaxeleOpacity,
+          set: setStoredMaxeleOpacity,
+        },
+        maxwvel: {
+          current: storedMaxwvelOpacity,
+          set: setStoredMaxwvelOpacity,
+        },
+        swan: {
+          current: storedSwanOpacity,
+          set: setStoredSwanOpacity,
         }
       },
     }}>
