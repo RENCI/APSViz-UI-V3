@@ -131,7 +131,7 @@ export const AdcircRasterLayer = (layer) => {
                         "station_name": l_props['product_name'] + " " + id,
                         "lat": lat,
                         "lon": lon,
-                        "location_name": l_props['product_name'] + "s over time (lon, lat): " + id,
+                        "location_name": "Water level at (lon, lat): " + id,
                         "model_run_id": layer.group,
                         "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
                         "source_name": l_props['model'],
