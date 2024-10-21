@@ -1,8 +1,8 @@
-import React, {useEffect, useMemo, useState, useCallback} from 'react';
-import {WMSTileLayer, useMap, useMapEvent} from 'react-leaflet';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { WMSTileLayer, useMap, useMapEvent } from 'react-leaflet';
 import SldStyleParser from 'geostyler-sld-parser';
-import {getNamespacedEnvParam, markClicked, restoreColorMapType} from '@utils/map-utils';
-import {useLayers, useSettings} from '@context';
+import { getNamespacedEnvParam, markClicked, restoreColorMapType } from '@utils/map-utils';
+import { useLayers, useSettings } from '@context';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -109,16 +109,19 @@ export const AdcircRasterLayer = (layer) => {
                 // get the FQDN of the UI data server
                 const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
 
+                // split the URL
+                const split_url = layer.properties['tds_download_url'].split('/');
+
+                // generate the base TDS svr hostname/url
+                const tds_svr = split_url[0] + '//' + split_url[2] + '/thredds';
+
                 // create the correct TDS URL without the hostname
                 const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html',
                     (layer.id.indexOf('swan') < 0 ? 'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
 
-                // get the hostname
-                const tds_svr = layer.properties['tds_download_url'].split('https://')[1].split('/thredds')[0].split('.')[0];
-
                 // generate the full url
-                const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast&url=" +
-                    tds_url + '&tds_svr=' + tds_svr;
+                const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast" +
+                    '&tds_svr=' + tds_svr + '&url=' + tds_url;
 
                 const l_props = layer.properties;
 
