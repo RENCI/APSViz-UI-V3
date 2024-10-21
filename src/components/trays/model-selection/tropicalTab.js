@@ -9,7 +9,7 @@ import { getNamespacedEnvParam, getBrandingHandler } from "@utils/map-utils";
 /**
  * Form to filter/selt tropical runs
  *
- * @returns {JSX.Element}
+ * @returns JSX.Element
  * @constructor
  */
 export const TropicalTabForm = () => {
@@ -28,6 +28,9 @@ export const TropicalTabForm = () => {
     // storage for received data to render pulldowns
     const [dropDownData, setDropDownData] = useState(null);
     const [catalogData, setCatalogData] = useState(null);
+
+    // used to enable/disable the submission button
+    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
     /**
      * method to initiate a model search with the filter selections on the tropical form
@@ -108,6 +111,9 @@ export const TropicalTabForm = () => {
      * resets the form
      */
     function resetForm() {
+        // disable the summit button
+        setIsSubmitDisabled(true);
+
         // reset the form controls
         setTropicalStorm(null);
         setTropicalAdvisory(null);
@@ -151,30 +157,30 @@ export const TropicalTabForm = () => {
             <form name={ "Tropical" } onSubmit={ formTropicalHandler }>
                 <Stack spacing={1}>
                     <Select name="tropical-storm-name" sx={{ fontSize: 'sm' }} value={ tropicalStorm } placeholder="Please select a tropical storm" onChange={(e, newValue) => {
-                        setTropicalStorm(newValue); }}>
+                        setTropicalStorm(newValue); setIsSubmitDisabled(false); }}>
                         <DropDownOptions data={dropDownData} type={'storm_names'}/>
                     </Select>
                     <Select name="tropical-advisory" sx={{ fontSize: 'sm' }} value={ tropicalAdvisory } placeholder="Please select an advisory" onChange={(e, newValue) => {
-                        setTropicalAdvisory(newValue); }}>
+                        setTropicalAdvisory(newValue); setIsSubmitDisabled(false); }}>
                         <DropDownOptions data={ dropDownData } type={ 'advisory_numbers' } />
                     </Select>
                     <Select name="tropical-grid" sx={{ fontSize: 'sm' }} value={ tropicalGrid } placeholder="Please select a grid" onChange={(e, newValue) => {
-                        setTropicalGrid(newValue); }}>
+                        setTropicalGrid(newValue); setIsSubmitDisabled(false); }}>
                         <DropDownOptions data={ dropDownData } type={ 'grid_types' } />
                     </Select>
                     <Select name="tropical-instance" sx={{ fontSize: 'sm' }} value={ tropicalInstance } placeholder="Please select an instance" onChange={(e, newValue) => {
-                        setTropicalInstance(newValue); }}>
+                        setTropicalInstance(newValue); setIsSubmitDisabled(false); }}>
                         <DropDownOptions data={ dropDownData } type={ 'instance_names' } />
                     </Select>
 
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={ isSubmitDisabled }>Submit</Button>
                     <Button type="reset" onClick={ resetForm }>Reset</Button>
                 </Stack>
 
                 <Divider sx={{ m: 2 }}/>
 
                 <Stack>
-                { <CatalogItems data={ catalogData } isTropical={ true } /> }
+                    { <CatalogItems data={ catalogData } isTropical={ true } /> }
                 </Stack>
             </form>
     </Fragment>);
