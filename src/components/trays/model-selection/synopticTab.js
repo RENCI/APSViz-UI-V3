@@ -23,6 +23,7 @@ export const SynopticTabForm = () => {
     const [synopticCycle, setSynopticCycle] = useState(null);
     const [synopticGrid, setSynopticGrid] = useState(null);
     const [synopticInstance, setSynopticInstance] = useState(null);
+    const [datePickerKey, setDatePickerKey] = useState("defaultKey");
 
     // init the data urls
     const rootUrl = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }`;
@@ -37,6 +38,11 @@ export const SynopticTabForm = () => {
     // state for the date validation error
     const [error, setError] = useState(null);
 
+    /**
+     * sets the date, checks for validity
+     *
+     * @param newValue
+     */
     const setChangedSynopticDate = (newValue) => {
         // if there was a valid date
         if (!isNaN(newValue) && newValue !== null) {
@@ -61,8 +67,6 @@ export const SynopticTabForm = () => {
         // avoid doing the usual form submit operations
         event.preventDefault();
 
-        //console.log('formSynopticSubmit error: ' + error);
-
         // build the query string from the submitted form data
         let queryString =
             ((synopticDate) ? '&run_date=' + synopticDate.toISOString() : '') +
@@ -72,7 +76,7 @@ export const SynopticTabForm = () => {
 
         // set different limits on the data returned if no filter params were passed
         if (queryString === '') {
-            queryString += '&limit=60';
+            queryString += '&limit=30';
         } else {
             queryString += '&limit=10';
         }
@@ -113,9 +117,6 @@ export const SynopticTabForm = () => {
                     return error.response.status;
                 });
 
-             // if (finalDataUrl.indexOf('get_pulldown_data') !== -1)
-             //    console.log('finalDataUrl: ' + finalDataUrl);
-
             // if there was an error from the web service
             if (ret_val !== 500) {
                 // check the request type to save it to the correct place
@@ -149,7 +150,11 @@ export const SynopticTabForm = () => {
      * resets the form
      */
     function resetForm() {
+        // reset the control's key
+        setDatePickerKey(Math.random().toString());
+
         // reset the form controls
+        setSynopticDate(null);
         setSynopticCycle(null);
         setSynopticGrid(null);
         setSynopticInstance(null);
@@ -197,6 +202,7 @@ export const SynopticTabForm = () => {
      * @returns {boolean}
      */
     const disableDate = (date) => {
+        // if there was data returned
         if (dropDownData) {
             // return false if the date is not found in the list of available dates
             return !dropDownData['run_dates'].includes(date.toISOString().split("T")[0]);
@@ -209,8 +215,7 @@ export const SynopticTabForm = () => {
      * @type {string}
      */
     const errorMessage = useMemo(() => {
-        //console.log('errorMessage error: ' + error);
-
+        // handle the error type
         switch (error) {
             case 'maxDate': {
                 return 'Please select a date that is not in the future';
@@ -232,7 +237,6 @@ export const SynopticTabForm = () => {
                 return '';
             }
         }
-
     }, [error]);
 
     /**
@@ -244,6 +248,7 @@ export const SynopticTabForm = () => {
                 <Stack spacing={ 1 }>
                     <LocalizationProvider dateAdapter={ AdapterDayjs }>
                         <DatePicker
+                            key={ datePickerKey }
                             defaultValue={ dayjs(new Date()) }
                             onError={ (newError) => setError(newError) }
                             disableFuture
@@ -255,9 +260,7 @@ export const SynopticTabForm = () => {
                                 field: { clearable: true },
                                 actionBar: { actions: ['clear'] }, fontSize: 10
                             }}
-                            onChange={(newValue) => {
-                                setChangedSynopticDate(newValue);
-                            }}/>
+                            onChange={ setChangedSynopticDate }/>
 
                     </LocalizationProvider>
 
