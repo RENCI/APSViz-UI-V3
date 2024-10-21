@@ -1,3 +1,9 @@
+/**
+ * All credit for this code goes to the people involved at Digital Democracy (https://www.digital-democracy.org/)
+ *
+ * original source can be found here: https://github.com/digidem/leaflet-side-by-side
+ */
+
 (function () {
     function r(e, n, t) {
         function o(i, f) {
