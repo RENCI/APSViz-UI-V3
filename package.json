@@ -64,6 +64,7 @@
     "@turf/distance": "^7.1.0",
     "@turf/flatten": "^7.1.0",
     "axios": "^1.7.7",
+    "axios-retry": "^4.5.0",
     "core-js": "^3.38.1",
     "cssify": "^0.8.0",
     "d3": "^7.9.0",
