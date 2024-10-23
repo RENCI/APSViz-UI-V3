@@ -60,7 +60,7 @@ export const LayersProvider = ({ children }) => {
   const  [alertMsg, setAlertMsg] = useState(null);
 
   // state to capture the default startup instance name
-  const [defaultInstanceName, setDefaultInstanceName] = useState('');
+  const [defaultInstanceName, setDefaultInstanceName] = useState(null);
 
   /**
    * this section is for the side-by-side compare mode items
