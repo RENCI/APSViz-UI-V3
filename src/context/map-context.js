@@ -40,13 +40,27 @@ const layerTypes = {
 };
 
 export const LayersProvider = ({ children }) => {
+  // default and hurricane layer states
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
 
+  // map reference state
   const [map, setMap] = useState(null);
+
+  // base map state
+  const [baseMap, setBaseMap] = useState();
+
+  // used to track the view state of the share comment
+  const [showShareComment, setShowShareComment] = useState(true);
+
+  // used to show alerts
+  const  [alertMsg, setAlertMsg] = useState(null);
+
+  // state to capture the default startup instance name
+  const [defaultInstanceName, setDefaultInstanceName] = useState('');
 
   /**
    * this section is for the side-by-side compare mode items
@@ -361,19 +375,13 @@ export const LayersProvider = ({ children }) => {
     setDefaultModelLayers([...newLayers]);
   };
 
-  const [baseMap, setBaseMap] = React.useState();
-
-  // used to track the view state of the share comment
-  const [showShareComment, setShowShareComment] = useState(true);
-
-  // used to show alerts
-  const  [alertMsg, setAlertMsg] = useState(null);
-
   return (
     <LayersContext.Provider
       value={{
         map, setMap,
         baseMap, setBaseMap,
+
+        defaultInstanceName, setDefaultInstanceName,
 
         defaultModelLayers, setDefaultModelLayers,
         hurricaneTrackLayers, setHurricaneTrackLayers,
