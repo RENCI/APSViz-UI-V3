@@ -165,7 +165,7 @@ export const AdcircRasterLayer = (layer) => {
         sld_body: currentStyle,
     }), [currentStyle]);
 
-    return currentStyle && (
+    return currentStyle && productType && (
         <WMSTileLayer
             url={gs_wms_url}
             layers={layer.layer.layers}
