@@ -18,7 +18,7 @@ import { Config } from '@components/config';
  */
 const Content = () => {
     // install the selected observation list from the layer context
-    const { selectedObservations } = useLayers();
+    const { selectedObservations, defaultInstanceName } = useLayers();
 
     // render all the application content
     return (
@@ -35,9 +35,11 @@ const Content = () => {
             }
             <Config />
             <AlertUser />
-            <Map />
             <Sidebar />
-            <ControlPanel/>
+            {/* here we are waiting for the retrieval of the default Instance name
+                before rendering these components */}
+            { (defaultInstanceName != null) && <Map/> }
+            { (defaultInstanceName != null) && <ControlPanel/> }
             <ComparePanel/>
             <MapLegend />
         </Fragment>
