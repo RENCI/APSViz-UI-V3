@@ -5,7 +5,7 @@ import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AdcircRasterLayer } from './adcirc-raster-layer';
-import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
+import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler, getDefaultInstance } from '@utils/map-utils';
 
 const newLayerDefaultState = (layer) => {
     const { product_type } = layer.properties;
@@ -93,7 +93,7 @@ export const DefaultLayers = () => {
     const shared_params = parseSharedURL();
 
     // create the URLs to the data endpoints
-    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?limit=1&use_new_wb=true&use_v3_sp=true${ getBrandingHandler() }${ shared_params['run_id'] }`;
+    const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }get_ui_data_secure?instance_name=hsofs_gfs_dev&limit=1&use_new_wb=true&use_v3_sp=true${ getBrandingHandler() + getDefaultInstance() }${ shared_params['run_id'] }`;
     const gs_wfs_url = `${ getNamespacedEnvParam('REACT_APP_GS_DATA_URL') }`;
 
     // retrieve the catalog member with the provided id
@@ -136,6 +136,7 @@ export const DefaultLayers = () => {
         }
         return(data);
     };
+
     useQuery({
         queryKey: ['apsviz-default-data', data_url],
         queryFn: getDefaultLayers,
