@@ -8,6 +8,7 @@ import { ControlPanel } from '@components/control-panel';
 import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
+import { Config } from '@components/config';
 
 /**
  * renders the main content
@@ -32,6 +33,7 @@ const Content = () => {
                     return <ObservationDialog key={obs["station_name"]} obs={obs} />;
                 })
             }
+            <Config />
             <AlertUser />
             <Map />
             <Sidebar />
