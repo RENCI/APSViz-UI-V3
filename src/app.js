@@ -8,6 +8,7 @@ import { ControlPanel } from '@components/control-panel';
 import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
+import { Config } from '@components/config';
 
 /**
  * renders the main content
@@ -17,7 +18,7 @@ import { AlertUser } from '@components/alert-user';
  */
 const Content = () => {
     // install the selected observation list from the layer context
-    const { selectedObservations } = useLayers();
+    const { selectedObservations, defaultInstanceName } = useLayers();
 
     // render all the application content
     return (
@@ -32,10 +33,13 @@ const Content = () => {
                     return <ObservationDialog key={obs["station_name"]} obs={obs} />;
                 })
             }
+            <Config />
             <AlertUser />
-            <Map />
             <Sidebar />
-            <ControlPanel/>
+            {/* here we are waiting for the retrieval of the default Instance name
+                before rendering these components */}
+            { (defaultInstanceName != null) && <Map/> }
+            { (defaultInstanceName != null) && <ControlPanel/> }
             <ComparePanel/>
             <MapLegend />
         </Fragment>

@@ -12,7 +12,7 @@ export const AlertUser = () => {
             <Fragment>
                 <Dialog open={ true } disableEnforceFocus onClick={ () => setAlertMsg(null) }>
                     <DialogContent sx={{ p:0, m: .5, fontSize: 10, fontStyle: 'italic'}}>
-                        <Tooltip title="Click to close" placement="top">
+                        <Tooltip title="Click anywhere to close" placement="top">
                             <Alert variant="outlined" severity={ alertMsg['severity'] }>{ alertMsg['msg'] }</Alert>
                         </Tooltip>
                     </DialogContent>

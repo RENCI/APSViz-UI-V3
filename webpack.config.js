@@ -124,7 +124,8 @@ module.exports = {
       '@share': path.resolve(__dirname, 'src/components/trays/share/'),
       '@utils': path.resolve(__dirname, 'src/utils/'),
       '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side/'),
-      '@alert-user': path.resolve(__dirname, 'src/components/alert-user/')
+      '@alert-user': path.resolve(__dirname, 'src/components/alert-user/'),
+      '@config': path.resolve(__dirname, 'src/components/config/')
     }
   },
 
