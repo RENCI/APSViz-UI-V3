@@ -131,7 +131,7 @@ export const AdcircRasterLayer = (layer) => {
 
                     // create the correct TDS URL without the hostname
                     const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html',
-                        (layer.id.includes('swan') ? 'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
+                        (layer.id.includes('swan') ? 'swan_HS' : 'fort') + '.63.nc').split('/thredds')[1];
 
                     // generate the full url
                     const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast" +
