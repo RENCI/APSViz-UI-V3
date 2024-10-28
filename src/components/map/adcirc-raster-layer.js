@@ -63,9 +63,10 @@ export const AdcircRasterLayer = (layer) => {
 
     // get the observation points selected, default layers and alert message from state
     const {
-        selectedObservations, setSelectedObservations,
         defaultModelLayers,
         setAlertMsg,
+        selectedObservations, setSelectedObservations,
+        defaultSelected, leftPaneID, rightPaneID
     } = useLayers();
 
     // capture the default layers
@@ -87,7 +88,18 @@ export const AdcircRasterLayer = (layer) => {
         return (selectedObservations.find((o) => o.id === id) !== undefined);
     };
 
-    // create a callback to handle a map click event
+    /**
+     * determines if the app is in compare mode
+     *
+     * @returns {boolean}
+     */
+    const inCompareMode = () => {
+        return (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected);
+    };
+
+    /**
+     * create a callback to handle a map click event
+     */
     const onClick = useCallback((e) => {
         // get the visible layer on the map
         const layer = layers.find((layer) => layer.properties['product_type'] !== "obs" && layer.state.visible === true);
@@ -101,55 +113,63 @@ export const AdcircRasterLayer = (layer) => {
 
         // if the point selected is new
         if (!isAlreadySelected(id)) {
-            // if this is a layer we can geo-point on
-            if (validLayerTypes.has(layer.properties['product_name'])) {
-                // create a marker target icon around the observation clicked
-                markClicked(map, e, id);
+            // this can only happen when we are not in compare mode
+            if (!inCompareMode()) {
+                // if this is a good layer product
+                if (validLayerTypes.has(layer.properties['product_name'])) {
+                    // create a marker target icon around the observation clicked
+                    markClicked(map, e, id);
 
-                // get the FQDN of the UI data server
-                const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
+                    // get the FQDN of the UI data server
+                    const data_url = `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}`;
 
-                // split the URL
-                const split_url = layer.properties['tds_download_url'].split('/');
+                    // split the URL
+                    const split_url = layer.properties['tds_download_url'].split('/');
 
-                // generate the base TDS svr hostname/url
-                const tds_svr = split_url[0] + '//' + split_url[2] + '/thredds';
+                    // generate the base TDS svr hostname/url
+                    const tds_svr = split_url[0] + '//' + split_url[2] + '/thredds';
 
-                // create the correct TDS URL without the hostname
-                const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html',
-                    (layer.id.indexOf('swan') < 0 ? 'fort' : 'swan_HS') + '.63.nc').split('/thredds')[1];
+                    // create the correct TDS URL without the hostname
+                    const tds_url = layer.properties['tds_download_url'].replace('catalog', 'dodsC').replace('catalog.html',
+                        (layer.id.includes('swan') ? 'swan_HS' : 'fort') + '.63.nc').split('/thredds')[1];
 
-                // generate the full url
-                const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast" +
-                    '&tds_svr=' + tds_svr + '&url=' + tds_url;
+                    // generate the full url
+                    const fullTDSURL = data_url + "get_geo_point_data?lon=" + e.latlng.lng + "&lat=" + e.latlng.lat + "&ensemble=nowcast" +
+                        '&tds_svr=' + tds_svr + '&url=' + tds_url;
 
-                const l_props = layer.properties;
+                    const l_props = layer.properties;
 
-                // create a set of properties for this object
-                const pointProps =
-                    {
-                        "station_name": l_props['product_name'] + " " + id,
-                        "lat": lat,
-                        "lon": lon,
-                        "location_name": layer.properties['product_name'].split(' ').slice(1).join(' ') + " at (lon, lat): " + id,
-                        "model_run_id": layer.group,
-                        "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
-                        "source_name": l_props['model'],
-                        "source_instance": l_props['instance_name'],
-                        "source_archive": l_props['location'],
-                        "forcing_metclass": l_props['met_class'],
-                        "location_type": "GeoPoint",
-                        "grid_name": l_props['grid_type'].toUpperCase(),
-                        "csvurl": fullTDSURL,
-                        "id": id
-                    };
+                    // create a set of properties for this object
+                    const pointProps =
+                        {
+                            "station_name": l_props['product_name'] + " " + id,
+                            "lat": lat,
+                            "lon": lon,
+                            "location_name": layer.properties['product_name'].split(' ').slice(1).join(' ') + " at (lon, lat): " + id,
+                            "model_run_id": layer.group,
+                            "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
+                            "source_name": l_props['model'],
+                            "source_instance": l_props['instance_name'],
+                            "source_archive": l_props['location'],
+                            "forcing_metclass": l_props['met_class'],
+                            "location_type": "GeoPoint",
+                            "grid_name": l_props['grid_type'].toUpperCase(),
+                            "csvurl": fullTDSURL,
+                            "id": id
+                        };
 
-                // populate selectedObservations list with the newly selected observation point
-                setSelectedObservations(previous => [...previous, pointProps]);
-            } else
+                    // populate selectedObservations list with the newly selected observation point
+                    setSelectedObservations(previous => [...previous, pointProps]);
+                } else
+                    setAlertMsg({
+                        'severity': 'warning',
+                        'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'
+                    });
+            }
+            else
                 setAlertMsg({
                     'severity': 'warning',
-                    'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'
+                    'msg': 'Geo-point selection is not available while in compare mode.'
                 });
         }
     });
@@ -165,7 +185,7 @@ export const AdcircRasterLayer = (layer) => {
         sld_body: currentStyle,
     }), [currentStyle]);
 
-    return currentStyle && (
+    return currentStyle && productType && (
         <WMSTileLayer
             url={gs_wms_url}
             layers={layer.layer.layers}
