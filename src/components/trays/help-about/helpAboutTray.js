@@ -15,7 +15,7 @@ import {
         KeyboardArrowLeft, ToggleOn as OnOffIcon, SwapVerticalCircleSharp as SwapLayersIcon
     } from '@mui/icons-material';
 
-import LocationIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.png';
+import targetIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.png';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
@@ -196,12 +196,12 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>Application settings</ListItem>
                                 </List>
                                 <Divider/>
+
                                 <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>ADCIRC model layer types:</Typography>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterSurfaceIcon color="primary"/></ListItemDecorator>HECRAS water surface</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HIResMaxElevationIcon color="primary"/></ListItemDecorator>High resolution maximum water level</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon color="primary"/></ListItemDecorator>Inundation area</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ObservationIcon color="primary"/></ListItemDecorator>Observations</ListItem>
-                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><Box> </Box></ListItemDecorator>Selected location</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaveHeightIcon color="primary"/></ListItemDecorator>Maximum significant wave height</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterLevelIcon color="primary"/></ListItemDecorator>Maximum water level</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WindVelocityIcon color="primary"/></ListItemDecorator>Maximum wind speed</ListItem>
@@ -214,6 +214,7 @@ export const HelpAboutTray = () => {
                                 </List>
                                 <Divider/>
                                 <List size='sm' sx={{ ml: 2, mt: 1, '--ListItem-minHeight': '25px' }}> <Typography sx={{ fontSize: "sm", fontStyle: 'italic' }}>Action buttons:</Typography>
+                                    <ListItem sx={{ ml: 1 }}><Box component="img" height="20px" width="20px" sx={{ ml: .3, mr: .1 }} src={ targetIcon }></Box>A selected location</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Toggle light or dark mode.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><MapIcon/></ListItemDecorator>Select a different base map.</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a model run up or down in the list.</ListItem>
@@ -376,7 +377,20 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view observation data?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select the colored/round icons on the map. When you
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
+                                    <ListItem sx={{ ml: 1 }}>
+                                        <Stack direction="row" spacing={ .1 }>
+                                            {  getObsSVGIcon('#FFFF00', '')}
+                                            {  getObsSVGIcon('#BEAEFA', '') }
+                                            {  getObsSVGIcon('#3D4849', '') } The observation point icons.</Stack>
+                                    </ListItem>
+
+                                    <ListItem sx={{ ml: 1 }}>
+                                        <Box component="img" height="20px" width="20px" sx={{ ml: .3, mr: .1, mb: .2 }} src={ targetIcon }></Box>The selected point icon.
+                                    </ListItem>
+                                </List>
+
+                                <Typography level="body-sm" sx={{ mt: 1, ml: 1 }}>All one has to do is select a observation point icon on the map. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that observation point.</Typography>
                                 <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
@@ -390,19 +404,26 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view geo-point data?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
+                                <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
+                                    <ListItem sx={{ ml: 1 }}><Box component="img" height="20px" width="20px" sx={{ ml: .3, mr: .1, mb: .2 }} src={ targetIcon }></Box>The selected location icon.</ListItem>
+                                </List>
+
                                 <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select any location on a map layer. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that point.
+                               </Typography>
 
+                                <Typography level="body-sm"  sx={{ fontStyle: 'italic', mt: 1, mb: 1,  ml: 1 }}>
                                     Need more details on what is actually going on here.
-                                    <Typography level="body-sm" sx={{ ml: 1 }}>
-                                        Note that this feature is not available while in Compare mode.
-                                    </Typography>
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
                                     <ListItem><Typography level="body-sm">You can also turn on/off plot lines on the chart.</Typography></ListItem>
                                 </List>
+
+                                <Typography level="body-sm" sx={{ mt: 1, ml: 1 }}>
+                                    Please note that this feature is not available while in Layer compare mode.
+                                </Typography>
                             </AccordionDetails>
                         </Accordion>
 
@@ -411,10 +432,10 @@ export const HelpAboutTray = () => {
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I compare model run layers?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-
                                 <List size='sm' sx={{ '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>The Compare Layers button.</ListItem>
                                 </List>
+
                                 <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the left pane.</ListItem>
                                     <ListItem sx={{ ml: 1 }}>Select a Model run and layer for the right pane.</ListItem>
@@ -423,7 +444,8 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                  <Typography sx={{ fontSize: "sm", ml: 1 }}>Note: Adding, removing or altering model runs or layers will automatically
-                                     restore the default view.</Typography>
+                                     restore the default view.
+                                 </Typography>
 
                             </AccordionDetails>
                         </Accordion>
