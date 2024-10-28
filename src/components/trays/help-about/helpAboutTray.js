@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails,
     Stack, Typography, List,  ListItem, ListItemDecorator, Divider } from '@mui/joy';
 import {
@@ -22,7 +22,7 @@ import SvgIcon from '@mui/material/SvgIcon';
  *
  * @param color
  * @param name
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 const getObsSVGIcon = ( color, name ) => {
     return (
@@ -44,14 +44,14 @@ const getObsSVGIcon = ( color, name ) => {
 /**
  * This component renders the help/about tray
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const HelpAboutTray = () => {
     // used to collapse other open accordions
-    const [index, setIndex] = React.useState(0);
-    const [descriptionIndex, setDescriptionIndex] = React.useState(-1);
-    const [screenCapIndex, setScreenCapIndex] = React.useState(-1);
+    const [index, setIndex] = useState(0);
+    const [descriptionIndex, setDescriptionIndex] = useState(-1);
+    const [screenCapIndex, setScreenCapIndex] = useState(-1);
 
     // render the form
     return (
@@ -166,7 +166,8 @@ export const HelpAboutTray = () => {
                                     <ListItem>Display tropical hurricane tracks and cones of uncertainty.</ListItem>
                                     <ListItem>Cycle through tropical advisories or synoptic model runs.</ListItem>
                                     <ListItem>Display (or hide) various model layer products such as wind speed, wave height, water levels, etc.</ListItem>
-                                    <ListItem>Select observation points to display current and forecast timeseries data at a location.</ListItem>
+                                    <ListItem>Select observation points to display current and forecast timeseries data at that location.</ListItem>
+                                    <ListItem>Select anywhere on a map layer to display current and forecast timeseries geo-point data at that location.</ListItem>
                                     <ListItem>Compare ADCIRC model layer types.</ListItem>
                                     <ListItem>View and adjust ADCIRC Layer colormap properties.</ListItem>
                                 </List>
@@ -374,6 +375,24 @@ export const HelpAboutTray = () => {
                             <AccordionDetails>
                                 <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select the colored/round icons on the map. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that observation point.</Typography>
+                                <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
+                                    <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
+                                    <ListItem><Typography level="body-sm">You can also turn on/off plot lines on the chart.</Typography></ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion expanded={index === 13} onChange={ (event, expanded) => { setIndex(expanded ? 13 : null); }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view geo-point data?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select and location on the map. When you
+                                    do, a dialog/chart will appear that displays the time-sequenced information at that point.
+
+                                    Need more details on what is actually going on here.
+                                </Typography>
+
                                 <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
                                     <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
                                     <ListItem><Typography level="body-sm">You can also turn on/off plot lines on the chart.</Typography></ListItem>
