@@ -47,7 +47,7 @@ export const getBrandingHandler = () =>  {
     // if this is a nopp branding
     if(window.location.href.includes('nopp')) {
         // use local host values
-        ret_val = '&project_code=nopp';
+        ret_val = '&ensemble_name=coampsforecast&project_code=nopp';
     }
 
     // return the query string

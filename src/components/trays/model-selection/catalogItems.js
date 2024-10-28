@@ -146,6 +146,12 @@ export default function CatalogItems(data) {
         }
         // return all the data cards
         else {
+            // get the sorting parameter
+            const sortParam = (data.isTropical) ? 'advisory_number' : 'cycle';
+
+            // simple sort comparer for more than 1 level of strings
+            const compare = (x, y) => (x > y) - (x < y);
+
             // render the results of the data query
             return (
                 <Fragment>
@@ -172,7 +178,8 @@ export default function CatalogItems(data) {
                                                     // filter by the group name, get the top 1
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
-                                                    .sort((a, b) => a.properties['product_name'] < b.properties['product_name'] ? -1 : 1)
+                                                    .sort((a, b) => compare(b.properties[sortParam], a.properties[sortParam]) || compare(a.properties['event_type'], b.properties['event_type']))
+                                                        //((b.properties[sortParam] + b.properties['event_type']).localeCompare(a.properties[sortParam] + a.properties['event_type'])))
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox

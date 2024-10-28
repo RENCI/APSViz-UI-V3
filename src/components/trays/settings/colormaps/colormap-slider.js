@@ -4,6 +4,7 @@ import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useSettings } from '@context';
 import { restoreColorMapType } from '@utils/map-utils';
+import { maxSliderValues } from './utils';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -31,7 +32,7 @@ export const ColormapSlider = ({style}) => {
         const marks = [];
 
         if (style.name.includes("maxwvel")) {
-            max_slider_value = 100;
+            max_slider_value = maxSliderValues[MAXWVEL];
             slider_step = 1;
             for (let i = 0; i <= max_slider_value; i+=10) {
                 marks.push({ label: i, value: i });
@@ -39,14 +40,14 @@ export const ColormapSlider = ({style}) => {
         }
         else
         if (style.name.includes("swan")) {
-            max_slider_value = 30;
+            max_slider_value = maxSliderValues[SWAN];
             slider_step = 0.5;
             for (let i = 0; i <= max_slider_value; i+=5) {
                 marks.push({ label: i, value: i });
             }
         }
         else { // maxele
-            max_slider_value = 10;
+            max_slider_value = maxSliderValues[MAXELE];
             slider_step = 0.25;
             for (let i = 0; i <= max_slider_value; i++) {
                 marks.push({ label: i, value: i });
@@ -59,7 +60,7 @@ export const ColormapSlider = ({style}) => {
         setMinSliderValue(0);
 
         const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
-        setValue([colormapEntries[colormapEntries.length-1].quantity, colormapEntries[0].quantity]);
+        setValue([parseFloat(colormapEntries[colormapEntries.length-1].quantity), parseFloat(colormapEntries[0].quantity)]);
     };
 
     useEffect(() => {
@@ -67,6 +68,16 @@ export const ColormapSlider = ({style}) => {
             sldParser
                 .readStyle(style)
                 .then((geostylerStyle) => {
+                    // for interval type colormaps, fake out current style with 
+                    // label stated max valuein range so we can do the right calculations
+                    // get label max - in format like this: ">= 2.00"
+                    if (geostylerStyle.output.rules[0].symbolizers[0].colorMap.type === "intervals") {
+                        const colorMapEntries = geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries;
+                        // now temporarily set that max range for the style
+                        colorMapEntries[colorMapEntries.length-1].quantity = 
+                            parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+                    }
+
                     setCurrentStyle(geostylerStyle.output);
                     setSliderParams(geostylerStyle.output);
                 })
@@ -99,6 +110,11 @@ export const ColormapSlider = ({style}) => {
         const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
         for(let i = colormapEntries.length-1; i >= 0; i--) {
             dataRange.push(colormapEntries[i].quantity);
+        }
+        // if this is an intervals type of colormap, correct last entry in range
+        if (style.rules[0].symbolizers[0].colorMap.type === "intervals") {
+            const colorMapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
+            dataRange[0] = parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
         }
     
         return(dataRange.reverse());
@@ -140,28 +156,50 @@ export const ColormapSlider = ({style}) => {
                 else {
                     entry.label = range[idx] + " m";
                 }
+                // if the colormap type is set to intervals, the last entry is a special case,
+                // so must change the last entry values
+                if (style.rules[0].symbolizers[0].colorMap.type === "intervals") {
+                    if ( idx === range.length-1) {
+                        if (style.name.includes("maxwvel")) {
+                            entry.label = ">= " + entry.quantity + " m/s";
+                        }
+                        else {
+                            entry.label = ">= " + entry.quantity + " m";
+                        }
+                        entry.quantity = maxSliderValue;
+                    }
+                }
             }
         });
         style.rules[0].symbolizers[0].colorMap.colorMapEntries=[...colormapEntries];
+
+        // set the style with a top max value to cover all 
+        // possible values at the top of the range
+
     
         return(style);
     };
 
     const handleChange = (event, newValue) => {
     // make sure the first thumb value is not >= the second
-        if (newValue[0] < newValue[1]) {
+    // and that second is >= sliderStep
+        if ((newValue[0] < newValue[1]) && (newValue[1] >= sliderStep)) {
             setValue(newValue);
         }
     };
     
     const handleChangeCommitted = (event, newValue) => {
-        if (newValue[0] < newValue[1]) {
-            setValue(newValue);
-        }
-        else 
+
+        // prevent overlapping values
         if (newValue[0] === newValue[1]) {
-            setValue([newValue[0]-sliderStep, newValue[1]]);
+            newValue[0] = newValue[0]-sliderStep;
         }
+        // since min slider value doesn't appear to work, make
+        // sure lower slider value is never less tha 0
+        newValue[0] = (newValue[0] < 0) ? 0 : newValue[0];
+        // also check for 0 upper value - set sliderStep as lowest value
+        newValue[1] = (newValue[1] < sliderStep) ? sliderStep : newValue[1];
+        setValue([newValue[0], newValue[1]]);
 
         // now create new style with altered data range
         // get current data range values in reverse order

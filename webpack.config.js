@@ -123,7 +123,9 @@ module.exports = {
       '@compare-layers': path.resolve(__dirname, 'src/components/trays/compare-layers/'),
       '@share': path.resolve(__dirname, 'src/components/trays/share/'),
       '@utils': path.resolve(__dirname, 'src/utils/'),
-      '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side')
+      '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side/'),
+      '@alert-user': path.resolve(__dirname, 'src/components/alert-user/'),
+      '@config': path.resolve(__dirname, 'src/components/config/')
     }
   },
 
