@@ -146,11 +146,7 @@ export const AdcircRasterLayer = (layer) => {
 
                 // populate selectedObservations list with the newly selected observation point
                 setSelectedObservations(previous => [...previous, pointProps]);
-            } else
-                setAlertMsg({
-                    'severity': 'warning',
-                    'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'
-                });
+            }
         }
     });
 
