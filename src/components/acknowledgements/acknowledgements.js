@@ -36,7 +36,6 @@ export const Acknowledgements = () => {
                             src={ crc_logo }>
                         </Box>
                     </Link>
-                    <Divider />
                     <Link href="https://renci.org/research/earth-data-science-research/" underline="none">
                         <Box
                             component="img"
@@ -45,7 +44,6 @@ export const Acknowledgements = () => {
                             src={ renci_logo }
                         />
                     </Link>
-                    <Divider />
                     <Link href="https://thewaterinstitute.org/" underline="none">
                         <Box
                             component="img"
@@ -54,7 +52,6 @@ export const Acknowledgements = () => {
                             src={ twi_logo }
                         />
                     </Link>
-                    <Divider />
                     <Link href="https://ccee.ncsu.edu/research/ewc/" underline="none">
                         <Box
                             component="img"
@@ -63,7 +60,6 @@ export const Acknowledgements = () => {
                             src={ nuu_logo }
                         />
                     </Link>
-                    <Divider />
                     <Link href="https://engineering.uga.edu/team_member/matthew-v-bilskie/" underline="none">
                         <Box
                             component="img"
