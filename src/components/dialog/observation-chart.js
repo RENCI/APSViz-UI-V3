@@ -205,7 +205,7 @@ function csvToJSON(csvData, setLineButtonView) {
  */
 function formatY_axis(value) {
     // return the formatted value
-    return value.toFixed(2);
+    return value.toFixed(1);
 }
 
 /**
@@ -221,7 +221,7 @@ function formatX_axis(value) {
     // empty data will be ignored
     if (value !== "")
         // do the reformatting
-        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0] + 'Z';
+        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0];
 
     // return the formatted value
     return ret_val;
@@ -267,7 +267,7 @@ function get_yaxis_ticks(data) {
         // init the return value
         const ret_val = [];
 
-        // create an array of tick marks based on the mav data value
+        // create an array of tick marks based on the max data value
         for (let i=-maxVal; i <= maxVal; i += .5)
             ret_val.push(i);
 
@@ -297,20 +297,21 @@ function CreateObsChart(c) {
                     <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
                         <CartesianGrid strokeDasharray="1 1" />
 
-                        <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+                        <XAxis interval={23} angle={-90} height={55} unit={'Z'} tickMargin={25} tick={{ stroke: 'tan', strokeWidth: .5 }} dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
 
                         <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3" />
-                        <YAxis ticks={ get_yaxis_ticks(data) } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+
+                        <YAxis unit={'m'} ticks={ get_yaxis_ticks(data) } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
 
                         <Tooltip />
 
-                        <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
-                        <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
-                        <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
-                        <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
-                        <Line type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Nowcast"] }/>
-                        <Line type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Forecast"] }/>
-                        <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
+                        <Line unit={'m'} type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
+                        <Line unit={'m'} type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
+                        <Line unit={'m'} type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
+                        <Line unit={'m'} type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
+                        <Line unit={'m'} type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Nowcast"] }/>
+                        <Line unit={'m'} type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Forecast"] }/>
+                        <Line unit={'m'} type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
                     </LineChart>
                 </ResponsiveContainer>
         }

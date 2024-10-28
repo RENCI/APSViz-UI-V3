@@ -105,7 +105,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
                     <DialogContent sx={{ fontSize: 10, p: "5px" }}>
                         <Stack direction="column" spacing={ '5px' } alignItems="center" >
                             <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
-                                <Stack display="wrap" sx={{ width: newWidth, minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight, flexWrap: "wrap"}} direction="row" spacing={'px'}  alignItems="center">
+                                <Stack display="wrap" sx={{ flexWrap: "wrap" }} direction="row" spacing={'2px'}  alignItems="center">
                                     {showLineButtonView("Observations") ?
                                         <Box><ToggleButton
                                         value="Observations"
