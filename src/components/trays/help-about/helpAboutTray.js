@@ -1,6 +1,6 @@
 import React, {Fragment, useState} from 'react';
 import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails,
-    Stack, Typography, List,  ListItem, ListItemDecorator, Divider } from '@mui/joy';
+    Stack, Typography, List,  ListItem, ListItemDecorator, Divider, Box } from '@mui/joy';
 import {
         // sidebar icons
         Layers as LayersIcon, CompareArrows as CompareLayersIcon, Storm as HurricaneIcon, Checklist as ModelSelectionIcon, Delete as RemoveIcon, Tune as SettingsIcon,
@@ -14,6 +14,8 @@ import {
         Map as MapIcon, LightMode as LightModeIcon, DragHandleRounded as HandleIcon, KeyboardArrowDown as ExpandIcon, ArrowDropUp as MoveUpArrow,
         KeyboardArrowLeft, ToggleOn as OnOffIcon, SwapVerticalCircleSharp as SwapLayersIcon
     } from '@mui/icons-material';
+
+import LocationIcon from '@images/location_searching_FILL0_wght400_GRAD0_opsz24.png';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
@@ -199,6 +201,7 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><HIResMaxElevationIcon color="primary"/></ListItemDecorator>High resolution maximum water level</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><FloodIcon color="primary"/></ListItemDecorator>Inundation area</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><ObservationIcon color="primary"/></ListItemDecorator>Observations</ListItem>
+                                    <ListItem sx={{ ml: 1 }}><ListItemDecorator><Box> </Box></ListItemDecorator>Selected location</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaveHeightIcon color="primary"/></ListItemDecorator>Maximum significant wave height</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WaterLevelIcon color="primary"/></ListItemDecorator>Maximum water level</ListItem>
                                     <ListItem sx={{ ml: 1 }}><ListItemDecorator><WindVelocityIcon color="primary"/></ListItemDecorator>Maximum wind speed</ListItem>
@@ -382,15 +385,18 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 13} onChange={ (event, expanded) => { setIndex(expanded ? 13 : null); }}>
+                        <Accordion expanded={index === 14} onChange={ (event, expanded) => { setIndex(expanded ? 14 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view geo-point data?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select and location on the map. When you
+                                <Typography level="body-sm" sx={{ ml: 1 }}>All one has to do is select any location on a map layer. When you
                                     do, a dialog/chart will appear that displays the time-sequenced information at that point.
 
                                     Need more details on what is actually going on here.
+                                    <Typography level="body-sm" sx={{ ml: 1 }}>
+                                        Note that this feature is not available while in Compare mode.
+                                    </Typography>
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ ml: 2, '--ListItem-minHeight': '25px' }}>
@@ -400,7 +406,7 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 14} onChange={ (event, expanded) => { setIndex(expanded ? 14 : null); }}>
+                        <Accordion expanded={index === 15} onChange={ (event, expanded) => { setIndex(expanded ? 15 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I compare model run layers?</Typography>
                             </AccordionSummary>
@@ -422,7 +428,7 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 15} onChange={ (event, expanded) => { setIndex(expanded ? 15 : null); }}>
+                        <Accordion expanded={index === 16} onChange={ (event, expanded) => { setIndex(expanded ? 16 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view or adjust ADCIRC layer colormap ranges?</Typography>
                             </AccordionSummary>
@@ -450,7 +456,7 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 16} onChange={ (event, expanded) => { setIndex(expanded ? 16 : null); }}>
+                        <Accordion expanded={index === 17} onChange={ (event, expanded) => { setIndex(expanded ? 17 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{ fontWeight: 'bold' }}>How do I view or adjust ADCIRC layer colormap styles?</Typography>
                             </AccordionSummary>
