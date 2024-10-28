@@ -26,7 +26,7 @@ export const Acknowledgements = () => {
                           flexDirection: 'row',
                           background: 'white',
                         }}>
-                <Stack alignItems="left" spacing={2} direction="row">
+                <Stack alignItems="left" spacing={1} direction="row">
                     <Link href="https://www.coastalresiliencecenter.org/" underline="none">
                         <Box
                             component="img"
