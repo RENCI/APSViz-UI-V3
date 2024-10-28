@@ -8,6 +8,7 @@ import { ControlPanel } from '@components/control-panel';
 import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
+import { Acknowledgements } from "@components/acknowledgements";
 
 /**
  * renders the main content
@@ -38,6 +39,7 @@ const Content = () => {
             <ControlPanel/>
             <ComparePanel/>
             <MapLegend />
+            <Acknowledgements />
         </Fragment>
     );
 };
