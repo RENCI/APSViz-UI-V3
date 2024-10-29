@@ -6,7 +6,7 @@ import { useLayers } from "@context";
  * component that handles the removal of styles from
  * local storage ADCIRC raster layers
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ResetCompare = () => {

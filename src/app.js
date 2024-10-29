@@ -14,7 +14,7 @@ import { Acknowledgements } from "@components/acknowledgements";
 /**
  * renders the main content
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 const Content = () => {
@@ -51,7 +51,7 @@ const Content = () => {
 /**
  * renders the application
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const App = () => {

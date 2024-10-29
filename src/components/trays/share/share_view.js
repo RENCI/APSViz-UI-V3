@@ -4,7 +4,7 @@ import { ShareViewTray } from "@share/shareViewTray.js";
 /**
  * component that handles the filtered selections of layers for the map.
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ShareView = () => {

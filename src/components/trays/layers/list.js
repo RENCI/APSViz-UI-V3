@@ -106,7 +106,7 @@ const newLayerDefaultState = (layer, group) => {
 /**
  * render the layers for the selected run groups
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const LayersList = () => {

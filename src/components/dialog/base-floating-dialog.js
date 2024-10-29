@@ -29,7 +29,7 @@ BaseFloatingDialog.propTypes = {
  *
  * @param title - the name of the dialog: string
  * @param index - the index of the data
- * @param dialogObject the object to render in the dialog: {JSX.Element}
+ * @param dialogObject the object to render in the dialog: React.ReactElement
  * @param dataKey - the key to the data list elements in state: string
  * @param dataList - a data list in state: array
  * @param setDataList - method to update a data list in state: function

@@ -6,7 +6,7 @@ import {TropicalTabForm} from "@model-selection/tropicalTab";
 /**
  * This component renders the model selection tray
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ModelSelectionTray = () => {
