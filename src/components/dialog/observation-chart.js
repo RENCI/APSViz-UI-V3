@@ -4,8 +4,9 @@ import { Typography } from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
-
+import { getNamespacedEnvParam } from "@utils/map-utils";
 import dayjs from 'dayjs';
+
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -56,10 +57,16 @@ function getObsChartData(url, setLineButtonView) {
 
         // create the function to call for data
         queryFn: async () => {
+            // create the authorization header
+            const requestOptions = {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
+            };
+
             // make the call to get the data
             const ret_val = await axios
                 // make the call to get the data
-                .get(url)
+                .get(url, requestOptions)
                 // use the data returned
                 .then (( response ) => {
                     // return the data
