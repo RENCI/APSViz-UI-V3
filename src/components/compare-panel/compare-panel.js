@@ -9,7 +9,7 @@ import Draggable from "react-draggable";
 /**
  * renders the compare mode selections.
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const ComparePanel = () => {

@@ -9,7 +9,7 @@ import { getNamespacedEnvParam, getBrandingHandler } from "@utils/map-utils";
 /**
  * Form to filter/selt tropical runs
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const TropicalTabForm = () => {

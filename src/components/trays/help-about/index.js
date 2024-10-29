@@ -14,7 +14,7 @@ export const title = 'APSViz Help/About';
 /**
  * render the removal component
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  */
 export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>

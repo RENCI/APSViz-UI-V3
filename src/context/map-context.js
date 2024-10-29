@@ -92,7 +92,7 @@ export const LayersProvider = ({ children }) => {
    * get the layer icon
    *
    * @param productType
-   * @returns JSX.Element
+   * @returns React.ReactElement
    */
   const getLayerIcon = ( productType )=> {
       // grab the icon

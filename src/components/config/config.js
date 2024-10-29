@@ -30,7 +30,7 @@ export const getDefaultInstanceName = () => {
 /**
  * handles getting the default instance name
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const Config = () => {
