@@ -166,11 +166,6 @@ export const AdcircRasterLayer = (layer) => {
                         'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'
                     });
             }
-            else
-                setAlertMsg({
-                    'severity': 'warning',
-                    'msg': 'Geo-point selection is not available while in compare mode.'
-                });
         }
     });
 
