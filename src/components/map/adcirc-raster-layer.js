@@ -157,9 +157,9 @@ export const AdcircRasterLayer = (layer) => {
                             "id": id
                         };
 
-                // populate selectedObservations list with the newly selected observation point
-                setSelectedObservations(previous => [...previous, pointProps]);
-            }
+                    // populate selectedObservations list with the newly selected observation point
+                    setSelectedObservations(previous => [...previous, pointProps]);
+                }
             }
         }
     });
