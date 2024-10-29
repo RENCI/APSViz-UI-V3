@@ -17,7 +17,7 @@ export const title = 'Remove items';
 /**
  * render the tray
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  */
 export const trayContents = () => (
       <Stack gap={ 2 } p={ 2 }>

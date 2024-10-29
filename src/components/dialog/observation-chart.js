@@ -18,7 +18,7 @@ dayjs.extend(utc);
  * renders the observations as a chart
  *
  * @param dataUrl
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export default function ObservationChart(chartProps) {
@@ -287,7 +287,7 @@ function get_yaxis_ticks(data) {
  * Creates the chart.
  *
  * @param url
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 function CreateObsChart(c) {

@@ -5,7 +5,7 @@ import { useLayers } from "@context";
 /**
  * component that handles the removal of all model runs.
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const RemoveModels = () => {

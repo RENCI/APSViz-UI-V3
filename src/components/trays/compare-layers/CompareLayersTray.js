@@ -35,7 +35,7 @@ const getModelRunGroupList = (layers) => {
 /**
  * This component renders the model selection tray
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const CompareLayersTray = () => {
