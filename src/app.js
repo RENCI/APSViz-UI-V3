@@ -9,6 +9,7 @@ import { ComparePanel } from '@components/compare-panel';
 import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
 import { Config } from '@components/config';
+import { Acknowledgements } from "@components/acknowledgements";
 
 /**
  * renders the main content
@@ -42,6 +43,7 @@ const Content = () => {
             { (defaultInstanceName != null) && <ControlPanel/> }
             <ComparePanel/>
             <MapLegend />
+            <Acknowledgements />
         </Fragment>
     );
 };
