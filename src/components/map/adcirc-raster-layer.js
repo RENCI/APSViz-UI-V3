@@ -64,6 +64,7 @@ export const AdcircRasterLayer = (layer) => {
     // get the observation points selected, default layers and alert message from state
     const {
         defaultModelLayers,
+        setAlertMsg,
         selectedObservations, setSelectedObservations,
         defaultSelected, leftPaneID, rightPaneID
     } = useLayers();
@@ -159,7 +160,11 @@ export const AdcircRasterLayer = (layer) => {
 
                     // populate selectedObservations list with the newly selected observation point
                     setSelectedObservations(previous => [...previous, pointProps]);
-                }
+                } else
+                    setAlertMsg({
+                        'severity': 'warning',
+                        'msg': 'Geo-point selection is not available for the ' + layer.properties['product_name'] + ' product.'
+                    });
             }
         }
     });
