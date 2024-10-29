@@ -493,7 +493,7 @@ export const HelpAboutTray = () => {
 
                                 <Typography level="body-sm" sx={{mt: 1, ml: 1}}>All one has to do is select a observation point icon on the map. When
                                     you do, a dialog/chart will appear that displays the time-sequenced information at that observation
-                                    point.</Typography>
+                                    location.</Typography>
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
                                     <ListItem><Typography level="body-sm">You have the ability to move or resize the dialog that appears.</Typography></ListItem>
                                     <ListItem><Typography level="body-sm">You can also turn on/off plot lines on the chart.</Typography></ListItem>
@@ -514,11 +514,11 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                 <Typography level="body-sm" sx={{ml: 1}}>All one has to do is select any location on a map product layer. When you
-                                    do, a dialog/chart will appear that displays the time-sequenced information at that point.
+                                    do, a dialog/chart will appear that displays the time-sequenced information at that location.
                                 </Typography>
 
                                 <Typography level="body-sm" sx={{fontStyle: 'italic', mt: 1, mb: 1, ml: 1}}>
-                                    Need more details on what is actually going on here.
+                                    TODO: Need more details on what is actually going on here.
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
