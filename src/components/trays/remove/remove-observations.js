@@ -5,7 +5,7 @@ import { useLayers } from "@context";
 /**
  * component that handles the removal of observations.
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const RemoveAllObservations = () => {

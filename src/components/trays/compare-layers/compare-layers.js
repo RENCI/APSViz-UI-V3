@@ -4,7 +4,7 @@ import { CompareLayersTray } from "@compare-layers/CompareLayersTray.js";
 /**
  * component that handles the comparison of layers on the map.
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const CompareLayers = () => {

@@ -22,7 +22,7 @@ import SvgIcon from '@mui/material/SvgIcon';
  *
  * @param color
  * @param name
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 const getObsSVGIcon = ( color, name ) => {
     return (
@@ -44,7 +44,7 @@ const getObsSVGIcon = ( color, name ) => {
 /**
  * This component renders the help/about tray
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const HelpAboutTray = () => {

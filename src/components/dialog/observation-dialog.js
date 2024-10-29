@@ -7,7 +7,7 @@ import ObservationChart from "@dialog/observation-chart";
  * This component renders the observation dialog, including the chart
  *
  * @param obs_data
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ObservationDialog = (obs_data) => {
