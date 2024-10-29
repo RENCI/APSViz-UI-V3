@@ -5,6 +5,7 @@ import { Tune as SettingsIcon } from '@mui/icons-material';
 import { DarkModeToggle } from './dark-mode';
 import { BaseMaps } from './basemap';
 import { DataRangeEdit } from './colormaps';
+import { Units } from './units';
 
 export const icon = <SettingsIcon />;
 
@@ -20,5 +21,8 @@ export const trayContents = () => (
     <Divider sx={{marginTop: 3}}/>
     <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
+    <Divider/>
+    <Typography level="title-lg">Units of measurement</Typography>
+    <Units/>
   </Stack>
 );
