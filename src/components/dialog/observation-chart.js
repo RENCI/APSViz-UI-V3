@@ -314,7 +314,7 @@ const get_xtick_interval = (data) => {
     else if (events_per_hour <= 1) {
         interval = one_hour_interval - 1;
     }
-    // 12-hour labels for 4 (or less) events per day of data
+    // 12-hour labels for 4 (or less) events per hour of data
     else if (events_per_hour <= 4) {
         interval = (events_per_hour * 12) - 1;
     }
