@@ -6,7 +6,7 @@ import LineAxisRoundedIcon from '@mui/icons-material/LineAxisRounded';
 /**
  * renders the observation chart Y-axis slider
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ObsChartYAxis = () => {
@@ -63,7 +63,7 @@ export const ObsChartYAxis = () => {
 /**
  * renders the icon
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const YAxisSlider = () => {

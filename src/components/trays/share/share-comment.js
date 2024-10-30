@@ -7,7 +7,7 @@ import { useLayers } from "@context";
 /**
  * renders the shared content on the app as defined in the query string
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const ShareComment = () => {

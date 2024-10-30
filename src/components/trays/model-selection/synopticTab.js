@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 /**
  * Form to filter/select synoptic runs
  *
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export const SynopticTabForm = () => {

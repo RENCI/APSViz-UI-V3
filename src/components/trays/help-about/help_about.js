@@ -4,7 +4,7 @@ import { HelpAboutTray } from "./helpAboutTray.js";
 /**
  * component that renders the help/about tray.
  *
- * @returns {JSX.Element}
+ * @returns React.ReactElement
  * @constructor
  */
 export const HelpAbout = () => {

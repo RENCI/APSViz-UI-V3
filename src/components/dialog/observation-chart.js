@@ -1,11 +1,12 @@
-import React, {Fragment} from 'react';
-import {useQuery} from '@tanstack/react-query';
-import {Typography} from '@mui/material';
+import React, { Fragment } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Typography } from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine} from 'recharts';
-
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
+import { getNamespacedEnvParam } from "@utils/map-utils";
 import dayjs from 'dayjs';
+
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -17,12 +18,12 @@ dayjs.extend(utc);
  * renders the observations as a chart
  *
  * @param dataUrl
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 export default function ObservationChart(chartProps) {
     // render the chart
-    return (<CreateObsChart chartProps={chartProps}/>);
+    return (<CreateObsChart chartProps={ chartProps } />);
 }
 
 /**
@@ -37,45 +38,51 @@ console.error = (...args) => {
 };
 
 /**
- * Retrieves and returns the chart data in json format
+ * Retrieves and returns the chart data in JSON format
  *
  * @param url
  * @returns { json }
  */
 function getObsChartData(url, setLineButtonView) {
-
     // configure the retry count to be zero
     axiosRetry(axios, {
         retries: 0
     });
 
     // return the data to the caller
-    return useQuery({
+    return useQuery( {
         // specify the data key and url to use
         queryKey: ['apsviz-data', url],
 
         // create the function to call for data
         queryFn: async () => {
+            // create the authorization header
+            const requestOptions = {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
+            };
+
             // make the call to get the data
             const ret_val = await axios
                 // make the call to get the data
-                .get(url)
+                .get(url, requestOptions)
                 // use the data returned
-                .then((response) => {
+                .then (( response ) => {
                     // return the data
                     return response.data;
                 })
                 // otherwise post the issue to the console log
-                .catch((error) => {
+                .catch (( error ) => {
                     // make sure we do not render anything
                     return error.response.status;
                 });
 
             // if there was not an error
             if (ret_val !== 500) {
-                // return the csv data in json format
+                // return the csv data in JSON format
                 return csvToJSON(ret_val, setLineButtonView);
-            } else
+            }
+            else
                 // just return nothing and nothing will be rendered
                 return '';
         }, refetchOnWindowFocus: false
@@ -108,7 +115,7 @@ function csvToJSON(csvData, setLineButtonView) {
             // init the converted data
             const jsonObj = {};
 
-            // loop through the data and get name/vale pairs in json format
+            // loop through the data and get name/vale pairs in JSON format
             for (let j = 0; j < dataHeader.length; j++) {
                 // save the data
                 jsonObj[dataHeader[j]] = currentLine[j];
@@ -131,7 +138,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Observations");
-                } else
+                }
+                else
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"]) {
@@ -139,7 +147,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("NOAA Tidal Predictions");
-                } else
+                }
+                else
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["APS Nowcast"]) {
@@ -147,7 +156,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Nowcast");
-                } else
+                }
+                else
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"]) {
@@ -155,7 +165,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Forecast");
-                } else
+                }
+                else
                     e["APS Forecast"] = null;
 
                 if (e["SWAN Nowcast"]) {
@@ -163,7 +174,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Nowcast");
-                } else
+                }
+                else
                     e["SWAN Nowcast"] = null;
 
                 if (e["SWAN Forecast"]) {
@@ -171,7 +183,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Forecast");
-                } else
+                }
+                else
                     e["SWAN Forecast"] = null;
 
                 if (e["Difference (APS-OBS)"]) {
@@ -179,7 +192,8 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Difference (APS-OBS)");
-                } else
+                }
+                else
                     e["Difference (APS-OBS)"] = null;
             }
         });
@@ -292,7 +306,7 @@ const get_xtick_interval = (data) => {
     // init the interval value, default to days
     let interval = one_hour_interval - 1;
 
-    // view all labels if there isnt a full day of data
+    // view all labels if there isn't a full day of data
     if (days <= 0.5) {
         interval = 0;
     }
@@ -317,12 +331,12 @@ const get_xtick_interval = (data) => {
  * Creates the chart.
  *
  * @param url
- * @returns JSX.Element
+ * @returns React.ReactElement
  * @constructor
  */
 function CreateObsChart(c) {
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
+    const {status, data} = getObsChartData(c.chartProps.url.replace('https://apsviz-ui-data-dev.apps.renci.org', 'http://localhost:4000'), c.chartProps.setLineButtonView);
 
     // render the chart
     return (
