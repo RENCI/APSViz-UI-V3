@@ -336,7 +336,7 @@ const get_xtick_interval = (data) => {
  */
 function CreateObsChart(c) {
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url.replace('https://apsviz-ui-data-dev.apps.renci.org', 'http://localhost:4000'), c.chartProps.setLineButtonView);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
 
     // render the chart
     return (
