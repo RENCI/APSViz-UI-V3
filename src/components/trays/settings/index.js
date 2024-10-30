@@ -19,10 +19,11 @@ export const trayContents = () => (
     <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
     <Divider sx={{marginTop: 3}}/>
+    <Typography level="title-lg">Units of measurement</Typography>
+    <Units/>
+    <Divider sx={{marginTop: 3}}/>
     <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
     <Divider/>
-    <Typography level="title-lg">Units of measurement</Typography>
-    <Units/>
   </Stack>
 );

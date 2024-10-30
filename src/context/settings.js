@@ -17,6 +17,18 @@ import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 export const SettingsContext = createContext({});
 export const useSettings = () => useContext(SettingsContext);
 
+export const metersToFeet = (m) => {
+  return m * 3.28084;
+};
+
+export const mpsToMph = (s) => {
+  return s * 2.236936;
+};
+
+export const mpsToKnots = (s) => {
+  return s *1.943844;
+};
+
 export const SettingsProvider = ({ children }) => {
   const { mode, setMode } = useColorScheme();
   const booleanValue = useToggleState();
@@ -37,6 +49,13 @@ export const SettingsProvider = ({ children }) => {
   const [storedMaxwvelOpacity, setStoredMaxwvelOpacity] = useLocalStorage('maxwvel_opacity',1.0);
   const [storedSwanOpacity, setStoredSwanOpacity] = useLocalStorage('swan_opacity',1.0);
 
+  // save the units type specified by user - imperial or metric (default)
+  const [storedUnitsType, setStoredUnitsType] = useLocalStorage('unitsType','metric');
+  // if units type is imperial, need to save wind speed unit - mph or knots
+  // default for metric is meters/second (mps)
+  const [storedSpeedType, setStoredSpeedType] = useLocalStorage('speedType','mps');
+
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
@@ -45,6 +64,18 @@ export const SettingsProvider = ({ children }) => {
         enabled: darkMode,
         toggle: toggleDarkMode,
       },
+
+      unitsType: {
+        current: storedUnitsType,
+        set: setStoredUnitsType,
+      },
+      speedType: {
+        current: storedSpeedType,
+        set: setStoredSpeedType,
+      },
+      metersToFeet,
+      mpsToMph,
+      mpsToKnots,
 
       mapStyle: {
         maxele: {
