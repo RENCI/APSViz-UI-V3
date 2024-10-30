@@ -505,7 +505,7 @@ export const HelpAboutTray = () => {
                             setIndex(expanded ? 14 : null);
                         }}>
                             <AccordionSummary>
-                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I view geo-point data?</Typography>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I view surface time series data at a selected lon/lat?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
@@ -513,12 +513,14 @@ export const HelpAboutTray = () => {
                                                                 src={targetIcon}></Box>The selected location icon.</ListItem>
                                 </List>
 
-                                <Typography level="body-sm" sx={{ml: 1}}>All one has to do is select any location on a map product layer. When you
-                                    do, a dialog/chart will appear that displays the time-sequenced information at that location.
-                                </Typography>
-
-                                <Typography level="body-sm" sx={{fontStyle: 'italic', mt: 1, mb: 1, ml: 1}}>
-                                    TODO: Need more details on what is actually going on here.
+                                <Typography level="body-sm" sx={{ mt: 1, mb: 1, ml: 1}}>
+                                    The user may select one or more points on the active Maximum Water Level or Maximum
+                                    Surface Wave Height surface features to plot available nowcast and forecast model values.
+                                    The nowcast looks back 6 hours. For each target point, a plot will be presented and the associated lat/lon
+                                    values will be included in the plot titles. If no data are available, the plot chart will report a warning
+                                    indicating a problem with collecting data. Data may be unavailable for multiple reasons including model runs that
+                                    did not compute the quantity of interest or selecting a lat/lon target that are outside the model grid,
+                                    such as inland.
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
