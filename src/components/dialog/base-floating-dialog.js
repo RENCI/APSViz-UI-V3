@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useRef, forwardRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography,
-    CssBaseline, Dialog, DialogContent, DialogTitle, Paper, Slide, IconButton} from '@mui/material';
+    Dialog, DialogContent, DialogTitle, Paper, IconButton} from '@mui/material';
 import Draggable from "react-draggable";
 import PropTypes from 'prop-types';
 import { Resizable } from "react-resizable";
@@ -41,7 +41,7 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     const [newWidth, setNewWidth] = useState(460);
     const [newHeight, setNewHeight] = useState(250);
 
-    // declare the width/meight min/max
+    // declare the width/height min/max
     const minWidth = 350;
     const maxWidth = 800;
 
@@ -66,103 +66,99 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     * configure and render the resizeable floating dialog
     */
     return (
-        <Fragment>
-            <CssBaseline />
-            <Resizable
-                height={ newHeight }
-                width={ newWidth }
-                maxWidth=""
-                onResize={ (event) => {
-                    setNewWidth(newWidth + event.movementX);
-                    setNewHeight(newHeight + event.movementY);
-                }}
-                axis="x"
-                draggableOpts={{ handleSize: [20, 20] }}>
-                <Dialog
-                    aria-labelledby="draggable-dialog"
-                    open={ true }
-                    onClose={ handleClose }
-                    PaperComponent={ PaperComponent }
-                    TransitionComponent={ Transition }
-                    disableEnforceFocus
-                    style={{ pointerEvents: 'none' }}
-                    PaperProps={{left: index * 20, top: index * 35, sx: { pointerEvents: 'auto' } }}
-                    sx={{ ml: 6, zIndex: 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}>
+        <Resizable
+            // height={ newHeight }
+            width={ newWidth }
+            maxWidth=""
+            onResize={ (event) => {
+                setNewWidth(newWidth + event.movementX);
+                setNewHeight(newHeight + event.movementY);
+            }}
+            axis="x">
+            <Dialog
+                aria-labelledby="draggable-dialog"
+                open={ true }
+                onClose={ handleClose }
+                PaperComponent={ PaperComponent }
+                // TransitionComponent={ Transition }
+                disableEnforceFocus
+                style={{ pointerEvents: 'none' }}
+                PaperProps={{ left: index * 20, top: index * 35, sx: { pointerEvents: 'auto' } }}
+                sx={{ ml: 6, zIndex: 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' } }}>
 
-                    <DialogTitle
-                        id="draggable-dialog"
-                        sx={{ p: 1, display: 'flex', alignItems: 'center', cursor: 'move', backgroundColor: 'lightblue' }}>
-                        <Typography
-                            sx={{ mt: .25, wordWrap: 'break-word', width: newWidth, minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight, flexWrap: "wrap", fontSize: 12}}>
-                            { title }
-                        </Typography>
-                    </DialogTitle>
+                <DialogTitle
+                    id="draggable-dialog"
+                    sx={{ p: 1, display: 'flex', alignItems: 'center', cursor: 'move', backgroundColor: 'lightblue' }}>
+                    <Typography
+                        sx={{ mt: .25, wordWrap: 'break-word', width: newWidth, minWidth: minWidth, maxWidth: maxWidth, maxHeight: maxHeight, flexWrap: "wrap", fontSize: 12}}>
+                        { title }
+                    </Typography>
+                </DialogTitle>
 
-                    <IconButton onClick={ handleClose } sx={{ position: 'absolute', right: 2, top: 0 }}>
-                        <CloseOutlinedIcon fontSize="small" color={"primary"}/>
-                    </IconButton>
+                <IconButton onClick={ handleClose } sx={{ position: 'absolute', right: 2, top: 0 }}>
+                    <CloseOutlinedIcon fontSize="small" color={"primary"}/>
+                </IconButton>
 
-                    <DialogContent sx={{ fontSize: 10, p: "5px" }}>
-                        <Stack direction="column" spacing={ '5px' } alignItems="center" >
-                            <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
-                                <Stack display="wrap" sx={{ flexWrap: "wrap" }} direction="row" spacing={'2px'}  alignItems="center">
-                                    {showLineButtonView("Observations") ?
-                                        <Box><ToggleButton
-                                        value="Observations"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, m: 0, p: "3px", color: 'Black' , fontSize: 8 }}>
-                                        Observations</ToggleButton></Box> : ''
-                                    }
+                <DialogContent sx={{ fontSize: 10, p: "5px" }}>
+                    <Stack direction="column" spacing={ '5px' } alignItems="center" >
+                        <ToggleButtonGroup variant="text" onChange={(event, newValue) => { toggleLineView(newValue); }}>
+                            <Stack display="wrap" sx={{ flexWrap: "wrap" }} direction="row" spacing={'2px'}  alignItems="center">
+                                {showLineButtonView("Observations") ?
+                                    <Box><ToggleButton
+                                    value="Observations"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Black' }, m: 0, p: "3px", color: 'Black' , fontSize: 8 }}>
+                                    Observations</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("APS Nowcast")) ?
-                                        <Box><ToggleButton
-                                        value="APS Nowcast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
-                                        APS Nowcast</ToggleButton></Box> : ''
-                                    }
+                                {(showLineButtonView("APS Nowcast")) ?
+                                    <Box><ToggleButton
+                                    value="APS Nowcast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
+                                    APS Nowcast</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("APS Forecast")) ?
-                                        <Box><ToggleButton
-                                        value="APS Forecast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
-                                        APS Forecast</ToggleButton></Box> : ''
-                                    }
+                                {(showLineButtonView("APS Forecast")) ?
+                                    <Box><ToggleButton
+                                    value="APS Forecast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
+                                    APS Forecast</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("SWAN Nowcast")) ?
-                                        <Box><ToggleButton
-                                        value="SWAN Nowcast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
-                                        SWAN Nowcast</ToggleButton></Box> : ''
-                                    }
+                                {(showLineButtonView("SWAN Nowcast")) ?
+                                    <Box><ToggleButton
+                                    value="SWAN Nowcast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'CornflowerBlue' }, m: 0, p: "3px", color: 'CornflowerBlue', fontSize: 8 }}>
+                                    SWAN Nowcast</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("SWAN Forecast")) ?
-                                        <Box><ToggleButton
-                                        value="SWAN Forecast"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
-                                        SWAN Forecast</ToggleButton></Box> : ''
-                                    }
+                                {(showLineButtonView("SWAN Forecast")) ?
+                                    <Box><ToggleButton
+                                    value="SWAN Forecast"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'LimeGreen' }, m: 0, p: "3px", color: 'LimeGreen', fontSize: 8 }}>
+                                    SWAN Forecast</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("NOAA Tidal Predictions")) ?
-                                        <Box><ToggleButton
-                                        value="NOAA Tidal Predictions"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, m: 0, p: "3px", color: 'Teal', fontSize: 8 }}>
-                                        NOAA Tidal Predictions</ToggleButton></Box> : ''
-                                    }
+                                {(showLineButtonView("NOAA Tidal Predictions")) ?
+                                    <Box><ToggleButton
+                                    value="NOAA Tidal Predictions"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Teal' }, m: 0, p: "3px", color: 'Teal', fontSize: 8 }}>
+                                    NOAA Tidal Predictions</ToggleButton></Box> : ''
+                                }
 
-                                    {(showLineButtonView("Difference (APS-OBS)")) ?
-                                        <Box><ToggleButton
-                                        value="Difference (APS-OBS)"
-                                        sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, m: 0, p: "3px", color: 'Red', fontSize: 9 }}>
-                                        Difference (APS-OBS)</ToggleButton></Box> : ''
-                                    }
-                                </Stack>
-                            </ToggleButtonGroup>
+                                {(showLineButtonView("Difference (APS-OBS)")) ?
+                                    <Box><ToggleButton
+                                    value="Difference (APS-OBS)"
+                                    sx={{ '&:hover': { color: 'White', backgroundColor: 'Red' }, m: 0, p: "3px", color: 'Red', fontSize: 9 }}>
+                                    Difference (APS-OBS)</ToggleButton></Box> : ''
+                                }
+                            </Stack>
+                        </ToggleButtonGroup>
 
-                            <Box sx={{ width: newWidth, minWidth: minWidth, maxWidth: maxWidth, height: newHeight, minHeight: minHeight, maxHeight: maxHeight }}> { dialogObject } </Box>
-                        </Stack>
-                    </DialogContent>
-                </Dialog>
-            </Resizable>
-        </Fragment>
+                        <Box sx={{ width: newWidth, minWidth: minWidth, maxWidth: maxWidth, height: newHeight, minHeight: minHeight, maxHeight: maxHeight }}> { dialogObject } </Box>
+                    </Stack>
+                </DialogContent>
+            </Dialog>
+        </Resizable>
     );
 }
 
@@ -188,16 +184,9 @@ function PaperComponent(props) {
             bounds="parent"
             nodeRef={ nodeRef }
             handle="#draggable-dialog"
-            cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper ref={ nodeRef } { ...props } sx={{ left: props.left, top: props.top }}/>
+            cancel={'[class*="MuiDialogContent-root"]'}
+            defaultPosition={{x: props.left, y: props.top}}>
+            <Paper ref={ nodeRef } { ...props } />
         </Draggable>
     );
 }
-
-/**
- * This creates an animated transition for the dialog that pops up
-*
-*/
-const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ ref } { ...props } />;
-});
