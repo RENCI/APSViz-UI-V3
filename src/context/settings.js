@@ -17,18 +17,6 @@ import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 export const SettingsContext = createContext({});
 export const useSettings = () => useContext(SettingsContext);
 
-export const metersToFeet = (m) => {
-  return m * 3.28084;
-};
-
-export const mpsToMph = (s) => {
-  return s * 2.236936;
-};
-
-export const mpsToKnots = (s) => {
-  return s *1.943844;
-};
-
 export const SettingsProvider = ({ children }) => {
   const { mode, setMode } = useColorScheme();
   const booleanValue = useToggleState();
@@ -73,9 +61,6 @@ export const SettingsProvider = ({ children }) => {
         current: storedSpeedType,
         set: setStoredSpeedType,
       },
-      metersToFeet,
-      mpsToMph,
-      mpsToKnots,
 
       mapStyle: {
         maxele: {

@@ -297,3 +297,102 @@ export const restoreColorMapType = (typeName, style) => {
 
         return updatedStyle;
 };
+
+// helper functions for unit conversions
+export const feetToMeters = (m) => {
+    return m * 0.3048;
+};
+export const metersToFeet = (m) => {
+    return m * 3.28084;
+};
+
+export const mphToMps = (s) => {
+    return s * 0.44704;
+};
+export const mpsToMph = (s) => {
+    return s * 2.2369;
+};
+
+export const knotsToMps = (s) => {
+    return s * 0.514444;
+};
+export const mpsToKnots = (s) => {
+    return s * 1.943844;
+};
+
+// this functiom converts a style to imperial units
+// styles will always be saved locally in metric units
+// however if the user settings specify imperial units,
+// the style must be converted just before it is used
+// in a GetMap or GetLegend request.
+
+// Save this code for now, is case we decide to do it this way
+// instead of switching to a new default style
+/*
+export const convertStyleUnitsToImperial = (layerType, style, speedType) => {
+    console.log(layerType);
+    console.log(style);
+    console.log(speedType);
+    // helper functions
+    const feetToMeters = (m) => {
+        return m * 0.3048;
+    };
+    const mphToMps = (s) => {
+        return s * 0.44704;
+    };
+    const knotsToMps = (s) => {
+        return s * 0.514444;
+    };
+    const metersToFeet = (m) => {
+        return m * 3.28084;
+    };
+    const mpsToMph = (s) => {
+        return s * 2.2369;
+    };
+    const mpsToKnots = (s) => {
+        return s * 1.943844;
+    };
+
+    const colormap = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
+    let newColormap = [];
+    const numClasses = colormap.length;
+    const colorMapType = style.rules[0].symbolizers[0].colorMap.type;
+    // this for getting max value when color map type is interval
+    const maxValue = parseFloat(colormap[numClasses-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+    let imperialMaxValue = 0.0;
+    let intervalValue = 0;
+    let speedFunc = mphToMps;
+
+    // see if we are handling distance units or speed units
+    if (layerType === "maxwvel63") {
+        // convert speed units
+        if (speedType === "mph") {
+            imperialMaxValue = Math.round(mpsToMph(maxValue));
+        }
+        else {
+            imperialMaxValue = Math.round(mpsToKnots(maxValue));
+            speedFunc = knotsToMps;
+        }
+        intervalValue = Math.trunc(imperialMaxValue/numClasses);
+        let label = 0.0;
+        colormap.forEach((entry) => {
+            newColormap.push({'color': entry.color, 'quantity': speedFunc(label), 'label':label+ " " + speedType});
+            label += intervalValue;
+        });
+    }
+    else {
+        // convert distance units
+        imperialMaxValue = Math.round(metersToFeet(maxValue));
+        intervalValue = Math.trunc(imperialMaxValue/numClasses);
+        let label = 0.0;
+        colormap.forEach((entry) => {
+            newColormap.push({'color': entry.color, 'quantity': feetToMeters(label), 'label':label+ " ft"});
+            label += intervalValue;
+        });
+    }
+
+    style.rules[0].symbolizers[0].colorMap.colorMapEntries = newColormap;
+    //console.log(style);
+    return style;
+};
+*/

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { FormControl, RadioGroup, Radio, Sheet, Typography } from '@mui/joy';
 import { useSettings } from '@context';
+import { maxeleStyle, maxeleImperialStyle,
+         maxwvelStyle, maxwvelImperialMPHStyle, maxwvelImperialKnotsStyle,
+         swanStyle, swanImperialStyle } from '@utils';
 
 
 /**
@@ -17,6 +20,7 @@ import { useSettings } from '@context';
 export const Units = () => {
 
     const {
+        mapStyle,
         unitsType,
         speedType,
     } = useSettings();
@@ -29,12 +33,26 @@ export const Units = () => {
         imperial: "mph",
     };
 
+    const setLayerStyles = (unitType) => {
+        if (unitType === "metric") {
+            mapStyle.maxele.set(maxeleStyle);
+            mapStyle.swan.set(swanStyle);
+            mapStyle.maxwvel.set(maxwvelStyle);
+        }
+        else {
+            mapStyle.maxele.set(maxeleImperialStyle);
+            mapStyle.swan.set(swanImperialStyle);
+            mapStyle.maxwvel.set(maxwvelImperialMPHStyle);
+        }
+    };
+
     const handleUnitChange = (event) => {
-        console.log(event.target.value);
-        setUnit(event.target.value);
-        unitsType.set(event.target.value);
+        const unitType = event.target.value;
+        console.log(unitType);
+        setUnit(unitType);
+        unitsType.set(unitType);
         // if units type is set to metric - reset speed type to meters/sec
-        if (event.target.value === "metric") {
+        if (unitType === "metric") {
             setSpeed(default_speed.metric);
             speedType.set(default_speed.metric);
         }
@@ -42,12 +60,20 @@ export const Units = () => {
             setSpeed(default_speed.imperial);
             speedType.set(default_speed.imperial);
         }
+        setLayerStyles(unitType);
     };
 
     const handleSpeedType = (event) => {
-        console.log(event.target.value);
-        setSpeed(event.target.value);
-        speedType.set(event.target.value);
+        const stype = event.target.value;
+        console.log(stype);
+        setSpeed(stype);
+        speedType.set(stype);
+        if (stype === "mph") {
+            mapStyle.maxwvel.set(maxwvelImperialMPHStyle);
+        }
+        else {
+            mapStyle.maxwvel.set(maxwvelImperialKnotsStyle);
+        }
     };
 
     return (
