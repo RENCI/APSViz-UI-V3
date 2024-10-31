@@ -297,8 +297,8 @@ const get_xtick_interval = (data) => {
     // data length in "days"
     const days = (data.length - 1) * dt / 24 / 60;
 
-    // get the number of events per hour
-    const events_per_hour = Math.max(Math.ceil(Math.log2(days)), 1);
+    // get the number of events per day
+    const events_per_day = Math.max(Math.ceil(Math.log2(days)), 1);
 
     // get the number of data elements per hour
     const one_hour_interval = 60 / dt;
@@ -307,16 +307,16 @@ const get_xtick_interval = (data) => {
     let interval = one_hour_interval - 1;
 
     // view all labels if there isn't a full day of data
-    if (events_per_hour <= 0.5) {
+    if (events_per_day <= 0.5) {
         interval = 0;
     }
     // hour labels for a single day
-    else if (events_per_hour <= 1) {
+    else if (events_per_day <= 1) {
         interval = one_hour_interval - 1;
     }
     // 12-hourly labels for 4 or less days of data
-    else if (events_per_hour <= 4) {
-        interval = (events_per_hour * 12) - 1;
+    else if (events_per_day <= 4) {
+        interval = (events_per_day * 12) - 1;
     }
 
     // return the new interval value
