@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Typography } from '@mui/material';
+import React, {Fragment} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {Typography} from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
-import { getNamespacedEnvParam } from "@utils/map-utils";
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine} from 'recharts';
+import {getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
 
 
@@ -23,7 +23,7 @@ dayjs.extend(utc);
  */
 export default function ObservationChart(chartProps) {
     // render the chart
-    return (<CreateObsChart chartProps={ chartProps } />);
+    return (<CreateObsChart chartProps={chartProps}/>);
 }
 
 /**
@@ -50,7 +50,7 @@ function getObsChartData(url, setLineButtonView) {
     });
 
     // return the data to the caller
-    return useQuery( {
+    return useQuery({
         // specify the data key and url to use
         queryKey: ['apsviz-data', url],
 
@@ -59,7 +59,7 @@ function getObsChartData(url, setLineButtonView) {
             // create the authorization header
             const requestOptions = {
                 method: 'GET',
-                headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
+                headers: {Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`}
             };
 
             // make the call to get the data
@@ -67,12 +67,12 @@ function getObsChartData(url, setLineButtonView) {
                 // make the call to get the data
                 .get(url, requestOptions)
                 // use the data returned
-                .then (( response ) => {
+                .then((response) => {
                     // return the data
                     return response.data;
                 })
                 // otherwise post the issue to the console log
-                .catch (( error ) => {
+                .catch((error) => {
                     // make sure we do not render anything
                     return error.response.status;
                 });
@@ -81,8 +81,7 @@ function getObsChartData(url, setLineButtonView) {
             if (ret_val !== 500) {
                 // return the csv data in JSON format
                 return csvToJSON(ret_val, setLineButtonView);
-            }
-            else
+            } else
                 // just return nothing and nothing will be rendered
                 return '';
         }, refetchOnWindowFocus: false
@@ -138,8 +137,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Observations");
-                }
-                else
+                } else
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"]) {
@@ -147,8 +145,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("NOAA Tidal Predictions");
-                }
-                else
+                } else
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["APS Nowcast"]) {
@@ -156,8 +153,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Nowcast");
-                }
-                else
+                } else
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"]) {
@@ -165,8 +161,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Forecast");
-                }
-                else
+                } else
                     e["APS Forecast"] = null;
 
                 if (e["SWAN Nowcast"]) {
@@ -174,8 +169,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Nowcast");
-                }
-                else
+                } else
                     e["SWAN Nowcast"] = null;
 
                 if (e["SWAN Forecast"]) {
@@ -183,8 +177,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Forecast");
-                }
-                else
+                } else
                     e["SWAN Forecast"] = null;
 
                 if (e["Difference (APS-OBS)"]) {
@@ -192,8 +185,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Difference (APS-OBS)");
-                }
-                else
+                } else
                     e["Difference (APS-OBS)"] = null;
             }
         });
@@ -290,38 +282,37 @@ function get_yaxis_ticks(data) {
  * @param data
  * @returns {number}
  */
-const get_xtick_interval = (data) => {
-    // time resolution in minutes
+function get_xtick_interval(data) {
+    //time resolution in minutes
     const dt = Math.abs((new Date(data[0].time) - new Date(data[1].time))) / (1000 * 60);
 
     // data length in "days"
     const days = (data.length - 1) * dt / 24 / 60;
 
-    // get the number of events per day
-    const events_per_day = Math.max(Math.ceil(Math.log2(days)), 1);
-
     // get the number of data elements per hour
     const one_hour_interval = 60 / dt;
 
-    // init the interval value, default to the number of events per hour -1
-    let interval = one_hour_interval - 1;
+    // default to daily
+    let interval = one_hour_interval * 24 - 1;
 
-    // view all labels if there isn't a full day of data
-    if (events_per_day <= 0.5) {
+    // all ticks for <= 0.5 days>
+    if (days <= 0.5) {
         interval = 0;
     }
-    // hour labels for a single day
-    else if (events_per_day <= 1) {
+    // hour labels for <= 1.5 days
+    else if (days <= 1.5) {
         interval = one_hour_interval - 1;
     }
-    // 12-hourly labels for 4 or less days of data
-    else if (events_per_day <= 4) {
-        interval = (events_per_day * 12) - 1;
+    // 6 hour labels for <= 4.5 days
+    else if (days <= 4.5) {
+        interval = one_hour_interval * 6 - 1;
     }
-
-    // return the new interval value
+    // 12 hour labels for <= 7.5 days
+    else if (days <= 7.5) {
+        interval = one_hour_interval * 12 - 1;
+    }
     return interval;
-};
+}
 
 /**
  * Creates the chart.
@@ -340,15 +331,15 @@ function CreateObsChart(c) {
             {
                 status === 'pending' ? (<Typography sx={{alignItems: 'center', fontSize: 12}}>Gathering chart data...</Typography>) :
                     (status === 'error' || data === '') ? (
-                        <Typography sx={{alignItems: 'center', color: 'red', fontSize: 12}}>
-                            There was a problem collecting data for this location.
-                        </Typography>) :
+                            <Typography sx={{alignItems: 'center', color: 'red', fontSize: 12}}>
+                                There was a problem collecting data for this location.
+                            </Typography>) :
                         <ResponsiveContainer>
-                            <LineChart margin={{ top: 5, right: 10, left: -25, bottom: 5 }} data={data} isHide={c.chartProps.isHideLine}>
+                            <LineChart margin={{top: 5, right: 10, left: -25, bottom: 5}} data={data} isHide={c.chartProps.isHideLine}>
                                 <CartesianGrid strokeDasharray="1 1"/>
 
-                                <XAxis interval={ get_xtick_interval(data) } angle={ -90 } height={ 55 } unit={ 'Z' } tickMargin={ 27 }
-                                       tick={{ stroke: 'tan', strokeWidth: .5 }} dataKey="time" tickFormatter={(value) => formatX_axis(value)}/>
+                                <XAxis interval={get_xtick_interval(data)} angle={-90} height={55} unit={'Z'} tickMargin={27}
+                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value)}/>
 
                                 <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3"/>
 
