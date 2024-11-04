@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ToggleButtonGroup, ToggleButton, Box, Stack, Typography,
     Dialog, DialogContent, DialogTitle, Paper, IconButton} from '@mui/material';
 import Draggable from "react-draggable";
@@ -8,7 +8,8 @@ import "react-resizable/css/styles.css";
 
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
-import { markUnclicked } from '@utils/map-utils';
+import {markUnclicked} from '@utils/map-utils';
+import {useLayers} from "@context";
 
 // define the properties of this component's input
 BaseFloatingDialog.propTypes = {
@@ -48,6 +49,11 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     const minHeight = 175;
     const maxHeight = 500;
 
+    // get the context for the compare layers view
+    const {
+        topMostDialogIndex, setTopMostDialogIndex
+    } = useLayers();
+
     /**
     * the close dialog handler
     */
@@ -63,28 +69,45 @@ export default function BaseFloatingDialog({ title, index, dialogObject, dataKey
     };
 
     /**
+     * handles a click on the dialog to make it have focus
+     */
+    const handleClick = () => {
+        // set the new topmost dialog in the stack
+        setTopMostDialogIndex(index);
+    };
+
+    /**
+     * Runs when the dialog is created to make it have focus
+     */
+    useEffect( () => {
+        // set the focus on this dialog
+        setTopMostDialogIndex(index);
+    }, [] );
+
+    /**
     * configure and render the resizeable floating dialog
     */
     return (
-        <Resizable
-            // height={ newHeight }
-            width={ newWidth }
-            maxWidth=""
-            onResize={ (event) => {
-                setNewWidth(newWidth + event.movementX);
-                setNewHeight(newHeight + event.movementY);
-            }}
-            axis="x">
-            <Dialog
-                aria-labelledby="draggable-dialog"
-                open={ true }
-                onClose={ handleClose }
-                PaperComponent={ PaperComponent }
-                // TransitionComponent={ Transition }
-                disableEnforceFocus
-                style={{ pointerEvents: 'none' }}
-                PaperProps={{ left: index * 20, top: index * 35, sx: { pointerEvents: 'auto' } }}
-                sx={{ ml: 6, zIndex: 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' } }}>
+            <Resizable
+                height={ newHeight }
+                width={ newWidth }
+                maxWidth=""
+                onResize={ (event) => {
+                    setNewWidth(newWidth + event.movementX);
+                    setNewHeight(newHeight + event.movementY);
+                }}
+                axis="x"
+                draggableOpts={{ handleSize: [20, 20] }}>
+                <Dialog
+                    onClick={ handleClick }
+                    onClose={ handleClose }
+                    aria-labelledby="draggable-dialog"
+                    open={ true }
+                    PaperComponent={ PaperComponent }
+                    disableEnforceFocus
+                    style={{ pointerEvents: 'none' }}
+                    PaperProps={{left: index * 45, top: index * 35, sx: { pointerEvents: 'auto' } }}
+                    sx={{ ml: 6, zIndex: (index===topMostDialogIndex) ? 1000 : 999, '.MuiBackdrop-root': { backgroundColor: 'transparent' }}}>
 
                 <DialogTitle
                     id="draggable-dialog"
