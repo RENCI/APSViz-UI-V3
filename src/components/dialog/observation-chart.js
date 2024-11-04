@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Typography } from '@mui/material';
+import React, {Fragment} from 'react';
+import {useQuery} from '@tanstack/react-query';
+import {Typography} from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
-import { getNamespacedEnvParam } from "@utils/map-utils";
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine} from 'recharts';
+import {getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
 
 
@@ -23,7 +23,7 @@ dayjs.extend(utc);
  */
 export default function ObservationChart(chartProps) {
     // render the chart
-    return (<CreateObsChart chartProps={ chartProps } />);
+    return (<CreateObsChart chartProps={chartProps}/>);
 }
 
 /**
@@ -33,25 +33,24 @@ export default function ObservationChart(chartProps) {
  */
 const error = console.error;
 console.error = (...args) => {
-  if (/defaultProps/.test(args[0])) return;
-  error(...args);
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
 };
 
 /**
- * Retrieves and returns the chart data in json format
+ * Retrieves and returns the chart data in JSON format
  *
  * @param url
  * @returns { json }
  */
 function getObsChartData(url, setLineButtonView) {
-
     // configure the retry count to be zero
     axiosRetry(axios, {
-       retries: 0
+        retries: 0
     });
 
     // return the data to the caller
-    return useQuery( {
+    return useQuery({
         // specify the data key and url to use
         queryKey: ['apsviz-data', url],
 
@@ -60,7 +59,7 @@ function getObsChartData(url, setLineButtonView) {
             // create the authorization header
             const requestOptions = {
                 method: 'GET',
-                headers: { Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
+                headers: {Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`}
             };
 
             // make the call to get the data
@@ -68,22 +67,21 @@ function getObsChartData(url, setLineButtonView) {
                 // make the call to get the data
                 .get(url, requestOptions)
                 // use the data returned
-                .then (( response ) => {
+                .then((response) => {
                     // return the data
                     return response.data;
                 })
                 // otherwise post the issue to the console log
-                .catch (( error ) => {
+                .catch((error) => {
                     // make sure we do not render anything
                     return error.response.status;
                 });
 
             // if there was not an error
             if (ret_val !== 500) {
-                // return the csv data in json format
+                // return the csv data in JSON format
                 return csvToJSON(ret_val, setLineButtonView);
-            }
-            else
+            } else
                 // just return nothing and nothing will be rendered
                 return '';
         }, refetchOnWindowFocus: false
@@ -116,7 +114,7 @@ function csvToJSON(csvData, setLineButtonView) {
             // init the converted data
             const jsonObj = {};
 
-            // loop through the data and get name/vale pairs in json format
+            // loop through the data and get name/vale pairs in JSON format
             for (let j = 0; j < dataHeader.length; j++) {
                 // save the data
                 jsonObj[dataHeader[j]] = currentLine[j];
@@ -127,7 +125,7 @@ function csvToJSON(csvData, setLineButtonView) {
         }
 
         // remove the timezone from the time value
-        ret_val.map(function (e){
+        ret_val.map(function (e) {
             // only convert records with a valid time
             if (e.time !== "") {
                 // take off the time zone
@@ -139,8 +137,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Observations");
-                }
-                else
+                } else
                     e["Observations"] = null;
 
                 if (e["NOAA Tidal Predictions"]) {
@@ -148,8 +145,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("NOAA Tidal Predictions");
-                }
-                else
+                } else
                     e["NOAA Tidal Predictions"] = null;
 
                 if (e["APS Nowcast"]) {
@@ -157,8 +153,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Nowcast");
-                }
-                else
+                } else
                     e["APS Nowcast"] = null;
 
                 if (e["APS Forecast"]) {
@@ -166,8 +161,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("APS Forecast");
-                }
-                else
+                } else
                     e["APS Forecast"] = null;
 
                 if (e["SWAN Nowcast"]) {
@@ -175,8 +169,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Nowcast");
-                }
-                else
+                } else
                     e["SWAN Nowcast"] = null;
 
                 if (e["SWAN Forecast"]) {
@@ -184,8 +177,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("SWAN Forecast");
-                }
-                else
+                } else
                     e["SWAN Forecast"] = null;
 
                 if (e["Difference (APS-OBS)"]) {
@@ -193,8 +185,7 @@ function csvToJSON(csvData, setLineButtonView) {
 
                     // set the line button to be in view
                     setLineButtonView("Difference (APS-OBS)");
-                }
-                else
+                } else
                     e["Difference (APS-OBS)"] = null;
             }
         });
@@ -212,7 +203,7 @@ function csvToJSON(csvData, setLineButtonView) {
  */
 function formatY_axis(value) {
     // return the formatted value
-    return value.toFixed(2);
+    return value.toFixed(1);
 }
 
 /**
@@ -228,7 +219,7 @@ function formatX_axis(value) {
     // empty data will be ignored
     if (value !== "")
         // do the reformatting
-        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0] + 'Z';
+        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0];
 
     // return the formatted value
     return ret_val;
@@ -257,7 +248,9 @@ function get_yaxis_ticks(data) {
             // identify the max value in the array of values
             const newVal = Math.max(...data
                 // make sure we do not run into any null or undefined values in the data
-                .filter(function(o) { return !(o[aKey] === undefined || o[aKey] === null); })
+                .filter(function (o) {
+                    return !(o[aKey] === undefined || o[aKey] === null);
+                })
                 // create the array of all the values
                 .map(o => o[aKey]));
 
@@ -274,13 +267,51 @@ function get_yaxis_ticks(data) {
         // init the return value
         const ret_val = [];
 
-        // create an array of tick marks based on the mav data value
-        for (let i=-maxVal; i <= maxVal; i += .5)
+        // create an array of tick marks based on the max data value
+        for (let i = -maxVal; i <= maxVal; i += .5)
             ret_val.push(i);
 
         // return the new y-axis array range
         return ret_val;
     }
+}
+
+/**
+ * gets the x-axis label interval count based on the data
+ *
+ * @param data
+ * @returns {number}
+ */
+function get_xtick_interval(data) {
+    //time resolution in minutes
+    const dt = Math.abs((new Date(data[0].time) - new Date(data[1].time))) / (1000 * 60);
+
+    // data length in "days"
+    const days = (data.length - 1) * dt / 24 / 60;
+
+    // get the number of data elements per hour
+    const one_hour_interval = 60 / dt;
+
+    // default to daily
+    let interval = one_hour_interval * 24 - 1;
+
+    // all ticks for <= 0.5 days>
+    if (days <= 0.5) {
+        interval = 0;
+    }
+    // hour labels for <= 1.5 days
+    else if (days <= 1.5) {
+        interval = one_hour_interval - 1;
+    }
+    // 6 hour labels for <= 4.5 days
+    else if (days <= 4.5) {
+        interval = one_hour_interval * 6 - 1;
+    }
+    // 12 hour labels for <= 7.5 days
+    else if (days <= 7.5) {
+        interval = one_hour_interval * 12 - 1;
+    }
+    return interval;
 }
 
 /**
@@ -292,35 +323,48 @@ function get_yaxis_ticks(data) {
  */
 function CreateObsChart(c) {
     // call to get the data. expect back some information too
-    const { status, data } = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
 
     // render the chart
     return (
         <Fragment>
-        {
-            status === 'pending' ? ( <Typography sx={{ alignItems: 'center', fontSize: 12 }}>Gathering chart data...</Typography> ) :
-                (status === 'error' || data === '') ? ( <Typography sx={{ alignItems: 'center', color: 'red', fontSize: 12 }}>There was a problem collecting data for this location.</Typography> ) :
-                <ResponsiveContainer>
-                    <LineChart data={ data } margin={{ left: -25 }} isHide={ c.chartProps.isHideLine }>
-                        <CartesianGrid strokeDasharray="1 1" />
+            {
+                status === 'pending' ? (<Typography sx={{alignItems: 'center', fontSize: 12}}>Gathering chart data...</Typography>) :
+                    (status === 'error' || data === '') ? (
+                            <Typography sx={{alignItems: 'center', color: 'red', fontSize: 12}}>
+                                There was a problem collecting data for this location.
+                            </Typography>) :
+                        <ResponsiveContainer>
+                            <LineChart margin={{top: 5, right: 10, left: -25, bottom: 5}} data={data} isHide={c.chartProps.isHideLine}>
+                                <CartesianGrid strokeDasharray="1 1"/>
 
-                        <XAxis tick={{ stroke: 'tan', strokeWidth: .5 }} tickSize="10" dataKey="time" tickFormatter={ (value) => formatX_axis(value) }/>
+                                <XAxis interval={get_xtick_interval(data)} angle={-90} height={55} unit={'Z'} tickMargin={27}
+                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value)}/>
 
-                        <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3" />
-                        <YAxis ticks={ get_yaxis_ticks(data) } tick={{ stroke: 'tan', strokeWidth: .5 }} tickFormatter={ (value) => formatY_axis(value) } />
+                                <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3"/>
 
-                        <Tooltip />
+                                <YAxis unit={'m'} ticks={get_yaxis_ticks(data)} tick={{stroke: 'tan', strokeWidth: .5}}
+                                       tickFormatter={(value) => formatY_axis(value)}/>
 
-                        <Line type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine['Observations'] }/>
-                        <Line type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["NOAA Tidal Predictions"] }/>
-                        <Line type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Nowcast"] }/>
-                        <Line type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["APS Forecast"] }/>
-                        <Line type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Nowcast"] }/>
-                        <Line type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["SWAN Forecast"] }/>
-                        <Line type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false} isAnimationActive={false} hide={ c.chartProps.isHideLine["Difference (APS-OBS)"] } />
-                    </LineChart>
-                </ResponsiveContainer>
-        }
+                                <Tooltip/>
+
+                                <Line unit={'m'} type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine['Observations']}/>
+                                <Line unit={'m'} type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["NOAA Tidal Predictions"]}/>
+                                <Line unit={'m'} type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["APS Nowcast"]}/>
+                                <Line unit={'m'} type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["APS Forecast"]}/>
+                                <Line unit={'m'} type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["SWAN Nowcast"]}/>
+                                <Line unit={'m'} type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["SWAN Forecast"]}/>
+                                <Line unit={'m'} type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false}
+                                      isAnimationActive={false} hide={c.chartProps.isHideLine["Difference (APS-OBS)"]}/>
+                            </LineChart>
+                        </ResponsiveContainer>
+            }
         </Fragment>
     );
 }
