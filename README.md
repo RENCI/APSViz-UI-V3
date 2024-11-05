@@ -1,4 +1,4 @@
-![renci-logo.png](Docs%2Frenci-logo.png)
+![aps-logo.png](src%2Fimages%2Faps-logo.png) 
 # RENCI APSViz UI/V3
 
 **This repository represents the third version of the user interface (APSViz) for the ADCIRC Prediction System (APS).**
@@ -38,4 +38,8 @@ ADCIRC usually requires a large amount of information for predicting coastal haz
 
 ***
 ### **Attributions and collaborators.**
-![Collaborators.png](Docs%2FCollaborators.png)
+<img src="src/images/CRC_LOGO.jpg" width="290px" height="70">
+<img src="src/images/NCU_LOGO.jpg" width="280px" height="70">
+<img src="src/images/TWI_LOGO.jpg" width="280px" height="70">
+<img src="src/images/UGA_LOGO.jpg" width="250px" height="70">
+<img src="src/images/nopp-logo.png" width="104px" height="70">
