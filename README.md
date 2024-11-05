@@ -1,16 +1,17 @@
 ![renci-logo.png](renci-logo.png)
-# APSViz UI/V3.
+# APSViz UI/V3
 
-**This repository represents the third version of the APSViz user interface. This application is used to render the products of the ADCIRC Prediction System (APS).**
+Coastal water level, wave and inundation forecasts are provided as part of an active, community-based research program to improve and expand these capabilities. Forecasts for the US East and Gulf coasts are updated four times daily using meteorological forecasts from the Global Forecast System.
+During tropical events additional water level, wave and inundation model forecasts are provided using alternative meteorological forecasts.
+
+The ADCIRC Prediction System (APS) results can be viewed using the APSViz application.
+
+This repository represents the third version of the APSViz user interface.
 
 ![ADCIRC-overview.png](Docs%2FADCIRC-overview.png)
 ***
 ### APS - The ADCIRC Prediction System.
-The ADCIRC Prediction System (APS) is a coastal hazards prediction system built around the ADCIRC coastal circulation and storm surge model.
-
-Coastal water level, wave and inundation forecasts are provided as part of an active, community-based research program to improve and expand these capabilities. Forecasts for the US East and Gulf coasts are updated four times daily using meteorological forecasts from the Global Forecast System.
-
-During tropical events additional water level, wave and inundation model forecasts are provided using alternative meteorological forecasts.
+#### The ADCIRC Prediction System (APS) is a coastal hazards prediction system built around the ADCIRC coastal circulation and storm surge model.
 
 ***
 ### ADCIRC - ADvanced CIRCulation.
@@ -71,7 +72,7 @@ docker build --build-arg APP_VERSION=PROD \
 --no-cache --progress plain -f APSViz-UI-V3\Dockerfile -t apsviz-ui-v3:latest .
 
 #### Kubernetes
-Please refer to the APSVis Helm repo [here](https://github.com/RENCI/apsviz-helm) for all Kubernetes deployment configurations.
+Please refer to the APSViz Helm repo [here](https://github.com/RENCI/apsviz-helm) for all Kubernetes deployment configurations.
 
 ***
 ### **Attributions and collaborators.**
