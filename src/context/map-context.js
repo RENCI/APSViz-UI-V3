@@ -62,6 +62,9 @@ export const LayersProvider = ({ children }) => {
   // state to capture the default startup instance name
   const [defaultInstanceName, setDefaultInstanceName] = useState(null);
 
+  // state to keep track of the obs dialog that has focus
+  const [topMostDialogIndex, setTopMostDialogIndex] = useState(0);
+
   /**
    * this section is for the side-by-side compare mode items
    * @type {string}
@@ -406,7 +409,10 @@ export const LayersProvider = ({ children }) => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
-        resetCompare, removeSideBySideLayers
+        resetCompare, removeSideBySideLayers,
+
+        // tracks the dialog that has focus
+        topMostDialogIndex, setTopMostDialogIndex
       }}
     >
       {children}
