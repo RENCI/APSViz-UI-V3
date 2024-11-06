@@ -154,7 +154,7 @@ export const maxeleImperialStyle = '<?xml version="1.0" encoding="UTF-8"?> \
               </sld:GrayChannel> \
             </sld:ChannelSelection> \
             <sld:ColorMap> \
-              <sld:ColorMapEntry color="#313695" quantity="0.00" label="0.00 m"/> \
+              <sld:ColorMapEntry color="#313695" quantity="0.00" label="0.00 ft"/> \
               <sld:ColorMapEntry color="#323C98" quantity="0.3048" label="1.0 ft"/> \
               <sld:ColorMapEntry color="#4E80B9" quantity="0.6096" label="2.0 ft"/> \
               <sld:ColorMapEntry color="#84BAD8" quantity="0.9144000000000001" label="3.0 ft"/> \
