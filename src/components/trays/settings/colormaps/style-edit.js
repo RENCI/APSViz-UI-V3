@@ -15,7 +15,7 @@ import SldStyleParser from 'geostyler-sld-parser';
 import { ColorMapEditor } from '@renci/apsviz-geostyler';
 import { restoreColorMapType } from '@utils/map-utils';
 import _cloneDeep from 'lodash/cloneDeep';
-import { maxSliderValues } from './utils';
+import { getFloatNumberFromLabel, maxSliderValues } from './utils';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -30,6 +30,8 @@ export const StyleEditor = () => {
     const {
         mapStyle,
         layerOpacity,
+        unitsType,
+        speedType,
     } = useSettings();
 
     const [colormap, setColormap] = useState();
@@ -99,7 +101,7 @@ export const StyleEditor = () => {
 
         // save the label units for later restoration
         let labelUnit = colormap.colorMapEntries[0].label.split("").reverse().join("").split(" ")[0];
-        // reverse again if this was a m/s unit - whew!
+        // reverse again if this was anything other than meters unit - whew!
         if (labelUnit.length > 1) labelUnit = labelUnit.split("").reverse().join("");
 
         //update type of colorMap
@@ -113,7 +115,7 @@ export const StyleEditor = () => {
             // check to see if this an intervals type of colormap
             // must handle weird last entry case, if so
             const topRange = (colormap.type === "intervals") ?
-                Number(colormap.colorMapEntries[colormap.colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g))
+                getFloatNumberFromLabel(colormap.colorMapEntries[colormap.colorMapEntries.length-1].label, 0)
                 :
                 Number(colormap.colorMapEntries[colormap.colorMapEntries.length-1].quantity);
 
@@ -135,7 +137,7 @@ export const StyleEditor = () => {
         else {
             if (value.colorMapEntries[value.colorMapEntries.length-1].label.includes(">=")) {
                 const last = value.colorMapEntries.length-1;
-                value.colorMapEntries[last].quantity = parseFloat(value.colorMapEntries[last].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+                value.colorMapEntries[last].quantity = getFloatNumberFromLabel(value.colorMapEntries[last].label, 2);
                 const labelParts = value.colorMapEntries[last].label.split(" ");
                 if (labelParts.length >= 3)
                     value.colorMapEntries[last].label = parseFloat(labelParts[1]).toFixed(2) + " " + labelParts[2];
@@ -158,13 +160,28 @@ export const StyleEditor = () => {
             const styleName = geoStylerStyle.output.name.split('_')[0];
             if (colormap.type === "intervals") {
                     const lastIndex = colormap.colorMapEntries.length-1;
+                    let labelUnit = "";
+                    // need to get value for last value in the range from the label
+                    // for imperial based values, because the value is always represented
+                    // in it metric form.
+                    const lastQuantity = getFloatNumberFromLabel(colormap.colorMapEntries[lastIndex].label, 1);
+                    console.log(lastQuantity);
                     if (styleName === MAXWVEL) {
-                        geoStylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries[lastIndex].label = ">= " + colormap.colorMapEntries[lastIndex].quantity + " m/s";
+                        if (unitsType.current === "imperial") {
+                            labelUnit = ((speedType.current === "knots")? " kn" : " mph");
+                        }
+                        else {
+                            labelUnit = "mps";
+                        }
                     }
                     else {
-                        geoStylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries[lastIndex].label = ">= " + colormap.colorMapEntries[lastIndex].quantity + " m";
+                        if (unitsType.current === "imperial")
+                            labelUnit = " ft";
                     }
-                geoStylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries[lastIndex].quantity = maxSliderValues[styleName];
+                    geoStylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries[lastIndex].label = ">= " + lastQuantity + labelUnit;
+                    // when the colormap type is intervals, have to set last colormap entry to be an estimated mav value for that layer
+                    // to account for the way interval colormaps work.
+                    geoStylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries[lastIndex].quantity = maxSliderValues[styleName][unitsType.current];
             }
 
             // save colormap type - it seems to get wiped out when the parser

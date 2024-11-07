@@ -15,3 +15,14 @@ export const sliderMarkSteps = {
     "maxwvel": { "metric": 10, "imperial": 20 },
     "swan": { "metric": 5, "imperial": 10 }
 };
+
+// find a float number in a colormap entry label and 
+// return with designated decimal places.
+export const getFloatNumberFromLabel = (label, decimalPlaces) => {
+    let num = 0.0;
+    const labelMatch = label.match(/[+-]?\d+(\.\d+)?/g);
+    if (labelMatch)
+        num = parseFloat(labelMatch).toFixed(decimalPlaces);
+
+    return num;
+};

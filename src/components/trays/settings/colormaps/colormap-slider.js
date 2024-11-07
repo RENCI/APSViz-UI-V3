@@ -4,7 +4,7 @@ import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useSettings } from '@context';
 import { restoreColorMapType, metersToFeet, feetToMeters, mpsToKnots, knotsToMps, mpsToMph, mphToMps  } from '@utils/map-utils';
-import { maxSliderValues, sliderSteps, sliderMarkSteps } from './utils';
+import { getFloatNumberFromLabel, maxSliderValues, sliderSteps, sliderMarkSteps } from './utils';
 
 const MAXELE = 'maxele';
 const MAXWVEL = 'maxwvel';
@@ -24,28 +24,6 @@ export const ColormapSlider = ({style}) => {
         speedType,
     } = useSettings();
 
-    // convert the value to imperial, if not metric
-    const convertValue = (product, v) => {
-        let newValue = v;
-
-        if (unitsType.current !== "metric") {
-            // handle speed conversions
-            if(product === MAXWVEL) {
-                if(speedType.current === "knots") {
-                    newValue = mpsToKnots(v);
-                }
-                else { // mph
-                    newValue = mpsToMph(v);
-                }
-            }
-            else { // handle distance conversion
-                newValue = metersToFeet(v);
-            }
-        }
-
-        return Math.round(newValue);
-    };
-
     const sldParser = new SldStyleParser();
 
      // set the correct slider values for the appropriate style and unit type
@@ -53,10 +31,8 @@ export const ColormapSlider = ({style}) => {
         let max_slider_value = 0;
         let slider_step = 0;
         const marks = [];
-        let product = '';
 
         if (style.name.includes(MAXWVEL)) {
-            product = MAXWVEL;
             max_slider_value = maxSliderValues[MAXWVEL][unitsType.current];
             slider_step = sliderSteps[MAXWVEL][unitsType.current];
             for (let i = 0; i <= max_slider_value; i+=sliderMarkSteps[MAXWVEL][unitsType.current]) {
@@ -65,7 +41,6 @@ export const ColormapSlider = ({style}) => {
         }
         else
         if (style.name.includes(SWAN)) {
-            product = SWAN;
             max_slider_value = maxSliderValues[SWAN][unitsType.current];
             slider_step = sliderSteps[SWAN][unitsType.current];
             for (let i = 0; i <= max_slider_value; i+=sliderMarkSteps[SWAN][unitsType.current]) {
@@ -73,7 +48,6 @@ export const ColormapSlider = ({style}) => {
             }
         }
         else { // maxele
-            product = MAXELE;
             max_slider_value = maxSliderValues[MAXELE][unitsType.current];
             slider_step = sliderSteps[MAXELE][unitsType.current];
             for (let i = 0; i <= max_slider_value; i+=sliderMarkSteps[MAXELE][unitsType.current]) {
@@ -87,8 +61,8 @@ export const ColormapSlider = ({style}) => {
         setMinSliderValue(0);
 
         const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
-        setValue([convertValue(product, parseFloat(colormapEntries[colormapEntries.length-1].quantity)),
-                  convertValue(product, parseFloat(colormapEntries[0].quantity))]);
+        setValue([getFloatNumberFromLabel(colormapEntries[colormapEntries.length-1].label, 0),
+                  parseFloat(colormapEntries[0].quantity)]);
     };
 
     useEffect(() => {
@@ -103,7 +77,8 @@ export const ColormapSlider = ({style}) => {
                         const colorMapEntries = geostylerStyle.output.rules[0].symbolizers[0].colorMap.colorMapEntries;
                         // now temporarily set that max range for the style
                         colorMapEntries[colorMapEntries.length-1].quantity = 
-                            parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+                            getFloatNumberFromLabel(colorMapEntries[colorMapEntries.length-1].label, 2);
+                            //parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
                     }
 
                     setCurrentStyle(geostylerStyle.output);
@@ -160,7 +135,8 @@ export const ColormapSlider = ({style}) => {
         // if this is an intervals type of colormap, correct last entry in range
         if (style.rules[0].symbolizers[0].colorMap.type === "intervals") {
             const colorMapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
-            dataRange[0] = parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+            //dataRange[0] = parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
+            dataRange[0] = getFloatNumberFromLabel(colorMapEntries[colorMapEntries.length-1].label, 2);
         }
     
         return(dataRange.reverse());
@@ -215,7 +191,7 @@ export const ColormapSlider = ({style}) => {
                     }
                     else {
                         entry.label = range[idx] + " " + speedType.current;
-                }
+                    }
                 }
                 else {
                     entry.label = range[idx] + ((unitsType.current === "metric")? " m" : " ft");
@@ -227,14 +203,15 @@ export const ColormapSlider = ({style}) => {
                         if (style.name.includes("maxwvel")) {
                             // 2 different speed types for imperial
                             if (unitsType.current === "imperial") {
-                                entry.label = range[idx] + ((speedType.current === "knots")? " kn" : " mph");
+                                entry.label = ">= " + range[idx] + ((speedType.current === "knots")? " kn" : " mph");
                             }
                             else {
-                                entry.label = range[idx] + " " + speedType.current;
+                                entry.label = ">= " + range[idx] + " " + speedType.current;
                             }
                         }
                         else {
-                            entry.label = ">= " + entry.quantity + ((unitsType.current === "metric")? " m" : " ft");
+                            //entry.label = ">= " + entry.quantity + ((unitsType.current === "metric")? " m" : " ft");
+                            entry.label = ">= " + range[idx] + ((unitsType.current === "metric")? " m" : " ft");
                         }
                         entry.quantity = maxSliderValue;
                     }
