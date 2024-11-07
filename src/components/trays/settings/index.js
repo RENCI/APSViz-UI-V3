@@ -5,6 +5,7 @@ import { Tune as SettingsIcon } from '@mui/icons-material';
 import { DarkModeToggle } from './dark-mode';
 import { BaseMaps } from './basemap';
 import { DataRangeEdit } from './colormaps';
+import { DateTimeFormat } from './date-time-format';
 
 export const icon = <SettingsIcon />;
 
@@ -18,7 +19,9 @@ export const trayContents = () => (
     <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
     <Divider sx={{marginTop: 3}}/>
-    <Typography mb={1} level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
+    <Typography level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
+    <Divider sx={{marginTop: 3}}/>
+    <DateTimeFormat/>
   </Stack>
 );
