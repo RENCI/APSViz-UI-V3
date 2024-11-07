@@ -14,6 +14,7 @@ export const HurricaneTrackGeoJson = ({index}) => {
 
   const {
     hurricaneTrackLayers,
+    useUTC
   } = useLayers();
   const [hurricaneData, setHurricaneData] = useState();
 
@@ -84,9 +85,11 @@ export const HurricaneTrackGeoJson = ({index}) => {
 
   const onEachHurrFeature = (feature, layer) => {
     if (feature.properties && feature.properties.time_utc) {
-      const popupContent = feature.properties.storm_name + ": " +
-                           feature.properties.time_utc + ", " +
-                           feature.properties.max_wind_speed_mph + "mph";
+      // get the date/time by current preference
+      const preferredTimeZone = useUTC ? feature.properties.time_utc + 'Z' : new Date(feature.properties.time_utc + 'Z').toLocaleString();
+
+      // build the popup content
+      const popupContent = feature.properties.storm_name + ": " + preferredTimeZone + ", " + feature.properties.max_wind_speed_mph + "mph";
 
       layer.on("mouseover", function (e) {
         this.bindPopup(popupContent).openPopup(e.latlng);
