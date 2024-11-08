@@ -66,7 +66,7 @@ export const LayersProvider = ({ children }) => {
   const [topMostDialogIndex, setTopMostDialogIndex] = useState(0);
 
   // flag to indicate to view dates/times in local or UTC mode
-  const [useUTC, setUseUTC] = useState(false);
+  const [useUTC, setUseUTC] = useState(true);
 
   /**
    * this section is for the side-by-side compare mode items
