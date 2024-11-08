@@ -101,15 +101,36 @@ export const getPropertyName = (layerProps, element_name) => {
 };
 
 /**
+ * gets the run date formatted based on current user UTC/locale selection
+ *
+ * @param layerProps
+ * @param useUTC
+ * @param longFormat
+ * @returns {string|string}
+ */
+export const getPreferredTimeZone = (layerProps, useUTC, longFormat=false) => {
+    // does the situation need the full date format
+    if (longFormat) {
+        return useUTC ? new Date(layerProps['runDate']).toUTCString() : new Date(layerProps['insertion_date']).toLocaleString();
+    }
+    // send back the short date format
+    else {
+        // get the date/time by current preference
+        return useUTC ? layerProps['run_date'] : new Date(layerProps['insertion_date']).toLocaleDateString();
+    }
+
+};
+
+/**
  * gets the summary header text for the layer groups.
  * This takes into account the two types of runs (tropical, synoptic)
  *
  * @param layerProps
  * @returns {string}
  */
-export const getHeaderSummary = (layerProps) => {
+export const getHeaderSummary = (layerProps, useUTC) => {
     // get the full accordian summary text
-    return layerProps['run_date'] + ': ' +
+    return getPreferredTimeZone(layerProps, useUTC) + ': ' +
         ((getPropertyName(layerProps, 'stormOrModelEle') === undefined) ? 'Data error' : getPropertyName(layerProps, 'stormOrModelEle').toUpperCase()) +
         ', ' + getPropertyName(layerProps, 'numberName') + getPropertyName(layerProps, 'numberEle') +
         ', Type: ' + layerProps['event_type'] +
@@ -185,7 +206,6 @@ export const markClicked = (map, event, id) => {
   
   marker.addTo(map);
 };
-
 
 export const markUnclicked = (map, id) => {
   map.eachLayer((layer) => {
