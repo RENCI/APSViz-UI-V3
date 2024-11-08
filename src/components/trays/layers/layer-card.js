@@ -17,11 +17,13 @@ import { useToggleState } from '@hooks';
 import { LayerActions } from './layer-card-actions';
 import { ActionButton } from '@components/buttons';
 import { DeleteLayerButton } from './delete-layer-button';
+import { getPreferredTimeZone } from "@utils/map-utils";
 
 export const LayerCard = ({ layer }) => {
   const {
     getLayerIcon,
     toggleLayerVisibility2,
+      useUTC
   } = useLayers();
   const expanded = useToggleState(false);
   const isVisible = layer.state.visible;
@@ -82,7 +84,7 @@ export const LayerCard = ({ layer }) => {
             sx={{ flex: 1, pl: '50px' }}
           >
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { layer.properties.run_date }
+              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { getPreferredTimeZone(layer.properties, useUTC) }
             </Typography>
             <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
               Cycle { layer.properties.cycle }

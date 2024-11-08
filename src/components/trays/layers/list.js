@@ -111,7 +111,7 @@ const newLayerDefaultState = (layer, group) => {
  */
 export const LayersList = () => {
     // get a handle to the layer state
-    const { removeObservations, defaultModelLayers, setDefaultModelLayers, hurricaneTrackLayers, setHurricaneTrackLayers } = useLayers();
+    const { removeObservations, defaultModelLayers, setDefaultModelLayers, hurricaneTrackLayers, setHurricaneTrackLayers, useUTC } = useLayers();
 
     // get the default layers
     const layers = [...defaultModelLayers];
@@ -307,7 +307,7 @@ export const LayersList = () => {
                                                         </IconButton>
 
                                                         <Typography level="body-xs" sx={{ mt: 1 }}>
-                                                            { getHeaderSummary(layer['properties']) }
+                                                            { getHeaderSummary(layer['properties'], useUTC) }
                                                         </Typography>
 
                                                         <DeleteModelRunButton groupId={ layer['group'] }/>

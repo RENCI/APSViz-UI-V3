@@ -56,7 +56,8 @@ export const CompareLayersTray = () => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        resetCompare, removeSideBySideLayers
+        resetCompare, removeSideBySideLayers,
+        useUTC
     } = useLayers();
 
     const {
@@ -339,7 +340,7 @@ export const CompareLayersTray = () => {
                             onChange={ (event, expanded) => { setAccordionIndex(expanded ? idx : null); }}
                         >
                             <AccordionSummary>
-                                <Typography level="body-xs">{ getHeaderSummary(layer['properties']) }</Typography>
+                                <Typography level="body-xs">{ getHeaderSummary(layer['properties'], useUTC)}</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails>

@@ -24,7 +24,7 @@ export const ComparePanel = () => {
         rightPaneType, setRightPaneType,
         leftLayerProps, setLeftLayerProps,
         rightLayerProps, setRightLayerProps,
-        resetCompare
+        resetCompare, useUTC
     } = useLayers();
 
     // get the default model run layers
@@ -46,7 +46,7 @@ export const ComparePanel = () => {
             // if the layers were captured
             if (layerProps !== undefined && layerProps.length !== 0) {
                 // get the full header summary text
-                return getHeaderSummary(layerProps[0]['properties']);
+                return getHeaderSummary(layerProps[0]['properties'], useUTC);
             }
             else {
                 // return the default text

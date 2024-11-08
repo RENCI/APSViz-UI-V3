@@ -20,6 +20,7 @@ export default function CatalogItems(data) {
         removeObservations,
         defaultModelLayers,
         setDefaultModelLayers,
+        useUTC
         } = useLayers();
 
     // create some state for what catalog accordian is expanded/not expanded
@@ -170,7 +171,7 @@ export default function CatalogItems(data) {
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
 
-                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } </AccordionSummary>
+                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } {(useUTC) ? '' : '(UTC)' }</AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
@@ -188,7 +189,7 @@ export default function CatalogItems(data) {
                                                             sx={{ m: .5 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
-                                                            label={ <Typography sx={{ fontSize: "xs" }}>{ getHeaderSummary(mbr['properties']) } </Typography> }
+                                                            label={ <Typography sx={{ fontSize: "xs" }}>{ getHeaderSummary(mbr['properties'], useUTC)} </Typography> }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
                                                         />
