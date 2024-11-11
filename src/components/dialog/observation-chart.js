@@ -97,8 +97,8 @@ function getObsChartData(url, setLineButtonView, useUTC) {
 const csvToJSON = (csvData, setLineButtonView, useUTC) => {
     // ensure that there is csv data to convert
     if (csvData !== "") {
-        // split on carriage returns
-        const lines = csvData.split("\n");
+        // split on carriage returns. also removing all the windows \r characters if they exist
+        const lines = csvData.replaceAll('\r', '').split('\n');
 
         // init the result
         const ret_val = [];
@@ -314,11 +314,11 @@ function get_xtick_interval(data) {
     else if (days <= 1.5) {
         interval = one_hour_interval - 1;
     }
-    // 6 hour labels for <= 4.5 days
+    // 6-hour labels for <= 4.5 days
     else if (days <= 4.5) {
         interval = one_hour_interval * 6 - 1;
     }
-    // 12 hour labels for <= 7.5 days
+    // 12-hour labels for <= 7.5 days
     else if (days <= 7.5) {
         interval = one_hour_interval * 12 - 1;
     }
