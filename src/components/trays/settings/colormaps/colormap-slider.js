@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SldStyleParser from 'geostyler-sld-parser';
 import { Slider, Box } from '@mui/joy';
 import { useSettings } from '@context';
-import { restoreColorMapType, metersToFeet, feetToMeters, mpsToKnots, knotsToMps, mpsToMph, mphToMps  } from '@utils/map-utils';
+import { restoreColorMapType, feetToMeters, knotsToMps, mphToMps  } from '@utils/map-utils';
 import { getFloatNumberFromLabel, maxSliderValues, sliderSteps, sliderMarkSteps } from './utils';
 
 const MAXELE = 'maxele';
@@ -112,31 +112,7 @@ export const ColormapSlider = ({style}) => {
         const dataRange = [];
         const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
         for(let i = colormapEntries.length-1; i >= 0; i--) {
-            // check to see if units are set to imperial 
-            if (unitsType.current === "imperial") {
-                // handle speed type range
-                if (style.name.includes(MAXWVEL)) {
-                    if (speedType.current === "knots") {
-                        dataRange.push(mpsToKnots(colormapEntries[i].quantity));
-                    }
-                    else {
-                        dataRange.push(mpsToMph(colormapEntries[i].quantity));
-                    }
-                }
-                else {
-                    dataRange.push(metersToFeet(colormapEntries[i].quantity));
-                }
-                
-            }
-            else {
-                dataRange.push(colormapEntries[i].quantity);
-            }
-        }
-        // if this is an intervals type of colormap, correct last entry in range
-        if (style.rules[0].symbolizers[0].colorMap.type === "intervals") {
-            const colorMapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
-            //dataRange[0] = parseFloat(colorMapEntries[colorMapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)).toFixed(2);
-            dataRange[0] = getFloatNumberFromLabel(colorMapEntries[colorMapEntries.length-1].label, 2);
+            dataRange.push(getFloatNumberFromLabel(colormapEntries[i].label, 2));
         }
     
         return(dataRange.reverse());
