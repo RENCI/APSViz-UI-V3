@@ -8,6 +8,8 @@ import {
 } from "@utils/hurricane/track";
 import { useLayers } from '@context';
 import { getNamespacedEnvParam } from "@utils";
+import { useSettings } from '@context';
+import { mphToMps, mphToKnots } from '@utils/map-utils';
 
 
 export const HurricaneTrackGeoJson = ({index}) => {
@@ -16,6 +18,11 @@ export const HurricaneTrackGeoJson = ({index}) => {
     hurricaneTrackLayers,
   } = useLayers();
   const [hurricaneData, setHurricaneData] = useState();
+
+  const {
+    unitsType,
+    speedType,
+} = useSettings();
 
   function coneStyle() {
     return {
@@ -84,9 +91,21 @@ export const HurricaneTrackGeoJson = ({index}) => {
 
   const onEachHurrFeature = (feature, layer) => {
     if (feature.properties && feature.properties.time_utc) {
+
+      // set wind speed to default units setting values
+      let windSpeed = mphToMps(feature.properties.max_wind_speed_mph);
+      let unitStr = "mps";
+      // now check to see the imperial setting has been selected instead
+      if(unitsType.current === "imperial") {
+        windSpeed = (speedType.current === "mph") ? feature.properties.max_wind_speed_mph
+                                                    :
+                                                    mphToKnots(feature.properties.max_wind_speed_mph);
+        unitStr = speedType.current;
+      }
+
       const popupContent = feature.properties.storm_name + ": " +
                            feature.properties.time_utc + ", " +
-                           feature.properties.max_wind_speed_mph + "mph";
+                           windSpeed.toFixed(1) + unitStr;
 
       layer.on("mouseover", function (e) {
         this.bindPopup(popupContent).openPopup(e.latlng);

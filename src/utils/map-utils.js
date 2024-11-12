@@ -319,6 +319,9 @@ export const knotsToMps = (s) => {
 export const mpsToKnots = (s) => {
     return s * 1.943844;
 };
+export const mphToKnots = (s) => {
+    return s / 1.15078;
+};
 
 // this functiom converts a style to imperial units
 // styles will always be saved locally in metric units
