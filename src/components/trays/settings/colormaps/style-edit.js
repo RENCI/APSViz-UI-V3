@@ -165,7 +165,7 @@ export const StyleEditor = () => {
                     // for imperial based values, because the value is always represented
                     // in it metric form.
                     const lastQuantity = getFloatNumberFromLabel(colormap.colorMapEntries[lastIndex].label, 1);
-                    console.log(lastQuantity);
+
                     if (styleName === MAXWVEL) {
                         if (unitsType.current === "imperial") {
                             labelUnit = ((speedType.current === "knots")? " kn" : " mph");
