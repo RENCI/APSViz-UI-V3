@@ -332,7 +332,7 @@ function get_xtick_interval(data) {
  * @returns React.ReactElement
  * @constructor
  */
-function CreateObsChart(c) {
+const CreateObsChart = (c) => {
     // get the timezone preference
     const { useUTC } = useSettings();
 
@@ -381,4 +381,4 @@ function CreateObsChart(c) {
             }
         </Fragment>
     );
-}
+};
