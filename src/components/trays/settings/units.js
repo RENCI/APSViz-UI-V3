@@ -48,7 +48,6 @@ export const Units = () => {
 
     const handleUnitChange = (event) => {
         const unitType = event.target.value;
-        console.log(unitType);
         setUnit(unitType);
         unitsType.set(unitType);
         // if units type is set to metric - reset speed type to meters/sec
@@ -65,7 +64,6 @@ export const Units = () => {
 
     const handleSpeedType = (event) => {
         const stype = event.target.value;
-        console.log(stype);
         setSpeed(stype);
         speedType.set(stype);
         if (stype === "mph") {

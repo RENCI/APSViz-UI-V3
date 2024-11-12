@@ -61,7 +61,7 @@ export const ColormapSlider = ({style}) => {
         setMinSliderValue(0);
 
         const colormapEntries = style.rules[0].symbolizers[0].colorMap.colorMapEntries;
-        setValue([getFloatNumberFromLabel(colormapEntries[colormapEntries.length-1].label, 0),
+        setValue([parseFloat(colormapEntries[colormapEntries.length-1].label.match(/[+-]?\d+(\.\d+)?/g)),
                   parseFloat(colormapEntries[0].quantity)]);
     };
 
