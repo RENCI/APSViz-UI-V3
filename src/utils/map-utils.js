@@ -118,7 +118,6 @@ export const getPreferredTimeZone = (layerProps, useUTC, longFormat=false) => {
         // get the date/time by current preference
         return useUTC ? layerProps['run_date'] : new Date(layerProps['insertion_date']).toLocaleDateString();
     }
-
 };
 
 /**
