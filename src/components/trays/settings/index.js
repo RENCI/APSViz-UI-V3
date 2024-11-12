@@ -19,9 +19,9 @@ export const trayContents = () => (
     <Typography level="title-lg">Select a Basemap</Typography>
     <BaseMaps />
     <Divider sx={{marginTop: 3}}/>
+    <DateTimeFormat/>
+    <Divider sx={{marginTop: 3}}/>
     <Typography level="title-lg">Edit ADCIRC Layer Colormaps</Typography>
     <DataRangeEdit />
-    <Divider sx={{marginTop: 3}}/>
-    <DateTimeFormat/>
   </Stack>
 );
