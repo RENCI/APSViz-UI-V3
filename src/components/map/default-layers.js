@@ -58,7 +58,6 @@ export const DefaultLayers = () => {
           color: '#000000',
           fillColor: obs_color,
           fillOpacity: 1
-            , riseOnHover: true
         });
     });
 
