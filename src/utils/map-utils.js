@@ -109,7 +109,7 @@ export const getPropertyName = (layerProps, element_name) => {
  * @returns {string|string}
  */
 export const getPreferredTimeZone = (layerProps, useUTC, longFormat=false) => {
-    // does the situation need the full date format
+    // if the usage needs the full date format
     if (longFormat) {
         return useUTC ? new Date(layerProps['runDate']).toUTCString() : new Date(layerProps['insertion_date']).toLocaleString();
     }

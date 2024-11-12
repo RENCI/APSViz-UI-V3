@@ -10,6 +10,7 @@ import { useColorScheme } from '@mui/joy/styles';
 import {
   useLocalStorage,
   useToggleState,
+  useToggleLocalStorage
 } from '@hooks';
 
 import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
@@ -37,9 +38,14 @@ export const SettingsProvider = ({ children }) => {
   const [storedMaxwvelOpacity, setStoredMaxwvelOpacity] = useLocalStorage('maxwvel_opacity',1.0);
   const [storedSwanOpacity, setStoredSwanOpacity] = useLocalStorage('swan_opacity',1.0);
 
+  // setting for the users UTC vs. Local time zone display
+  const useUTC = useToggleLocalStorage('useUTC', true);
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
+
+      useUTC,
 
       darkMode: {
         enabled: darkMode,

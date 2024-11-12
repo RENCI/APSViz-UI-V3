@@ -12,7 +12,7 @@ import {
   KeyboardArrowDown as ExpandIcon,
   Schedule as ClockIcon,
 } from '@mui/icons-material';
-import { useLayers } from '@context';
+import { useLayers, useSettings } from '@context';
 import { useToggleState } from '@hooks';
 import { LayerActions } from './layer-card-actions';
 import { ActionButton } from '@components/buttons';
@@ -22,9 +22,14 @@ import { getPreferredTimeZone } from "@utils/map-utils";
 export const LayerCard = ({ layer }) => {
   const {
     getLayerIcon,
-    toggleLayerVisibility2,
-      useUTC
+    toggleLayerVisibility2
   } = useLayers();
+
+  /**
+   * use the use UTC value from the settings state
+   */
+  const { useUTC } = useSettings();
+
   const expanded = useToggleState(false);
   const isVisible = layer.state.visible;
 
@@ -84,7 +89,7 @@ export const LayerCard = ({ layer }) => {
             sx={{ flex: 1, pl: '50px' }}
           >
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { getPreferredTimeZone(layer.properties, useUTC) }
+              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { getPreferredTimeZone(layer.properties, useUTC.enabled) }
             </Typography>
             <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
               Cycle { layer.properties.cycle }

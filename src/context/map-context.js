@@ -65,9 +65,6 @@ export const LayersProvider = ({ children }) => {
   // state to keep track of the obs dialog that has focus
   const [topMostDialogIndex, setTopMostDialogIndex] = useState(0);
 
-  // flag to indicate to view dates/times in local or UTC mode
-  const [useUTC, setUseUTC] = useState(true);
-
   /**
    * this section is for the side-by-side compare mode items
    * @type {string}
@@ -413,9 +410,6 @@ export const LayersProvider = ({ children }) => {
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
         resetCompare, removeSideBySideLayers,
-
-        // flag to indicate how to display date/times
-        useUTC, setUseUTC,
 
         // tracks the dialog that has focus
         topMostDialogIndex, setTopMostDialogIndex

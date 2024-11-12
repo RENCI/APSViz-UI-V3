@@ -6,7 +6,7 @@ import axiosRetry from 'axios-retry';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import {getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
-import { useLayers } from '@context';
+import { useSettings } from '@context';
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -334,10 +334,10 @@ function get_xtick_interval(data) {
  */
 function CreateObsChart(c) {
     // get the timezone preference
-    const { useUTC } = useLayers();
+    const { useUTC } = useSettings();
 
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC.enabled);
 
     // render the chart
     return (
@@ -353,7 +353,7 @@ function CreateObsChart(c) {
                                 <CartesianGrid strokeDasharray="1 1"/>
 
                                 <XAxis interval={get_xtick_interval(data)} angle={-90} height={55} tickMargin={27}
-                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value, useUTC)}/>
+                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value, useUTC.enabled)}/>
 
                                 <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3"/>
 

@@ -6,7 +6,7 @@ import {
     getTrackData,
     getTrackGeojson
 } from "@utils/hurricane/track";
-import { useLayers } from '@context';
+import { useLayers, useSettings } from '@context';
 import { getNamespacedEnvParam } from "@utils";
 
 
@@ -14,8 +14,12 @@ export const HurricaneTrackGeoJson = ({index}) => {
 
   const {
     hurricaneTrackLayers,
-    useUTC
   } = useLayers();
+
+  const {
+    useUTC
+  } = useSettings();
+
   const [hurricaneData, setHurricaneData] = useState();
 
   function coneStyle() {
@@ -86,7 +90,7 @@ export const HurricaneTrackGeoJson = ({index}) => {
   const onEachHurrFeature = (feature, layer) => {
     if (feature.properties && feature.properties.time_utc) {
       // get the date/time by current preference
-      const preferredTimeZone = useUTC ? feature.properties.time_utc + 'Z' : new Date(feature.properties.time_utc + 'Z').toLocaleString();
+      const preferredTimeZone = useUTC.enabled ? feature.properties.time_utc + 'Z' : new Date(feature.properties.time_utc + 'Z').toLocaleString();
 
       // build the popup content
       const popupContent = feature.properties.storm_name + ": " + preferredTimeZone + ", " + feature.properties.max_wind_speed_mph + "mph";

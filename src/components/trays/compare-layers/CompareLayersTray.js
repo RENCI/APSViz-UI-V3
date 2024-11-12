@@ -56,12 +56,12 @@ export const CompareLayersTray = () => {
         rightLayerProps, setRightLayerProps,
         selectedRightLayer, setSelectedRightLayer,
         setSideBySideLayers,
-        resetCompare, removeSideBySideLayers,
-        useUTC
+        resetCompare, removeSideBySideLayers
     } = useLayers();
 
     const {
         mapStyle,
+        useUTC
     } = useSettings();
 
     // used to collapse other open accordions
@@ -340,7 +340,7 @@ export const CompareLayersTray = () => {
                             onChange={ (event, expanded) => { setAccordionIndex(expanded ? idx : null); }}
                         >
                             <AccordionSummary>
-                                <Typography level="body-xs">{ getHeaderSummary(layer['properties'], useUTC)}</Typography>
+                                <Typography level="body-xs">{ getHeaderSummary(layer['properties'], useUTC.enabled)}</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails>

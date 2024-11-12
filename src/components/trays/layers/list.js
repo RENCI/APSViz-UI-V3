@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionGroup, Box, Divider, IconButton, Stack } from '@mui/joy';
 import { ActionButton } from '@components/buttons';
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
-import { useLayers } from '@context';
+import { useLayers, useSettings } from '@context';
 import { LayerCard } from './layer-card';
 import { DeleteModelRunButton } from "@components/trays/layers/delete-layer-button";
 import { Typography } from '@mui/joy';
@@ -111,7 +111,10 @@ const newLayerDefaultState = (layer, group) => {
  */
 export const LayersList = () => {
     // get a handle to the layer state
-    const { removeObservations, defaultModelLayers, setDefaultModelLayers, hurricaneTrackLayers, setHurricaneTrackLayers, useUTC } = useLayers();
+    const { removeObservations, defaultModelLayers, setDefaultModelLayers, hurricaneTrackLayers, setHurricaneTrackLayers } = useLayers();
+
+    // use the use UTC value from the settings state
+    const { useUTC } = useSettings();
 
     // get the default layers
     const layers = [...defaultModelLayers];
@@ -307,7 +310,7 @@ export const LayersList = () => {
                                                         </IconButton>
 
                                                         <Typography level="body-xs" sx={{ mt: 1 }}>
-                                                            { getHeaderSummary(layer['properties'], useUTC) }
+                                                            { getHeaderSummary(layer['properties'], useUTC.enabled) }
                                                         </Typography>
 
                                                         <DeleteModelRunButton groupId={ layer['group'] }/>
