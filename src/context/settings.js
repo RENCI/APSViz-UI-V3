@@ -41,15 +41,33 @@ export const SettingsProvider = ({ children }) => {
   // setting for the users UTC vs. Local time zone display
   const useUTC = useToggleLocalStorage('useUTC', true);
 
+  // save the units type specified by user - imperial or metric (default)
+  const [storedUnitsType, setStoredUnitsType] = useLocalStorage('unitsType','metric');
+
+  // if units type is imperial, need to save wind speed unit - mph or knots
+  // default for metric is meters/second (mps)
+  const [storedSpeedType, setStoredSpeedType] = useLocalStorage('speedType','mps');
+
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
 
+      // state storage for tracking the Time zone selection
       useUTC,
 
       darkMode: {
         enabled: darkMode,
         toggle: toggleDarkMode,
+      },
+
+      unitsType: {
+        current: storedUnitsType,
+        set: setStoredUnitsType,
+      },
+      speedType: {
+        current: storedSpeedType,
+        set: setStoredSpeedType,
       },
 
       mapStyle: {

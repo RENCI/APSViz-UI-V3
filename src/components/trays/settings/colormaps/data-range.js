@@ -15,6 +15,8 @@ export const DataRangeEdit = () => {
 
     const {
         mapStyle,
+        unitsType,
+        speedType,
     } = useSettings();
 
     return (
@@ -36,21 +38,35 @@ export const DataRangeEdit = () => {
                             style={mapStyle.maxele.current}
                         />
                     </Box>
-                    <Typography startDecorator={<MaxElevationIcon />} mb={2} level="title-md">Maximum Water Level</Typography>
+                    <Typography 
+                        startDecorator={<MaxElevationIcon />} 
+                        mb={2} 
+                        level="title-md">
+                            Maximum Water Level {unitsType.current==="metric"? "(meters)" : "(feet)"}
+                    </Typography>
                 
                     <Box width={300} >
                         <ColormapSlider
                             style={mapStyle.maxwvel.current}
                         />
                     </Box>
-                    <Typography startDecorator={<MaxWindVelocityIcon />}  mb={2} level="title-md">Maximum Wind Speed</Typography>
+                    <Typography
+                        startDecorator={<MaxWindVelocityIcon />}
+                        mb={2}
+                        level="title-md">
+                            Maximum Wind Speed ({speedType.current})
+                    </Typography>
                     
                     <Box width={300} >
                         <ColormapSlider
                             style={mapStyle.swan.current}
                         />
                     </Box>
-                    <Typography startDecorator={<SwanIcon />} level="title-md">Maximum Significant Wave Height</Typography>
+                    <Typography 
+                        startDecorator={<SwanIcon />}
+                        level="title-md">
+                            Maximum Significant Wave Height {unitsType.current==="metric"? "(meters)" : "(feet)"}
+                    </Typography>
                 </Stack>
             </TabPanel>
             <TabPanel value={1}>

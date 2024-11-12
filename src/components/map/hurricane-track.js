@@ -2,12 +2,10 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
 import { Marker } from 'leaflet';
-import {
-    getTrackData,
-    getTrackGeojson
-} from "@utils/hurricane/track";
-import { useLayers, useSettings } from '@context';
+import { getTrackData, getTrackGeojson } from "@utils/hurricane/track";
+import { useLayers, useSettings} from '@context';
 import { getNamespacedEnvParam } from "@utils";
+import { mphToMps, mphToKnots } from '@utils/map-utils';
 
 
 export const HurricaneTrackGeoJson = ({index}) => {
@@ -16,11 +14,15 @@ export const HurricaneTrackGeoJson = ({index}) => {
     hurricaneTrackLayers,
   } = useLayers();
 
-  const {
-    useUTC
-  } = useSettings();
+  // get the time zone from settings state
+  const { useUTC } = useSettings();
 
   const [hurricaneData, setHurricaneData] = useState();
+
+  const {
+    unitsType,
+    speedType,
+} = useSettings();
 
   function coneStyle() {
     return {
@@ -92,8 +94,19 @@ export const HurricaneTrackGeoJson = ({index}) => {
       // get the date/time by current preference
       const preferredTimeZone = useUTC.enabled ? feature.properties.time_utc + 'Z' : new Date(feature.properties.time_utc + 'Z').toLocaleString();
 
+      // set wind speed to default units setting values
+      let windSpeed = mphToMps(feature.properties.max_wind_speed_mph);
+      let unitStr = "mps";
+      // now check to see the imperial setting has been selected instead
+      if(unitsType.current === "imperial") {
+        windSpeed = (speedType.current === "mph") ? feature.properties.max_wind_speed_mph
+                                                    :
+                                                    mphToKnots(feature.properties.max_wind_speed_mph);
+        unitStr = speedType.current;
+      }
+
       // build the popup content
-      const popupContent = feature.properties.storm_name + ": " + preferredTimeZone + ", " + feature.properties.max_wind_speed_mph + "mph";
+      const popupContent = feature.properties.storm_name + ": " + preferredTimeZone + ", " + windSpeed.toFixed(1) + unitStr;
 
       layer.on("mouseover", function (e) {
         this.bindPopup(popupContent).openPopup(e.latlng);
