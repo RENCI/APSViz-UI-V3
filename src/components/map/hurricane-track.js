@@ -2,13 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { GeoJSON } from 'react-leaflet';
 import { Marker } from 'leaflet';
-import {
-    getTrackData,
-    getTrackGeojson
-} from "@utils/hurricane/track";
-import { useLayers } from '@context';
+import { getTrackData, getTrackGeojson } from "@utils/hurricane/track";
+import { useLayers, useSettings} from '@context';
 import { getNamespacedEnvParam } from "@utils";
-import { useSettings } from '@context';
 import { mphToMps, mphToKnots } from '@utils/map-utils';
 
 
@@ -17,6 +13,10 @@ export const HurricaneTrackGeoJson = ({index}) => {
   const {
     hurricaneTrackLayers,
   } = useLayers();
+
+  // get the time zone from settings state
+  const { useUTC } = useSettings();
+
   const [hurricaneData, setHurricaneData] = useState();
 
   const {
@@ -91,6 +91,8 @@ export const HurricaneTrackGeoJson = ({index}) => {
 
   const onEachHurrFeature = (feature, layer) => {
     if (feature.properties && feature.properties.time_utc) {
+      // get the date/time by current preference
+      const preferredTimeZone = useUTC.enabled ? feature.properties.time_utc + 'Z' : new Date(feature.properties.time_utc + 'Z').toLocaleString();
 
       // set wind speed to default units setting values
       let windSpeed = mphToMps(feature.properties.max_wind_speed_mph);
@@ -103,9 +105,8 @@ export const HurricaneTrackGeoJson = ({index}) => {
         unitStr = speedType.current;
       }
 
-      const popupContent = feature.properties.storm_name + ": " +
-                           feature.properties.time_utc + ", " +
-                           windSpeed.toFixed(1) + unitStr;
+      // build the popup content
+      const popupContent = feature.properties.storm_name + ": " + preferredTimeZone + ", " + windSpeed.toFixed(1) + unitStr;
 
       layer.on("mouseover", function (e) {
         this.bindPopup(popupContent).openPopup(e.latlng);

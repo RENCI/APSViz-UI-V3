@@ -10,6 +10,7 @@ import { useColorScheme } from '@mui/joy/styles';
 import {
   useLocalStorage,
   useToggleState,
+  useToggleLocalStorage
 } from '@hooks';
 
 import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
@@ -37,8 +38,12 @@ export const SettingsProvider = ({ children }) => {
   const [storedMaxwvelOpacity, setStoredMaxwvelOpacity] = useLocalStorage('maxwvel_opacity',1.0);
   const [storedSwanOpacity, setStoredSwanOpacity] = useLocalStorage('swan_opacity',1.0);
 
+  // setting for the users UTC vs. Local time zone display
+  const useUTC = useToggleLocalStorage('useUTC', true);
+
   // save the units type specified by user - imperial or metric (default)
   const [storedUnitsType, setStoredUnitsType] = useLocalStorage('unitsType','metric');
+
   // if units type is imperial, need to save wind speed unit - mph or knots
   // default for metric is meters/second (mps)
   const [storedSpeedType, setStoredSpeedType] = useLocalStorage('speedType','mps');
@@ -47,6 +52,9 @@ export const SettingsProvider = ({ children }) => {
   return (
     <SettingsContext.Provider value={{
       booleanValue,
+
+      // state storage for tracking the Time zone selection
+      useUTC,
 
       darkMode: {
         enabled: darkMode,

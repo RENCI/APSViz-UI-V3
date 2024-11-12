@@ -14,7 +14,7 @@ import {
     Share as ShareViewIcon,
     HelpCenter as HelpAboutIcon,
 
-    // map model layer types
+    // map ADCIRC model layer types
     Tsunami as WaveHeightIcon,
     QueryStats as ObservationIcon,
     Air as WindVelocityIcon,
@@ -94,7 +94,7 @@ export const HelpAboutTray = () => {
                                 <Divider/>
                                 <Typography level="body-sm" sx={{ml: 1, mt: 1}}>Funding:</Typography>
                                 <List marker="circle" size="sm" sx={{ml: 3, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem>DHS Coastal Resilience Center</ListItem>
+                                    <ListItem>DHS Coastal Resilience Center.</ListItem>
                                     <ListItem>National Ocean Partnership Program (NOPP)</ListItem>
                                     <ListItem>RENCI</ListItem>
                                 </List>
@@ -102,10 +102,10 @@ export const HelpAboutTray = () => {
                                 <Divider/>
                                 <Typography level="body-sm" sx={{ml: 1, mt: 1}}>Collaborators:</Typography>
                                 <List marker="circle" size="sm" sx={{ml: 3, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem>RENCI/UNC, NCSU, UGA</ListItem>
-                                    <ListItem>DHS CRC</ListItem>
-                                    <ListItem>The Water Institute for the Gulf</ListItem>
-                                    <ListItem>NC Dept of Transportation</ListItem>
+                                    <ListItem>RENCI/UNC, NC State University and the University opf Georgia.</ListItem>
+                                    <ListItem>DHS CRC.</ListItem>
+                                    <ListItem>The Water Institute for the Gul.</ListItem>
+                                    <ListItem>NC Dept of Transportation.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -173,9 +173,9 @@ export const HelpAboutTray = () => {
                                     }}>
                                         <AccordionSummary sx={{fontSize: "sm", fontStyle: 'italic'}}>APSViz User Interface</AccordionSummary>
                                         <AccordionDetails>
-                                            <Typography level="body-sm" sx={{ml: 1}}>The APSViz User interface renders the products of the APSViz
+                                            <Typography level="body-sm" sx={{ml: 1}}>The APSViz User interface renders the ADCIRC model layers of the APSViz
                                                 workflows for the user. It provides the user with tools to select, interrogate and display various
-                                                ADCIRC products.</Typography>
+                                                ADCIRC model layers.</Typography>
                                         </AccordionDetails>
                                     </Accordion>
 
@@ -199,40 +199,38 @@ export const HelpAboutTray = () => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List marker="decimal" size="sm" sx={{ml: 1, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem>Search for and select tropical or synoptic model runs.</ListItem>
+                                    <ListItem>Search for and select tropical or synoptic ADCIRC model runs.</ListItem>
                                     <ListItem>Display tropical hurricane tracks and cones of uncertainty.</ListItem>
-                                    <ListItem>Cycle through tropical advisories or synoptic model runs.</ListItem>
-                                    <ListItem>Display (or hide) various model layer products such as wind speed, wave height, water levels,
+                                    <ListItem>Cycle through tropical advisories or synoptic ADCIRC model runs.</ListItem>
+                                    <ListItem>Display (or hide) various ADCIRC model layers such as wind speed, wave height, water levels,
                                         etc.</ListItem>
                                     <ListItem>Select observation points to display current and forecast timeseries data at that location.</ListItem>
                                     <ListItem>Select anywhere on a map layer to display current and forecast timeseries geo-point data at that
                                         location.</ListItem>
                                     <ListItem>Compare ADCIRC model layer types.</ListItem>
                                     <ListItem>View and adjust ADCIRC Layer colormap properties.</ListItem>
+                                    <ListItem>Select between UTC or current local date and time formats.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 3} onChange={(event, expanded) => {
-                            setIndex(expanded ? 3 : null);
-                        }}>
+                        <Accordion expanded={index === 3} onChange={(event, expanded) => { setIndex(expanded ? 3 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{fontWeight: 'bold'}}>What do all the icons mean?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
 
                                 <Typography level="body-sm" sx={{ml: 1, mb: 1}}>Each icon represents a functionality of the application available to
-                                    the
-                                    user.</Typography>
+                                    the user.</Typography>
                                 <Divider/>
                                 <List size='sm' sx={{ml: 2, mt: 1, '--ListItem-minHeight': '25px'}}> <Typography
                                     sx={{fontSize: "sm", fontStyle: 'italic'}}>Collapsable sidebar items:</Typography>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>Selected models and
                                         layers list</ListItem>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>Compare model
-                                        run product layers</ListItem>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><CompareLayersIcon color="primary"/></ListItemDecorator>Compare ADCIRC model
+                                         layers</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><HurricaneIcon color="primary"/></ListItemDecorator>Hurricane track list</ListItem>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>Model run
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><ModelSelectionIcon color="primary"/></ListItemDecorator>ADCIRC model run
                                         filtering and selection</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><RemoveIcon color="primary"/></ListItemDecorator>Remove various map
                                         items</ListItem>
@@ -278,18 +276,18 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Toggle light or dark
                                         mode.</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><MapIcon/></ListItemDecorator>Select a different base map.</ListItem>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a model run up or down in the
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><HandleIcon/></ListItemDecorator>Reorder a ADCIRC model run up or down in the
                                         list.</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><OnOffIcon color="primary"/></ListItemDecorator>Turn on/off a
-                                        layer</ListItem>
+                                        layer.</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><RemoveIcon
-                                        sx={{color: 'darkred', 'filter': 'opacity(0.5)'}}/></ListItemDecorator>Remove a model run or layer.</ListItem>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><SwapLayersIcon color="success"/></ListItemDecorator>Swap model run
+                                        sx={{color: 'darkred', 'filter': 'opacity(0.5)'}}/></ListItemDecorator>Remove a ADCIRC model run or layer.</ListItem>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><SwapLayersIcon color="success"/></ListItemDecorator>Swap ADCIRC model run
                                         layer compare panes.</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><ExpandIcon/> or <ExpandIcon sx={{transform: 'rotate(180deg)'}}/>Expand
                                         or collapse an item.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><MoveUpArrow/> or <MoveUpArrow sx={{transform: 'rotate(180deg)'}}/>Reorder
-                                        a model layer.</ListItemDecorator></ListItem>
+                                        the ADCIRC model layers.</ListItemDecorator></ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><KeyboardArrowLeft/> or <KeyboardArrowLeft
                                         sx={{transform: 'rotate(180deg)'}}/>Increment tropical advisories or synoptic
                                         cycles.</ListItemDecorator></ListItem>
@@ -325,7 +323,7 @@ export const HelpAboutTray = () => {
                                         <AccordionSummary sx={{fontSize: "sm", fontStyle: 'italic'}}>Edge</AccordionSummary>
                                         <AccordionDetails>
                                             <List size='sm' marker="decimal" sx={{ml: 1, '--ListItem-minHeight': '25px'}}>
-                                                <ListItem>Right click the browser surface.</ListItem>
+                                                <ListItem>Right click on the browser surface.</ListItem>
                                                 <ListItem>Select `Screenshot` from the context menu that appears.</ListItem>
                                                 <ListItem>At the top of the browser you can select to capture a portion of the browser or the entire
                                                     browser surface.</ListItem>
@@ -335,9 +333,7 @@ export const HelpAboutTray = () => {
                                         </AccordionDetails>
                                     </Accordion>
 
-                                    <Accordion expanded={screenCapIndex === 6} onChange={(event, expanded) => {
-                                        setScreenCapIndex(expanded ? 6 : null);
-                                    }}>
+                                    <Accordion expanded={screenCapIndex === 6} onChange={(event, expanded) => { setScreenCapIndex(expanded ? 6 : null); }}>
                                         <AccordionSummary sx={{fontSize: "sm", fontStyle: 'italic'}}>Firefox</AccordionSummary>
                                         <AccordionDetails>
                                             <List size='sm' marker="decimal" sx={{ml: 1, '--ListItem-minHeight': '25px'}}>
@@ -351,9 +347,7 @@ export const HelpAboutTray = () => {
                                         </AccordionDetails>
                                     </Accordion>
 
-                                    <Accordion expanded={screenCapIndex === 7} onChange={(event, expanded) => {
-                                        setScreenCapIndex(expanded ? 7 : null);
-                                    }}>
+                                    <Accordion expanded={screenCapIndex === 7} onChange={(event, expanded) => { setScreenCapIndex(expanded ? 7 : null); }}>
                                         <AccordionSummary sx={{fontSize: "sm", fontStyle: 'italic'}}>Safari</AccordionSummary>
                                         <AccordionDetails>
                                             <List size='sm' marker="decimal" sx={{ml: 1, '--ListItem-minHeight': '25px'}}>
@@ -384,12 +378,11 @@ export const HelpAboutTray = () => {
                                         selection sidebar button.</ListItem>
                                 </List>
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}>Click on the ADCIRC Model selection icon.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Select either tropical or synoptic model runs.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the ADCIRC Model selection icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Select either the tropical or synoptic ADCIRC model run tab.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select one or more appropriate data filter parameters.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Click on the Submit button to retrieve model runs.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Select on the model runs returned from the query to place them on the map
-                                        surface.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the Submit button to retrieve ADCIRC model runs.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Select on the ADCIRC model runs returned from the query to place them on the map surface.</ListItem>
                                     <ListItem sx={{ml: 1}}>When finished, retract the tray or click the Reset button to start a new search.</ListItem>
                                 </List>
                             </AccordionDetails>
@@ -399,19 +392,19 @@ export const HelpAboutTray = () => {
                             setIndex(expanded ? 9 : null);
                         }}>
                             <AccordionSummary>
-                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I include, remove or reorder Layers on the map?
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I include, remove or reorder ADCIRC model layers on the map?
                                 </Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>The Model layers
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LayersIcon color="primary"/></ListItemDecorator>The ADCIRC Model layers
                                         sidebar button.</ListItem>
                                 </List>
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}>Click on the Model Layers icon button.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Expand a model run.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the ADCIRC model Layers icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Expand a ADCIRC model run.</ListItem>
                                     <ListItem sx={{ml: 1}}>You can show/hide (slider), remove or reorder
-                                        (up/down arrows) for individual model run layers from the list shown.</ListItem>
+                                        (up/down arrows) for individual ADCIRC model run layers from the list shown.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -444,16 +437,15 @@ export const HelpAboutTray = () => {
                                         Settings sidebar button.</ListItem>
                                 </List>
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Is for selecting light or dark mode.</ListItem>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LightModeIcon/></ListItemDecorator>Is for selecting light or
+                                        dark mode.</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><MapIcon/></ListItemDecorator>Is for selecting a different base
                                         map.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 12} onChange={(event, expanded) => {
-                            setIndex(expanded ? 12 : null);
-                        }}>
+                        <Accordion expanded={index === 12} onChange={(event, expanded) => { setIndex(expanded ? 12 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I change the base map?</Typography>
                             </AccordionSummary>
@@ -463,16 +455,14 @@ export const HelpAboutTray = () => {
                                         Settings sidebar button.</ListItem>
                                 </List>
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon</ListItem>
-                                    <ListItem sx={{ml: 1}}>Click on the base map icon</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the base map icon.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select your preferred base map.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
 
-                        <Accordion expanded={index === 13} onChange={(event, expanded) => {
-                            setIndex(expanded ? 13 : null);
-                        }}>
+                        <Accordion expanded={index === 13} onChange={(event, expanded) => { setIndex(expanded ? 13 : null); }}>
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I view observation data?</Typography>
                             </AccordionSummary>
@@ -513,14 +503,16 @@ export const HelpAboutTray = () => {
                                                                 src={targetIcon}></Box>The selected location icon.</ListItem>
                                 </List>
 
+                                <Typography level="body-sm" sx={{ mt: 1, ml: 1}}>
+                                    The user may select one or more points on the active Maximum Water Level or Maximum Surface Wave Height surface
+                                    features to plot available ADCIRC nowcast and forecast model values. The nowcast looks back 6 hours and forcast
+                                    data can go up to 5 days into the future.
+                                </Typography>
                                 <Typography level="body-sm" sx={{ mt: 1, mb: 1, ml: 1}}>
-                                    The user may select one or more points on the active Maximum Water Level or Maximum
-                                    Surface Wave Height surface features to plot available nowcast and forecast model values.
-                                    The nowcast looks back 6 hours. For each target point, a plot will be presented and the associated lat/lon
-                                    values will be included in the plot titles. If no data are available, the plot chart will report a warning
-                                    indicating a problem with collecting data. Data may be unavailable for multiple reasons including model runs that
-                                    did not compute the quantity of interest or selecting a lat/lon target that are outside the model grid,
-                                    such as inland.
+                                    For each target point, a plot will be presented and the associated lat/lon values will be included in the plot
+                                    titles. If no data are available, the plot chart will report a warning indicating a problem with collecting data.
+                                    Data may be unavailable for multiple reasons including ADCIRC model runs that did not compute the quantity of interest
+                                    or selecting a lat/lon target that are outside the ADCIRC model grid, such as inland.
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
@@ -529,7 +521,8 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                 <Typography level="body-sm" sx={{fontWeight: 'bold', fontStyle: 'italic', mt: 1, ml: 1}}>
-                                    Please note that this feature is not available when in Compare Layers mode.
+                                    Please note that this feature is only available for water level layers. It is also not available when in Compare
+                                    Layers mode.
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
@@ -538,7 +531,7 @@ export const HelpAboutTray = () => {
                             setIndex(expanded ? 15 : null);
                         }}>
                             <AccordionSummary>
-                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I compare model run layers?</Typography>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I compare ADCIRC model run layers?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
@@ -547,13 +540,14 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem sx={{ml: 1}}>Select a Model run and layer for the left pane.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Select a Model run and layer for the right pane.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Click on the Compare Layers icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Select a ADCIRC model run and layer for the left pane.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Select a ADCIRC model run and layer for the right pane.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select the Reset button to clear your selections.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select the Swap button to reposition your selections.</ListItem>
                                 </List>
 
-                                <Typography sx={{fontSize: "sm", ml: 1}}>Note: Adding, removing or altering model runs or layers will automatically
+                                <Typography sx={{fontSize: "sm", ml: 1}}>Note: Adding, removing or altering ADCIRC model runs or layers will automatically
                                     restore the default view.
                                 </Typography>
 
@@ -564,8 +558,8 @@ export const HelpAboutTray = () => {
                             setIndex(expanded ? 16 : null);
                         }}>
                             <AccordionSummary>
-                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I view or adjust ADCIRC layer colormap
-                                    ranges?</Typography>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I view or adjust a ADCIRC model layer colormap
+                                    range?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
 
@@ -575,20 +569,20 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                 <Typography sx={{fontSize: "sm", ml: 1}}>
-                                    Users have the ability to change the colormap ranges for ADCIRC layer product types within the &quot;Edit
+                                    Users have the ability to change the colormap ranges for ADCIRC layer types within the &quot;Edit
                                     ADCIRC Layer Colormaps&quot; section in the Application Settings sidebar.
                                 </Typography>
 
                                 <Typography sx={{fontSize: "sm", mt: 1, ml: 1}}>
-                                    The colormap ranges for each layer product are found on the &quot;Basic tab&quot;. These settings allow a
-                                    user to specify the minimum and maximum values attributed to the colormap range for that layer product.
+                                    The colormap ranges for each layer are found on the &quot;Basic tab&quot;. These settings allow a
+                                    user to specify the minimum and maximum values attributed to the colormap range for that ADCIRC model layer.
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon button on the sidebar.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select the Edit ADCIRC Layer Colormaps &quot;Basic&quot; tab.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Find the layer product range you would like to adjust.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Use the slider buttons to specify the minimum and maximum color ranges for a layer
-                                        product.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Find the ADCIRC model layer range you would like to adjust.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Use the slider buttons to specify the minimum and maximum color ranges for a ADCIRC model layer.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>
@@ -608,19 +602,19 @@ export const HelpAboutTray = () => {
                                 </List>
 
                                 <Typography sx={{fontSize: "sm", ml: 1}}>
-                                    Users have the ability to view or alter colormap styles for ADCIRC layer product types within the &quot;Edit
+                                    Users have the ability to view or alter colormap styles for ADCIRC model layer types within the &quot;Edit
                                     ADCIRC Layer Colormaps&quot; section of the Application Settings sidebar.
                                 </Typography>
 
                                 <Typography sx={{fontSize: "sm", mt: 1, ml: 1}}>
-                                    The colormap styles for each layer product are found on the &quot;Advanced&quot; tab. These setting allows a user
-                                    to specify the
-                                    values attributed to the colormap for that layer product.
+                                    The colormap styles for each model layer are found on the &quot;Advanced&quot; tab. These setting allows a user
+                                    to specify the values attributed to the colormap for that ADCIRC model layer.
                                 </Typography>
 
                                 <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon button on the sidebar.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select the Edit ADCIRC Layer Colormaps &quot;Advanced&quot; tab.</ListItem>
-                                    <ListItem sx={{ml: 1}}>Choose the layer product type you would like to modify.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Choose the ADCIRC model layer type you would like to modify.</ListItem>
                                     <ListItem sx={{ml: 1}}>Optionally select the colormap style type. &quot;Ramp&quot; is a continuous color gradient,
                                         while &quot;Interval&quot; represent color steps.</ListItem>
                                     <ListItem sx={{ml: 1}}>Optionally select the colormap number of classes. This value divides the colormap steps
@@ -628,6 +622,37 @@ export const HelpAboutTray = () => {
                                     <ListItem sx={{ml: 1}}>Optionally select a colormap Color ramp. A Color ramp is a graded palette of
                                         colors.</ListItem>
                                     <ListItem sx={{ml: 1}}>Select the &quot;Save New Colormap&quot; button to save your selection(s).</ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+
+                        <Accordion expanded={index === 18} onChange={(event, expanded) => {
+                            setIndex(expanded ? 18 : null);
+                        }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I change the date and time format to reflect my
+                                    current locale?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application
+                                        Settings sidebar button.</ListItem>
+                                </List>
+
+                                <Typography sx={{fontSize: "sm", ml: 1}}>
+                                    Users have the ability to change the way dates and times are displayed in the Application Settings sidebar.
+                                </Typography>
+
+                                <Typography sx={{fontSize: "sm", mt: 1, ml: 1}}>
+                                    Users can select if they want to see dates and times in UTC format (the default) or by the locale defined within 
+                                    the browser or as defined in the computer&#39;s operating system.
+                                </Typography>
+
+                                <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Locate the &quot;Select date/time format&quot; section.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Use the slider button to switch between UTC or your current time zone.</ListItem>
                                 </List>
                             </AccordionDetails>
                         </Accordion>

@@ -95,6 +95,7 @@ export const StormLayers = () => {
             stormName: stormName,
             stormNumber: stormNumber,
             runDate: topLayer.properties.run_date,
+            insertion_date: topLayer.properties['insertion_date'],
             year: year,
             advisory: advisory,
             instanceName: topLayer.properties.instance_name,

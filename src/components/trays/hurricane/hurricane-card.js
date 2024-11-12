@@ -9,13 +9,20 @@ import {
 import {
   Schedule as ClockIcon,
 } from '@mui/icons-material';
-import { useLayers } from '@context';
+import { useLayers, useSettings } from '@context';
 import { useToggleState } from '@hooks';
+import { getPreferredTimeZone } from "@utils/map-utils";
 
 export const HurricaneCard = ( layer ) => {
   const {
-    toggleHurricaneLayerVisibility,
+    toggleHurricaneLayerVisibility
   } = useLayers();
+
+  /**
+   * use the use UTC value from the settings state
+   */
+  const { useUTC } = useSettings();
+
   const expanded = useToggleState(false);
   const hlayer = layer.layer;
   const isVisible = hlayer.state.visible;
@@ -73,7 +80,7 @@ export const HurricaneCard = ( layer ) => {
             sx={{ flex: 1, pl: '50px' }}
           >
             <Typography level="body-sm" sx={{ display: 'inline-flex', alignItems: 'center' }}>
-              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { new Date(hlayer.runDate).toUTCString() }
+              <ClockIcon sx={{ transform: 'scale(0.66)' }} /> { getPreferredTimeZone(hlayer, useUTC.enabled, true)}
             </Typography>
             <Typography level="body-xs" sx={{ display: 'inline-flex', alignItems: 'center' }}>
               Advisory { hlayer.advisory }

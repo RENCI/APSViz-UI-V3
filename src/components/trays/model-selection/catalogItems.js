@@ -3,6 +3,7 @@ import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, C
 import PropTypes from 'prop-types';
 import { getHeaderSummary } from "@utils/map-utils";
 import { useLayers } from "@context/map-context";
+import {useSettings} from "@context";
 
 // set component prop types
 CatalogItems.propTypes = { data: PropTypes.any };
@@ -19,8 +20,11 @@ export default function CatalogItems(data) {
     const {
         removeObservations,
         defaultModelLayers,
-        setDefaultModelLayers,
+        setDefaultModelLayers
         } = useLayers();
+
+    // use the use UTC value from the settings state
+    const { useUTC } = useSettings();
 
     // create some state for what catalog accordian is expanded/not expanded
     const [accordianDateIndex, setAccordianDateIndex] = useState(-1);
@@ -170,7 +174,7 @@ export default function CatalogItems(data) {
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
 
-                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } </AccordionSummary>
+                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } {useUTC.enabled ? '' : '(UTC)' }</AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away
@@ -188,7 +192,7 @@ export default function CatalogItems(data) {
                                                             sx={{ m: .5 }}
                                                             key={ mbrIdx }
                                                             checked={ getCheckedState(mbr.group) }
-                                                            label={ <Typography sx={{ fontSize: "xs" }}>{ getHeaderSummary(mbr['properties']) } </Typography> }
+                                                            label={ <Typography sx={{ fontSize: "xs" }}>{ getHeaderSummary(mbr['properties'], useUTC.enabled)} </Typography> }
                                                             onChange={ (event) => handleCBClick( catalog['members'], mbr['group'],
                                                                 event.target.checked) }
                                                         />

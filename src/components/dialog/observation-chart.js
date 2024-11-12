@@ -1,12 +1,12 @@
 import React, {Fragment} from 'react';
-import {useQuery} from '@tanstack/react-query';
-import {Typography} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { Typography } from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
 import {getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
-
+import { useSettings } from '@context';
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -43,7 +43,7 @@ console.error = (...args) => {
  * @param url
  * @returns { json }
  */
-function getObsChartData(url, setLineButtonView) {
+function getObsChartData(url, setLineButtonView, useUTC) {
     // configure the retry count to be zero
     axiosRetry(axios, {
         retries: 0
@@ -80,7 +80,7 @@ function getObsChartData(url, setLineButtonView) {
             // if there was not an error
             if (ret_val !== 500) {
                 // return the csv data in JSON format
-                return csvToJSON(ret_val, setLineButtonView);
+                return csvToJSON(ret_val, setLineButtonView, useUTC);
             } else
                 // just return nothing and nothing will be rendered
                 return '';
@@ -94,7 +94,7 @@ function getObsChartData(url, setLineButtonView) {
  * @param csvData
  * @returns { json [] }
  */
-function csvToJSON(csvData, setLineButtonView) {
+const csvToJSON = (csvData, setLineButtonView, useUTC) => {
     // ensure that there is csv data to convert
     if (csvData !== "") {
         // split on carriage returns. also removing all the windows \r characters if they exist
@@ -128,8 +128,15 @@ function csvToJSON(csvData, setLineButtonView) {
         ret_val.map(function (e) {
             // only convert records with a valid time
             if (e.time !== "") {
-                // take off the time zone
-                e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
+                // put the date/time in the chosen format
+                if (useUTC) {
+                    // reformat the text given into UTC format
+                    e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
+                }
+                else {
+                    // reformat the date/time to the local timezone
+                    e.time = new Date(e.time).toLocaleString();
+                }
 
                 // data that is missing a value will not result in plotting
                 if (e["Observations"]) {
@@ -193,7 +200,7 @@ function csvToJSON(csvData, setLineButtonView) {
         // return the json data representation
         return ret_val;
     }
-}
+};
 
 /**
  * reformats the data label shown on the x-axis
@@ -207,19 +214,23 @@ function formatY_axis(value) {
 }
 
 /**
- * reformats the data label shown on the x-axis
+ * reformats the data label shown on the x-axis. this uses the chosen timezone.
  *
  * @param value
  * @returns {string}
  */
-function formatX_axis(value) {
+function formatX_axis(value, useUTC) {
     // init the return value
     let ret_val = "";
 
     // empty data will be ignored
     if (value !== "")
-        // do the reformatting
-        ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0];
+        // put this in the proper format
+        if(useUTC)
+            ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0] + 'Z';
+        // else use reformat using the local time zone
+        else
+            ret_val = dayjs(value).format('MM/DD-HH').split('+')[0];
 
     // return the formatted value
     return ret_val;
@@ -321,9 +332,12 @@ function get_xtick_interval(data) {
  * @returns React.ReactElement
  * @constructor
  */
-function CreateObsChart(c) {
+const CreateObsChart = (c) => {
+    // get the timezone preference
+    const { useUTC } = useSettings();
+
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC.enabled);
 
     // render the chart
     return (
@@ -338,8 +352,8 @@ function CreateObsChart(c) {
                             <LineChart margin={{top: 5, right: 10, left: -25, bottom: 5}} data={data} isHide={c.chartProps.isHideLine}>
                                 <CartesianGrid strokeDasharray="1 1"/>
 
-                                <XAxis interval={get_xtick_interval(data)} angle={-90} height={55} unit={'Z'} tickMargin={27}
-                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value)}/>
+                                <XAxis interval={get_xtick_interval(data)} angle={-90} height={55} tickMargin={27}
+                                       tick={{stroke: 'tan', strokeWidth: .5}} dataKey="time" tickFormatter={(value) => formatX_axis(value, useUTC.enabled)}/>
 
                                 <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3"/>
 
@@ -367,4 +381,4 @@ function CreateObsChart(c) {
             }
         </Fragment>
     );
-}
+};

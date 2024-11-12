@@ -23,9 +23,10 @@ import {
   Water as MaxElevationIcon,
   Waves as HIResMaxElevationIcon,
 } from '@mui/icons-material';
-import { getBrandingHandler, getNamespacedEnvParam } from "@utils/map-utils";
+import { getBrandingHandler, getNamespacedEnvParam, getPreferredTimeZone} from "@utils/map-utils";
 import { getDefaultInstanceName } from "@components/config";
 import { Branding } from './branding';
+import {useSettings} from "@context";
 
 const layerIcons = {
   maxele63: <MaxElevationIcon />,
@@ -43,7 +44,13 @@ export const ControlPanel = () => {
           setDefaultModelLayers,
           getAllLayersInvisible,
           toggleLayerVisibility,
-          toggleHurricaneLayerVisibility } = useLayers();
+          toggleHurricaneLayerVisibility,
+          } = useLayers();
+
+  /**
+   * use the use UTC value from the settings state
+   */
+  const { useUTC } = useSettings();
 
   const data_url = `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }` + `get_ui_data_secure?limit=1&use_v3_sp=true${ getBrandingHandler() + getDefaultInstanceName() }`;
   const layers = [...defaultModelLayers];
@@ -78,7 +85,7 @@ export const ControlPanel = () => {
   if (topLayers[0]) {
     runCycle = topLayers[0].properties.cycle;
     runAdvisory = topLayers[0].properties.advisory_number;
-    runDate = topLayers[0].properties.run_date;
+    runDate = getPreferredTimeZone(topLayers[0].properties, useUTC.enabled);
     instanceName = topLayers[0].properties.instance_name;
     metClass = topLayers[0].properties.met_class;
     eventType = topLayers[0].properties.event_type;
@@ -357,10 +364,10 @@ export const ControlPanel = () => {
                   {metClass === 'tropical'? `Storm Name: ${stormName}` : ''}
                 </Typography>
                 <Typography level="body-md" alignSelf="center">
-                  Model run date: {runDate}
+                  Model run date: { runDate }
                 </Typography>
                 <Typography level="body-sm" alignSelf="center">
-                  Instance: {instanceName}
+                  Instance: { instanceName }
                 </Typography>
                 <Typography level="body-sm" alignSelf="center">
                   Meteorology: { eventType }

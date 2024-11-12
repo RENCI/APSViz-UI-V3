@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Stack, Typography, Button, Card, Tooltip } from '@mui/joy';
-import { useLayers } from '@context';
+import {useLayers, useSettings} from '@context';
 import { SwapHorizontalCircleSharp as SwapLayersIcon,
          CloseSharp as ResetIcon } from '@mui/icons-material';
 import { getHeaderSummary } from "@utils/map-utils";
@@ -27,6 +27,9 @@ export const ComparePanel = () => {
         resetCompare
     } = useLayers();
 
+    // use the use UTC value from the settings state
+    const { useUTC } = useSettings();
+
     // get the default model run layers
     const layers = [...defaultModelLayers];
 
@@ -46,7 +49,7 @@ export const ComparePanel = () => {
             // if the layers were captured
             if (layerProps !== undefined && layerProps.length !== 0) {
                 // get the full header summary text
-                return getHeaderSummary(layerProps[0]['properties']);
+                return getHeaderSummary(layerProps[0]['properties'], useUTC.enabled);
             }
             else {
                 // return the default text
