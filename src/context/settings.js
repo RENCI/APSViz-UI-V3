@@ -37,6 +37,13 @@ export const SettingsProvider = ({ children }) => {
   const [storedMaxwvelOpacity, setStoredMaxwvelOpacity] = useLocalStorage('maxwvel_opacity',1.0);
   const [storedSwanOpacity, setStoredSwanOpacity] = useLocalStorage('swan_opacity',1.0);
 
+  // save the units type specified by user - imperial or metric (default)
+  const [storedUnitsType, setStoredUnitsType] = useLocalStorage('unitsType','metric');
+  // if units type is imperial, need to save wind speed unit - mph or knots
+  // default for metric is meters/second (mps)
+  const [storedSpeedType, setStoredSpeedType] = useLocalStorage('speedType','mps');
+
+
   return (
     <SettingsContext.Provider value={{
       booleanValue,
@@ -44,6 +51,15 @@ export const SettingsProvider = ({ children }) => {
       darkMode: {
         enabled: darkMode,
         toggle: toggleDarkMode,
+      },
+
+      unitsType: {
+        current: storedUnitsType,
+        set: setStoredUnitsType,
+      },
+      speedType: {
+        current: storedSpeedType,
+        set: setStoredSpeedType,
       },
 
       mapStyle: {
