@@ -19,10 +19,10 @@ export const DateTimeFormat = () => {
 
     // return the control
     return (
-        <Stack direction={'column'} sx={{ mt: 2 }}>
+        <Stack direction={'column'}>
             <Typography level="title-lg">Select date/time format</Typography>
             <Typography
-                sx={{ ml: 3, mt: 1 }}
+                sx={{ ml: 1, mt: 1 }}
                 component="label"
                 startDecorator={ <Switch checked={ !useUTC } onChange={ onChange }/> }
             >Use your locale</Typography>
