@@ -4,10 +4,9 @@ import { Typography } from '@mui/material';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts';
-import {getNamespacedEnvParam} from "@utils/map-utils";
+import {feetToMeters, metersToFeet, getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
 import { useSettings } from '@context';
-import { metersToFeet } from '@utils/map-utils';
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -44,7 +43,7 @@ console.error = (...args) => {
  * @param url
  * @returns { json }
  */
-function getObsChartData(url, setLineButtonView, useUTC, units) {
+function getObsChartData(url, setLineButtonView) {
     // configure the retry count to be zero
     axiosRetry(axios, {
         retries: 0
@@ -64,25 +63,17 @@ function getObsChartData(url, setLineButtonView, useUTC, units) {
             };
 
             // make the call to get the data
-            const ret_val = await axios
-                // make the call to get the data
-                .get(url, requestOptions)
+            const ret_val = await axios.get(url, requestOptions)
                 // use the data returned
-                .then((response) => {
-                    // return the data
-                    return response.data;
-                })
-                // otherwise post the issue to the console log
-                .catch((error) => {
-                    // make sure we do not render anything
-                    return error.response.status;
-                });
+                .then((response) => { return response.data; })
+                // otherwise capture the error
+                .catch((error) => { return error.response.status; });
 
             // if there was not an error
-            if (ret_val !== 500) {
+            if (ret_val !== 500)
                 // return the csv data in JSON format
-                return csvToJSON(ret_val, setLineButtonView, useUTC, units);
-            } else
+                return csvToJSON(ret_val, setLineButtonView);
+            else
                 // just return nothing and nothing will be rendered
                 return '';
         }, refetchOnWindowFocus: false
@@ -90,32 +81,15 @@ function getObsChartData(url, setLineButtonView, useUTC, units) {
 }
 
 /**
- * converts chart data units from meters to feet
- *
- * @param { json [] }
- * @returns { json [] }
- */
-const convertChartDataToFeet = (e) => {
-    for (const key in e) {
-        console.log(key);
-        if (e[key] && key !== "time") {
-            e[key] = metersToFeet(e[key]);
-        }
-    }
-
-    return e;
-};
-
-/**
  * converts CSV data into json format
  *
  * @param csvData
  * @returns { json [] }
  */
-const csvToJSON = (csvData, setLineButtonView, useUTC, units) => {
+const csvToJSON = (csvData, setLineButtonView) => {
     // ensure that there is csv data to convert
     if (csvData !== "") {
-        // split on carriage returns. also removing all the windows \r characters if they exist
+        // split on carriage returns. also removing all the windows "\r" characters when they exist
         const lines = csvData.replaceAll('\r', '').split('\n');
 
         // init the result
@@ -129,104 +103,95 @@ const csvToJSON = (csvData, setLineButtonView, useUTC, units) => {
             // split the line on commas
             const currentLine = lines[i].split(",");
 
-            // init the converted data
+            // init storage for the processed data
             const jsonObj = {};
 
-            // loop through the data and get name/vale pairs in JSON format
+            // loop through the data and get name/value pairs in JSON format
             for (let j = 0; j < dataHeader.length; j++) {
                 // save the data
                 jsonObj[dataHeader[j]] = currentLine[j];
             }
 
-            // add the data to the return
-            ret_val.push(jsonObj);
+            // make sure there is a good record (has a timestamp)
+            if (jsonObj.time.length) {
+                // add these so the "units" converter will initially format the data properly
+                jsonObj['useUTC'] = null;
+                jsonObj['units'] = null;
+
+                // add the data to the return
+                ret_val.push(jsonObj);
+            }
         }
 
-        // remove the timezone from the time value
-        ret_val.map(function (e) {
-            // only convert records with a valid time
-            if (e.time !== "") {
-                // put the date/time in the chosen format
-                if (useUTC) {
-                    // reformat the text given into UTC format
-                    e.time = e.time.substring(0, e.time.split(':', 2).join(':').length) + 'Z';
-                }
-                else {
-                    // reformat the date/time to the local timezone
-                    e.time = new Date(e.time).toLocaleString();
-                }
-
-                // convert all the chart data to feet, if the units type is imperial
-                if (units === "imperial") {
-                    e = convertChartDataToFeet(e);
-                }
-
-                // data that is missing a value will not result in plotting
-                if (e["Observations"]) {
-                    e["Observations"] = +parseFloat(e["Observations"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("Observations");
-                } else
-                    e["Observations"] = null;
-
-                if (e["NOAA Tidal Predictions"]) {
-                    e["NOAA Tidal Predictions"] = +parseFloat(e["NOAA Tidal Predictions"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("NOAA Tidal Predictions");
-                } else
-                    e["NOAA Tidal Predictions"] = null;
-
-                if (e["APS Nowcast"]) {
-                    e["APS Nowcast"] = +parseFloat(e["APS Nowcast"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("APS Nowcast");
-                } else
-                    e["APS Nowcast"] = null;
-
-                if (e["APS Forecast"]) {
-                    e["APS Forecast"] = +parseFloat(e["APS Forecast"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("APS Forecast");
-                } else
-                    e["APS Forecast"] = null;
-
-                if (e["SWAN Nowcast"]) {
-                    e["SWAN Nowcast"] = +parseFloat(e["SWAN Nowcast"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("SWAN Nowcast");
-                } else
-                    e["SWAN Nowcast"] = null;
-
-                if (e["SWAN Forecast"]) {
-                    e["SWAN Forecast"] = +parseFloat(e["SWAN Forecast"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("SWAN Forecast");
-                } else
-                    e["SWAN Forecast"] = null;
-
-                if (e["Difference (APS-OBS)"]) {
-                    e["Difference (APS-OBS)"] = +parseFloat(e["Difference (APS-OBS)"]).toFixed(3);
-
-                    // set the line button to be in view
-                    setLineButtonView("Difference (APS-OBS)");
-                } else
-                    e["Difference (APS-OBS)"] = null;
-            }
+        // get the data formatted properly
+        ret_val.forEach( function (chartItem) {
+            // loop through the keys
+            Object.keys(chartItem).forEach(function (key) {
+                // if there is a value for the key
+                if (chartItem[key])
+                    setLineButtonView(key);
+                // undefined data gets set to null for proper chart rendering
+                else
+                    chartItem[key] = null;
+            });
         });
 
-        // return the json data representation
+        // return the data
         return ret_val;
     }
 };
 
 /**
- * reformats the data label shown on the x-axis
+ * reformats the data based on user selections for the timezone and units of measurement
+ *
+ * @param data
+ * @param newUnits
+ * @param useUTC
+ */
+const getReformattedData = (data, newUnits, useUTC) => {
+    // if there is data to process
+    if (data !== undefined && data.length) {
+        // loop through each chart data item
+        data.forEach( function (chartItem) {
+            // loop through all the keys and change the format if needed
+            Object.keys(chartItem).forEach(function(key){
+                // check for timezone conversion on the time element
+                if (key === 'time') {
+                    // convert the date/time to UTC format
+                    if (useUTC) {
+                        // get the date/time in ISO format
+                        const newTime = new Date(chartItem[key]).toISOString();
+
+                        // reformat the date/time into the new format
+                        chartItem[key] = newTime.replace('T', ' ')
+                            .substring(0, newTime.split(':', 2) .join(':').length) + 'Z';
+                    }
+                    // convert the date/time to local timezone
+                    else {
+                        // reformat the date/time to the local timezone
+                        chartItem[key] = new Date(chartItem[key]).toLocaleString();
+                    }
+                }
+                // check for measurement units conversion
+                else if (newUnits !== chartItem['units']) {
+                    // if the data element is null, it stays null
+                    if (chartItem[key] !== null) {
+                        // convert the value to the new measurement units
+                        chartItem[key] = (newUnits === 'imperial') ? +parseFloat(metersToFeet(chartItem[key])).toFixed(3) :
+                            +parseFloat(feetToMeters(chartItem[key])).toFixed(3);
+                    }
+                }
+            });
+
+            // save the new timezone and measurement unit types
+            chartItem['useUTC'] = useUTC;
+            chartItem['units'] = newUnits;
+        });
+    }
+};
+
+/**
+ * reformats the data label shown on the y-axis
  *
  * @param value
  * @returns {string}
@@ -249,7 +214,7 @@ function formatX_axis(value, useUTC) {
     // empty data will be ignored
     if (value !== "")
         // put this in the proper format
-        if(useUTC)
+        if (useUTC)
             ret_val = dayjs.utc(value).format('MM/DD-HH').split('+')[0] + 'Z';
         // else use reformat using the local time zone
         else
@@ -330,21 +295,18 @@ function get_xtick_interval(data) {
     let interval = one_hour_interval * 24 - 1;
 
     // all ticks for <= 0.5 days>
-    if (days <= 0.5) {
+    if (days <= 0.5)
         interval = 0;
-    }
     // hour labels for <= 1.5 days
-    else if (days <= 1.5) {
+    else if (days <= 1.5)
         interval = one_hour_interval - 1;
-    }
     // 6-hour labels for <= 4.5 days
-    else if (days <= 4.5) {
+    else if (days <= 4.5)
         interval = one_hour_interval * 6 - 1;
-    }
     // 12-hour labels for <= 7.5 days
-    else if (days <= 7.5) {
+    else if (days <= 7.5)
         interval = one_hour_interval * 12 - 1;
-    }
+
     return interval;
 }
 
@@ -358,11 +320,15 @@ function get_xtick_interval(data) {
 const CreateObsChart = (c) => {
     // get the timezone preference
     const { useUTC, unitsType } = useSettings();
-    // set the units label
+
+    // set the "units" label
     const unitLabel = (unitsType.current === "imperial") ? "ft" : "m";
 
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC.enabled, unitsType.current);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView);
+
+    // reformat the data to the desired time zone and units of measurement
+    getReformattedData(data, unitsType.current, useUTC.enabled);
 
     // render the chart
     return (
@@ -387,19 +353,19 @@ const CreateObsChart = (c) => {
 
                                 <Tooltip/>
 
-                                <Line unit={'m'} type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="Observations" stroke="black" strokeWidth={1} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine['Observations']}/>
-                                <Line unit={'m'} type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="NOAA Tidal Predictions" stroke="teal" strokeWidth={1} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["NOAA Tidal Predictions"]}/>
-                                <Line unit={'m'} type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="APS Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["APS Nowcast"]}/>
-                                <Line unit={'m'} type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="APS Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["APS Forecast"]}/>
-                                <Line unit={'m'} type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="SWAN Nowcast" stroke="CornflowerBlue" strokeWidth={2} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["SWAN Nowcast"]}/>
-                                <Line unit={'m'} type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="SWAN Forecast" stroke="LimeGreen" strokeWidth={2} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["SWAN Forecast"]}/>
-                                <Line unit={'m'} type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false}
+                                <Line unit={unitLabel} type="monotone" dataKey="Difference (APS-OBS)" stroke="red" strokeWidth={1} dot={false}
                                       isAnimationActive={false} hide={c.chartProps.isHideLine["Difference (APS-OBS)"]}/>
                             </LineChart>
                         </ResponsiveContainer>
