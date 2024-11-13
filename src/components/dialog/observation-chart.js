@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tool
 import {getNamespacedEnvParam} from "@utils/map-utils";
 import dayjs from 'dayjs';
 import { useSettings } from '@context';
+import { metersToFeet } from '@utils/map-utils';
 
 // install day.js for UTC visual formatting
 const utc = require("dayjs/plugin/utc");
@@ -43,7 +44,7 @@ console.error = (...args) => {
  * @param url
  * @returns { json }
  */
-function getObsChartData(url, setLineButtonView, useUTC) {
+function getObsChartData(url, setLineButtonView, useUTC, units) {
     // configure the retry count to be zero
     axiosRetry(axios, {
         retries: 0
@@ -80,7 +81,7 @@ function getObsChartData(url, setLineButtonView, useUTC) {
             // if there was not an error
             if (ret_val !== 500) {
                 // return the csv data in JSON format
-                return csvToJSON(ret_val, setLineButtonView, useUTC);
+                return csvToJSON(ret_val, setLineButtonView, useUTC, units);
             } else
                 // just return nothing and nothing will be rendered
                 return '';
@@ -89,12 +90,29 @@ function getObsChartData(url, setLineButtonView, useUTC) {
 }
 
 /**
+ * converts chart data units from meters to feet
+ *
+ * @param { json [] }
+ * @returns { json [] }
+ */
+const convertChartDataToFeet = (e) => {
+    for (const key in e) {
+        console.log(key);
+        if (e[key] && key !== "time") {
+            e[key] = metersToFeet(e[key]);
+        }
+    }
+
+    return e;
+};
+
+/**
  * converts CSV data into json format
  *
  * @param csvData
  * @returns { json [] }
  */
-const csvToJSON = (csvData, setLineButtonView, useUTC) => {
+const csvToJSON = (csvData, setLineButtonView, useUTC, units) => {
     // ensure that there is csv data to convert
     if (csvData !== "") {
         // split on carriage returns. also removing all the windows \r characters if they exist
@@ -136,6 +154,11 @@ const csvToJSON = (csvData, setLineButtonView, useUTC) => {
                 else {
                     // reformat the date/time to the local timezone
                     e.time = new Date(e.time).toLocaleString();
+                }
+
+                // convert all the chart data to feet, if the units type is imperial
+                if (units === "imperial") {
+                    e = convertChartDataToFeet(e);
                 }
 
                 // data that is missing a value will not result in plotting
@@ -334,10 +357,12 @@ function get_xtick_interval(data) {
  */
 const CreateObsChart = (c) => {
     // get the timezone preference
-    const { useUTC } = useSettings();
+    const { useUTC, unitsType } = useSettings();
+    // set the units label
+    const unitLabel = (unitsType.current === "imperial") ? "ft" : "m";
 
     // call to get the data. expect back some information too
-    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC.enabled);
+    const {status, data} = getObsChartData(c.chartProps.url, c.chartProps.setLineButtonView, useUTC.enabled, unitsType.current);
 
     // render the chart
     return (
@@ -357,7 +382,7 @@ const CreateObsChart = (c) => {
 
                                 <ReferenceLine y={0} stroke="Black" strokeDasharray="3 3"/>
 
-                                <YAxis unit={'m'} ticks={get_yaxis_ticks(data)} tick={{stroke: 'tan', strokeWidth: .5}}
+                                <YAxis unit={unitLabel} ticks={get_yaxis_ticks(data)} tick={{stroke: 'tan', strokeWidth: .5}}
                                        tickFormatter={(value) => formatY_axis(value)}/>
 
                                 <Tooltip/>

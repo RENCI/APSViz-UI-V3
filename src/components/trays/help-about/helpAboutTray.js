@@ -657,6 +657,36 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
+                        <Accordion expanded={index === 19} onChange={(event, expanded) => {
+                            setIndex(expanded ? 19 : null);
+                        }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I change the units of measurement (i.e. meters or feet) displayed on the webpage?</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+
+                                <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application
+                                        Settings sidebar button.</ListItem>
+                                </List>
+
+                                <Typography sx={{fontSize: "sm", ml: 1}}>
+                                    Users have the ability to set the units of measurement used on the webpage in the Application Settings sidebar.
+                                </Typography>
+
+                                <Typography sx={{fontSize: "sm", mt: 1, ml: 1}}>
+                                    Users can select whether to show data values on the webpage in metric (the default) or imperial values.
+                                    In addition from changing between meters and feet, if the user selects imperial units, they can also select between mph and knots for speed type units.
+                                </Typography>
+
+                                <List size='sm' marker="decimal" sx={{ml: 2, '--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}>Click on the Application Settings icon button on the sidebar.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Locate the &quot;Units of measurement&quot; section.</ListItem>
+                                    <ListItem sx={{ml: 1}}>Select the appropriate radio buttons for your preferences.</ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
+
                     </Stack>
                 </AccordionGroup>
             </Stack>
