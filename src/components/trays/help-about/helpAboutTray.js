@@ -102,9 +102,9 @@ export const HelpAboutTray = () => {
                                 <Divider/>
                                 <Typography level="body-sm" sx={{ml: 1, mt: 1}}>Collaborators:</Typography>
                                 <List marker="circle" size="sm" sx={{ml: 3, '--ListItem-minHeight': '25px'}}>
-                                    <ListItem>RENCI/UNC, NC State University and the University opf Georgia.</ListItem>
+                                    <ListItem>RENCI/UNC, NC State University and the University of Georgia.</ListItem>
                                     <ListItem>DHS CRC.</ListItem>
-                                    <ListItem>The Water Institute for the Gul.</ListItem>
+                                    <ListItem>The Water Institute for the Gulf.</ListItem>
                                     <ListItem>NC Dept of Transportation.</ListItem>
                                 </List>
                             </AccordionDetails>
