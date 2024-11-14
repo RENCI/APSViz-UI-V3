@@ -17,7 +17,7 @@ dayjs.extend(utc);
 /**
  * renders the observations as a chart
  *
- * @param dataUrl
+ * @param chartProps
  * @returns React.ReactElement
  * @constructor
  */
@@ -27,7 +27,7 @@ export default function ObservationChart(chartProps) {
 }
 
 /**
- * this suppresses the re-chart errors on the x/y-axis rendering.
+ * this captures the re-chart deprecation warnings on the chart rendering.
  *
  * @type {{(message?: any, ...optionalParams: any[]): void, (...data: any[]): void}}
  */
@@ -41,7 +41,8 @@ console.error = (...args) => {
  * Retrieves and returns the chart data in JSON format
  *
  * @param url
- * @returns { json }
+ * @param setLineButtonView
+ * @returns { [json] || '' }
  */
 function getObsChartData(url, setLineButtonView) {
     // configure the retry count to be zero
@@ -84,6 +85,7 @@ function getObsChartData(url, setLineButtonView) {
  * converts CSV data into json format
  *
  * @param csvData
+ * @param setLineButtonView
  * @returns { json [] }
  */
 const csvToJSON = (csvData, setLineButtonView) => {
@@ -123,7 +125,7 @@ const csvToJSON = (csvData, setLineButtonView) => {
             }
         }
 
-        // get the data formatted properly
+        // set the chart line toggle and get undefined data formatted for the chart rendering
         ret_val.forEach( function (chartItem) {
             // loop through the keys
             Object.keys(chartItem).forEach(function (key) {
@@ -142,7 +144,9 @@ const csvToJSON = (csvData, setLineButtonView) => {
 };
 
 /**
- * reformats the data based on user selections for the timezone and units of measurement
+ * reformats the data based on user selections for the timezone and units of measurement.
+ *
+ * note: this method modifies the data in-place.
  *
  * @param data
  * @param newUnits
@@ -205,6 +209,7 @@ function formatY_axis(value) {
  * reformats the data label shown on the x-axis. this uses the chosen timezone.
  *
  * @param value
+ * @param useUTC
  * @returns {string}
  */
 function formatX_axis(value, useUTC) {
@@ -307,13 +312,14 @@ function get_xtick_interval(data) {
     else if (days <= 7.5)
         interval = one_hour_interval * 12 - 1;
 
+    // return the calculated interval
     return interval;
 }
 
 /**
  * Creates the chart.
  *
- * @param url
+ * @param c: the chart props
  * @returns React.ReactElement
  * @constructor
  */
@@ -336,9 +342,9 @@ const CreateObsChart = (c) => {
             {
                 status === 'pending' ? (<Typography sx={{alignItems: 'center', fontSize: 12}}>Gathering chart data...</Typography>) :
                     (status === 'error' || data === '') ? (
-                            <Typography sx={{alignItems: 'center', color: 'red', fontSize: 12}}>
-                                There was a problem collecting data for this location.
-                            </Typography>) :
+                        <Typography sx={{alignItems: 'center', color: 'red', fontSize: 12}}>
+                            There was a problem collecting data for this location.
+                        </Typography>) :
                         <ResponsiveContainer>
                             <LineChart margin={{top: 5, right: 10, left: -25, bottom: 5}} data={data} isHide={c.chartProps.isHideLine}>
                                 <CartesianGrid strokeDasharray="1 1"/>
