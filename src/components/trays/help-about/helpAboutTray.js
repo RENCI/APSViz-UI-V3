@@ -663,8 +663,8 @@ export const HelpAboutTray = () => {
                             <AccordionSummary>
                                 <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I change the units of measurement (i.e. meters or feet) displayed on the webpage?</Typography>
                             </AccordionSummary>
-                            <AccordionDetails>
 
+                            <AccordionDetails>
                                 <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><SettingsIcon color="primary"/></ListItemDecorator>The Application
                                         Settings sidebar button.</ListItem>
