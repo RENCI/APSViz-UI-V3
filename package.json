@@ -81,12 +81,16 @@
     "react-draggable": "^4.4.6",
     "react-leaflet": "^4.2.1",
     "react-map-gl": "^7.1.7",
+    "react-native-bcrypt": "^2.4.0",
     "react-query": "^3.39.3",
     "react-resizable": "^3.0.5",
     "react-router-dom": "^6.26.2",
     "recharts": "^2.12.7",
     "stream": "^0.0.3",
     "ws": "^8.18.0"
+  },
+  "browser": {
+    "crypto": false
   },
   "overrides": {
     "json5": "^2.2.2",
