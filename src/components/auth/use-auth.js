@@ -1,6 +1,6 @@
-import React, {createContext, useContext, useMemo} from "react";
-import {useNavigate} from "react-router-dom";
-import {useLocalStorage} from '@hooks';
+import React, { createContext, useContext, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from '@hooks';
 import PropTypes from "prop-types";
 
 // create a new context
@@ -15,7 +15,7 @@ const AuthContext = createContext();
  */
 export const AuthProvider = ({ children }) => {
     // assign local storage for the user profile
-    const [userProfile, setUserProfile] = useLocalStorage("user", null);
+    const [userProfile, setUserProfile] = useLocalStorage('userProfile', null);
     const navigate = useNavigate();
 
     // call this function to authenticate the user
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         setUserProfile(userProfile);
 
         // redirect to the main page
-        navigate("/");
+        navigate('/');
     };
 
     // call this function to sign out a logged-in user
@@ -33,19 +33,31 @@ export const AuthProvider = ({ children }) => {
         setUserProfile(null);
 
         // redirect to the login page
-        navigate("/login");
+        navigate('/login');
     };
 
-    // call this to navigate to the add user page
+    // call this to navigate to the add-user page
     const addUser = () => {
+        // remove the user data
+        setUserProfile(null);
+
         // redirect to the add a user page
-        navigate("/add-user", {replace: true});
+        navigate('/login', {replace: true});
+    };
+
+        // call this to navigate to the add-user page
+    const navAddUser = () => {
+        // remove the user data
+        setUserProfile(null);
+
+        // redirect to the add a user page
+        navigate('/add-user', {replace: true});
     };
 
     // call this to navigate to the update user page
-    const updateUser = () => {
-        // redirect to the update user profile page
-        navigate("/update-user", {replace: true});
+    const updateUser = (newUserProfile) => {
+        // remove the user data
+        setUserProfile(newUserProfile);
     };
 
     // define methods and user profile
@@ -54,6 +66,7 @@ export const AuthProvider = ({ children }) => {
             userProfile,
             login,
             logout,
+            navAddUser,
             addUser,
             updateUser
         }),
@@ -61,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     );
 
     // return a new authentication provider
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={ value }>{ children }</AuthContext.Provider>;
 };
 
 // define the object properties

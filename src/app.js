@@ -10,7 +10,7 @@ import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
 import { Config } from '@components/config';
 import { Acknowledgements } from "@components/acknowledgements";
-import { Login, Logout, AddUser, UpdateUser, AuthProvider, ProtectedRoute } from '@auth';
+import { Login, AddUser, AuthProvider, ProtectedRoute } from '@auth';
 
 /**
  * renders the main content
@@ -63,9 +63,7 @@ export const App = () => {
                 <Routes>
                     <Route path="/" element={<ProtectedRoute><Content /></ProtectedRoute>}/>
                     <Route path="/login" element={<Login />} />
-                    <Route path="/logout" element={<Logout />} />
                     <Route path="/add-user" element={<AddUser />} />
-                    <Route path="/update-user" element={<UpdateUser />} />
                 </Routes>
             </AuthProvider>
         </BrowserRouter>
