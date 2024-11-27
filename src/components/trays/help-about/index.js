@@ -12,7 +12,7 @@ export const icon = <HelpAboutIcon />;
 export const title = 'APSViz Help/About';
 
 /**
- * render the removal component
+ * render the help/about component
  *
  * @returns React.ReactElement
  */
