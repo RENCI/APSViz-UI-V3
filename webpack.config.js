@@ -127,7 +127,8 @@ module.exports = {
       '@alert-user': path.resolve(__dirname, 'src/components/alert-user/'),
       '@acknowledgements': path.resolve(__dirname, 'src/components/acknowledgements/'),
       '@config': path.resolve(__dirname, 'src/components/config/'),
-      '@auth' : path.resolve(__dirname, 'src/components/auth/')
+      '@auth' : path.resolve(__dirname, 'src/components/auth/'),
+      '@control-panel' : path.resolve(__dirname, 'src/components/control-panel')
     }
   },
 
