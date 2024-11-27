@@ -40,7 +40,7 @@ body {
   justify-content: flex-start;
   align-items: stretch;
   min-height: 100vh;
-  background-color: #fff;
+  background-image: url('images/main_bg.png');
 }
 
 /* 
