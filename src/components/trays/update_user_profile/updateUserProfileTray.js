@@ -22,8 +22,9 @@ bcrypt.setRandomFallback = (len) => {
  * @constructor
  */
 export const UpdateUserProfileTray = () => {
-    // state for the date validation error
+    // state for the date validation responses
     const [error, setError] = useState(null);
+    const [msg, setMsg] = useState(null);
 
     // storage for the username and password
     const [emailValue, setEmailValue] = useState('');
@@ -39,9 +40,9 @@ export const UpdateUserProfileTray = () => {
      * populate the controls with their current values
      */
     useEffect( () => {
-        setEmailValue(userProfile['ret_val']['profile']['email']);
-        setFirstNameValue(userProfile['ret_val']['profile']['details']['first_name']);
-        setLastNameValue(userProfile['ret_val']['profile']['details']['last_name']);
+        setEmailValue(userProfile.userProfile.profile.email);
+        setFirstNameValue(userProfile.userProfile.profile['details']['first_name']);
+        setLastNameValue(userProfile.userProfile.profile['details']['last_name']);
     }, [] );
 
     /**
@@ -157,9 +158,11 @@ export const UpdateUserProfileTray = () => {
             // continue to validate the credentials
             else {
                 // if the call successful and it is the correct password
-                if (ret_val['success'])
+                if (ret_val['success']) {
                     // save the new user profile
                     updateUser(ret_val);
+                    setMsg('Your profile has been updated successfully.');
+                }
                 else {
                     // show the error
                     setError('Error updating the user. Please contact an administrator.');
@@ -175,6 +178,7 @@ export const UpdateUserProfileTray = () => {
                 <Typography level="title-lg" sx={{ mt: 1, mb: 2 }}>Update your account ({ emailValue })</Typography>
 
                 { error && <Typography sx={{ fontSize: 15, color: 'red' }}>{ error }</Typography> }
+                { msg && <Typography sx={{ fontSize: 15, color: 'green' }}>{ msg }</Typography> }
 
                 <Input
                     value={ firstNameValue }

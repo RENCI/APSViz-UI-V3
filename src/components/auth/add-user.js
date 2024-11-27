@@ -1,9 +1,10 @@
-import React, {useState, Fragment} from "react";
-import {useAuth} from "@auth";
-import {getNamespacedEnvParam} from "@utils";
+import React, { useState, Fragment } from "react";
+import { useAuth } from "@auth";
+import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
-import {Button, Divider, Typography, Input, Stack, Box} from '@mui/joy';
+import { Button, Divider, Typography, Input, Stack, Box } from '@mui/joy';
 import isaac from "isaac";
+import { Branding } from "@control-panel";
 
 // load the encryption library
 const bcrypt = require('react-native-bcrypt');
@@ -137,12 +138,9 @@ export const AddUser = () => {
                     return error.response.status;
                 });
 
-            // if the user was not found
-            if (ret_val === 404)
-                setError('User not found');
-            // serious error on the server
-            else if (ret_val === 500)
-                setError("Error adding the user.");
+            // error on the server
+            if (ret_val === 500)
+                setError("Sorry, the user name may already exist.");
             // continue to validate the credentials
             else {
                 // if the call successful and it is the correct password
@@ -151,7 +149,7 @@ export const AddUser = () => {
                     addUser();
                 else {
                     // show the error
-                    setError('Error adding the user. Please contact an administrator.');
+                    setError('Sorry, the user name may already exist.');
                 }
             }
         }
@@ -166,16 +164,24 @@ export const AddUser = () => {
                 minHeight: '100',
                 alignItems: 'center'
             }}>
-                <Box sx={{
+                <Box bgcolor="white" sx={{
                     m: 2,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    border: 1,
-                    borderColor: 'primary.main'
+                    border: 3,
+                    borderColor: '#6495ED'
                 }}>
-                    <Stack spacing={1} sx={{m: 2}}>
-                        <Typography variant="h1" sx={{mt: 1, mb: 2, fontSize: 20}}>Create an account</Typography>
+                    <Stack spacing={ 2 } sx={{ m: 2 }}>
+                        <Box sx={{
+                            m: 2,
+                            border: 3,
+                            borderColor: '#6495ED'
+                        }}>
+                            <Branding/>
+                        </Box>
+
+                        <Typography level="title-lg" sx={{ mt: 1, mb: 2 }}>Create an account</Typography>
 
                         { error && <Typography sx={{fontSize: 15, color: 'red'}}>{ error }</Typography> }
 
@@ -210,7 +216,7 @@ export const AddUser = () => {
 
                         <Button
                             disabled={ !emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue || !(passwordValue === newPasswordValue) }
-                            onClick={ onAddUserClicked }>Create your account
+                            onClick={ onAddUserClicked }>Sign me up!
                         </Button>
                     </Stack>
                 </Box>
