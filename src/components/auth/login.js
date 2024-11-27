@@ -24,7 +24,6 @@ export const Login = () => {
 
     /**
      * handles the login button event
-     * TODO: use tanstack in here
      *
      * @returns
      */
@@ -68,7 +67,7 @@ export const Login = () => {
             // if the call successful and it is the correct password
             if (ret_val['success'] && bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']))
                 // save the new user profile
-                login({ ret_val });
+                login(ret_val);
             else {
                 // show the error
                 setError('Denied.');
@@ -130,5 +129,5 @@ export const Login = () => {
                 </Box>
             </form>
         </Fragment>
-);
+    );
 };
