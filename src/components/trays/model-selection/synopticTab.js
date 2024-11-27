@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
  * @constructor
  */
 export const SynopticTabForm = () => {
-
     // declare all state variables for the synoptic tab dropdown data
     const [synopticDate, setSynopticDate] = useState(dayjs(new Date()));
     const [synopticCycle, setSynopticCycle] = useState(null);
