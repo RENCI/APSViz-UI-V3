@@ -123,7 +123,7 @@ export const Login = () => {
                             >Log in
                             </Button>
 
-                            <Button onClick={ () => navAddUser() }>Don&#39;t have an account? Sign Up</Button>
+                            <Button onClick={ () => navAddUser() }>Sign up for an account</Button>
                         </Stack>
                     </Box>
                 </Box>

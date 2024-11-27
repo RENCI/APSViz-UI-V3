@@ -181,8 +181,6 @@ export const AddUser = () => {
                             <Branding/>
                         </Box>
 
-                        <Typography level="title-lg" sx={{ mt: 1, mb: 2 }}>Create an account</Typography>
-
                         { error && <Typography sx={{fontSize: 15, color: 'red'}}>{ error }</Typography> }
 
                         <Input
@@ -216,7 +214,7 @@ export const AddUser = () => {
 
                         <Button
                             disabled={ !emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue || !(passwordValue === newPasswordValue) }
-                            onClick={ onAddUserClicked }>Sign me up!
+                            onClick={ onAddUserClicked }>Sign me up
                         </Button>
                     </Stack>
                 </Box>
