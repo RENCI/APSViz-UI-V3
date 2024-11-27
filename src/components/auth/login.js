@@ -1,8 +1,9 @@
-import React, {useState, Fragment} from "react";
+import React, {useState, Fragment } from "react";
 import {useAuth} from "@auth";
 import {getNamespacedEnvParam} from "@utils";
 import axios from 'axios';
 import {Button, Divider, Typography, Input, Stack, Box} from '@mui/joy';
+import { Branding } from "@control-panel";
 
 /**
  * page to collect the user credentials and verify them
@@ -19,15 +20,17 @@ export const Login = () => {
     const [passwordValue, setPasswordValue] = useState('');
 
     // save the user details and redirect to the main page
-    const {login, addUser} = useAuth();
+    const {login, navAddUser} = useAuth();
 
     /**
      * handles the login button event
      * TODO: use tanstack in here
      *
-     * @returns {Promise<void>}
+     * @returns
      */
-    const onLogInClicked = async () => {
+    const onLogInClicked = async (e) => {
+        e.preventDefault();
+
         // create the authorization header
         const requestOptions = {
             method: 'GET',
@@ -53,7 +56,7 @@ export const Login = () => {
 
         // if the user was not found
         if (ret_val === 404)
-            setError('User name not found');
+            setError('User not found');
         // serious error on the server
         else if (ret_val === 500)
             setError("Error validating the user.");
@@ -65,7 +68,7 @@ export const Login = () => {
             // if the call successful and it is the correct password
             if (ret_val['success'] && bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']))
                 // save the new user profile
-                login({ret_val});
+                login({ ret_val });
             else {
                 // show the error
                 setError('Denied.');
@@ -76,44 +79,56 @@ export const Login = () => {
     // render the page
     return (
         <Fragment>
-            <Box sx={{ display: 'flex',
-                 justifyContent: 'center',
-                 minHeight: '100',
-                alignItems: 'center'
-            }}>
-                <Box sx={{ m: 2,
+            <form name={"Synoptic"} onSubmit={ onLogInClicked }>
+                <Box sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
-                    border: 1,
-                    borderColor: 'primary'}}>
-                    <Stack spacing={1} sx={{ m: 2 }}>
-                        <Typography variant="h1" sx={{ mt: 1, mb: 2, fontSize: 20 }}>Log In</Typography>
+                    minHeight: '100',
+                    alignItems: 'center'
+                }}>
+                    <Box bgcolor="white" sx={{
+                        m: 2,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        border: 3,
+                        borderColor: '#6495ED'
+                    }}>
+                        <Stack spacing={ 2 } sx={{ m: 2 }}>
+                            <Box sx={{
+                                m: 2,
+                                border: 3,
+                                borderColor: '#6495ED'
+                            }}>
+                                <Branding/>
+                            </Box>
 
-                        {error && <Typography sx={{ fontSize: 15, color: 'red' }}>{error}</Typography>}
+                            {error && <Typography sx={{ fontSize: 15, color: 'red' }}>{ error }</Typography> }
 
-                        <Input
-                            value={emailValue}
-                            onChange={e => setEmailValue(e.target.value)}
-                            placeholder="Email address"/>
+                            <Input
+                                value={ emailValue }
+                                onChange={ e => setEmailValue(e.target.value) }
+                                placeholder="Email address"/>
 
-                        <Input
-                            type="password"
-                            value={passwordValue}
-                            onChange={e => setPasswordValue(e.target.value)}
-                            placeholder="Password"/>
+                            <Input
+                                type="password"
+                                value={ passwordValue }
+                                onChange={ e => setPasswordValue(e.target.value) }
+                                placeholder="Password"/>
 
-                        <Divider/>
+                            <Divider/>
 
-                        <Button
-                            disabled={!emailValue || !passwordValue}
-                            onClick={onLogInClicked}>Log In
-                        </Button>
+                            <Button
+                                type="submit"
+                                disabled={ !emailValue || !passwordValue }
+                            >Log in
+                            </Button>
 
-                        <Button onClick={() => addUser()}>Don&#39;t have an account? Sign Up</Button>
-                    </Stack>
+                            <Button onClick={ () => navAddUser() }>Don&#39;t have an account? Sign Up</Button>
+                        </Stack>
+                    </Box>
                 </Box>
-            </Box>
+            </form>
         </Fragment>
-    );
+);
 };
