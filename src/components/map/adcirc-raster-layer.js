@@ -98,6 +98,32 @@ export const AdcircRasterLayer = (layer) => {
     };
 
     /**
+     * determine if the user cant select more chart dialogs
+     *
+     */
+    const tooManyCharts = () => {
+        // init the return
+        let ret_val = false;
+
+        // if the user has reached max number of charts (10), alert them.
+        // note the length is 0 based
+        if (selectedObservations.length + 1 > 10) {
+            // create an alert message
+            setAlertMsg(
+                {
+                    'severity': 'warning',
+                    'msg': 'You have exceeded the maximum number of charts (10).'
+                });
+
+            // set no can do
+            ret_val = true;
+        }
+
+        // allow the user to add the chart selection
+        return ret_val;
+    };
+
+    /**
      * create a callback to handle a map click event
      */
     const onClick = useCallback((e) => {
@@ -112,7 +138,7 @@ export const AdcircRasterLayer = (layer) => {
         const id = lon + ', ' + lat;
 
         // if the point selected is new
-        if (!isAlreadySelected(id)) {
+        if (!isAlreadySelected(id) && !tooManyCharts() ) {
             // this can only happen when we are not in compare mode
             if (!inCompareMode()) {
                 // if this is a good layer product
