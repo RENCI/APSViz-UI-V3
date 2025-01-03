@@ -1,9 +1,20 @@
-import React, {useState, Fragment } from "react";
-import {useAuth} from "@auth";
-import {getNamespacedEnvParam} from "@utils";
+import React, { useState } from "react";
+import { useAuth } from "@auth";
+import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
-import {Button, Divider, Typography, Input, Stack, Box} from '@mui/joy';
+import { Button, Divider, Typography, Input, Stack, Box } from '@mui/joy';
 import { Branding } from "@control-panel";
+
+// load the encryption library
+import bcrypt from "react-native-bcrypt";
+import isaac from "isaac";
+
+// override using unsecure math.random when generating hashes
+bcrypt.setRandomFallback((len) => {
+	const buf = new Uint8Array(len);
+
+	return buf.map(() => Math.floor(isaac.random() * 256));
+});
 
 /**
  * page to collect the user credentials and verify them
@@ -20,7 +31,7 @@ export const Login = () => {
     const [passwordValue, setPasswordValue] = useState('');
 
     // save the user details and redirect to the main page
-    const {login, navAddUser} = useAuth();
+    const { login, navAddUser } = useAuth();
 
     /**
      * handles the login button event
@@ -61,24 +72,28 @@ export const Login = () => {
             setError("Error validating the user.");
         // continue to validate the credentials
         else {
-            // crytography library
-            const bcrypt = require('react-native-bcrypt');
-
-            // if the call successful and it is the correct password
+            // if the call was successful and it is the correct password
             if (ret_val['success'] && bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']))
                 // save the new user profile
                 login(ret_val);
             else {
                 // show the error
-                setError('Denied.');
+                setError('Incorrect password or user doesnt exist.');
             }
         }
     };
 
     // render the page
     return (
-        <Fragment>
-            <form name={"Synoptic"} onSubmit={ onLogInClicked }>
+        <div
+            style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '350px'}}>
+
+            <form name={"login"} onSubmit={ onLogInClicked }>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -91,13 +106,13 @@ export const Login = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         border: 3,
-                        borderColor: '#6495ED'
+                        borderColor: '#245F97'
                     }}>
                         <Stack spacing={ 2 } sx={{ m: 2 }}>
                             <Box sx={{
                                 m: 2,
                                 border: 3,
-                                borderColor: '#6495ED'
+                                borderColor: '#245F97'
                             }}>
                                 <Branding/>
                             </Box>
@@ -107,7 +122,7 @@ export const Login = () => {
                             <Input
                                 value={ emailValue }
                                 onChange={ e => setEmailValue(e.target.value) }
-                                placeholder="Email address"/>
+                                placeholder="User name (Email address)"/>
 
                             <Input
                                 type="password"
@@ -120,7 +135,7 @@ export const Login = () => {
                             <Button
                                 type="submit"
                                 disabled={ !emailValue || !passwordValue }
-                            >Log in
+                                >Log in
                             </Button>
 
                             <Button onClick={ () => navAddUser() }>Sign up for an account</Button>
@@ -128,6 +143,6 @@ export const Login = () => {
                     </Box>
                 </Box>
             </form>
-        </Fragment>
+        </div>
     );
 };
