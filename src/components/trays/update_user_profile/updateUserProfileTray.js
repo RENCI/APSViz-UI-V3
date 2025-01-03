@@ -1,19 +1,19 @@
 import React, {useState, Fragment, useEffect} from "react";
+import {Button, Divider, Typography, Input, Stack} from '@mui/joy';
 import {useAuth} from "@auth";
 import {getNamespacedEnvParam} from "@utils";
 import axios from 'axios';
-import {Button, Divider, Typography, Input, Stack} from '@mui/joy';
-import isaac from "isaac";
 
 // load the encryption library
-const bcrypt = require('react-native-bcrypt');
+import bcrypt from "react-native-bcrypt";
+import isaac from "isaac";
 
 // override using unsecure math.random when generating hashes
-bcrypt.setRandomFallback = (len) => {
-    const buf = new Uint8Array(len);
+bcrypt.setRandomFallback((len) => {
+	const buf = new Uint8Array(len);
 
-    return buf.map(() => Math.floor(isaac.random() * 256));
-};
+	return buf.map(() => Math.floor(isaac.random() * 256));
+});
 
 /**
  * page to collect the user credentials and verify them
@@ -54,7 +54,7 @@ export const UpdateUserProfileTray = () => {
      */
     const getUserDetails = (first_name, last_name) => {
         // return the user profile details
-        return `{"first_name": "${first_name}", "last_name": "${last_name}", "created_on": "${new Date().toISOString()}"}`;
+        return `{"first_name": "${ first_name }", "last_name": "${ last_name }", "created_on": "${ new Date().toISOString() }"}`;
     };
 
     /**
@@ -74,7 +74,6 @@ export const UpdateUserProfileTray = () => {
     /**
      * validates the entered user params
      *
-     * @param email
      * @param first_name
      * @param last_name
      * @param password
@@ -82,19 +81,36 @@ export const UpdateUserProfileTray = () => {
      *
      * @returns { boolean }
      */
-    const validateAddParams = () => {
+    const validateUpdateParams = (first_name, last_name, password, new_password) => {
+        // init the return value
+        let ret_val = true;
+
+        // create a regex to validate the password
+        const pwd_regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+
         // all fields are mandatory
-        if (emailValue && firstNameValue && lastNameValue && (passwordValue === newPasswordValue)) {
-            // TODO: perform formatting validations for each param
-
-            return true;
-        } else {
+        if (password !== new_password) {
             // let the user know
-            setError('Please check to make sure you have entered data properly in all fields.');
+            setError('The passwords you entered do not match.');
 
-            // return failure
-            return false;
+            setPasswordValue('');
+            setNewPasswordValue('');
+
+            ret_val = false;
         }
+        // make sure the password is formatted properly
+        else if (new_password && !pwd_regex.test(new_password)) {
+            // let the user know
+            setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
+
+            setPasswordValue('');
+            setNewPasswordValue('');
+
+            ret_val = false;
+        }
+
+        // return to the caller
+        return ret_val;
     };
 
     /**
@@ -108,13 +124,16 @@ export const UpdateUserProfileTray = () => {
      */
     const getQueryString = () => {
         // if the user added all the params
-        if (validateAddParams()) {
-            // if there was not new password specified do not update it
-            const new_password = (newPasswordValue) ? `&password_hash=${getPasswordHash(newPasswordValue)}` : '';
+        if (validateUpdateParams(firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
+            // if there wasn't new password specified do not update it
+            const new_password_qs = (newPasswordValue) ? `&password_hash=${ getPasswordHash(newPasswordValue) }` : '';
 
             // return the query string
             return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}` +
-                `update_user?email=${emailValue}&role_id=2${new_password}&details=${getUserDetails(firstNameValue, lastNameValue)}`;
+                `update_user?email=${ emailValue }&role_id=2${ new_password_qs }&details=${ getUserDetails(firstNameValue, lastNameValue) }`;
+        }
+        else {
+            return false;
         }
     };
 
@@ -132,7 +151,7 @@ export const UpdateUserProfileTray = () => {
             // create the authorization header
             const requestOptions = {
                 method: 'GET',
-                headers: {Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`}
+                headers: {Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
             };
 
             // call for data
@@ -154,7 +173,7 @@ export const UpdateUserProfileTray = () => {
                 setError('User name not found');
             // serious error on the server
             else if (ret_val === 500)
-                setError("Error adding the user.");
+                setError("Error updating the user.");
             // continue to validate the credentials
             else {
                 // if the call successful and it is the correct password
@@ -194,18 +213,18 @@ export const UpdateUserProfileTray = () => {
                     type="password"
                     value={ passwordValue }
                     onChange={ e => setPasswordValue(e.target.value) }
-                    placeholder="Password"/>
+                    placeholder="New password"/>
 
                 <Input
                     type="password"
                     value={ newPasswordValue }
                     onChange={e => setNewPasswordValue(e.target.value)}
-                    placeholder="Verify your password"/>
+                    placeholder="Verify your new password"/>
 
                 <Divider/>
 
                 <Button
-                    disabled={ !emailValue || !firstNameValue || !lastNameValue || !(passwordValue === newPasswordValue) }
+                    disabled={ !firstNameValue || !lastNameValue }
                     onClick={ onUpdateUserClicked }>Submit
                 </Button>
             </Stack>
