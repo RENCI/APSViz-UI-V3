@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
-import { Button, Divider, Typography, Input, Stack, Box } from '@mui/joy';
+import { Button, Divider, Typography, Input, Box, Tooltip } from '@mui/joy';
 import isaac from "isaac";
 import { Branding } from "@control-panel";
 
@@ -34,7 +34,7 @@ export const AddUser = () => {
     const [lastNameValue, setLastNameValue] = useState('');
 
     // redirect to the main page on successful account addition
-    const { addUser } = useAuth();
+    const {addUser} = useAuth();
 
     /**
      * Returns the user profile details
@@ -45,7 +45,7 @@ export const AddUser = () => {
      */
     const getUserDetails = (first_name, last_name) => {
         // return the user profile details
-        return `{"first_name": "${ first_name }", "last_name": "${ last_name }", "created_on": "${ new Date().toISOString() }"}`;
+        return `{"first_name": "${first_name}", "last_name": "${last_name}", "created_on": "${new Date().toISOString()}"}`;
     };
 
     /**
@@ -74,19 +74,46 @@ export const AddUser = () => {
      * @returns { boolean }
      */
     const validateAddParams = (email, first_name, last_name, password, new_password) => {
-        // all fields are mandatory
-        if (email && first_name && last_name && password && new_password && (password === new_password)) {
-            // TODO: perform formatting validations for each param
+        // init the return value
+        let ret_val = true;
 
-            return true;
-        }
-        else {
-            // let the user know
-            setError('Please check to make sure you have entered data properly in all fields.');
+        // create a regex to validate the email address
+        const email_regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const pwd_regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
-            // return failure
-            return false;
+        // all fields are mandatory, the email must be legit
+        if (email && first_name && last_name && password && new_password) {
+            // if a valid email address entered
+            if (!email_regex.test(email)) {
+                // let the user know
+                setError('The email address you have entered is invalid.');
+
+                setEmailValue('');
+
+                ret_val = false;
+            }
+            // if the password entries do not match
+            else if (password !== new_password) {
+                // let the user know
+                setError('The passwords you entered do not match.');
+
+                setPasswordValue('');
+                setNewPasswordValue('');
+
+                ret_val = false;
+            } else if (!pwd_regex.test(password)) {
+                // let the user know
+                setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
+
+                setPasswordValue('');
+                setNewPasswordValue('');
+
+                ret_val = false;
+            }
         }
+
+        // return to the caller
+        return ret_val;
     };
 
     /**
@@ -104,6 +131,8 @@ export const AddUser = () => {
             // return the query string
             return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}` +
                 `add_user?email=${email}&password_hash=${getPasswordHash(password)}&role_id=2&details=${getUserDetails(first_name, last_name)}`;
+        } else {
+            return false;
         }
     };
 
@@ -140,7 +169,7 @@ export const AddUser = () => {
 
             // error on the server
             if (ret_val === 500)
-                setError("Sorry, the user name may already exist.");
+                setError("There was an error creating the account.");
             // continue to validate the credentials
             else {
                 // if the call successful and it is the correct password
@@ -149,7 +178,7 @@ export const AddUser = () => {
                     addUser();
                 else {
                     // show the error
-                    setError('Sorry, the user name may already exist.');
+                    setError('The user name may already exist.');
                 }
             }
         }
@@ -157,68 +186,77 @@ export const AddUser = () => {
 
     // render the page
     return (
-        <Fragment>
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                minHeight: '100',
-                alignItems: 'center'
+        <div
+            style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '350px'
             }}>
-                <Box bgcolor="white" sx={{
-                    m: 2,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+
+            <Box bgcolor="white" sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                border: 3,
+                borderColor: '#245F97',
+                gap: 1 }}>
+
+                <Box sx={{
+                    m: 1,
                     border: 3,
-                    borderColor: '#6495ED'
+                    borderColor: '#245F97'
                 }}>
-                    <Stack spacing={ 2 } sx={{ m: 2 }}>
-                        <Box sx={{
-                            m: 2,
-                            border: 3,
-                            borderColor: '#6495ED'
-                        }}>
-                            <Branding/>
-                        </Box>
-
-                        { error && <Typography sx={{fontSize: 15, color: 'red'}}>{ error }</Typography> }
-
-                        <Input
-                            value={ firstNameValue }
-                            onChange={ e => setFirstNameValue(e.target.value) }
-                            placeholder="First name"/>
-
-                        <Input
-                            value={ lastNameValue }
-                            onChange={ e => setLastNameValue(e.target.value) }
-                            placeholder="Last name"/>
-
-                        <Input
-                            value={ emailValue }
-                            onChange={ e => setEmailValue(e.target.value)}
-                            placeholder="Email address"/>
-
-                        <Input
-                            type="password"
-                            value={ passwordValue }
-                            onChange={ e => setPasswordValue( e.target.value) }
-                            placeholder="Password"/>
-
-                        <Input
-                            type="password"
-                            value={ newPasswordValue }
-                            onChange={ e => setNewPasswordValue(e.target.value) }
-                            placeholder="Verify your password"/>
-
-                        <Divider/>
-
-                        <Button
-                            disabled={ !emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue || !(passwordValue === newPasswordValue) }
-                            onClick={ onAddUserClicked }>Sign me up
-                        </Button>
-                    </Stack>
+                    <Branding/>
                 </Box>
+
+                { error && <Typography sx={{ ml: 1, mr: 1, mb: 1, display: 'flex', fontSize: 15, color: 'red' }}>{ error }</Typography> }
+
+                <Input
+                    sx={{ width: '75%' }}
+                    value={ firstNameValue }
+                    onChange={ e => setFirstNameValue(e.target.value) }
+                    placeholder="First name"/>
+
+                <Input
+                    sx={{ width: '75%' }}
+                    value={ lastNameValue }
+                    onChange={ e => setLastNameValue(e.target.value) }
+                    placeholder="Last name"/>
+
+                <Input
+                    sx={{ width: '75%' }}
+                    value={ emailValue }
+                    onChange={ e => setEmailValue(e.target.value) }
+                    placeholder="Email address (user name)"/>
+
+                <Tooltip
+                    sx={{ width: '300px'}}
+                    title={"Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character."}
+                >
+                    <Input
+                        sx={{ width: '75%' }}
+                        type="password"
+                        value={ passwordValue }
+                        onChange={ e => setPasswordValue(e.target.value) }
+                        placeholder="Password"/>
+                </Tooltip>
+
+                <Input
+                    sx={{ width: '75%' }}
+                    type="password"
+                    value={ newPasswordValue }
+                    onChange={ e => setNewPasswordValue(e.target.value) }
+                    placeholder="Verify your password"/>
+
+                <Divider sx={{ m: 1 }}/>
+
+                <Button sx={{ mb: 1, width: '90%' }}
+                    disabled={ !emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue }
+                    onClick={ onAddUserClicked }>Sign me up
+                </Button>
             </Box>
-        </Fragment>
+        </div>
     );
 };
