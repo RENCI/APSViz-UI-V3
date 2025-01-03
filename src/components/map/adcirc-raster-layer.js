@@ -65,8 +65,9 @@ export const AdcircRasterLayer = (layer) => {
     const {
         defaultModelLayers,
         setAlertMsg,
-        selectedObservations, setSelectedObservations,
-        defaultSelected, leftPaneID, rightPaneID
+        setSelectedObservations,
+        defaultSelected, leftPaneID, rightPaneID,
+        isAlreadySelected, tooManyCharts
     } = useLayers();
 
     // capture the default layers
@@ -79,48 +80,12 @@ export const AdcircRasterLayer = (layer) => {
     const validLayerTypes = new Set(['Maximum Water Level', 'Maximum Significant Wave Height']);
 
     /**
-     * determines if the point was already selected
-     *
-     * @param id
-     */
-    const isAlreadySelected = (id) => {
-        // return true if the point was already selected
-        return (selectedObservations.find((o) => o.id === id) !== undefined);
-    };
-
-    /**
      * determines if the app is in compare mode
      *
      * @returns {boolean}
      */
     const inCompareMode = () => {
         return (leftPaneID !== defaultSelected && rightPaneID !== defaultSelected);
-    };
-
-    /**
-     * determine if the user cant select more chart dialogs
-     *
-     */
-    const tooManyCharts = () => {
-        // init the return
-        let ret_val = false;
-
-        // if the user has reached max number of charts (10), alert them.
-        // note the length is 0 based
-        if (selectedObservations.length + 1 > 10) {
-            // create an alert message
-            setAlertMsg(
-                {
-                    'severity': 'warning',
-                    'msg': 'You have exceeded the maximum number of charts (10).'
-                });
-
-            // set no can do
-            ret_val = true;
-        }
-
-        // allow the user to add the chart selection
-        return ret_val;
     };
 
     /**
@@ -137,8 +102,8 @@ export const AdcircRasterLayer = (layer) => {
         // create an id for the point
         const id = lon + ', ' + lat;
 
-        // if the point selected is new
-        if (!isAlreadySelected(id) && !tooManyCharts() ) {
+        // if this point was not already selected, and we have not reached max dialogs open
+        if (!isAlreadySelected(id) && !tooManyCharts()) {
             // this can only happen when we are not in compare mode
             if (!inCompareMode()) {
                 // if this is a good layer product
@@ -171,7 +136,7 @@ export const AdcircRasterLayer = (layer) => {
                             "station_name": l_props['product_name'] + " " + id,
                             "lat": lat,
                             "lon": lon,
-                            "location_name": layer.properties['product_name'].split(' ').slice(1).join(' ') + " at (lon, lat): " + id,
+                            "title": 'GeoPoint: ' + layer.properties['product_name'].split(' ').slice(1).join(' ') + " at (lon, lat): " + id,
                             "model_run_id": layer.group,
                             "data_source": (l_props['event_type'] + '_' + l_props['grid_type']).toUpperCase(),
                             "source_name": l_props['model'],
