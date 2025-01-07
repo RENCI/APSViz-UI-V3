@@ -2,6 +2,7 @@ import React from 'react';
 import { MapContainer } from 'react-leaflet';
 import { DefaultLayers } from './default-layers';
 import { StormLayers } from './storm-layers';
+import { ExternalLayers } from './external-layers';
 import { BaseMap } from './base-map';
 import {
   useLayers,
@@ -27,6 +28,7 @@ export const Map = () => {
           <BaseMap />
           <DefaultLayers/>
           <StormLayers/>
+          <ExternalLayers/>
       </MapContainer>
     );
   };

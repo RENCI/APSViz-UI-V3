@@ -43,6 +43,7 @@ export const LayersProvider = ({ children }) => {
   // default and hurricane layer states
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
+  const [externalLayers, setExternalLayers] = useState([]);
 
   // this object contains data for graph rendering
   const [selectedObservations, setSelectedObservations] = useState([]);
@@ -388,6 +389,7 @@ export const LayersProvider = ({ children }) => {
 
         defaultModelLayers, setDefaultModelLayers,
         hurricaneTrackLayers, setHurricaneTrackLayers,
+        externalLayers, setExternalLayers,
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
         layerTypes,
