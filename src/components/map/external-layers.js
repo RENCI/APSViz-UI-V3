@@ -18,10 +18,17 @@ export const ExternalLayers = () => {
     //const sst_url = "https://coastwatch.noaa.gov/erddap/wms/noaacwecnAVHRRmultisatsstEastCoastMonthly/request";
     //const sst_layer = "noaacwecnAVHRRmultisatsstEastCoastMonthly:sst";
 
+    //const sst_url = "https://coastwatch.noaa.gov/erddap/wms/noaacwecnAVHRRmultisatsstEastCoast3Day/request";
+    //const sst_layer = "noaacwecnAVHRRmultisatsstEastCoast3Day:sst";
+
+    const sst_url = "https://tds.maracoos.org/wms";
+    const sst_layer = "GOES_SST/sst";
+
     const wmsLayerParams = {
         format: "image/png",
         transparent: true,
-        srs: "EPSG:4326",
+        srs: "EPSG:3857",
+        styles: "raster/GHRSST_L4_MUR_Sea_Surface_Temperature",
     };
     
     // externalLayerList.map((layer) => {
@@ -34,10 +41,14 @@ export const ExternalLayers = () => {
         <>
         {externalLayerList.map((layer) => (
             <WMSTileLayer
-                key={layer.name}
+                /* key={layer.name}
                 url={layer.url}
                 layers={layer.name}
-                params={layer.params}
+                params={layer.params} */
+                key={sst_layer}
+                url={sst_url}
+                layers={sst_layer}
+                params={wmsLayerParams}
             />
         ))};
         </>
