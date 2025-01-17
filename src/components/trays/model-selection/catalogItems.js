@@ -3,7 +3,7 @@ import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails, Stack, C
 import PropTypes from 'prop-types';
 import { getHeaderSummary } from "@utils/map-utils";
 import { useLayers } from "@context/map-context";
-import {useSettings} from "@context";
+import { useSettings } from "@context";
 
 // set component prop types
 CatalogItems.propTypes = { data: PropTypes.any };
@@ -65,7 +65,7 @@ export default function CatalogItems(data) {
      * @param checked
      */
     const handleSelectedLayers = (layerGroup, selectedLayers, checked) => {
-        // add visibility state property to retrieved catalog layers
+        // the new list of layers
         let newLayers = [];
 
         // first see if this set of layers already exists in state, and remove them if the selection was unchecked
@@ -183,7 +183,6 @@ export default function CatalogItems(data) {
                                                     .filter((val, idx, self) =>
                                                         ( idx === self.findIndex((t)=> ( t['group'] === val['group']) )))
                                                     .sort((a, b) => compare(b.properties[sortParam], a.properties[sortParam]) || compare(a.properties['event_type'], b.properties['event_type']))
-                                                        //((b.properties[sortParam] + b.properties['event_type']).localeCompare(a.properties[sortParam] + a.properties['event_type'])))
                                                     // output summarized details of each group member
                                                     .map((mbr, mbrIdx) => (
                                                         // create the checkbox

@@ -43,6 +43,8 @@ export const LayersProvider = ({ children }) => {
   // default and hurricane layer states
   const [defaultModelLayers, setDefaultModelLayers] = useState([]);
   const [hurricaneTrackLayers, setHurricaneTrackLayers] = useState([]);
+
+  // these are the external layers selected in the additional data layers tray
   const [externalLayers, setExternalLayers] = useState([]);
 
   // this object contains data for graph rendering
