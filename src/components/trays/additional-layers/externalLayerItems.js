@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-import { Stack, Checkbox, Typography, Divider } from '@mui/joy';
+import { AccordionGroup, Accordion, AccordionSummary, AccordionDetails,
+    Stack, Checkbox, Typography, Divider, Tab, Tabs, TabPanel, TabList, Box } from '@mui/joy';
 import { useLayers } from "@context/map-context";
 import PropTypes from 'prop-types';
 
@@ -108,7 +109,7 @@ export default function ExternalLayerItems(data) {
                         // output sources
                         .map(
                             (layer, itemIndex) => (
-                                <Stack key={ itemIndex } spacing={ 2 }>
+                                <Stack key={ itemIndex } spacing={ .1 } direction="column" gap={ .1 }>
                                     <Typography level="sm" sx={{ fontWeight: 'bold' }}> { layer['source'] }</Typography>
                                     {
                                         // output checkboxes for each layer name/url
@@ -117,14 +118,46 @@ export default function ExternalLayerItems(data) {
                                             .filter(item => item.source === layer.source)
                                             // output the checkboxes
                                             .map ((layer, itemIndex) =>
-                                                <Checkbox
-                                                    size="sm"
-                                                    sx={{ m: 11 }}
-                                                    key={ itemIndex }
-                                                    checked={ getCheckedState( layer.name ) }
-                                                    label={ <Typography sx={{ fontSize: "xs" }}> { layer['name'] } </Typography> }
-                                                    onChange={ () => toggleLayerVisibility(layer['name']) }
-                                                />
+                                                <AccordionGroup key={ itemIndex } sx={{ maxWidth: 415, size: "sm", variant: "soft", p: 0 }}>
+                                                    <Accordion sx={{ p: 0 }}>
+                                                        <AccordionSummary>
+                                                            <Checkbox
+                                                                size="sm"
+                                                                checked={ getCheckedState( layer.name ) }
+                                                                label={ <Typography sx={{ fontSize: "xs" }}> { layer['name'] } </Typography> }
+                                                                onChange={ () => toggleLayerVisibility(layer['name']) }
+                                                            />
+                                                        </AccordionSummary>
+
+                                                        <AccordionDetails>
+                                                            <Tabs defaultValue={0}>
+                                                                <Stack
+                                                                    direction="row"
+                                                                    justifyContent="space-between"
+                                                                >
+                                                                    <TabList size="sm" sx={{ flex: 1 }}>
+                                                                        <Tab variant="plain" color="primary">
+                                                                            Metadata
+                                                                        </Tab>
+                                                                    </TabList>
+                                                                </Stack>
+
+                                                                <TabPanel value={ 0 }>
+                                                                    <Box component="pre" sx={{
+                                                                        fontSize: '75%',
+                                                                        color: 'text.primary',
+                                                                        backgroundColor: 'transparent',
+                                                                        overflowX: 'auto',
+                                                                        m: 0, p: 1,
+                                                                        height: '100px',
+                                                                        }}>
+                                                                            { JSON.stringify(layer, null, 2) }
+                                                                    </Box>
+                                                                </TabPanel>
+                                                            </Tabs>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                </AccordionGroup>
                                             )
                                     }
                                    <Divider />
