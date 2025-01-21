@@ -38,7 +38,7 @@ export const ShareViewTray = () => {
         // capture the selected observations from state
         const observations = selectedObservations.map(
             (x) => (
-                JSON.stringify({'id': x.id, 'lat': x.lat, 'lng': x.lon, 'location_name': x.location_name, 'station_name': x.station_name, 'csvurl': x.csvurl})
+                JSON.stringify({'id': x.id, 'lat': x.lat, 'lng': x.lon, 'title': x.title, 'location_name': x.location_name, 'station_name': x.station_name, 'csvurl': x.csvurl})
             )
         ).join(',');
 
