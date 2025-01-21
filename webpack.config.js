@@ -128,7 +128,9 @@ module.exports = {
       '@acknowledgements': path.resolve(__dirname, 'src/components/acknowledgements/'),
       '@config': path.resolve(__dirname, 'src/components/config/'),
       '@auth' : path.resolve(__dirname, 'src/components/auth/'),
-      '@control-panel' : path.resolve(__dirname, 'src/components/control-panel')
+      '@control-panel' : path.resolve(__dirname, 'src/components/control-panel'),
+      '@config': path.resolve(__dirname, 'src/components/config/'),
+      '@additional-layers': path.resolve(__dirname, 'src/components/trays/additional-layers/'),
     }
   },
 

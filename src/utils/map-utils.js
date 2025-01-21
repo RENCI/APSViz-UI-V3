@@ -167,7 +167,7 @@ export const getNamespacedEnvParam = (param) => {
         }
         else if (window.location.href.includes('adcirc')) {
             // use AWS hostname values
-            namespace = 'AWS';
+            namespace = 'PROD';
         }
     }
 

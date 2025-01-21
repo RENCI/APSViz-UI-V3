@@ -288,7 +288,7 @@ export const SynopticTabForm = () => {
                 <Divider sx={{ m: 2 }}/>
 
                 <Stack>
-                    { <CatalogItems data={ catalogData } isTropical={ false }/> }
+        { <CatalogItems data={ catalogData } isTropical={ false }/> }
                 </Stack>
             </form>
         </Fragment>
