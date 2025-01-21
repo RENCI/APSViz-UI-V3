@@ -1,6 +1,7 @@
 import * as hurricanes from './hurricane';
 import * as layers from './layers';
 import * as compare_layers from './compare-layers';
+import * as additional_layers from './additional-layers';
 import * as model_selection from './model-selection';
 import * as remove_items from './remove';
 import * as settings from './settings';
@@ -13,6 +14,7 @@ export default {
   compare_layers,
   hurricanes,
   model_selection,
+  additional_layers,
   remove_items,
   settings,
   share_view,
