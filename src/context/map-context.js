@@ -190,6 +190,43 @@ export const LayersProvider = ({ children }) => {
         }
     };
 
+
+    /**
+     * determines if the point was already selected
+     *
+     * @param id
+     */
+    const isAlreadySelected = (id) => {
+        // return true if the point was already selected
+        return (selectedObservations.find((o) => o.id === id) !== undefined);
+    };
+
+    /**
+     * determine if the user cant select more chart dialogs
+     *
+     */
+    const tooManyCharts = () => {
+        // init the return
+        let ret_val = false;
+
+        // if the user has reached max number of charts (10), alert them.
+        // note the length is 0 based
+        if (selectedObservations.length + 1 > 10) {
+            // create an alert message
+            setAlertMsg(
+                {
+                    'severity': 'warning',
+                    'msg': 'You have exceeded the maximum number of charts (10).'
+                });
+
+            // set no can do
+            ret_val = true;
+        }
+
+        // allow the user to add the chart selection
+        return ret_val;
+    };
+
   const toggleHurricaneLayerVisibility = id => {
     const newLayers = [...hurricaneTrackLayers];
     const index = newLayers.findIndex(l => l.id === id);
@@ -401,6 +438,7 @@ export const LayersProvider = ({ children }) => {
         getAllLayersInvisible, getAllHurricaneLayersInvisible, getAllRasterLayersInvisible,
         swapLayers, removeLayer, removeModelRun, removeAllModelRuns, removeObservations,
         getLayerIcon, setLayerOpacity,
+        isAlreadySelected, tooManyCharts,
 
         // declare access to the compare mode items
         defaultSelected,
@@ -414,6 +452,7 @@ export const LayersProvider = ({ children }) => {
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
         resetCompare, removeSideBySideLayers,
+
 
         // tracks the dialog that has focus
         topMostDialogIndex, setTopMostDialogIndex

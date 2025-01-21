@@ -5,7 +5,7 @@ import { useLayers } from '@context';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AdcircRasterLayer } from './adcirc-raster-layer';
-import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler } from '@utils/map-utils';
+import { markClicked, parseSharedURL, addSharedObservations, getNamespacedEnvParam, getBrandingHandler,  } from '@utils/map-utils';
 import { getDefaultInstanceName } from "@components/config";
 
 const newLayerDefaultState = (layer) => {
@@ -34,7 +34,8 @@ export const DefaultLayers = () => {
         defaultModelLayers,
         setDefaultModelLayers,
         setSelectedObservations,
-        setShowShareComment
+        setShowShareComment,
+        isAlreadySelected, tooManyCharts
     } = useLayers();
 
     const obsPointToLayer = ((feature, latlng) => {
@@ -62,6 +63,7 @@ export const DefaultLayers = () => {
     });
 
     const onEachObsFeature = (feature, layer) => {
+        // if the feature is legit
         if (feature.properties && feature.properties.location_name) {
           const popupContent = feature.properties.location_name;
     
@@ -78,14 +80,21 @@ export const DefaultLayers = () => {
           });
 
           layer.on("click", function (e) {
-            // this id is used to remove a selected observation from the selectedObservations list when the dialog is closed
-            feature.properties.id = feature.properties.station_name;
+            // if this point was not already selected, and we have not reached max dialogs open
+            if(!isAlreadySelected(feature.properties.station_name) && !tooManyCharts())
+            {
+                // this id is used to remove a selected observation from the selectedObservations list when the dialog is closed
+                feature.properties.id = feature.properties.station_name;
 
-            // create a marker target icon around the observation clicked
-            markClicked(map, e, feature.properties.id);
+                // title this as an observation point
+                feature.properties['title'] = feature.properties['gauge_owner'] + ' observation: ' + feature.properties.location_name;
 
-            // populate selectedObservations list with the newly selected observation point
-            setSelectedObservations(previous => [...previous, feature.properties]);
+                // create a marker target icon around the observation clicked
+                markClicked(map, e, feature.properties.id);
+
+                // populate selectedObservations list with the newly selected observation point
+                setSelectedObservations(previous => [...previous, feature.properties]);
+            }
           });
         }
     };
