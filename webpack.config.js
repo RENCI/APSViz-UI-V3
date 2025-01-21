@@ -126,7 +126,8 @@ module.exports = {
       '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side/'),
       '@alert-user': path.resolve(__dirname, 'src/components/alert-user/'),
       '@acknowledgements': path.resolve(__dirname, 'src/components/acknowledgements/'),
-      '@config': path.resolve(__dirname, 'src/components/config/')
+      '@config': path.resolve(__dirname, 'src/components/config/'),
+      '@additional-layers': path.resolve(__dirname, 'src/components/trays/additional-layers/'),
     }
   },
 
