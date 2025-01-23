@@ -61,6 +61,19 @@ export default function ExternalLayerItems(data) {
     }
 
     /**
+     * removes the "state" JSON branch for the metadata view
+     *
+     */
+    const json_replacer = (key, value) => {
+        // return nothing if this is the "state" branch
+        if (key === "state")
+            return undefined;
+        // otherwise return the value
+        else
+            return value;
+    };
+
+    /**
      * handles updating the visibility of an external layers on the map surface
      *
      * @param selectedLayerName
@@ -255,7 +268,7 @@ export default function ExternalLayerItems(data) {
                                                                     m: 0, p: 1,
                                                                     height: '100px',
                                                                     }}>
-                                                                        { JSON.stringify(layer, null, 2) }
+                                                                        { JSON.stringify(layer, json_replacer, 2) }
                                                                 </Box>
                                                             </TabPanel>
                                                         </Tabs>
