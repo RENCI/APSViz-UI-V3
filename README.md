@@ -1,68 +1,84 @@
-# RENCI APSViz UI/V3
+![renci-logo.png](renci-logo.png)
+# APSViz UI/V3
 
-This React application boilerplate contains an initial configuration common to the many of the web applications built at/by/for RENCI.
+Coastal water level, wave and inundation forecasts are provided as part of an active, community-based research program to improve and expand these capabilities. Forecasts for the US East and Gulf coasts are updated four times daily using meteorological forecasts from the Global Forecast System.
+During tropical events additional water level, wave and inundation model forecasts are provided using alternative meteorological forecasts.
 
-The following are set up by default: Webpack 5, Babel, CSS Modules, Source Maps, Hot Module Replacement, React, Image support (png, jpg, jpeg, gif, svg, webp), and ESLint. Basic client-side routing is configured with a couple exmaples using [Markdown](https://www.markdownguide.org/) files for content management. For a more complete set of dependencies, consult the `package.json` file. In addition, this starter comes with the branding resources for RENCI and UNC, which we also often require.
+The ADCIRC Prediction System (APS) results can be viewed using the APSViz application.
 
-### 🚀 Get Started
+This repository represents the third version of the APSViz user interface.
 
-This repository is a template repository. Click [Use this template](https://github.com/renci/react-starter/generate) to
-generate a new repository with the same directory structure and files as this repository.
-(The "Include all branches" checkbox can safely remain unchecked on the repository generation page.)
+![ADCIRC-overview.png](Docs%2FADCIRC-overview.png)
+***
+### APS - The ADCIRC Prediction System.
+#### The ADCIRC Prediction System (APS) is a coastal hazards prediction system built around the ADCIRC coastal circulation and storm surge model.
 
-### 🚧 Application Development
+***
+### ADCIRC - ADvanced CIRCulation.
 
-Now that we have the base code. We're ready to install the application depdendencies and begin development. Move into the project root directory, and install the dependencies with `npm i`. Then start a local development server by running `npm start`. Note that this development environment utilizes [hot-module-replacement](https://webpack.js.org/guides/hot-module-replacement/) and [react-refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin) for optimal developer experience. That's it!
+ADCIRC is a system of computer programs for solving time dependent, free surface circulation and transport problems in two and three dimensions. These programs utilize the finite element method in space allowing the use of highly flexible, unstructured grids. Typical ADCIRC applications have included:
 
-#### Environment Variables
+- Prediction of storm surge and flooding
+- Modeling tides and wind driven circulation
+- Larval transport studies near shore marine operations
+- Dredging feasibility 
+- and Material disposal studies
+***
 
-Not every UI will require environment-specific variables, but it is common, so some notes are here to get that set up in Webpack.
-First, we'll need to install `dotenv-webpack`, which compiles environment variables into the application bundle.
+### **Top-level Technologies and component versions used in the APSViz application.**
 
-```shell
-npm i dotenv-webpack -D
-```
-Next, we'll make two additions to `webpack.config.js`: (1) import this new dependency at the top of the file
+> *Please refer to the package.json file in this repository for a complete listing of other supporting packages used in this product.*
 
-```js
-const DotenvPlugin = require('dotenv-webpack')
-```
+<div style="margin-left: auto; margin-right: auto; width: 30%">
 
-and (2) add the plugin to the `plugins` array.
+| **Technology** | **Version** |
+|:--------------:|:-----------:|
+|     ESLint     |   9.11.1    |
+|   JavaScript   |    >ES6     |
+|      Node      |   20.17.0   |
+|      NPM       |   10.8.0    |
+|     React      |   18.3.1    |
+</div>
 
-```js
-const plugins = [
-  // ...
-  new DotenvPlugin(),
-]
-```
+### Supporting systems and tools.
+<div style="margin-left: auto; margin-right: auto; width: 30%">
 
-All done! Now, Webpack will look for the `.env` file for environment variables to feed into the application. A typical `.env` file might look something like the following.
+| **Technology** | **Version** |
+|:--------------:|:-----------:|
+|     Docker     |   27.1.1    |
+|    FastAPI     |   0.115.2   |
+|   Geoserver    |   2.20.1    |
+|   Kubernetes   |   1.29.8    | 
+|   PostgreSQL   |   15-3.3    |
+|    RabbitMQ    |   3.9.13    |
+|     SFTPGo     |    2.2.3    |
+| TDS (THREDDS)  |    5.4.0    |
+</div>
 
-```shell
-# .env
-API_PORT=3000
-```
+***
+### **Code quality and consistency.**
+**This codebase is routinely examined for package version upgrades and vulnerabilities.**
 
-The environment variables defined in the `.env` file will populate the `process.env` object in your React application. See the [dotenv-webpack documentation](https://github.com/mrsteele/dotenv-webpack#readme) for additional customization. Note that it is often desirable to add `.env` to your `.gitignore` file.
+***
+### **Installing this project.**
+#### Dockerfile command line
+docker build --build-arg APP_VERSION=PROD \
+--build-arg APP_GS_DATA_PROD_URL="GeoServer URL" \
+--build-arg APP_UI_DATA_PROD_URL="UI Data provider URL" \
+--build-arg APP_UI_DATA_PROD_TOKEN="JWT token" \
+--build-arg APP_UI_HURRICANE_ICON_PROD_URL="Hurricane icon file server URL" \
+--build-arg APP_PACKAGE_RENCI_REGISTRY="Custom package registry" \
+--build-arg APP_PACKAGE_REGISTRY_TOKEN="Custom package registry token" \
+--no-cache --progress plain -f APSViz-UI-V3\Dockerfile -t apsviz-ui-v3:latest .
 
-> This section can be used as a guide to install other Webpack [plugins](https://webpack.js.org/plugins/) and [loaders](https://webpack.js.org/loaders/) in general.
+#### Kubernetes
+Please refer to the APSViz Helm repo [here](https://github.com/RENCI/apsviz-helm) for all Kubernetes deployment configurations.
 
-### 🎁 Building for Production
-
-To build a production-ready React app, run `npm run build` from the project root directory. The bundled files will be exported to the `dist` directory. To build an easily debuggable production build, use `npm run build-dev`.
-
-#### Docker
-
-A Dockerfile lives in this repo to help get started with containerized deployment.
-It is a multi-stage build that results in an NGINX image with the application bundle where NGNIX expects to find it.
-
-The command to build an image might look something like the following.
-```
-docker build -t my-ui .
-```
-
-To spin up a container from your image, use a command such as the following.
-```
-docker run --rm -p 80:8080 my-ui
-```
+***
+### **Attributions and collaborators.**
+<a href="https://www.adcircprediction.org/"><img alt="test" src="src/images/aps-logo.png" width="120px" height="40"></a>
+<a href="https://www.coastalresiliencecenter.org/"><img src="src/images/CRC_LOGO.jpg" width="200px" height="40"></a>
+<a href="https://ccee.ncsu.edu/research/ewc/"><img src="src/images/NCU_LOGO.jpg" width="200px" height="40"></a>
+<a href="https://thewaterinstitute.org/"><img src="src/images/TWI_LOGO.jpg" width="180px" height="40"></a>
+<a href="https://engineering.uga.edu/team_member/matthew-v-bilskie/"><img src="src/images/UGA_LOGO.jpg" width="140px" height="40"></a>
+<a href="https://www.noaa.gov/ocean-science-and-technology-subcommittee/national-oceanographic-partnership-program"><img src="src/images/nopp-logo.png" width="70px" height="40"></a>
