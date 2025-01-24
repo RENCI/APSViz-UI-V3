@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import {
-    AccordionGroup, Accordion, AccordionDetails, Button, Stack,
+    AccordionGroup, Accordion, AccordionDetails, AccordionSummary, Button, Stack,
     Checkbox, Typography, Tab, Tabs, TabPanel, TabList, Box } from '@mui/joy';
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from "@context/map-context";
@@ -59,6 +59,19 @@ export default function ExternalLayerItems(data) {
             }
         });
     }
+
+    /**
+     * removes the "state" JSON branch for the metadata view
+     *
+     */
+    const json_replacer = (key, value) => {
+        // return nothing if this is the "state" branch
+        if (key === "state")
+            return undefined;
+        // otherwise return the value
+        else
+            return value;
+    };
 
     /**
      * handles updating the visibility of an external layers on the map surface
@@ -197,73 +210,84 @@ export default function ExternalLayerItems(data) {
                             // output sources
                             .map(
                                 (layer, itemIndex) => (
-                                    <Stack key={ itemIndex } spacing={ 0 } direction="column" gap={ 0 }>
-                                        <Typography level="body-sm" sx={{ mb: 1, fontWeight: 'bold' }}> { layer['source'] }</Typography>
-                                        {
-                                            // output checkboxes for each layer name/url
-                                            externalLayers
-                                            // get the layer names for this source type
-                                            .filter(item => item.source === layer.source)
-                                            // output the checkboxes
-                                            .map ((layer, itemIndex) =>
-                                                <Accordion
-                                                    key={ itemIndex }
-                                                    sx={{ p: 0 }}
-                                                    expanded={ getAccordionState(layer['name']) }
-                                                    onChange={ () => toggleAccordionView(layer['name']) }>
+                                    <Accordion
+                                        key={ itemIndex }
+                                        expanded={ getAccordionState(layer['source']) }
+                                        onChange={ () => toggleAccordionView(layer['source']) }>
 
-                                                    <Stack
-                                                        direction="row"
-                                                        justifyContent="space-between"
-                                                        alignItems="stretch"
-                                                        gap={ 2 }
-                                                        >
-                                                            <Checkbox
-                                                                size="sm"
-                                                                checked={ getCheckedState( layer.name ) }
-                                                                label={ <Typography sx={{ fontSize: "xs" }}> { layer['name'] } </Typography> }
-                                                                onChange={ () => toggleLayerVisibility(layer['name']) }
-                                                            />
+                                        <AccordionSummary>
+                                            <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "16px" }}> { layer['source'] }</Typography>
+                                        </AccordionSummary>
 
-                                                            <ActionButton onClick={ () => toggleAccordionView( layer['name']) }>
-                                                                <ExpandIcon
-                                                                    fontSize="sm"
-                                                                    sx={{ transform: getAccordionState(layer['name']) ? 'rotate(180deg)' : 'rotate(0)',
-                                                                        transition: 'transform 100ms' }} />
-                                                            </ActionButton>
-                                                    </Stack>
+                                        <AccordionDetails>
+                                            <Stack spacing={ 0 } direction="column" gap={ 0 }>
+                                            {
+                                                // output checkboxes for each layer name/url
+                                                externalLayers
+                                                // get the layer names for this source type
+                                                .filter(item => item.source === layer.source)
+                                                // output the checkboxes
+                                                .map ((layer, itemIndex) =>
+                                                    <Accordion
+                                                        key={ itemIndex }
+                                                        sx={{ p: 0 }}
+                                                        expanded={ getAccordionState(layer['name']) }
+                                                        onChange={ () => toggleAccordionView(layer['name']) }>
 
-                                                    <AccordionDetails>
-                                                        <Tabs defaultValue={0}>
-                                                            <Stack
-                                                                direction="row"
-                                                                justifyContent="space-between"
+                                                        <Stack
+                                                            direction="row"
+                                                            justifyContent="space-between"
+                                                            alignItems="stretch"
+                                                            gap={ 1 }
                                                             >
-                                                                <TabList size="sm" sx={{ flex: 1 }}>
-                                                                    <Tab variant="plain" color="primary">
-                                                                        Metadata
-                                                                    </Tab>
-                                                                </TabList>
-                                                            </Stack>
+                                                                <Checkbox
+                                                                    size="sm"
+                                                                    checked={ getCheckedState( layer.name ) }
+                                                                    label={ <Typography sx={{ fontSize: "xs" }}> { layer['name'] } </Typography> }
+                                                                    onChange={ () => toggleLayerVisibility(layer['name']) }
+                                                                />
 
-                                                            <TabPanel value={ 0 }>
-                                                                <Box component="pre" sx={{
-                                                                    fontSize: '75%',
-                                                                    color: 'text.primary',
-                                                                    backgroundColor: 'transparent',
-                                                                    overflowX: 'auto',
-                                                                    m: 0, p: 1,
-                                                                    height: '100px',
-                                                                    }}>
-                                                                        { JSON.stringify(layer, null, 2) }
-                                                                </Box>
-                                                            </TabPanel>
-                                                        </Tabs>
-                                                    </AccordionDetails>
-                                                </Accordion>
-                                            )
-                                        }
-                                    </Stack>
+                                                                <ActionButton onClick={ () => toggleAccordionView( layer['name']) }>
+                                                                    <ExpandIcon
+                                                                        fontSize="sm"
+                                                                        sx={{ transform: getAccordionState(layer['name']) ? 'rotate(180deg)' : 'rotate(0)',
+                                                                            transition: 'transform 100ms' }} />
+                                                                </ActionButton>
+                                                        </Stack>
+
+                                                        <AccordionDetails>
+                                                            <Tabs defaultValue={0}>
+                                                                <Stack
+                                                                    direction="row"
+                                                                    justifyContent="space-between"
+                                                                >
+                                                                    <TabList size="sm" sx={{ flex: 1 }}>
+                                                                        <Tab variant="plain" color="primary">
+                                                                            Metadata
+                                                                        </Tab>
+                                                                    </TabList>
+                                                                </Stack>
+
+                                                                <TabPanel value={ 0 }>
+                                                                    <Box component="pre" sx={{
+                                                                        fontSize: '75%',
+                                                                        color: 'text.primary',
+                                                                        backgroundColor: 'transparent',
+                                                                        overflowX: 'auto',
+                                                                        m: 0, p: 1,
+                                                                        height: '100px',
+                                                                        }}>
+                                                                            { JSON.stringify(layer, json_replacer, 2) }
+                                                                    </Box>
+                                                                </TabPanel>
+                                                            </Tabs>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                )
+                                            }
+                                            </Stack>
+                                        </AccordionDetails>
+                                    </Accordion>
                                 )
                             )
                         }
