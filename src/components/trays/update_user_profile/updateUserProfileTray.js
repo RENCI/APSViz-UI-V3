@@ -1,7 +1,7 @@
-import React, {useState, Fragment, useEffect} from "react";
-import {Button, Divider, Typography, Input, Stack} from '@mui/joy';
-import {useAuth} from "@auth";
-import {getNamespacedEnvParam} from "@utils";
+import React, { useState, Fragment, useEffect } from "react";
+import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
+import { useAuth } from "@auth";
+import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
 
 // load the encryption library
@@ -36,6 +36,8 @@ export const UpdateUserProfileTray = () => {
     // redirect to the main page on successful account addition
     const { updateUser, userProfile } = useAuth();
 
+    // set controls disabled
+    const [isDisabled, setIsDisabled] = useState(false);
     /**
      * populate the controls with their current values
      */
@@ -43,6 +45,9 @@ export const UpdateUserProfileTray = () => {
         setEmailValue(userProfile.userProfile.profile.email);
         setFirstNameValue(userProfile.userProfile.profile['details']['first_name']);
         setLastNameValue(userProfile.userProfile.profile['details']['last_name']);
+
+        if (userProfile.userProfile.profile.role_id === 0)
+            setIsDisabled(true);
     }, [] );
 
     /**
@@ -194,37 +199,40 @@ export const UpdateUserProfileTray = () => {
     return (
         <Fragment>
             <Stack spacing={1}>
-                <Typography level="title-lg" sx={{ mt: 1, mb: 2 }}>Update your account ({ emailValue })</Typography>
-
+                { !isDisabled && <Typography level="title-lg" sx={{ mt: 1, mb: 2 }}>Update your account ({ emailValue })</Typography> }
                 { error && <Typography sx={{ fontSize: 15, color: 'red' }}>{ error }</Typography> }
                 { msg && <Typography sx={{ fontSize: 15, color: 'green' }}>{ msg }</Typography> }
 
                 <Input
                     value={ firstNameValue }
                     onChange={ e => setFirstNameValue(e.target.value) }
-                    placeholder="First name"/>
+                    placeholder="First name"
+                    disabled={ isDisabled}/>
 
                 <Input
                     value={ lastNameValue }
                     onChange={ e => setLastNameValue(e.target.value) }
-                    placeholder="Last name"/>
+                    placeholder="Last name"
+                    disabled={ isDisabled }/>
 
                 <Input
                     type="password"
                     value={ passwordValue }
                     onChange={ e => setPasswordValue(e.target.value) }
-                    placeholder="New password"/>
+                    placeholder="New password"
+                    disabled={ isDisabled }/>
 
                 <Input
                     type="password"
                     value={ newPasswordValue }
                     onChange={e => setNewPasswordValue(e.target.value)}
-                    placeholder="Verify your new password"/>
+                    placeholder="Verify your new password"
+                    disabled={ isDisabled }/>
 
                 <Divider/>
 
                 <Button
-                    disabled={ !firstNameValue || !lastNameValue }
+                    disabled={ !firstNameValue || !lastNameValue || isDisabled}
                     onClick={ onUpdateUserClicked }>Submit
                 </Button>
             </Stack>

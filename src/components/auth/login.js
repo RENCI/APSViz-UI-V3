@@ -33,6 +33,9 @@ export const Login = () => {
     // save the user details and redirect to the main page
     const { login, navAddUser } = useAuth();
 
+    // create a guest account profile
+    const guest_acct = {"success": true, "role": {"type": "User"}, "profile": {"email": "Guest","role_id": 0,"details": {"last_name": "Guest", "first_name": "Guest"}}};
+
     /**
      * handles the login button event
      *
@@ -73,7 +76,7 @@ export const Login = () => {
         // continue to validate the credentials
         else {
             // if the call was successful and it is the correct password
-            if (ret_val['success'] && bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']))
+            if (ret_val['success'] && (bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']) || ret_val['profile']['email'] === 'guest'))
                 // save the new user profile
                 login(ret_val);
             else {
@@ -132,12 +135,8 @@ export const Login = () => {
 
                             <Divider/>
 
-                            <Button
-                                type="submit"
-                                disabled={ !emailValue || !passwordValue }
-                                >Log in
-                            </Button>
-
+                            <Button type="submit" disabled={ (!emailValue || !passwordValue) }>Log in</Button>
+                            <Button onClick={ () => login(guest_acct)}>Log in as guest</Button>
                             <Button onClick={ () => navAddUser() }>Sign up for an account</Button>
                         </Stack>
                     </Box>
