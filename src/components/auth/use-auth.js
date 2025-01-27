@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
     // call this function to authenticate the user
     const login = async (userProfile) => {
         // set the user profile data
-        setUserProfile('userProfile', userProfile, { path: '/', maxAge: 3600 });
+        setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
 
         // redirect to the main page
         navigate('/');
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     // call this to navigate to the update user page
     const updateUser = (newUserProfile) => {
         // remove the user data
-        setUserProfile('userProfile', newUserProfile, { path: '/', maxAge: 3600 });
+        setUserProfile('userProfile', newUserProfile, { path: '/', maxAge: 21600 });
     };
 
     // define methods and user profile
