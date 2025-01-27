@@ -129,9 +129,9 @@ module.exports = {
       '@config': path.resolve(__dirname, 'src/components/config/'),
       '@auth' : path.resolve(__dirname, 'src/components/auth/'),
       '@control-panel' : path.resolve(__dirname, 'src/components/control-panel'),
-      '@config': path.resolve(__dirname, 'src/components/config/'),
       '@additional-layers': path.resolve(__dirname, 'src/components/trays/additional-layers/'),
-    }
+    },
+    fallback: { crypto: false }
   },
 
   devtool: 'source-map',
@@ -162,3 +162,4 @@ module.exports = {
     hints: false
   }
 }
+
