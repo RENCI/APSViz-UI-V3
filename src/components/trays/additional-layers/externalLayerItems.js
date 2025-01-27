@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import {
-    AccordionGroup, Accordion, AccordionDetails, Button, Stack,
+    AccordionGroup, Accordion, AccordionDetails, AccordionSummary, Button, Stack,
     Checkbox, Typography, Tab, Tabs, TabPanel, TabList, Box } from '@mui/joy';
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from "@context/map-context";
@@ -268,24 +268,26 @@ export default function ExternalLayerItems(data) {
                                                                     </TabList>
                                                                 </Stack>
 
-                                                            <TabPanel value={ 0 }>
-                                                                <Box component="pre" sx={{
-                                                                    fontSize: '75%',
-                                                                    color: 'text.primary',
-                                                                    backgroundColor: 'transparent',
-                                                                    overflowX: 'auto',
-                                                                    m: 0, p: 1,
-                                                                    height: '100px',
-                                                                    }}>
-                                                                        { JSON.stringify(layer, null, 2) }
-                                                                </Box>
-                                                            </TabPanel>
-                                                        </Tabs>
-                                                    </AccordionDetails>
-                                                </Accordion>
-                                            )
-                                        }
-                                    </Stack>
+                                                                <TabPanel value={ 0 }>
+                                                                    <Box component="pre" sx={{
+                                                                        fontSize: '75%',
+                                                                        color: 'text.primary',
+                                                                        backgroundColor: 'transparent',
+                                                                        overflowX: 'auto',
+                                                                        m: 0, p: 1,
+                                                                        height: '100px',
+                                                                        }}>
+                                                                            { JSON.stringify(layer, json_replacer, 2) }
+                                                                    </Box>
+                                                                </TabPanel>
+                                                            </Tabs>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                )
+                                            }
+                                            </Stack>
+                                        </AccordionDetails>
+                                    </Accordion>
                                 )
                             )
                         }
