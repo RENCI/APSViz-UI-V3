@@ -16,15 +16,7 @@ export const ExternalLayers = () => {
         externalLayers
     } = useLayers();
 
-    //const sst_url = "https://coastwatch.noaa.gov/erddap/wms/noaacwBLENDEDsstDNDaily/request";
-    //const sst_layer = "noaacwBLENDEDsstDNDaily:analysed_sst";
-
-    //const sst_url = "https://coastwatch.noaa.gov/erddap/wms/noaacwecnAVHRRmultisatsstEastCoastMonthly/request";
-    //const sst_layer = "noaacwecnAVHRRmultisatsstEastCoastMonthly:sst";
-
-    //const sst_url = "https://coastwatch.noaa.gov/erddap/wms/noaacwecnAVHRRmultisatsstEastCoast3Day/request";
-    //const sst_layer = "noaacwecnAVHRRmultisatsstEastCoast3Day:sst";
-
+    // if there are external layers to render
     if (externalLayers != null) {
         return (
             <Fragment>
@@ -34,10 +26,10 @@ export const ExternalLayers = () => {
                     .map(
                         (layer) => (
                             <WMSTileLayer
-                                key={layer.name}
-                                url={layer.url}
-                                layers={layer.layer}
-                                params={layer.params}
+                                key={ layer.name }
+                                url={ layer.url }
+                                layers={ layer.layer }
+                                params={ layer.params }
                             />
                         )
                     )

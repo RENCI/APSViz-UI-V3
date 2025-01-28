@@ -7,6 +7,7 @@ import { RemoveAllObservations } from "./remove-observations";
 import { RemoveModels } from "./remove-models";
 import { ResetStyles } from "./reset-styles";
 import { ResetCompare } from "./reset-compare";
+import { RemoveAdditionalLayers } from "./remove-addl-layers";
 
 // get an icon for the tray
 export const icon = <RemoveIcon />;
@@ -25,5 +26,6 @@ export const trayContents = () => (
             <RemoveModels />
             <ResetStyles />
             <ResetCompare />
+            <RemoveAdditionalLayers />
       </Stack>
     );

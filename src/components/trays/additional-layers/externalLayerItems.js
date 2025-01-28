@@ -5,7 +5,7 @@ import {
 import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
 import { useLayers } from "@context/map-context";
 import PropTypes from 'prop-types';
-import {ActionButton} from "@components/buttons";
+import { ActionButton } from "@components/buttons";
 
 // set component prop types
 ExternalLayerItems.propTypes = {
@@ -215,7 +215,7 @@ export default function ExternalLayerItems(data) {
                                         expanded={ getAccordionState(layer['source']) }
                                         onChange={ () => toggleAccordionView(layer['source']) }>
 
-                                        <AccordionSummary>
+                                        <AccordionSummary sx={{flexDirection: "row-reverse"}}>
                                             <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "16px" }}> { layer['source'] }</Typography>
                                         </AccordionSummary>
 
@@ -243,7 +243,7 @@ export default function ExternalLayerItems(data) {
                                                                 <Checkbox
                                                                     size="sm"
                                                                     checked={ getCheckedState( layer.name ) }
-                                                                    label={ <Typography sx={{ fontSize: "xs" }}> { layer['name'] } </Typography> }
+                                                                    label={ <Typography sx={{ fontSize: "xs" }}> { layer['row_num'] }: { layer['name'] } </Typography> }
                                                                     onChange={ () => toggleLayerVisibility(layer['name']) }
                                                                 />
 

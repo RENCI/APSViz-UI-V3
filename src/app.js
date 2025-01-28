@@ -6,7 +6,7 @@ import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
 import { ComparePanel } from '@components/compare-panel';
-import { MapLegend } from '@components/legend';
+import { MapLegend, AdditionalMapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
 import { Config } from '@components/config';
 import { Acknowledgements } from "@components/acknowledgements";
@@ -43,6 +43,7 @@ const Content = () => {
             { (defaultInstanceName != null) && <ControlPanel/> }
             <ComparePanel/>
             <MapLegend />
+            <AdditionalMapLegend />
             <Acknowledgements />
         </Fragment>
     );

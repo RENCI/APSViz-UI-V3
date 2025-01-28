@@ -68,6 +68,9 @@ export const LayersProvider = ({ children }) => {
   // state to keep track of the obs dialog that has focus
   const [topMostDialogIndex, setTopMostDialogIndex] = useState(0);
 
+  // state to keep track of the obs dialog that has focus
+  const [topMostExtLegendIndex, setTopMostExtLegendIndex] = useState(0);
+
   /**
    * this section is for the side-by-side compare mode items
    * @type {string}
@@ -125,6 +128,26 @@ export const LayersProvider = ({ children }) => {
           // reset the compared layers
           setSideBySideLayers(null);
       }
+  };
+
+  /**
+   * hides the selected additional layers
+   *
+   */
+  const removeAdditionalLayers = () => {
+      // get a copy of the external layers
+      const newLayers = [...externalLayers];
+
+      // loop through the layers
+      newLayers.map(layer => {
+        // if this later is set to visible
+        if (layer.state.visible) {
+            layer.state.visible = false;
+        }
+      });
+
+      // save the altered list
+      setExternalLayers([...newLayers]);
   };
 
   /**
@@ -452,10 +475,13 @@ export const LayersProvider = ({ children }) => {
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
         resetCompare, removeSideBySideLayers,
-
+        removeAdditionalLayers,
 
         // tracks the dialog that has focus
-        topMostDialogIndex, setTopMostDialogIndex
+        topMostDialogIndex, setTopMostDialogIndex,
+
+        // tracks the topmost additional layer legend index
+        topMostExtLegendIndex, setTopMostExtLegendIndex
       }}
     >
       {children}
