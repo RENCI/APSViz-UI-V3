@@ -12,7 +12,7 @@ import isaac from "isaac";
 // override using unsecure math.random when generating hashes
 bcrypt.setRandomFallback((len) => {
     // create an array with size defined
-	const buf = new Uint8Array(len);
+	const buf = [...new Uint8Array(len)];
 
     // assign a new random number generator
 	return buf.map(() => Math.floor(isaac.random() * 256));
