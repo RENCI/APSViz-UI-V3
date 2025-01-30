@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useAuth } from "@auth";
-import {Button, Stack } from '@mui/joy';
+import { Button, Stack } from '@mui/joy';
 
 /**
  * page to collect the user credentials and verify them
