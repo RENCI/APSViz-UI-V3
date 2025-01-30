@@ -210,10 +210,11 @@ export default function ExternalLayerItems(data) {
                                     <Accordion
                                         key={ itemIndex }
                                         expanded={ getAccordionState(layer['source']) }
-                                        onChange={ () => toggleAccordionView(layer['source']) }>
+                                        onChange={ () => toggleAccordionView(layer['source']) }
+                                        sx={{ p: 0, m: 0, mt: -.2 }}>
 
-                                        <AccordionSummary sx={{flexDirection: "row-reverse"}}>
-                                            <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "16px" }}> { layer['source'] }</Typography>
+                                        <AccordionSummary >
+                                            <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "14px" }}> { layer['source'] }</Typography>
                                         </AccordionSummary>
 
                                         <AccordionDetails>
@@ -227,7 +228,7 @@ export default function ExternalLayerItems(data) {
                                                 .map ((layer, itemIndex) =>
                                                     <Accordion
                                                         key={ itemIndex }
-                                                        sx={{ p: 0 }}
+                                                        sx={{ p: 0, ml: 1.5, mb: -.3 }}
                                                         expanded={ getAccordionState(layer['name']) }
                                                         onChange={ () => toggleAccordionView(layer['name']) }>
 
@@ -235,7 +236,7 @@ export default function ExternalLayerItems(data) {
                                                             direction="row"
                                                             justifyContent="space-between"
                                                             alignItems="stretch"
-                                                            gap={ 1 }
+                                                            // gap={ .5 }
                                                             >
                                                                 <Checkbox
                                                                     size="sm"
@@ -244,9 +245,9 @@ export default function ExternalLayerItems(data) {
                                                                     onChange={ () => toggleLayerVisibility(layer['name']) }
                                                                 />
 
-                                                                <ActionButton onClick={ () => toggleAccordionView( layer['name']) }>
+                                                                <ActionButton onClick={ () => toggleAccordionView( layer['name']) } sx={{ mr: .4 }}>
                                                                     <ExpandIcon
-                                                                        fontSize="sm"
+                                                                        fontSize="10px"
                                                                         sx={{ transform: getAccordionState(layer['name']) ? 'rotate(180deg)' : 'rotate(0)',
                                                                             transition: 'transform 100ms' }} />
                                                                 </ActionButton>
@@ -271,7 +272,7 @@ export default function ExternalLayerItems(data) {
                                                                         color: 'text.primary',
                                                                         backgroundColor: 'transparent',
                                                                         overflowX: 'auto',
-                                                                        m: 0, p: 1,
+                                                                        m: -1, p: 1,
                                                                         height: '100px',
                                                                         }}>
                                                                             { JSON.stringify(layer, json_replacer, 2) }
