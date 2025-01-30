@@ -91,14 +91,11 @@ export default function ExternalLayerItems(data) {
             return;
         }
 
-        // get the target layer to toggle
-        const alteredLayer = newLayers[index];
-
         // toggle the visibility
-        alteredLayer.state.visible = !alteredLayer.state.visible;
+        newLayers[index].state.visible = !newLayers[index].state.visible;
 
         // save the layers
-        setExternalLayers([...newLayers.slice(0, index), { ...alteredLayer }, ...newLayers.slice(index + 1)]);
+        setExternalLayers([...newLayers]);
     };
 
     /**
