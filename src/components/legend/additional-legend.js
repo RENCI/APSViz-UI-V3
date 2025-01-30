@@ -86,7 +86,7 @@ export const AdditionalMapLegend = () => {
                                         }}>
 
                                         <Typography sx={{ p: 0, m: 0, fontColor: "black", fontWeight: 'bold', fontSize: "10px" }}>
-                                            { sublayer.source.split(' ').map(word => word.charAt(0)) } { sublayer.row_num }
+                                            { sublayer.source.split(' ').slice(0, 3).map(word => word.charAt(0)) } { sublayer.row_num }
                                         </Typography>
                                     </Avatar>
 
