@@ -134,16 +134,14 @@ export const LayersProvider = ({ children }) => {
    * hides the selected additional layers
    *
    */
-  const removeAdditionalLayers = () => {
+  const removeAdditionalLayerSelections = () => {
       // get a copy of the external layers
       const newLayers = [...externalLayers];
 
-      // loop through the layers
-      newLayers.map(layer => {
+      // loop through the layers that are currently visible
+      newLayers.filter(item => item.state.visible === true).map(layer => {
         // if this later is set to visible
-        if (layer.state.visible) {
-            layer.state.visible = false;
-        }
+        layer.state.visible = false;
       });
 
       // save the altered list
@@ -451,7 +449,6 @@ export const LayersProvider = ({ children }) => {
 
         defaultModelLayers, setDefaultModelLayers,
         hurricaneTrackLayers, setHurricaneTrackLayers,
-        externalLayers, setExternalLayers,
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
         layerTypes,
@@ -475,12 +472,13 @@ export const LayersProvider = ({ children }) => {
         selectedRightLayer, setSelectedRightLayer,
         sideBySideLayers, setSideBySideLayers,
         resetCompare, removeSideBySideLayers,
-        removeAdditionalLayers,
 
         // tracks the dialog that has focus
         topMostDialogIndex, setTopMostDialogIndex,
 
-        // tracks the topmost additional layer legend index
+        // tracks the additional layers
+        externalLayers, setExternalLayers,
+        removeAdditionalLayerSelections,
         topMostExtLegendIndex, setTopMostExtLegendIndex
       }}
     >
