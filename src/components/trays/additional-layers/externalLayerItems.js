@@ -236,7 +236,6 @@ export default function ExternalLayerItems(data) {
                                                             direction="row"
                                                             justifyContent="space-between"
                                                             alignItems="stretch"
-                                                            // gap={ .5 }
                                                             >
                                                                 <Checkbox
                                                                     size="sm"
