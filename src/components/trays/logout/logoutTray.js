@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useAuth } from "@auth";
+import { userAuth } from "@auth";
 import {Button, Stack } from '@mui/joy';
 
 /**
@@ -10,7 +10,7 @@ import {Button, Stack } from '@mui/joy';
  */
 export const LogoutTray = () => {
     // attach to the logout functionality
-    const { logout } = useAuth();
+    const { logout } = userAuth();
 
     const onLogoutClicked = async () => {
         logout();

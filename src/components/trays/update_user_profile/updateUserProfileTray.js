@@ -1,6 +1,6 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
-import { useAuth } from "@auth";
+import { userAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
 
@@ -37,7 +37,7 @@ export const UpdateUserProfileTray = () => {
     const [lastNameValue, setLastNameValue] = useState('');
 
     // redirect to the main page on successful account addition
-    const { updateUser, userProfile } = useAuth();
+    const { updateUser, userProfile } = userAuth();
 
     // set controls disabled
     const [isDisabled, setIsDisabled] = useState(false);

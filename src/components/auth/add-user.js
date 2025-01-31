@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Button, Divider, Typography, Input, Box, Tooltip } from '@mui/joy';
-import { useAuth } from "@auth";
+import React, {useState} from "react";
+import {Button, Divider, Typography, Input, Box, Tooltip} from '@mui/joy';
+import { userAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
 import { Branding } from "@control-panel";
 import axios from 'axios';
+import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
@@ -12,10 +13,10 @@ import isaac from "isaac";
 // override using unsecure math.random when generating hashes
 bcrypt.setRandomFallback((len) => {
     // create an array with size defined
-	const buf = [...new Uint8Array(len)];
+    const buf = [...new Uint8Array(len)];
 
     // assign a new random number generator
-	return buf.map(() => Math.floor(isaac.random() * 256));
+    return buf.map(() => Math.floor(isaac.random() * 256));
 });
 
 /**
@@ -28,15 +29,15 @@ export const AddUser = () => {
     // state for the date validation error
     const [error, setError] = useState(null);
 
-    // storage for the username and password
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
-    const [newPasswordValue, setNewPasswordValue] = useState('');
-    const [firstNameValue, setFirstNameValue] = useState('');
-    const [lastNameValue, setLastNameValue] = useState('');
+    // storage for the form items
+    const [ emailValue, setEmailValue ] = useState('');
+    const [ passwordValue, setPasswordValue ] = useState('');
+    const [ newPasswordValue, setNewPasswordValue ] = useState('');
+    const [ firstNameValue, setFirstNameValue ] = useState('');
+    const [ lastNameValue, setLastNameValue ] = useState('');
 
     // redirect to the main page on successful account addition
-    const { login, addUser } = useAuth();
+    const { login, addUser } = userAuth();
 
     /**
      * Returns the user profile details
@@ -47,7 +48,10 @@ export const AddUser = () => {
      */
     const getUserDetails = (first_name, last_name) => {
         // return the user profile details
-        return `{"first_name": "${first_name}", "last_name": "${last_name}", "created_on": "${new Date().toISOString()}"}`;
+        return `{"first_name": "${first_name}", "last_name": "${last_name}", "created_on": "${new Date().toISOString()}",         
+                "basemap": "USGS Topo", "darkMode": "light", 
+                "unitsType": "imperial", "useUTC": "false", "speedType": "knots", 
+                "maxwvel_opacity": "1", "maxele_opacity": "1", "swan_opacity": "1"}`;
     };
 
     /**
@@ -130,10 +134,8 @@ export const AddUser = () => {
         // if the user added all the params
         if (validateAddParams(emailValue, firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
             // return the query string
-            return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}` +
-                `add_user?email=${email}&password_hash=${getPasswordHash(password)}&role_id=2&details=${getUserDetails(first_name, last_name)}`;
-        }
-        else {
+            return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}add_user?email=${email}&password_hash=${getPasswordHash(password)}&role_id=2&maxele_style=${encodeURIComponent(maxeleStyle)}&maxwvel_style=${encodeURIComponent(maxwvelStyle)}&swan_style=${encodeURIComponent(swanStyle)}&details=${getUserDetails(first_name, last_name)}`;
+        } else {
             return false;
         }
     };
@@ -183,8 +185,7 @@ export const AddUser = () => {
 
                     // go to the login page
                     login();
-                }
-                else {
+                } else {
                     // show the error
                     setError('The user name may already exist.');
                 }
@@ -202,7 +203,7 @@ export const AddUser = () => {
                 transform: 'translate(-50%, -50%)',
                 width: '350px'
             }}>
-            <form name={"add-user"} onSubmit={ onAddUserClicked }>
+            <form name={"add-user"} onSubmit={onAddUserClicked}>
                 <Box bgcolor="white" sx={{
                     display: 'flex',
                     flexDirection: 'column',

@@ -44,7 +44,7 @@ export const SettingsProvider = ({ children }) => {
   // save the units type specified by user - imperial or metric (default)
   const [storedUnitsType, setStoredUnitsType] = useLocalStorage('unitsType','metric');
 
-  // if units type is imperial, need to save wind speed unit - mph or knots
+  // if unitsType is imperial, need to save wind speed unit - mph or knots
   // default for metric is meters/second (mps)
   const [storedSpeedType, setStoredSpeedType] = useLocalStorage('speedType','mps');
 

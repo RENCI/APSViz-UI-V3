@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from "react-router-dom";
-import { useAuth } from "@auth";
+import { userAuth } from "@auth";
 import PropTypes from "prop-types";
 
 /**
@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
  */
 export const ProtectedRoute = ({children}) => {
     // grab an auth object
-    const { userProfile } = useAuth();
+    const { userProfile } = userAuth();
 
     // if the user was not authenticated
     if (Object.keys(userProfile).length === 0) {
