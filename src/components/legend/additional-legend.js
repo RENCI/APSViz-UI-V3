@@ -15,12 +15,34 @@ export const AdditionalMapLegend = () => {
     // create a reference to avoid the findDOMNode deprecation issue
     const nodeRef = useRef(null);
 
+    // get a list of unique layer names
+    const layerNames = [...new Set(externalLayers.map((l) => l.source))];
+
     /**
      * handles a click on the legend to make it have focus
      */
     const handleClick = (index) => {
         // set the new topmost dialog in the stack
         setTopMostExtLegendIndex(index);
+    };
+
+    /**
+     * get the index of the target layer in the array for cascade spacing
+     *
+     * @param layerName
+     * @returns {*}
+     */
+    const getGroupIndex = (layerName) => {
+        // get the index of this layer name
+        let index = layerNames.findIndex(item => item === layerName);
+
+        // this should never happen, but will check anyway
+        if (index < 0)
+            // default the value
+            index = 0;
+
+        // return the index
+        return index;
     };
 
     // render the legends
@@ -37,10 +59,10 @@ export const AdditionalMapLegend = () => {
             .map((layer) => (
                 // display legends for all selected external layers
                 externalLayers
-                // group by the source name
-                .filter(item => item.source === layer.source)
                 // only render visible layers that have a URL to a legend
                 .filter(item => (item.state.visible && item.params['legendURL']))
+                // group by the source name
+                .filter(item => item.source === layer.source)
                 // run through all the layers in each group
                 .map((sublayer, itemIndex) => (
                     <Draggable
@@ -57,7 +79,7 @@ export const AdditionalMapLegend = () => {
                             sx={{
                                 position: 'absolute',
                                 top: 10 + ( 15 * itemIndex ),
-                                right: 75 + ( 25 * itemIndex ),
+                                right: 75 + ( 25 * itemIndex ) + ( 61 * getGroupIndex(sublayer.source)),
                                 transition: 'filter 250ms',
                                 padding: '5px',
                                 border: 1,
@@ -86,7 +108,7 @@ export const AdditionalMapLegend = () => {
                                         }}>
 
                                         <Typography sx={{ p: 0, m: 0, fontColor: "black", fontWeight: 'bold', fontSize: "10px" }}>
-                                            { sublayer.source.split(' ').map(word => word.charAt(0)) } { sublayer.row_num }
+                                            { sublayer.source.split(' ').slice(0, 3).map(word => word.charAt(0)) } { sublayer.row_num }
                                         </Typography>
                                     </Avatar>
 

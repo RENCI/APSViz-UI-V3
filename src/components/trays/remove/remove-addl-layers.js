@@ -10,12 +10,12 @@ import { useLayers } from "@context";
  */
 export const RemoveAdditionalLayers = () => {
     // get the method to remove the observation items in state
-    const { removeAdditionalLayers } = useLayers();
+    const { removeAdditionalLayerSelections } = useLayers();
 
     // render the button
     return (
         <Fragment>
-            <Button color="primary" onClick={() => removeAdditionalLayers()}>Remove selected additional layers</Button>
+            <Button color="primary" onClick={() => removeAdditionalLayerSelections()}>Remove selected additional layers</Button>
         </Fragment>
     );
 };
