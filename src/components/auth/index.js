@@ -1,4 +1,4 @@
 export * from './add-user';
 export * from './login';
 export * from './protected-route';
-export * from './use-auth';
+export * from './user-auth';
