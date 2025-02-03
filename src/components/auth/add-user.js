@@ -8,9 +8,13 @@ import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
+
+// load a library to upgrade to a secure random number generator
 import isaac from "isaac";
 
-// override using unsecure math.random when generating hashes
+/**
+ *  override the unsecure math.random when generating hashes
+ */
 bcrypt.setRandomFallback((len) => {
     // create an array with size defined
     const buf = [...new Uint8Array(len)];

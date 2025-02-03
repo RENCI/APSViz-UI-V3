@@ -27,20 +27,6 @@ export const AuthProvider = ({ children }) => {
     const { useUTC, unitsType, mapStyle, layerOpacity, speedType } = useSettings();
     const { mode, setMode } = useColorScheme();
 
-    // define methods and the user profile
-    const value = useMemo(() => (
-            {
-                userProfile,
-                login,
-                logout,
-                navAddUser,
-                addUser,
-                updateUser
-            }
-        ),
-        [userProfile]
-    );
-
     // call this function to authenticate the user
     const login = async (userProfile) => {
         // set the user profile data
@@ -68,7 +54,7 @@ export const AuthProvider = ({ children }) => {
         removeUserProfile('userProfile');
 
         // redirect to the add a user page
-        navigate('/login', {replace: true});
+        navigate('/login', { replace: true });
     };
 
         // call this to navigate to the add-user page
@@ -77,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         removeUserProfile('userProfile');
 
         // redirect to the add a user page
-        navigate('/add-user', {replace: true});
+        navigate('/add-user', { replace: true });
     };
 
     // call this to navigate to the update user page
@@ -116,16 +102,19 @@ export const AuthProvider = ({ children }) => {
      * @param userProfile
      */
     const loadSelectedLayerStyles = (profile) => {
+        // set the maxele style from the DB ot use the default
         if (profile.maxelestyle)
             mapStyle.maxele.set(profile.maxelestyle);
         else
             mapStyle.maxele.set(maxeleStyle);
 
+        // set the maxwvel style from the DB ot use the default
         if (profile.maxwvelstyle)
             mapStyle.maxwvel.set(profile.maxwvelstyle);
         else
             mapStyle.maxwvel.set(maxwvelStyle);
 
+        // set the swan style from the DB ot use the default
         if (profile.swanstyle)
             mapStyle.swan.set(profile.swanstyle);
         else
@@ -133,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     /**
-     * loads the profile details
+     * loads the profile details from the DB
      *
      * @param userProfile
      */
@@ -156,6 +145,7 @@ export const AuthProvider = ({ children }) => {
         // set the dark mode
         toggleDarkMode(profile.darkMode === "dark");
 
+        // set the other user settings if they exist in the DB
         if (profile.unitsType) unitsType.set(profile.unitsType);
         if (profile.useUTC === 'true') useUTC.unset(); // confusing, I know. the control is labeled "use your locale"
         if (profile.speedType) speedType.set(profile.speedType);
@@ -163,6 +153,21 @@ export const AuthProvider = ({ children }) => {
         if (profile.maxele_opacity) layerOpacity.maxele.set(parseFloat(profile.maxele_opacity));
         if (profile.swan_opacity) layerOpacity.swan.set(parseFloat(profile.swan_opacity));
     };
+
+    /**
+     * define the authentication methods and user profile
+     *
+     */
+    const value = useMemo(
+        () => ({
+            userProfile,
+            login,
+            logout,
+            navAddUser,
+            addUser,
+            updateUser
+        }), [userProfile]
+    );
 
     // return a new authentication provider
     return <AuthContext.Provider value={ value }>{ children }</AuthContext.Provider>;

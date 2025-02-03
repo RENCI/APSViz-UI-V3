@@ -1,16 +1,20 @@
-import React, {useState} from "react";
-import {userAuth} from "@auth";
-import {getNamespacedEnvParam} from "@utils";
+import React, { useState} from "react";
 import axios from 'axios';
-import {Button, Divider, Typography, Input, Stack, Box} from '@mui/joy';
-import {Branding} from "@control-panel";
+import { userAuth } from "@auth";
+import { getNamespacedEnvParam } from "@utils";
+import { Button, Divider, Typography, Input, Stack, Box } from '@mui/joy';
+import { Branding } from "@control-panel";
 import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
+
+// load a library to upgrade to a secure random number generator
 import isaac from "isaac";
 
-// override using unsecure math.random when generating hashes
+/**
+ *  override the unsecure math.random when generating hashes
+ */
 bcrypt.setRandomFallback((len) => {
     // create an array with size defined
     const buf = [...new Uint8Array(len)];
@@ -27,22 +31,23 @@ bcrypt.setRandomFallback((len) => {
  */
 export const Login = () => {
     // state for the date validation error
-    const [error, setError] = useState(null);
+    const [ error, setError ] = useState(null);
 
     // storage for the username and password
-    const [emailValue, setEmailValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
+    const [ emailValue, setEmailValue ] = useState('');
+    const [ passwordValue, setPasswordValue ] = useState('');
 
-    // save the user details and redirect to the main page
-    const {login, navAddUser} = userAuth();
+    // methods to log into to the app and redirect to the main page
+    const { login, navAddUser } = userAuth();
 
-    // create a guest account profile
+    // create a default guest account profile
     const guest_acct = {
         "success": true,
         "role": {"type": "User"},
         "profile": {
             "email": "Guest", "role_id": 0, "details": {
-                "last_name": "Guest", "first_name": "Guest", "basemap": "USGS Topo", "darkMode": "light",
+                "last_name": "Guest", "first_name": "Guest",
+                "basemap": "USGS Topo", "darkMode": "light",
                 "unitsType": "imperial", "useUTC": "false", "speedType": "knots",
                 "maxwvel_opacity": "1", "maxele_opacity": "1", "swan_opacity": "1",
                 "maxelestyle": `"${maxeleStyle}"`, "maxwvelstyle": `"${maxwvelStyle}"`, "swanstyle": `"${swanStyle}"`
@@ -90,7 +95,8 @@ export const Login = () => {
         // continue to validate the credentials
         else {
             // if the call was successful and it is the correct password
-            if (ret_val['success'] && (bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']) || ret_val['profile']['email'] === 'guest'))
+            if (ret_val['success'] &&
+                (bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']) || ret_val['profile']['email'] === 'guest'))
                 // save the new user profile
                 login(ret_val);
             else {
@@ -111,7 +117,7 @@ export const Login = () => {
                 width: '350px'
             }}>
 
-            <form name={"login"} onSubmit={onLogInClicked}>
+            <form name={"login"} onSubmit={ onLogInClicked }>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -126,7 +132,7 @@ export const Login = () => {
                         border: 3,
                         borderColor: '#245F97'
                     }}>
-                        <Stack spacing={2} sx={{m: 2}}>
+                        <Stack spacing={ 2 } sx={{ m: 2 }}>
                             <Box sx={{
                                 m: 2,
                                 border: 3,
@@ -135,24 +141,24 @@ export const Login = () => {
                                 <Branding/>
                             </Box>
 
-                            {error && <Typography sx={{fontSize: 15, color: 'red'}}>{error}</Typography>}
+                            {error && <Typography sx={{ fontSize: 15, color: 'red' }}>{error}</Typography>}
 
                             <Input
                                 value={emailValue}
-                                onChange={e => setEmailValue(e.target.value)}
+                                onChange={ e => setEmailValue(e.target.value) }
                                 placeholder="User name (Email address)"/>
 
                             <Input
                                 type="password"
-                                value={passwordValue}
-                                onChange={e => setPasswordValue(e.target.value)}
+                                value={ passwordValue }
+                                onChange={ e => setPasswordValue(e.target.value )}
                                 placeholder="Password"/>
 
                             <Divider/>
 
-                            <Button type="submit" disabled={(!emailValue || !passwordValue)}>Log in</Button>
-                            <Button onClick={() => login(guest_acct)}>Log in as guest</Button>
-                            <Button onClick={() => navAddUser()}>Sign up for an account</Button>
+                            <Button type="submit" disabled={ (!emailValue || !passwordValue) }>Log in</Button>
+                            <Button onClick={ () => login(guest_acct) }>Log in as guest</Button>
+                            <Button onClick={ () => navAddUser() }>Sign up for an account</Button>
                         </Stack>
                     </Box>
                 </Box>
