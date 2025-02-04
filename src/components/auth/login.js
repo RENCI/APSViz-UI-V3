@@ -4,7 +4,6 @@ import { userAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
 import { Button, Divider, Typography, Input, Stack, Box } from '@mui/joy';
 import { Branding } from "@control-panel";
-import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
@@ -45,13 +44,12 @@ export const Login = () => {
         "success": true,
         "role": {"type": "User"},
         "profile": {
-            "email": "Guest", "role_id": 0, "details": {
-                "last_name": "Guest", "first_name": "Guest",
-                "basemap": "USGS Topo", "darkMode": "light",
-                "unitsType": "imperial", "useUTC": "false", "speedType": "knots",
-                "maxwvel_opacity": "1", "maxele_opacity": "1", "swan_opacity": "1",
-                "maxelestyle": `"${maxeleStyle}"`, "maxwvelstyle": `"${maxwvelStyle}"`, "swanstyle": `"${swanStyle}"`
-            }
+            "email": "Guest",
+            "role_id": 1,
+            "details": "{\"useUTC\": \"false\", \"basemap\": \"USGS Topo\", \"darkMode\": \"light\", \"last_name\": \"Guest\", \"speedType\": \"knots\", \"unitsType\": \"imperial\", \"created_on\": \"2025-01-24T21:12:42.245Z\", \"first_name\": \"Guest\", \"swan_opacity\": \"1\", \"maxele_opacity\": \"1\", \"maxwvel_opacity\": \"1\"}",
+            "maxelestyle": null,
+            "maxwvelstyle": null,
+            "swanstyle": null
         }
     };
 
@@ -96,9 +94,12 @@ export const Login = () => {
         else {
             // if the call was successful and it is the correct password
             if (ret_val['success'] &&
-                (bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']) || ret_val['profile']['email'] === 'guest'))
+                // validate the password
+                (bcrypt.compareSync(passwordValue, ret_val['profile']['password_hash']) || ret_val['profile']['email'] === 'guest')) {
+
                 // save the new user profile
                 login(ret_val);
+            }
             else {
                 // show the error
                 setError('Incorrect password or user doesnt exist.');
