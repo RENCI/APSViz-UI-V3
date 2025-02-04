@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { userAuth } from "@auth";
 import { Button, Stack } from '@mui/joy';
 import { useSettings } from "@context";
@@ -11,10 +11,19 @@ import { useSettings } from "@context";
  */
 export const LogoutTray = () => {
     // attach to the logout functionality
-    const { logout } = userAuth();
+    const { userProfile, logout } = userAuth();
 
     // get the flag to indicate unsaved changes from state
     const { changesMade, setChangesMade } = useSettings();
+
+    // set controls disabled
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    useEffect( () => {
+        // disable update functionality for guest logons
+        if (userProfile.userProfile.profile.role_id === 0)
+            setIsDisabled(true);
+    }, [] );
 
     /**
      * handle the logout button click
@@ -25,7 +34,7 @@ export const LogoutTray = () => {
     const onLogoutClicked = async (saveChanges) => {
         // if changes were made to settings
         if (saveChanges) {
-            alert('saving changes');
+            alert('Saving changes...');
             setChangesMade(false);
         }
 
@@ -36,7 +45,7 @@ export const LogoutTray = () => {
     return (
         <Fragment>
             <Stack spacing={1}>
-                { changesMade && <Button onClick={ () => onLogoutClicked(true) }>Save settings and log out</Button> }
+                { changesMade && !isDisabled && <Button onClick={ () => onLogoutClicked(true) }>Save settings and log out</Button> }
                 <Button onClick={ () => onLogoutClicked(false) }>Log out</Button>
             </Stack>
         </Fragment>
