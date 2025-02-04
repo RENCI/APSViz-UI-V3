@@ -45,7 +45,7 @@ export const Login = () => {
         "role": {"type": "User"},
         "profile": {
             "email": "Guest",
-            "role_id": 1,
+            "role_id": 0,
             "details": "{\"useUTC\": \"false\", \"basemap\": \"USGS Topo\", \"darkMode\": \"light\", \"last_name\": \"Guest\", \"speedType\": \"knots\", \"unitsType\": \"imperial\", \"created_on\": \"2025-01-24T21:12:42.245Z\", \"first_name\": \"Guest\", \"swan_opacity\": \"1\", \"maxele_opacity\": \"1\", \"maxwvel_opacity\": \"1\"}",
             "maxelestyle": null,
             "maxwvelstyle": null,
