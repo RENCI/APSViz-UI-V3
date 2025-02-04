@@ -96,8 +96,10 @@ export const AddUser = () => {
             // let the user know
             setError('The email address you have entered is invalid.');
 
+            // clear the value
             setEmailValue('');
 
+            // return failure
             ret_val = false;
         }
         // if the password entries do not match
@@ -115,9 +117,11 @@ export const AddUser = () => {
             // let the user know
             setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
 
+            // clear the values
             setPasswordValue('');
             setNewPasswordValue('');
 
+            // return failure
             ret_val = false;
         }
 
