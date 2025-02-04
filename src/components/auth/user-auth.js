@@ -29,14 +29,20 @@ export const AuthProvider = ({ children }) => {
 
     // call this function to authenticate the user
     const login = async (userProfile) => {
-        // set the user profile data
-        setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
+        // if there was a user profile returned
+        if (userProfile) {
+            // // convert the details text to JSON
+            // userProfile.profile.details = JSON.parse(userProfile.profile.details);
 
-        // apply the settings from the user profile
-        applyUserSettings(userProfile);
+            // set the user profile data
+            setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
 
-        // redirect to the main page
-        navigate('/');
+            // apply the settings from the user profile
+            applyUserSettings(userProfile);
+
+            // redirect to the main page
+            navigate('/');
+        }
     };
 
     // call this function to sign out a logged-in user
@@ -145,9 +151,9 @@ export const AuthProvider = ({ children }) => {
         // set the dark mode
         toggleDarkMode(profile.darkMode === "dark");
 
-        // set the other user settings if they exist in the DB
+        // set the other user settings when they exist in the DB
+        if (profile.useUTC) profile.useUTC === 'true' ? useUTC.set() : useUTC.unset();
         if (profile.unitsType) unitsType.set(profile.unitsType);
-        if (profile.useUTC === 'true') useUTC.unset(); // confusing, I know. the control is labeled "use your locale"
         if (profile.speedType) speedType.set(profile.speedType);
         if (profile.maxwvel_opacity) layerOpacity.maxwvel.set(parseFloat(profile.maxwvel_opacity));
         if (profile.maxele_opacity) layerOpacity.maxele.set(parseFloat(profile.maxele_opacity));
