@@ -25,7 +25,7 @@ export const DateTimeFormat = () => {
                 sx={{ ml: 1, mt: 1 }}
                 component="label"
                 startDecorator={ <Switch checked={ useUTC.enabled } onChange={ onChange }/> }
-            >Use UTC timezone</Typography>
+            >Use UTC</Typography>
         </Stack>
     );
 };
