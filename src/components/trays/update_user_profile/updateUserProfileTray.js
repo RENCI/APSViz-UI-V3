@@ -3,6 +3,7 @@ import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
 import { userAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
 import axios from 'axios';
+import { useLayers, useSettings } from '@context';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
@@ -44,6 +45,11 @@ export const UpdateUserProfileTray = () => {
 
     // set controls disabled
     const [isDisabled, setIsDisabled] = useState(false);
+
+    // get the user selected settings
+    const { useUTC, unitsType, mapStyle, layerOpacity, speedType, darkMode } = useSettings();
+    const { baseMap } = useLayers();
+
     /**
      * populate the controls with their current values
      */
@@ -52,6 +58,7 @@ export const UpdateUserProfileTray = () => {
         setFirstNameValue(userProfile.userProfile.profile['details']['first_name']);
         setLastNameValue(userProfile.userProfile.profile['details']['last_name']);
 
+        // disable update functionality for guest logons
         if (userProfile.userProfile.profile.role_id === 0)
             setIsDisabled(true);
     }, [] );
@@ -65,7 +72,15 @@ export const UpdateUserProfileTray = () => {
      */
     const getUserDetails = (first_name, last_name) => {
         // return the user profile details
-        return `{"first_name": "${ first_name }", "last_name": "${ last_name }", "created_on": "${ new Date().toISOString() }"}`;
+        return `{"first_name":"${first_name}",` +
+            `"last_name":"${last_name}",`+
+            `"useUTC":"${useUTC.enabled}",`+
+            `"basemap":"${baseMap.title}",` +
+            `"darkMode":"${darkMode.enabled}",`+
+            `"speedType":"${speedType.current}",` +
+            `"unitsType":"${unitsType.current}",` +
+            `"maxele_opacity":"${layerOpacity.maxele.current}",` +
+            `"maxwvel_opacity":"${layerOpacity.maxele.current}"}`;
     };
 
     /**
@@ -125,50 +140,36 @@ export const UpdateUserProfileTray = () => {
     };
 
     /**
-     * generates the query string
-     *
-     * @param email
-     * @param first_name
-     * @param last_name
-     * @param password
-     * @returns {*|boolean}
-     */
-    const getQueryString = () => {
-        // if the user added all the params
-        if (validateUpdateParams(firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
-            // if there wasn't new password specified do not update it
-            const new_password_qs = (newPasswordValue) ? `&password_hash=${ getPasswordHash(newPasswordValue) }` : '';
-
-            // return the query string
-            return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}` +
-                `update_user?email=${ emailValue }&role_id=2${ new_password_qs }&details=${ getUserDetails(firstNameValue, lastNameValue) }`;
-        }
-        else {
-            return false;
-        }
-    };
-
-    /**
      * handles user add button event
      *
      * @returns {Promise<void>}
      */
     const onUpdateUserClicked = async () => {
-        // generate the query string
-        const data_url = getQueryString();
+        // make sure the form params are legit
+        if (validateUpdateParams(firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
+            // clear all messages and errors for this run
+            setError(null);
+            setMsg(null);
 
-        // if the query string was created successfully
-        if (data_url !== false) {
-            // create the authorization header
-            const requestOptions = {
-                method: 'GET',
-                headers: {Authorization: `Bearer ${ getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN') }`}
-            };
-
-            // call for data
+            // call to update the data data
             const ret_val = await axios
                 // make the call to get the data
-                .get(data_url, requestOptions)
+                .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`
+                        },
+                        params: {
+                            email: emailValue,
+                            role_id: 2,
+                            password_hash: (newPasswordValue) ? getPasswordHash(newPasswordValue) : '',
+                            details: getUserDetails(firstNameValue, lastNameValue),
+                            maxelestyle: mapStyle.maxele.current,
+                            maxwvelstyle: mapStyle.maxwvel.current,
+                            swanstyle: mapStyle.swan.current
+                        }
+                    })
                 // use the data returned
                 .then((response) => {
                     // return the data
@@ -181,10 +182,10 @@ export const UpdateUserProfileTray = () => {
 
             // if the user was not found
             if (ret_val === 404)
-                setError('User name not found');
+                setError('User name was not found');
             // serious error on the server
             else if (ret_val === 500)
-                setError("Error updating the user.");
+                setError("Error updating your user profile.");
             // continue to validate the credentials
             else {
                 // if the call successful and it is the correct password
@@ -192,8 +193,7 @@ export const UpdateUserProfileTray = () => {
                     // save the new user profile
                     updateUser(ret_val);
                     setMsg('Your profile has been updated successfully.');
-                }
-                else {
+                } else {
                     // show the error
                     setError('Error updating the user. Please contact an administrator.');
                 }
@@ -231,14 +231,14 @@ export const UpdateUserProfileTray = () => {
                 <Input
                     type="password"
                     value={ newPasswordValue }
-                    onChange={e => setNewPasswordValue(e.target.value)}
+                    onChange={ e => setNewPasswordValue(e.target.value) }
                     placeholder="Verify your new password"
                     disabled={ isDisabled }/>
 
                 <Divider/>
 
                 <Button
-                    disabled={ !firstNameValue || !lastNameValue || isDisabled}
+                    disabled={ !firstNameValue || !lastNameValue || isDisabled }
                     onClick={ onUpdateUserClicked }>Submit
                 </Button>
             </Stack>

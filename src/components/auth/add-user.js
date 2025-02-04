@@ -138,7 +138,9 @@ export const AddUser = () => {
         // if the user added all the params
         if (validateAddParams(emailValue, firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
             // return the query string
-            return `${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}add_user?email=${email}&password_hash=${getPasswordHash(password)}&role_id=2&maxele_style=${encodeURIComponent(maxeleStyle)}&maxwvel_style=${encodeURIComponent(maxwvelStyle)}&swan_style=${encodeURIComponent(swanStyle)}&details=${getUserDetails(first_name, last_name)}`;
+            return `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }add_user?email=${ email }&password_hash=${ getPasswordHash(password) }` +
+                    `&role_id=2&maxele_style=${ encodeURIComponent(maxeleStyle) }&maxwvel_style=${ encodeURIComponent(maxwvelStyle) }&swan_style=` +
+                    `${ encodeURIComponent(swanStyle) }&details=${ getUserDetails(first_name, last_name) }`;
         } else {
             return false;
         }
@@ -207,7 +209,7 @@ export const AddUser = () => {
                 transform: 'translate(-50%, -50%)',
                 width: '350px'
             }}>
-            <form name={"add-user"} onSubmit={onAddUserClicked}>
+            <form name={"add-user"} onSubmit={ onAddUserClicked }>
                 <Box bgcolor="white" sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -225,52 +227,51 @@ export const AddUser = () => {
                         <Branding/>
                     </Box>
 
-                    {error && <Typography sx={{ml: 1, mr: 1, mb: 1, display: 'flex', fontSize: 15, color: 'red'}}>{error}</Typography>}
+                    {error && <Typography sx={{ml: 1, mr: 1, mb: 1, display: 'flex', fontSize: 15, color: 'red'}}>{ error }</Typography>}
 
                     <Input
-                        sx={{width: '75%'}}
-                        value={firstNameValue}
-                        onChange={e => setFirstNameValue(e.target.value)}
+                        sx={{ width: '85%' }}
+                        value={ emailValue}
+                        onChange={ e => setEmailValue(e.target.value) }
+                        placeholder="User name (your email address)"/>
+
+                    <Input
+                        sx={{ width: '85%' }}
+                        value={ firstNameValue }
+                        onChange={ e => setFirstNameValue(e.target.value) }
                         placeholder="First name"/>
 
                     <Input
-                        sx={{width: '75%'}}
-                        value={lastNameValue}
-                        onChange={e => setLastNameValue(e.target.value)}
+                        sx={{ width: '85%' }}
+                        value={ lastNameValue }
+                        onChange={ e => setLastNameValue(e.target.value) }
                         placeholder="Last name"/>
-
-                    <Input
-                        sx={{width: '75%'}}
-                        value={emailValue}
-                        onChange={e => setEmailValue(e.target.value)}
-                        placeholder="User name (Email address)"/>
 
                     <Tooltip
                         sx={{width: '300px'}}
                         title={"Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character."}
                     >
                         <Input
-                            sx={{width: '75%'}}
+                            sx={{ width: '85%' }}
                             type="password"
-                            value={passwordValue}
-                            onChange={e => setPasswordValue(e.target.value)}
+                            value={ passwordValue }
+                            onChange={ e => setPasswordValue(e.target.value) }
                             placeholder="Password"/>
                     </Tooltip>
 
                     <Input
-                        sx={{width: '75%'}}
+                        sx={{ width: '85%' }}
                         type="password"
-                        value={newPasswordValue}
-                        onChange={e => setNewPasswordValue(e.target.value)}
+                        value={ newPasswordValue }
+                        onChange={ e => setNewPasswordValue(e.target.value) }
                         placeholder="Verify your password"/>
 
-                    <Divider sx={{m: 1}}/>
+                    <Divider sx={{ m: 1 }}/>
 
                     <Button
                         type="submit"
-                        sx={{mb: 1, width: '90%'}}
-                        disabled={!emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue}
-                        // onClick={ onAddUserClicked }
+                        sx={{ mb: 1, width: '90%' }}
+                        disabled={ !emailValue || !firstNameValue || !lastNameValue || !passwordValue || !newPasswordValue }
                     >
                         Sign me up
                     </Button>

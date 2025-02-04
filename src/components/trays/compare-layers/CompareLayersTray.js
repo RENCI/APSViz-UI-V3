@@ -191,7 +191,7 @@ export const CompareLayersTray = () => {
      */
     useEffect (() => {
         // if we have left and right layer properties
-        if(leftLayerProps && rightLayerProps) {
+        if(leftLayerProps && rightLayerProps && map) {
             // remove the side-by-side compare control and layers
             removeSideBySideLayers();
 
@@ -247,7 +247,7 @@ export const CompareLayersTray = () => {
      */
     useEffect(() => {
         // if we have both panes ready for rendering
-        if(selectedLeftLayer && selectedRightLayer) {
+        if(selectedLeftLayer && selectedRightLayer && map) {
             // add the selected layers to the map and state so it can be removed later
             setSideBySideLayers(L.control.sideBySide(selectedLeftLayer, selectedRightLayer, { padding: 0 }).addTo(map));
         }
