@@ -119,8 +119,8 @@ export const LayersProvider = ({ children }) => {
       // remove the current compare layers if they exist
       if (sideBySideLayers) {
           // remove the layers on each pane
-          map.removeLayer(sideBySideLayers['_leftLayer']);
-          map.removeLayer(sideBySideLayers['_rightLayer']);
+          if (sideBySideLayers['_leftLayer']) map.removeLayer(sideBySideLayers['_leftLayer']);
+          if (sideBySideLayers['_rightLayer']) map.removeLayer(sideBySideLayers['_rightLayer']);
 
           // remove the side by side layer
           sideBySideLayers.remove();
@@ -153,20 +153,23 @@ export const LayersProvider = ({ children }) => {
    *
    */
   const resetCompare = () => {
-      // clear the left layer type/ID/properties/layer
-      setLeftPaneType(defaultSelected);
-      setLeftPaneID(defaultSelected);
-      setLeftLayerProps(null);
-      setSelectedLeftLayer(null);
+      // if the map is initialized
+      if (map) {
+          // clear the left layer type/ID/properties/layer
+          setLeftPaneType(defaultSelected);
+          setLeftPaneID(defaultSelected);
+          setLeftLayerProps(null);
+          setSelectedLeftLayer(null);
 
-      // clear the right pane ID/Name/properties/layer
-      setRightPaneType(defaultSelected);
-      setRightPaneID(defaultSelected);
-      setRightLayerProps(null);
-      setSelectedRightLayer(null);
+          // clear the right pane ID/Name/properties/layer
+          setRightPaneType(defaultSelected);
+          setRightPaneID(defaultSelected);
+          setRightLayerProps(null);
+          setSelectedRightLayer(null);
 
-      // remove the side by side layers
-      removeSideBySideLayers();
+          // remove the side by side layers
+          removeSideBySideLayers();
+      }
     };
 
     /**
