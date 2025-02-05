@@ -125,6 +125,7 @@ module.exports = {
       '@utils': path.resolve(__dirname, 'src/utils/'),
       '@side-by-side': path.resolve(__dirname, 'src/components/side-by-side/'),
       '@alert-user': path.resolve(__dirname, 'src/components/alert-user/'),
+      'save-profile': path.resolve(__dirname, 'src/components/save-profile/'),
       '@acknowledgements': path.resolve(__dirname, 'src/components/acknowledgements/'),
       '@config': path.resolve(__dirname, 'src/components/config/'),
       '@auth' : path.resolve(__dirname, 'src/components/auth/'),
