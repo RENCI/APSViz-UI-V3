@@ -34,37 +34,43 @@ export const AddUser = () => {
     const [error, setError] = useState(null);
 
     // storage for the form items
-    const [ emailValue, setEmailValue ] = useState('');
-    const [ passwordValue, setPasswordValue ] = useState('');
-    const [ newPasswordValue, setNewPasswordValue ] = useState('');
-    const [ firstNameValue, setFirstNameValue ] = useState('');
-    const [ lastNameValue, setLastNameValue ] = useState('');
+    const [ emailValue, setEmailValue ] = useState('d@d.com');
+    const [ passwordValue, setPasswordValue ] = useState('dddddd1!');
+    const [ newPasswordValue, setNewPasswordValue ] = useState('dddddd1!');
+    const [ firstNameValue, setFirstNameValue ] = useState('d');
+    const [ lastNameValue, setLastNameValue ] = useState('d');
 
     // redirect to the main page on successful account addition
     const { login, addUser } = userAuth();
 
     /**
-     * Returns the user profile details
+     * Returns the default user profile details
      *
      * @param first_name
      * @param last_name
      * @returns {string}
      */
-    const getUserDetails = (first_name, last_name) => {
+    const getUserDetails = () => {
         // return the user profile details
-        return `{"first_name": "${first_name}", "last_name": "${last_name}", "created_on": "${new Date().toISOString()}",         
-                "basemap": "USGS Topo", "darkMode": "light", 
-                "unitsType": "imperial", "useUTC": "false", "speedType": "knots", 
-                "maxwvel_opacity": "1", "maxele_opacity": "1", "swan_opacity": "1"}`;
+        return `{"first_name": "${ firstNameValue }",` +
+            `"last_name": "${ lastNameValue }",` +
+            `"created_on": "${ new Date().toISOString() }",` +
+            `"basemap": "USGS Topo",` +
+            `"darkMode": "light",` +
+            `"unitsType": "imperial",` +
+            `"useUTC": "false",` +
+            `"speedType": "knots",` +
+            `"maxwvel_opacity": "1",` +
+            `"maxele_opacity": "1",` +
+            `"swan_opacity": "1"}`;
     };
 
     /**
      * returns the hashed password
      *
-     * @param passwordValue
      * @returns {string}
      */
-    const getPasswordHash = (passwordValue) => {
+    const getPasswordHash = () => {
         // get the salt
         const salt = bcrypt.genSaltSync(10);
 
@@ -83,7 +89,7 @@ export const AddUser = () => {
      *
      * @returns { boolean }
      */
-    const validateAddParams = (email, first_name, last_name, password, new_password) => {
+    const validateAddParams = () => {
         // init the return value
         let ret_val = true;
 
@@ -92,7 +98,7 @@ export const AddUser = () => {
         const pwd_regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
         // if a valid email address entered
-        if (!email_regex.test(email)) {
+        if (!email_regex.test(emailValue)) {
             // let the user know
             setError('The email address you have entered is invalid.');
 
@@ -103,7 +109,7 @@ export const AddUser = () => {
             ret_val = false;
         }
         // if the password entries do not match
-        else if (password !== new_password) {
+        else if (passwordValue !== newPasswordValue) {
             // let the user know
             setError('The passwords you entered do not match.');
 
@@ -113,7 +119,7 @@ export const AddUser = () => {
             ret_val = false;
         }
         // make sure the password is formatted properly
-        else if (!pwd_regex.test(password)) {
+        else if (!pwd_regex.test(passwordValue)) {
             // let the user know
             setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
 
@@ -129,25 +135,9 @@ export const AddUser = () => {
         return ret_val;
     };
 
-    /**
-     * generates the query string
-     *
-     * @param email
-     * @param first_name
-     * @param last_name
-     * @param password
-     * @returns {*|boolean}
-     */
-    const getQueryString = (email, first_name, last_name, password) => {
-        // if the user added all the params
-        if (validateAddParams(emailValue, firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
-            // return the query string
-            return `${ getNamespacedEnvParam('REACT_APP_UI_DATA_URL') }add_user?email=${ email }&password_hash=${ getPasswordHash(password) }` +
-                    `&role_id=2&maxele_style=${ encodeURIComponent(maxeleStyle) }&maxwvel_style=${ encodeURIComponent(maxwvelStyle) }&swan_style=` +
-                    `${ encodeURIComponent(swanStyle) }&details=${ getUserDetails(first_name, last_name) }`;
-        } else {
-            return false;
-        }
+    const onAddClicked = async (e) => {
+        // add the user in the DB
+        await onAddUserClicked(e);
     };
 
     /**
@@ -158,29 +148,42 @@ export const AddUser = () => {
     const onAddUserClicked = async (e) => {
         e.preventDefault();
 
-        // generate the query string
-        const data_url = getQueryString(emailValue, firstNameValue, lastNameValue, passwordValue);
-
         // if the query string was created successfully
-        if (data_url !== false) {
-            // create the authorization header
-            const requestOptions = {
-                method: 'GET',
-                headers: {Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`}
-            };
+        if (validateAddParams()) {
+            // clear any errors
+            setError('');
 
             // call for data
             const ret_val = await axios
                 // make the call to get the data
-                .get(data_url, requestOptions)
+                .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}add_user`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`
+                        },
+                        params: {
+                            email: emailValue,
+                            password_hash: getPasswordHash(),
+                            role_id: 2,
+                            details: getUserDetails(),
+                            maxele_style: maxeleStyle,
+                            maxwvel_style: maxwvelStyle,
+                            swan_style: swanStyle
+                        }
+                    })
                 // use the data returned
                 .then((response) => {
                     // return the data
                     return response.data;
                 })
                 .catch((error) => {
-                    // make sure we do not render anything
-                    return error.response.status;
+                    // handle an axios error
+                    if(error.name === 'AxiosError')
+                        return 500;
+                    // else handle an error coming from the web service
+                    else
+                        return error.response.status;
                 });
 
             // error on the server
@@ -213,7 +216,7 @@ export const AddUser = () => {
                 transform: 'translate(-50%, -50%)',
                 width: '350px'
             }}>
-            <form name={"add-user"} onSubmit={ onAddUserClicked }>
+            <form name={"add-user"} onSubmit={ onAddClicked }>
                 <Box bgcolor="white" sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -231,7 +234,7 @@ export const AddUser = () => {
                         <Branding/>
                     </Box>
 
-                    {error && <Typography sx={{ml: 1, mr: 1, mb: 1, display: 'flex', fontSize: 15, color: 'red'}}>{ error }</Typography>}
+                    {error && <Typography sx={{ ml: 1, mr: 1, mb: 1, display: 'flex', fontSize: 15, color: 'red' }}>{ error }</Typography>}
 
                     <Input
                         sx={{ width: '85%' }}
