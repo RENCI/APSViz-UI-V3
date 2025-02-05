@@ -250,7 +250,7 @@ export const HelpAboutTray = () => {
                                         items</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><ShareViewIcon color="primary"/></ListItemDecorator>Share your view with
                                         a colleague</ListItem>
-                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LogoutIcon color="primary"/></ListItemDecorator>Logout of the
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LogoutIcon color="primary"/></ListItemDecorator>Log out of the
                                         application</ListItem>
                                     <ListItem sx={{ml: 1}}><ListItemDecorator><HelpAboutIcon color="primary"/></ListItemDecorator>Application
                                         help/about</ListItem>
@@ -725,6 +725,32 @@ export const HelpAboutTray = () => {
                             </AccordionDetails>
                         </Accordion>
 
+                        <Accordion expanded={index === 20} onChange={(event, expanded) => {
+                            setIndex(expanded ? 20 : null);
+                        }}>
+                            <AccordionSummary>
+                                <Typography level="title-sm" sx={{fontWeight: 'bold'}}>How do I save my user interface preferences?
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography sx={{fontSize: "sm", mt: 0, ml: 1}}>
+                                    Note: You will need to create an account on the application in order to save your application preferences.
+                                    You can create an account on the log in startup form by hitting the &#34;Sign up for an account&#34; button.
+                                </Typography>
+
+                                <Typography sx={{fontSize: "sm", mt: 1, ml: 1}}>
+                                    There are then 2 ways in which you can save your application preferences:
+                                </Typography>
+
+                                <List size='sm' sx={{'--ListItem-minHeight': '25px'}}>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><UserUpdateProfileIcon color="primary"/></ListItemDecorator>You can
+                                        navigate to the Your account tray and select the &#34;Submit&#34; button.</ListItem>
+                                    <ListItem sx={{ml: 1}}><ListItemDecorator><LogoutIcon color="primary"/></ListItemDecorator>When you log out of
+                                        the application you will see a &#34;Save settings and log out button&#34; if you have unsaved preferences.
+                                        Select this button and your preferences will be saved.</ListItem>
+                                </List>
+                            </AccordionDetails>
+                        </Accordion>
                     </Stack>
                 </AccordionGroup>
             </Stack>
