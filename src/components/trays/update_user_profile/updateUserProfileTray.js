@@ -2,8 +2,8 @@ import React, { useState, Fragment, useEffect } from "react";
 import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
 import { userAuth } from "@auth";
 import { getNamespacedEnvParam } from "@utils";
-import axios from 'axios';
 import { useLayers, useSettings } from '@context';
+import axios from 'axios';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
@@ -55,8 +55,8 @@ export const UpdateUserProfileTray = () => {
      */
     useEffect( () => {
         setEmailValue(userProfile.userProfile.profile.email);
-        setFirstNameValue(userProfile.userProfile.profile['details']['first_name']);
-        setLastNameValue(userProfile.userProfile.profile['details']['last_name']);
+        setFirstNameValue(userProfile.userProfile.profile.details.first_name);
+        setLastNameValue(userProfile.userProfile.profile.details.last_name);
 
         // disable update functionality for guest logons
         if (userProfile.userProfile.profile.role_id === 0)
@@ -70,17 +70,17 @@ export const UpdateUserProfileTray = () => {
      * @param last_name
      * @returns {string}
      */
-    const getUserDetails = (first_name, last_name) => {
+    const getUserDetails = () => {
         // return the user profile details
-        return `{"first_name":"${first_name}",` +
-            `"last_name":"${last_name}",`+
-            `"useUTC":"${useUTC.enabled}",`+
-            `"basemap":"${baseMap.title}",` +
-            `"darkMode":"${darkMode.enabled}",`+
-            `"speedType":"${speedType.current}",` +
-            `"unitsType":"${unitsType.current}",` +
-            `"maxele_opacity":"${layerOpacity.maxele.current}",` +
-            `"maxwvel_opacity":"${layerOpacity.maxele.current}"}`;
+        return `{"first_name":"${ firstNameValue }",` +
+            `"last_name":"${ lastNameValue }",`+
+            `"useUTC":"${ useUTC.enabled }",`+
+            `"basemap":"${ baseMap.title }",` +
+            `"darkMode":"${ darkMode.enabled }",`+
+            `"speedType":"${ speedType.current }",` +
+            `"unitsType":"${ unitsType.current }",` +
+            `"maxele_opacity":"${ layerOpacity.maxele.current }",` +
+            `"maxwvel_opacity":"${ layerOpacity.maxele.current }"}`;
     };
 
     /**
@@ -89,7 +89,7 @@ export const UpdateUserProfileTray = () => {
      * @param passwordValue
      * @returns {string}
      */
-    const getPasswordHash = (passwordValue) => {
+    const getPasswordHash = () => {
         // get the salt
         const salt = bcrypt.genSaltSync(10);
 
@@ -107,32 +107,35 @@ export const UpdateUserProfileTray = () => {
      *
      * @returns { boolean }
      */
-    const validateUpdateParams = (first_name, last_name, password, new_password) => {
+    const validateUpdateParams = () => {
         // init the return value
         let ret_val = true;
 
-        // create a regex to validate the password
-        const pwd_regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+        // if there is something to do
+        if(passwordValue && newPasswordValue) {
+            // create a regex to validate the password
+            const pwd_regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
 
-        // all fields are mandatory
-        if (password !== new_password) {
-            // let the user know
-            setError('The passwords you entered do not match.');
+            // all fields are mandatory
+            if (passwordValue !== newPasswordValue) {
+                // let the user know
+                setError('The passwords you entered do not match.');
 
-            setPasswordValue('');
-            setNewPasswordValue('');
+                setPasswordValue('');
+                setNewPasswordValue('');
 
-            ret_val = false;
-        }
-        // make sure the password is formatted properly
-        else if (new_password && !pwd_regex.test(new_password)) {
-            // let the user know
-            setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
+                ret_val = false;
+            }
+            // make sure the password is formatted properly
+            else if (newPasswordValue && !pwd_regex.test(newPasswordValue)) {
+                // let the user know
+                setError('Legitimate passwords are between 7 to 15 characters which contain at least one numeric digit and a special character.');
 
-            setPasswordValue('');
-            setNewPasswordValue('');
+                setPasswordValue('');
+                setNewPasswordValue('');
 
-            ret_val = false;
+                ret_val = false;
+            }
         }
 
         // return to the caller
@@ -140,18 +143,18 @@ export const UpdateUserProfileTray = () => {
     };
 
     /**
-     * handles user add button event
+     * handles user update button event
      *
      * @returns {Promise<void>}
      */
     const onUpdateUserClicked = async () => {
         // make sure the form params are legit
-        if (validateUpdateParams(firstNameValue, lastNameValue, passwordValue, newPasswordValue)) {
+        if (validateUpdateParams()) {
             // clear all messages and errors for this run
             setError(null);
             setMsg(null);
 
-            // call to update the data data
+            // call to update the data
             const ret_val = await axios
                 // make the call to get the data
                 .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
@@ -163,11 +166,11 @@ export const UpdateUserProfileTray = () => {
                         params: {
                             email: emailValue,
                             role_id: 2,
-                            password_hash: (newPasswordValue) ? getPasswordHash(newPasswordValue) : '',
-                            details: getUserDetails(firstNameValue, lastNameValue),
-                            maxelestyle: mapStyle.maxele.current,
-                            maxwvelstyle: mapStyle.maxwvel.current,
-                            swanstyle: mapStyle.swan.current
+                            password_hash: (newPasswordValue) ? getPasswordHash() : '',
+                            details: getUserDetails(),
+                            maxele_style: mapStyle.maxele.current,
+                            maxwvel_style: mapStyle.maxwvel.current,
+                            swan_style: mapStyle.swan.current
                         }
                     })
                 // use the data returned
@@ -186,7 +189,7 @@ export const UpdateUserProfileTray = () => {
             // serious error on the server
             else if (ret_val === 500)
                 setError("Error updating your user profile.");
-            // continue to validate the credentials
+            // continue to validate the response
             else {
                 // if the call successful and it is the correct password
                 if (ret_val['success']) {
@@ -213,7 +216,7 @@ export const UpdateUserProfileTray = () => {
                     value={ firstNameValue }
                     onChange={ e => setFirstNameValue(e.target.value) }
                     placeholder="First name"
-                    disabled={ isDisabled}/>
+                    disabled={ isDisabled }/>
 
                 <Input
                     value={ lastNameValue }
