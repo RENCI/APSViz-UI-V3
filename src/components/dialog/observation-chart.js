@@ -64,11 +64,21 @@ function getObsChartData(url, setLineButtonView) {
             };
 
             // make the call to get the data
-            const ret_val = await axios.get(url, requestOptions)
+            const ret_val = await axios
+                .get(url, requestOptions)
                 // use the data returned
-                .then((response) => { return response.data; })
+                .then((response) => {
+                    return response.data;
+                })
                 // otherwise capture the error
-                .catch((error) => { return error.response.status; });
+                .catch((error) => {
+                    // handle an axios error
+                    if(error.name === 'AxiosError')
+                        return 500;
+                    // else handle an error coming from the web service
+                    else
+                        return error.response.status;
+                });
 
             // if there was not an error
             if (ret_val !== 500)
