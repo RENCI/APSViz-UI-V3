@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
 import { userAuth } from "@auth";
-import { getNamespacedEnvParam } from "@utils";
+import {getNamespacedEnvParam, maxeleStyle, maxwvelStyle, swanStyle} from "@utils";
 import { useLayers, useSettings } from '@context';
 import axios from 'axios';
 
@@ -30,8 +30,8 @@ bcrypt.setRandomFallback((len) => {
  */
 export const UpdateUserProfileTray = () => {
     // state for the date validation responses
-    const [error, setError] = useState(null);
-    const [msg, setMsg] = useState(null);
+    const [error, setError] = useState('');
+    const [msg, setMsg] = useState('');
 
     // storage for the username and password
     const [emailValue, setEmailValue] = useState('');
@@ -74,13 +74,14 @@ export const UpdateUserProfileTray = () => {
         // return the user profile details
         return `{"first_name":"${ firstNameValue }",` +
             `"last_name":"${ lastNameValue }",`+
-            `"useUTC":"${ useUTC.enabled }",`+
             `"basemap":"${ baseMap.title }",` +
             `"darkMode":"${ darkMode.enabled }",`+
-            `"speedType":"${ speedType.current }",` +
             `"unitsType":"${ unitsType.current }",` +
+            `"useUTC":"${ useUTC.enabled }",`+
+            `"speedType":"${ speedType.current }",` +
             `"maxele_opacity":"${ layerOpacity.maxele.current }",` +
-            `"maxwvel_opacity":"${ layerOpacity.maxele.current }"}`;
+            `"maxwvel_opacity":"${ layerOpacity.maxwvel.current }",` +
+            `"swan_opacity": "${ layerOpacity.swan.current }"}`;
     };
 
     /**
@@ -156,31 +157,31 @@ export const UpdateUserProfileTray = () => {
 
             // call to update the data
             const ret_val = await axios
-                // make the call to get the data
-                .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`
-                        },
-                        params: {
-                            email: emailValue,
-                            role_id: 2,
-                            password_hash: (newPasswordValue) ? getPasswordHash() : '',
-                            details: getUserDetails(),
-                            maxele_style: mapStyle.maxele.current,
-                            maxwvel_style: mapStyle.maxwvel.current,
-                            swan_style: mapStyle.swan.current
-                        }
-                    })
+                // make the call to update the data
+                .post(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
+                {
+                    email: emailValue,
+                    password_hash: (newPasswordValue) ? getPasswordHash() : null,
+                    details: getUserDetails(),
+                    maxele_style: (mapStyle.maxele.current) ? mapStyle.maxele.current : null,
+                    maxwvel_style: (mapStyle.maxwvel.current) ? mapStyle.maxwvel.current : null,
+                    swan_style: (mapStyle.swan.current) ? mapStyle.swan.current : null
+                },
+                {
+                    headers: { Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}` }
+                })
                 // use the data returned
                 .then((response) => {
                     // return the data
                     return response.data;
                 })
                 .catch((error) => {
-                    // make sure we do not render anything
-                    return error.response.status;
+                    // handle an axios error
+                    if(error.name === 'AxiosError')
+                        return 500;
+                    // else handle an error coming from the web service
+                    else
+                        return error.response.status;
                 });
 
             // if the user was not found

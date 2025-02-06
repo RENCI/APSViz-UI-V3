@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import {Button, Divider, Typography, Input, Box, Tooltip} from '@mui/joy';
 import { userAuth } from "@auth";
-import { getNamespacedEnvParam } from "@utils";
+import {getNamespacedEnvParam, maxeleStyle, maxwvelStyle, swanStyle} from "@utils";
 import { Branding } from "@control-panel";
 import axios from 'axios';
-import { maxeleStyle, maxwvelStyle, swanStyle } from '@utils';
 
 // load the encryption library
 const bcrypt = require('bcryptjs');
@@ -48,13 +47,12 @@ export const AddUser = () => {
      *
      * @param first_name
      * @param last_name
-     * @returns {string}
      */
     const getUserDetails = () => {
         // return the user profile details
-        return `{"first_name": "${ firstNameValue }",` +
-            `"last_name": "${ lastNameValue }",` +
-            `"created_on": "${ new Date().toISOString() }",` +
+        return `{"first_name": "${firstNameValue}",` +
+            `"last_name": "${lastNameValue}",` +
+            `"created_on": "${new Date().toISOString()}",` +
             `"basemap": "USGS Topo",` +
             `"darkMode": "light",` +
             `"unitsType": "imperial",` +
@@ -155,22 +153,19 @@ export const AddUser = () => {
 
             // call for data
             const ret_val = await axios
-                // make the call to get the data
-                .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}add_user`,
+                // make the call to send the data
+                .post(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}add_user`,
                     {
-                        method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`
-                        },
-                        params: {
-                            email: emailValue,
-                            password_hash: getPasswordHash(),
-                            role_id: 2,
-                            details: getUserDetails(),
-                            maxele_style: maxeleStyle,
-                            maxwvel_style: maxwvelStyle,
-                            swan_style: swanStyle
-                        }
+                        email: emailValue,
+                        password_hash: getPasswordHash(),
+                        role_id: "2",
+                        details: getUserDetails(),
+                        maxele_style: maxeleStyle,
+                        maxwvel_style: maxwvelStyle,
+                        swan_style: swanStyle
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}` }
                     })
                 // use the data returned
                 .then((response) => {
