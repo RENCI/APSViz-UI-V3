@@ -46,7 +46,7 @@ export const Login = () => {
         "profile": {
             "email": "Guest",
             "role_id": 0,
-            "details": "{\"useUTC\": \"false\", \"basemap\": \"USGS Topo\", \"darkMode\": \"light\", \"last_name\": \"Guest\", \"speedType\": \"knots\", \"unitsType\": \"imperial\", \"created_on\": \"2025-01-24T21:12:42.245Z\", \"first_name\": \"Guest\", \"swan_opacity\": \"1\", \"maxele_opacity\": \"1\", \"maxwvel_opacity\": \"1\"}",
+            "details": {"useUTC": "false", "basemap": "USGS Topo", "darkMode": "light", "last_name": "Guest", "speedType": "knots", "unitsType": "imperial", "created_on": "", "first_name": "Guest", "swan_opacity": "1", "maxele_opacity": "1", "maxwvel_opacity": "1"},
             "maxelestyle": null,
             "maxwvelstyle": null,
             "swanstyle": null
@@ -80,8 +80,12 @@ export const Login = () => {
                 return response.data;
             })
             .catch((error) => {
-                // make sure we do not render anything
-                return error.response.status;
+                // handle an axios error
+                if(error.name === 'AxiosError')
+                    return 500;
+                // else handle an error coming from the web service
+                else
+                    return error.response.status;
             });
 
         // if the user was not found
