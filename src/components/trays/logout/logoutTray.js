@@ -84,8 +84,12 @@ export const LogoutTray = () => {
                 return response.data;
             })
             .catch((error) => {
-                // make sure we do not render anything
-                return error.response.status;
+                // handle an axios error
+                if(error.name === 'AxiosError')
+                    return 500;
+                // else handle an error coming from the web service
+                else
+                    return error.response.status;
             });
 
         // if the user was not found
