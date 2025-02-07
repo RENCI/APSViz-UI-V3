@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     const { setBaseMap } = useLayers();
 
     // get all the associated setting handles
-    const { useUTC, unitsType, mapStyle, layerOpacity, speedType } = useSettings();
+    const { useUTC, unitsType, mapStyle, layerOpacity, speedType, setChangesMade} = useSettings();
     const { mode, setMode } = useColorScheme();
 
     // call this function to authenticate the user
@@ -41,6 +41,9 @@ export const AuthProvider = ({ children }) => {
 
             // save the user profile data
             setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
+
+            // reset the setting changed flag
+            setChangesMade(false);
 
             // redirect to the main page
             navigate('/');
