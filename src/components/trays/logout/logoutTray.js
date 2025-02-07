@@ -44,15 +44,16 @@ export const LogoutTray = () => {
      */
     const getUserDetails = () => {
         // return the user profile details
-        return `{"first_name":"${ userProfile.userProfile.profile.first_name }",` +
-            `"last_name":"${userProfile.userProfile.profile.last_name }",`+
+        return `{"first_name":"${ userProfile.userProfile.profile.details.first_name }",` +
+            `"last_name":"${userProfile.userProfile.profile.details.last_name }",`+
             `"useUTC":"${ useUTC.enabled }",`+
             `"basemap":"${ baseMap.title }",` +
-            `"darkMode":"${ darkMode.enabled }",`+
+            `"darkMode":"${ (darkMode.enabled) ? 'dark' : "light" }",`+
             `"speedType":"${ speedType.current }",` +
             `"unitsType":"${ unitsType.current }",` +
             `"maxele_opacity":"${ layerOpacity.maxele.current }",` +
-            `"maxwvel_opacity":"${ layerOpacity.maxele.current }"}`;
+            `"maxwvel_opacity":"${ layerOpacity.maxele.current }",` +
+            `"swan_opacity": "${ layerOpacity.swan.current }"}`;
     };
 
     /**
@@ -63,20 +64,18 @@ export const LogoutTray = () => {
     const onUpdateUserClicked = async () => {
         // call to update the data
         const ret_val = await axios
-            // make the call to get the data
-            .get(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
+                // make the call to update the data
+                .post(`${getNamespacedEnvParam('REACT_APP_UI_DATA_URL')}update_user`,
                 {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}`
-                    },
-                    params: {
-                        email: userProfile.userProfile.profile.email,
-                        details: getUserDetails(),
-                        maxele_style: mapStyle.maxele.current,
-                        maxwvel_style: mapStyle.maxwvel.current,
-                        swans_style: mapStyle.swan.current
-                    }
+                    email: userProfile.userProfile.profile.email,
+                    password_hash: null,
+                    details: getUserDetails(),
+                    maxele_style: (mapStyle.maxele.current) ? mapStyle.maxele.current : null,
+                    maxwvel_style: (mapStyle.maxwvel.current) ? mapStyle.maxwvel.current : null,
+                    swan_style: (mapStyle.swan.current) ? mapStyle.swan.current : null
+                },
+                {
+                    headers: { Authorization: `Bearer ${getNamespacedEnvParam('REACT_APP_UI_DATA_TOKEN')}` }
                 })
             // use the data returned
             .then((response) => {
