@@ -12,7 +12,7 @@ import {
     Typography } from '@mui/joy';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { Map } from '@mui/icons-material';
-import { useLayers } from '@context';
+import {useLayers, useSettings} from '@context';
 import { BasemapList } from '@utils/map-utils';
 import { useLocalStorage } from '@hooks';
 
@@ -20,6 +20,8 @@ export function BaseMaps() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { baseMap, setBaseMap } = useLayers();
   const [storedValue, setStoredValue] = useLocalStorage('basemap', '');
+
+  const { setChangesMade } = useSettings();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,6 +37,7 @@ export function BaseMaps() {
     if (selectedBasemap.length === 1) {
       setBaseMap(selectedBasemap[0]);
       setStoredValue(selectedBasemap[0].title);
+      setChangesMade(true);
     }
   };
 
