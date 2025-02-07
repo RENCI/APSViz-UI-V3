@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useCallback } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import PropTypes from "prop-types";
@@ -31,14 +31,16 @@ export const AuthProvider = ({ children }) => {
     const login = async (userProfile) => {
         // if there was a user profile returned
         if (userProfile) {
-            // // convert the details text to JSON
-            // userProfile.profile.details = JSON.parse(userProfile.profile.details);
-
-            // set the user profile data
-            setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
-
             // apply the settings from the user profile
             applyUserSettings(userProfile);
+
+            // remove the layer styles in the profile
+            delete userProfile.profile.maxelestyle;
+            delete userProfile.profile.maxwvelstyle;
+            delete userProfile.profile.swanstyle;
+
+            // save the user profile data
+            setUserProfile('userProfile', userProfile, { path: '/', maxAge: 21600 });
 
             // redirect to the main page
             navigate('/');
@@ -63,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         navigate('/login', { replace: true });
     };
 
-        // call this to navigate to the add-user page
+    // call this to navigate to the add-user page
     const navAddUser = () => {
         // remove the user data
         removeUserProfile('userProfile');
@@ -93,14 +95,6 @@ export const AuthProvider = ({ children }) => {
             loadProfileDetails(userProfile.profile.details);
         }
     };
-
-    /**
-     * sets the UI dark mode
-     */
-    const toggleDarkMode = useCallback((darkMode) => {
-        // set the mode
-        setMode(darkMode ? 'dark' : 'light');
-    }, [mode]);
 
     /**
      * load the layer styles
@@ -148,8 +142,11 @@ export const AuthProvider = ({ children }) => {
             }
         }
 
-        // set the dark mode
-        toggleDarkMode(profile.darkMode === "dark");
+        // if the mode is different from what is currently set
+        if (mode !== profile.darkMode) {
+            // set the new dark or light mode
+            setMode(profile.darkMode === "dark" ? 'dark' : 'light');
+        }
 
         // set the other user settings when they exist in the DB
         if (profile.useUTC) profile.useUTC === 'true' ? useUTC.set() : useUTC.unset();
