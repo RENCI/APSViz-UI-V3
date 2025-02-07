@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { Button, Divider, Typography, Input, Stack } from '@mui/joy';
 import { userAuth } from "@auth";
-import {getNamespacedEnvParam, maxeleStyle, maxwvelStyle, swanStyle} from "@utils";
+import { getNamespacedEnvParam } from "@utils";
 import { useLayers, useSettings } from '@context';
 import axios from 'axios';
 
@@ -47,7 +47,7 @@ export const UpdateUserProfileTray = () => {
     const [isDisabled, setIsDisabled] = useState(false);
 
     // get the user selected settings
-    const { useUTC, unitsType, mapStyle, layerOpacity, speedType, darkMode } = useSettings();
+    const { useUTC, unitsType, mapStyle, layerOpacity, speedType, darkMode, setChangesMade } = useSettings();
     const { baseMap } = useLayers();
 
     /**
@@ -75,7 +75,7 @@ export const UpdateUserProfileTray = () => {
         return `{"first_name":"${ firstNameValue }",` +
             `"last_name":"${ lastNameValue }",`+
             `"basemap":"${ baseMap.title }",` +
-            `"darkMode":"${ darkMode.enabled }",`+
+            `"darkMode":"${ (darkMode.enabled) ? 'dark' : "light" }",`+
             `"unitsType":"${ unitsType.current }",` +
             `"useUTC":"${ useUTC.enabled }",`+
             `"speedType":"${ speedType.current }",` +
@@ -196,6 +196,7 @@ export const UpdateUserProfileTray = () => {
                 if (ret_val['success']) {
                     // save the new user profile
                     updateUser(ret_val);
+                    setChangesMade(false);
                     setMsg('Your profile has been updated successfully.');
                 } else {
                     // show the error
