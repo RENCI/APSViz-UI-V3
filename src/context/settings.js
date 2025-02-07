@@ -27,6 +27,7 @@ export const SettingsProvider = ({ children }) => {
   const darkMode = useMemo(() => mode === 'dark', [mode]);
   const toggleDarkMode = useCallback(() => {
     setMode(darkMode ? 'light' : 'dark');
+    setChangesMade(true);
   }, [mode]);
 
   const [storedMaxeleStyle, setStoredMaxeleStyle] = useLocalStorageChange('maxele', maxeleStyle);
