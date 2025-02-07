@@ -99,28 +99,14 @@ export const LogoutTray = () => {
             console.log("Error updating your user profile.");
     };
 
-    /**
-     * handle the logout button click
-     *
-     * @param saveChanges
-     * @returns {Promise<void>}
-     */
-    const onLogoutClicked = async (saveChanges) => {
-        // if changes were made to settings
-        if (saveChanges) {
-            // update the settings in the DB
-            await onUpdateUserClicked();
-        }
-
-        // log out of the application
+    const onLogoutClicked = async () => {
         logout();
     };
 
     return (
         <Fragment>
             <Stack spacing={1}>
-                { changesMade && !isDisabled && <Button onClick={ () => onLogoutClicked(true) }>Save settings and log out</Button> }
-                <Button onClick={ () => onLogoutClicked(false) }>Log out</Button>
+                <Button onClick={ onLogoutClicked }>Log out</Button>
             </Stack>
         </Fragment>
     );
