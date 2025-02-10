@@ -136,6 +136,7 @@ export const MapLegend = () => {
                         '&:hover': { filter: 'opacity(1.0)' },
                         padding: '10px',
                         zIndex: 999,
+                        border: 1,
                         borderRadius: 'sm',
                         visibility: legendVisibilty,
 

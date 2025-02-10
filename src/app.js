@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Map } from '@components/map';
-import { ObservationDialog } from "@components/dialog/observation-dialog";
+import { ObservationDialog } from "@dialog/observation-dialog";
 import { useLayers } from '@context';
 import { Sidebar } from '@components/sidebar';
 import { ControlPanel } from '@components/control-panel';
@@ -10,6 +10,7 @@ import { MapLegend } from '@components/legend';
 import { AlertUser } from '@components/alert-user';
 import { Config } from '@components/config';
 import { Acknowledgements } from "@components/acknowledgements";
+import { Login, AddUser, AuthProvider, ProtectedRoute } from '@auth';
 
 /**
  * renders the main content
@@ -43,6 +44,7 @@ const Content = () => {
             { (defaultInstanceName != null) && <ControlPanel/> }
             <ComparePanel/>
             <MapLegend />
+            {/* <AdditionalMapLegend /> */}
             <Acknowledgements />
         </Fragment>
     );
@@ -57,12 +59,14 @@ const Content = () => {
 export const App = () => {
     // render the application
     return (
-        <Fragment>
-            <BrowserRouter>
+        <BrowserRouter>
+            <AuthProvider>
                 <Routes>
-                    <Route path="/" element={ <Content/> } />
-               </Routes>
-            </BrowserRouter>
-        </Fragment>
+                    <Route path="/" element={<ProtectedRoute><Content /></ProtectedRoute>}/>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/add-user" element={<AddUser />} />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
     );
 };

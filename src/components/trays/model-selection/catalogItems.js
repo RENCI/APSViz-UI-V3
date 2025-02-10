@@ -174,7 +174,7 @@ export default function CatalogItems(data) {
                                             expanded={accordianDateIndex === itemIndex}
                                             onChange={(event, expanded) => { setAccordianDateIndex(expanded ? itemIndex : null); }}>
 
-                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } {useUTC.enabled ? '' : '(UTC)' }</AccordionSummary>
+                                            <AccordionSummary sx={{ fontSize: 'sm' }}> { catalog['id'] } {useUTC.enabled ? '(UTC)' : '' }</AccordionSummary>
 
                                             <AccordionDetails> {
                                                 // loop through the data members and put them away

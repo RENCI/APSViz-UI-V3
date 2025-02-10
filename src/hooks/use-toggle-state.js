@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { useLocalStorage } from '@hooks';
 
 export const useToggleState = (initialValue = false) => {
   const [value, setValue] = useState(initialValue);
@@ -15,8 +14,8 @@ export const useToggleState = (initialValue = false) => {
   };
 };
 
-export const useToggleLocalStorage = (key, initialValue = false) => {
-  const [value, setValue] = useLocalStorage(key, initialValue);
+export const useToggleLocalStorage = (key, initialValue = false, useLocalStorageChange) => {
+  const [value, setValue] = useLocalStorageChange(key, initialValue);
   const toggleValue = useCallback(() => setValue(!value), [value]);
   const setTrue = useCallback(() => setValue(true), [value]);
   const setFalse = useCallback(() => setValue(false), [value]);

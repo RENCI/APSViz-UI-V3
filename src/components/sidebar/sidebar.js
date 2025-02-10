@@ -9,6 +9,7 @@ import SidebarTrays from '../trays';
 // tray for unlisted keys will be stuck into the upper sidebar list.
 const LOWER_SIDEBAR_MENU_ITEM_IDS = [
   'help_about',
+  'update_user_profile',
   'settings',
 ];
 // split sidebar items into upper and lower

@@ -68,6 +68,9 @@ export const LayersProvider = ({ children }) => {
   // state to keep track of the obs dialog that has focus
   const [topMostDialogIndex, setTopMostDialogIndex] = useState(0);
 
+  // state to keep track of the obs dialog that has focus
+  const [topMostExtLegendIndex, setTopMostExtLegendIndex] = useState(0);
+
   /**
    * this section is for the side-by-side compare mode items
    * @type {string}
@@ -116,8 +119,8 @@ export const LayersProvider = ({ children }) => {
       // remove the current compare layers if they exist
       if (sideBySideLayers) {
           // remove the layers on each pane
-          map.removeLayer(sideBySideLayers['_leftLayer']);
-          map.removeLayer(sideBySideLayers['_rightLayer']);
+          if (sideBySideLayers['_leftLayer']) map.removeLayer(sideBySideLayers['_leftLayer']);
+          if (sideBySideLayers['_rightLayer']) map.removeLayer(sideBySideLayers['_rightLayer']);
 
           // remove the side by side layer
           sideBySideLayers.remove();
@@ -128,24 +131,45 @@ export const LayersProvider = ({ children }) => {
   };
 
   /**
+   * hides the selected additional layers
+   *
+   */
+  const removeAdditionalLayerSelections = () => {
+      // get a copy of the external layers
+      const newLayers = [...externalLayers];
+
+      // loop through the layers that are currently visible
+      newLayers.filter(item => item.state.visible === true).map(layer => {
+        // if this later is set to visible
+        layer.state.visible = false;
+      });
+
+      // save the altered list
+      setExternalLayers([...newLayers]);
+  };
+
+  /**
    * clears any captured compare selection data and layers
    *
    */
   const resetCompare = () => {
-      // clear the left layer type/ID/properties/layer
-      setLeftPaneType(defaultSelected);
-      setLeftPaneID(defaultSelected);
-      setLeftLayerProps(null);
-      setSelectedLeftLayer(null);
+      // if the map is initialized
+      if (map) {
+          // clear the left layer type/ID/properties/layer
+          setLeftPaneType(defaultSelected);
+          setLeftPaneID(defaultSelected);
+          setLeftLayerProps(null);
+          setSelectedLeftLayer(null);
 
-      // clear the right pane ID/Name/properties/layer
-      setRightPaneType(defaultSelected);
-      setRightPaneID(defaultSelected);
-      setRightLayerProps(null);
-      setSelectedRightLayer(null);
+          // clear the right pane ID/Name/properties/layer
+          setRightPaneType(defaultSelected);
+          setRightPaneID(defaultSelected);
+          setRightLayerProps(null);
+          setSelectedRightLayer(null);
 
-      // remove the side by side layers
-      removeSideBySideLayers();
+          // remove the side by side layers
+          removeSideBySideLayers();
+      }
     };
 
     /**
@@ -428,7 +452,6 @@ export const LayersProvider = ({ children }) => {
 
         defaultModelLayers, setDefaultModelLayers,
         hurricaneTrackLayers, setHurricaneTrackLayers,
-        externalLayers, setExternalLayers,
         selectedObservations, setSelectedObservations,
         showShareComment, setShowShareComment,
         layerTypes,
@@ -453,9 +476,13 @@ export const LayersProvider = ({ children }) => {
         sideBySideLayers, setSideBySideLayers,
         resetCompare, removeSideBySideLayers,
 
-
         // tracks the dialog that has focus
-        topMostDialogIndex, setTopMostDialogIndex
+        topMostDialogIndex, setTopMostDialogIndex,
+
+        // tracks the additional layers
+        externalLayers, setExternalLayers,
+        removeAdditionalLayerSelections,
+        topMostExtLegendIndex, setTopMostExtLegendIndex
       }}
     >
       {children}

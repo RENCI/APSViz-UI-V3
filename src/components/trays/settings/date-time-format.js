@@ -24,8 +24,8 @@ export const DateTimeFormat = () => {
             <Typography
                 sx={{ ml: 1, mt: 1 }}
                 component="label"
-                startDecorator={ <Switch checked={ !useUTC.enabled } onChange={ onChange }/> }
-            >Use your locale</Typography>
+                startDecorator={ <Switch checked={ useUTC.enabled } onChange={ onChange }/> }
+            >Use UTC</Typography>
         </Stack>
     );
 };
