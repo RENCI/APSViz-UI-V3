@@ -1,11 +1,12 @@
 import React, { Fragment, useState } from "react";
 import {
     AccordionGroup, Accordion, AccordionDetails, AccordionSummary, Button, Stack,
-    Checkbox, Typography, Tab, Tabs, TabPanel, TabList, Box } from '@mui/joy';
-import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
+    Checkbox, Typography, Tab, Tabs, TabPanel, TabList, Box, IconButton, Tooltip } from '@mui/joy';
+// import { KeyboardArrowDown as ExpandIcon } from '@mui/icons-material';
+import { LegendToggle as LegendIcon } from '@mui/icons-material';
 import { useLayers } from "@context/map-context";
 import PropTypes from 'prop-types';
-import { ActionButton } from "@components/buttons";
+// import { ActionButton } from "@components/buttons";
 
 // set component prop types
 ExternalLayerItems.propTypes = {
@@ -210,11 +211,10 @@ export default function ExternalLayerItems(data) {
                                     <Accordion
                                         key={ itemIndex }
                                         expanded={ getAccordionState(layer['source']) }
-                                        onChange={ () => toggleAccordionView(layer['source']) }
-                                        sx={{ p: 0, m: 0, mt: -.2 }}>
+                                        onChange={ () => toggleAccordionView(layer['source']) }>
 
-                                        <AccordionSummary >
-                                            <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "14px" }}> { layer['source'] }</Typography>
+                                        <AccordionSummary sx={{flexDirection: "row-reverse"}}>
+                                            <Typography sx={{ p: 0, fontWeight: 'bold', fontSize: "16px" }}> { layer['source'] }</Typography>
                                         </AccordionSummary>
 
                                         <AccordionDetails>
@@ -228,7 +228,7 @@ export default function ExternalLayerItems(data) {
                                                 .map ((layer, itemIndex) =>
                                                     <Accordion
                                                         key={ itemIndex }
-                                                        sx={{ p: 0, ml: 1.5, mb: -.3 }}
+                                                        sx={{ p: 0 }}
                                                         expanded={ getAccordionState(layer['name']) }
                                                         onChange={ () => toggleAccordionView(layer['name']) }>
 
@@ -236,6 +236,7 @@ export default function ExternalLayerItems(data) {
                                                             direction="row"
                                                             justifyContent="space-between"
                                                             alignItems="stretch"
+                                                            gap={ 1 }
                                                             >
                                                                 <Checkbox
                                                                     size="sm"
@@ -243,13 +244,30 @@ export default function ExternalLayerItems(data) {
                                                                     label={ <Typography sx={{ fontSize: "xs" }}> { layer['row_num'] }: { layer['name'] } </Typography> }
                                                                     onChange={ () => toggleLayerVisibility(layer['name']) }
                                                                 />
+                                                                {layer.state.visible && layer.params['legendURL'] && 
+                                                                    <Tooltip title={
+                                                                                <img
+                                                                                    src={layer.params['legendURL'].includes("GetLegend") ? 
+                                                                                            layer.params['legendURL'] + "&WIDTH=40&HEIGHT=200"
+                                                                                            :
+                                                                                            layer.params['legendURL']
+                                                                                    }
+                                                                                /* width={240} */
+                                                                                alt=""
+                                                                                />
+                                                                            }>
+                                                                        <IconButton>
+                                                                            <LegendIcon fontSize="sm"/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                }
 
-                                                                <ActionButton onClick={ () => toggleAccordionView( layer['name']) } sx={{ mr: .4 }}>
+                                                               {/*  <ActionButton onClick={ () => toggleAccordionView( layer['name']) }>
                                                                     <ExpandIcon
-                                                                        fontSize="10px"
+                                                                        fontSize="sm"
                                                                         sx={{ transform: getAccordionState(layer['name']) ? 'rotate(180deg)' : 'rotate(0)',
                                                                             transition: 'transform 100ms' }} />
-                                                                </ActionButton>
+                                                                </ActionButton> */}
                                                         </Stack>
 
                                                         <AccordionDetails>
@@ -271,7 +289,7 @@ export default function ExternalLayerItems(data) {
                                                                         color: 'text.primary',
                                                                         backgroundColor: 'transparent',
                                                                         overflowX: 'auto',
-                                                                        m: -1, p: 1,
+                                                                        m: 0, p: 1,
                                                                         height: '100px',
                                                                         }}>
                                                                             { JSON.stringify(layer, json_replacer, 2) }
