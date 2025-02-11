@@ -7,7 +7,7 @@ import { LayerCard } from './layer-card';
 import { DeleteModelRunButton } from "@components/trays/layers/delete-layer-button";
 import { Typography } from '@mui/joy';
 import { DragHandleRounded as HandleIcon } from '@mui/icons-material';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { getHeaderSummary } from "@utils/map-utils";
 
 /**
